@@ -24,6 +24,8 @@ class User extends Authenticatable
         'username',
         'profile_type_id',
         'slug',
+        'phone',
+        'phone_verified_at',
     ];
 
     /**
@@ -44,6 +46,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'profile_type_id' => 'float',
     ];
 
     public function ProfileType()

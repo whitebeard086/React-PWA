@@ -23,6 +23,10 @@ Route::post('/register/check-email', [AuthController::class, 'check_email']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [UserController::class, 'register']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Protected Routes
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::get('/profile/user', [UserController::class, 'get_user']);
+    Route::get('/countries', [UserController::class, 'get_countries']);
+    Route::post('/profile/phone', [UserController::class, 'update_phone']);
+    Route::post('/profile/phone/verify', [UserController::class, 'verify_phone']);
 });
