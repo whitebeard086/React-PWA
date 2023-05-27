@@ -14,7 +14,7 @@ import { Field, Form, Formik } from "formik";
 import classNames from "classnames";
 import useAuth from "utils/hooks/useAuth";
 import { Loading, PasswordInput } from "components/shared";
-import { checkEmail, checkUser } from "views/auth/store/dataSlice";
+import { checkEmail, checkUser, setSignupData } from "views/auth/store/dataSlice";
 
 const SignupForm = (props) => {
     const { disableSubmit = false, className, signInUrl = "/login" } = props;
@@ -53,6 +53,7 @@ const SignupForm = (props) => {
         emailAvail,
         usernameAvail,
         profileTypes,
+        signupData,
         gettingProfileTypes,
     } = useSelector((state) => state.authentication.data)
     const { 
@@ -108,15 +109,25 @@ const SignupForm = (props) => {
         setSubmitting(true);
         const result = await signUp({ username, password, email, password_confirmation, profile_type_id: userType });
 
+        const data = {
+            username: username,
+            email: email,
+            userType: userType === 1 ? "Normal User" : userType === 2 ? "Service Provider" : null
+        }
+
+        dispatch(setSignupData(data))
+
         if (result.status === "failed") {
             setMessage(result.message);
         }
 
         setSubmitting(false);
 
-        if (result.status === "success") {
-            navigate("/welcome");
-        }
+        // if (result.status === "success" && signupData.userType === "Normal User") {
+        //     navigate("/welcome");
+        // } else if (result.status === "success" && signupData.userType === "Service Provider") {
+        //     navigate('/service-setup')
+        // }
     };
 
     const onAgreeTerms = (value, e) => {

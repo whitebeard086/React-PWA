@@ -39,7 +39,9 @@ function useAuth() {
 				let redirectUrl
 
 				if (userType === "Normal User") {
-
+					redirectUrl = query.get(REDIRECT_URL_KEY)
+				} else if (userType === "Service Provider") {
+					redirectUrl = '/service-setup'
 				}
 
 				navigate(redirectUrl ? redirectUrl : appConfig.authenticatedEntryPath)
@@ -64,7 +66,6 @@ function useAuth() {
 				const { token } = resp.data
 				dispatch(onSignInSuccess(token))
 				if(resp.data.user) {
-					console.log(resp.data);
 					dispatch(setUser({
 						profile: resp.data.user,
 						userType: resp.data.user.profile_type.name,
@@ -75,7 +76,15 @@ function useAuth() {
 						hasVisited: true,
 					}))
 				}
-				const redirectUrl = query.get(SIGNUP_REDIRECT_URL_KEY)
+
+				let redirectUrl;
+
+				if (userType === "Normal User") {
+					redirectUrl = query.get(REDIRECT_URL_KEY)
+				} else if (userType === "Service Provider") {
+					redirectUrl = '/service-setup'
+				}
+				
 				navigate(redirectUrl ? redirectUrl : appConfig.authenticatedEntryPath)
                 return {
                     status: 'success',

@@ -40,6 +40,7 @@ export const checkEmail = createAsyncThunk(
 const dataSlice = createSlice({
     name: "authentication/data",
     initialState: {
+        signupData: {},
         checkingUsername: false,
         usernameAvail: false,
         checkingEmail: false,
@@ -50,6 +51,11 @@ const dataSlice = createSlice({
         emailStatusMessage: "",
         profileTypes: [],
         gettingProfileTypes: false,
+    },
+    reducers: {
+        setSignupData: (state, action) => {
+            state.signupData = action.payload
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -97,5 +103,9 @@ const dataSlice = createSlice({
             })
     }
 }) 
+
+export const {
+    setSignupData,
+} = dataSlice.actions;
 
 export default dataSlice.reducer;

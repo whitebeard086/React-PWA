@@ -13,18 +13,12 @@ const Register = lazy(() => import("./views/auth/Register"));
 const Login = lazy(() => import("./views/auth/Login"));
 const Home = lazy(() => import("./views/home"));
 const Verify = lazy(() => import("./views/verify"));
+const Service = lazy(() => import("./views/service"));
 
 function App() {
     const dispatch = useDispatch();
 
     const { signedIn } = useSelector((state) => state.auth.session)
-    console.log(signedIn);
-    // useEffect(() => {
-    //     if (!signedIn) {
-    //         <Navigate to="/login" />
-    //     }
-    // }, [signedIn])
-
 
     useEffect(() => {
         dispatch(getUser());
@@ -40,6 +34,7 @@ function App() {
                         <Route path="/login" element={signedIn ? <Navigate to="/home" /> : <Login />} />
                         <Route path="/home" element={signedIn ? <Home /> : <Navigate to="/login" />} />
                         <Route path="/verify" element={signedIn ? <Verify /> : <Navigate to="/login" />} />
+                        <Route path="/service-setup" element={signedIn ? <Service /> : <Navigate to="/login" />} />
                     </Routes>
                 </Suspense>
             </BrowserRouter>

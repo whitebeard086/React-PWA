@@ -17,6 +17,7 @@ export const initialState = {
     profile: {},
     userType: "",
     hasVisited: false,
+    hasService: false,
     gettingUser: false,
     verifiedPhone: true,
 };
