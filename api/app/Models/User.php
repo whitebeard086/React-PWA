@@ -53,4 +53,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(ProfileType::class);
     }
+
+    public function Service()
+    {
+        return $this->hasOne(Service::class);
+    }
 }

@@ -27,6 +27,9 @@ Route::get('/register', [UserController::class, 'register']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/profile/user', [UserController::class, 'get_user']);
     Route::get('/countries', [UserController::class, 'get_countries']);
+    Route::get('/categories', [UserController::class, 'get_categories']);
+    Route::post('/category/subcategories', [UserController::class, 'get_subcategories']);
     Route::post('/profile/phone', [UserController::class, 'update_phone']);
     Route::post('/profile/phone/verify', [UserController::class, 'verify_phone']);
+    Route::post('/profile/service/new', [UserController::class, 'new_service']);
 });
