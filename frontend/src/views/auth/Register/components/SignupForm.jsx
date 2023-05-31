@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import debounce from 'lodash/debounce'
 import { BsDot } from "react-icons/bs"
@@ -21,6 +21,9 @@ const SignupForm = (props) => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const location = useLocation();
+
+    const from = location.state?.from?.pathname || "/home"
 
     const validationSchema = Yup.object().shape({
         username: Yup.string().required("Please enter your user name"),
@@ -62,6 +65,8 @@ const SignupForm = (props) => {
         terms
 
     } = useSelector((state) => state.authentication.state);
+    const { signedIn } = useSelector((state) => state.auth.session)
+    const { userType, verifiedPhone, hasService } = useSelector((state) => state.auth.user)
 
     // console.log(usernameAvail);
     const passwordCheck = characters && number && uppercase && lowercase && specialChar
@@ -93,6 +98,26 @@ const SignupForm = (props) => {
     const [emailMessage, setEmailMessage] = useEmailMessage();
 
     useEffect(() => {
+        let redirectUrl = from
+
+        if (signedIn) {
+            if (userType === "Normal User" && verifiedPhone) {
+                redirectUrl = from
+            } else if (userType === "Normal User" && !verifiedPhone) {
+                redirectUrl = '/verify'
+            } else if (userType === "Service Provider" && !hasService) {
+                redirectUrl = '/service-setup'
+            } else if (userType === "Service Provider" && !verifiedPhone) {
+                redirectUrl = '/verify'
+            } else if (userType === "Service Provider" && hasService && verifiedPhone) {
+                redirectUrl = '/home'
+            } 
+
+            navigate(redirectUrl, { replace: true })
+        }
+    }, [from, hasService, navigate, signedIn, userType, verifiedPhone])
+
+    useEffect(() => {
         if (status === 'success' || status === 'error') {
             setCheckMessage(statusMessage)
         }
@@ -122,12 +147,6 @@ const SignupForm = (props) => {
         }
 
         setSubmitting(false);
-
-        // if (result.status === "success" && signupData.userType === "Normal User") {
-        //     navigate("/welcome");
-        // } else if (result.status === "success" && signupData.userType === "Service Provider") {
-        //     navigate('/service-setup')
-        // }
     };
 
     const onAgreeTerms = (value, e) => {
@@ -135,7 +154,7 @@ const SignupForm = (props) => {
     }
 
     return (
-        <div className={classNames(className, 'mt-4 max-w-xs mx-auto')}>
+        <div className={classNames(className, 'mt-4 max-w-lg mx-auto')}>
             {message && (
                 <Alert className="mb-4" type="danger" showIcon>
                     {message}
@@ -229,18 +248,18 @@ const SignupForm = (props) => {
                       <Field name="userType">
                         {({ field, form }) => {
                             return gettingProfileTypes ? (
-                                <Card bodyClass="p-1" className="w-80">
+                                <Card bodyClass="p-1" className="w-full">
                                     <Loading loading={true} />
                                 </Card> 
                             ) : (
                                 <div className="flex justify-center">
                                     <Radio.Group 
-                                        className="flex items-center gap-2" 
+                                        className="flex w-full items-center gap-4" 
                                         value={[field.value]} 
                                         onChange={(val) => form.setFieldValue(field.name, val)}
                                     >
                                         {profileTypes?.map((type) => (
-                                            <Radio key={type.id} className="border-2 p-2 rounded-md border-gray-400" value={type.id}>{type.name}</Radio>
+                                            <Radio key={type.id} className="border-2 w-full p-2 rounded-md border-gray-400 mr-0" value={type.id}>{type.name}</Radio>
                                         ))}
                                     </Radio.Group>
                                 </div>

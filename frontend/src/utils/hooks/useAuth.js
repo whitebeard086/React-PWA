@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { REDIRECT_URL_KEY, SIGNUP_REDIRECT_URL_KEY } from '../../constants/app.constant'
-import { useNavigate } from 'react-router-dom'
-import { initialState, setUser } from '../../store/auth/userSlice'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { getUser, initialState, setUser, userLoggedOut } from '../../store/auth/userSlice'
 import useQuery from './useQuery'
 import { apiSignIn, apiSignOut, apiSignUp } from '../../services/AuthService'
 import { onSignInSuccess, onSignOutSuccess } from '../../store/auth/sessionSlice'
@@ -12,11 +12,16 @@ function useAuth() {
     const dispatch = useDispatch()
 
     const navigate = useNavigate()
+	const location = useLocation()
+
+    const from = location.state?.from?.pathname || "/home"
+
+    // console.log(location);
 
 	const query = useQuery()
 
     const { token, signedIn } = useSelector((state) => state.auth.session)
-	const { userType } = useSelector((state) => state.auth.user)
+	const { userType, verifiedPhone, hasService } = useSelector((state) => state.auth.user)
 
     const signIn = async (values) => {
         try {
@@ -29,22 +34,11 @@ function useAuth() {
 						profile: resp.data.user,
 						userType: resp.data.user.profile_type.name,
 						hasVisited: true,
-					} || { 
-						profile: {},
-						userType: "",
-						hasVisited: true,
-					}))
+						hasService: resp.data.user.service ? true : false,
+						verifiedPhone: resp.data.user.phone_verified_at !== null ? true : false,
+						userSet: true,
+					} || initialState))
 				}
-				// const redirectUrl = query.get(REDIRECT_URL_KEY)
-				let redirectUrl
-
-				if (userType === "Normal User") {
-					redirectUrl = query.get(REDIRECT_URL_KEY)
-				} else if (userType === "Service Provider") {
-					redirectUrl = '/service-setup'
-				}
-
-				navigate(redirectUrl ? redirectUrl : appConfig.authenticatedEntryPath)
 				
                 return {
                     status: 'success',
@@ -70,22 +64,12 @@ function useAuth() {
 						profile: resp.data.user,
 						userType: resp.data.user.profile_type.name,
 						hasVisited: true,
-					} || { 
-						profile: {},
-						userType: "",
-						hasVisited: true,
-					}))
+						hasService: resp.data.user.service ? true : false,
+						verifiedPhone: resp.data.user.phone_verified_at !== null ? true : false,
+						userSet: true,
+					} || initialState))
 				}
 
-				let redirectUrl;
-
-				if (userType === "Normal User") {
-					redirectUrl = query.get(REDIRECT_URL_KEY)
-				} else if (userType === "Service Provider") {
-					redirectUrl = '/service-setup'
-				}
-				
-				navigate(redirectUrl ? redirectUrl : appConfig.authenticatedEntryPath)
                 return {
                     status: 'success',
                     message: ''
@@ -114,7 +98,8 @@ function useAuth() {
         authenticated: token && signedIn,
         signIn,
 		signUp,
-        signOut
+        signOut,
+		handleSignOut
     }
 }
 

@@ -3,10 +3,43 @@ import * as Yup from "yup";
 import useTimeOutMessage from "../../../../utils/hooks/useTimeOutMessage";
 import { Alert, Button, FormContainer, FormItem, Input } from "../../../../components/ui";
 import { PasswordInput } from "../../../../components/shared";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../../../utils/hooks/useAuth";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const SignInForm = (props) => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const { signedIn } = useSelector((state) => state.auth.session)
+    const { userType, verifiedPhone, hasService } = useSelector((state) => state.auth.user)
+
+    const from = location.state?.from?.pathname || "/home"
+
+    useEffect(() => {
+        let redirectUrl = from
+
+        if (signedIn) {
+            if (userType === "Normal User" && verifiedPhone) {
+                redirectUrl = from
+            } else if (userType === "Normal User" && !verifiedPhone) {
+                redirectUrl = '/verify'
+            } else if (userType === "Service Provider" && !hasService) {
+                redirectUrl = '/service-setup'
+            } else if (userType === "Service Provider" && !verifiedPhone) {
+                redirectUrl = '/verify'
+            } else if (userType === "Service Provider" && hasService && verifiedPhone) {
+                redirectUrl = '/home'
+            } 
+
+            navigate(redirectUrl, { replace: true })
+        }
+
+        redirectUrl = ""
+    }, [from, hasService, navigate, signedIn, userType, verifiedPhone])
+    console.log(location);
+
     const {
         disableSubmit = false,
         className,
@@ -35,6 +68,7 @@ const SignInForm = (props) => {
         }
 
         setSubmitting(false);
+        // dispatch(getUser())
     };
 
     return (

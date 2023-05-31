@@ -17,9 +17,10 @@ export const initialState = {
     profile: {},
     userType: "",
     hasVisited: false,
-    hasService: false,
+    hasService: null,
+    userSet: null,
     gettingUser: false,
-    verifiedPhone: true,
+    verifiedPhone: null,
 };
 
 export const userSlice = createSlice({
@@ -50,6 +51,12 @@ export const userSlice = createSlice({
                 } else if (action.payload.user.phone_verified_at !== null) {
                     state.verifiedPhone = true
                 }
+
+                if (action.payload.user.service === null) {
+                    state.hasService = false
+                } else if (action.payload.user.service) {
+                    state.hasService = true
+                }
             })
             .addCase(getUser.rejected, (state) => {
                 state.gettingUser = false;
@@ -57,6 +64,6 @@ export const userSlice = createSlice({
     },
 });
 
-export const { setUser, updateUser, setHasVisited } = userSlice.actions;
+export const { setUser, updateUser, setHasVisited, userLoggedOut } = userSlice.actions;
 
 export default userSlice.reducer;

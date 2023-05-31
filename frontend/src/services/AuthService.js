@@ -111,3 +111,27 @@ export async function apiVerifyPhone (data) {
         data
     })
 }
+
+export async function apiGetCategories (data) {
+    return ApiService.fetchData({
+        url: '/categories',
+        method: 'get',
+        data
+    })
+}
+
+export async function apiGetSubCategories (data) {
+    return ApiService.fetchData({
+        url: '/category/subcategories',
+        method: 'post',
+        data
+    })
+}
+
+export async function apiCreateService (data) {
+    return ApiService.fetchData({
+        url: '/profile/service/new',
+        method: 'post',
+        data
+    })
+}

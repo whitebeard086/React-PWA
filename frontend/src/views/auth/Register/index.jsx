@@ -23,8 +23,8 @@ const Register = () => {
     }
     
     return (
-        <Container className="max-w-sm">
-            <div className="">
+        <Container className="max-w-xl p-6">
+            <div className="w-full">
                 <div className="w-full flex justify-center">
                     <img className="w-72" src="/img/signup.png" alt="" />
                 </div>

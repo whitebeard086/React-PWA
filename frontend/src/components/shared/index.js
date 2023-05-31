@@ -1,3 +1,5 @@
 export { default as Loading } from './Loading'
 export { default as Container } from './Container'
 export { default as PasswordInput } from './PasswordInput'
+export { default as RichTextEditor } from './RichTextEditor'
+export { default as FormNumericInput } from './FormNumericInput'

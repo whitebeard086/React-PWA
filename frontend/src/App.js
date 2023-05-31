@@ -7,6 +7,9 @@ import { PersistGate } from "redux-persist/integration/react";
 import { BrowserRouter, Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import history from "./history";
 import { getUser } from "store/auth/userSlice";
+import Layout from "views/route/Layout";
+import NotFound from "views/notfound";
+import RequireAuth from "views/route/RequireAuth";
 
 const Landing = lazy(() => import("./views/landing"));
 const Register = lazy(() => import("./views/auth/Register"));
@@ -18,23 +21,43 @@ const Service = lazy(() => import("./views/service"));
 function App() {
     const dispatch = useDispatch();
 
-    const { signedIn } = useSelector((state) => state.auth.session)
+    const { hasService, verifiedPhone, userType } = useSelector((state) => state.auth.user)
 
     useEffect(() => {
         dispatch(getUser());
     }, [dispatch]);
+
+    // useEffect(() => {
+    //     if (userType === "Service Provider" && !hasService) {
+    //         // return <Navigate to="/verify-setup" />
+    //         console.log("go to service-setup");
+    //     } else if (userType === "Normal User" && !verifiedPhone) {
+    //         <Navigate to="/verify" />
+    //         console.log("go to phone-verification");   
+    //     }
+
+    //     if ((userType === "Service Provider" && hasService) && !verifiedPhone) {
+    //         // return <Navigate to="/verify" />
+    //         console.log("go to phone-verification");
+    //     }
+    // }, [hasService, userType, verifiedPhone])
 
     return (
         <PersistGate loading={null} persistor={persistor}>
             <BrowserRouter history={history}>
                 <Suspense fallback={<></>}>
                     <Routes>
-                        <Route path="/" element={<Landing />} />
-                        <Route path="/register" element={signedIn ? <Navigate to="/home" /> : <Register />} />
-                        <Route path="/login" element={signedIn ? <Navigate to="/home" /> : <Login />} />
-                        <Route path="/home" element={signedIn ? <Home /> : <Navigate to="/login" />} />
-                        <Route path="/verify" element={signedIn ? <Verify /> : <Navigate to="/login" />} />
-                        <Route path="/service-setup" element={signedIn ? <Service /> : <Navigate to="/login" />} />
+                        <Route path="/" element={<Layout />}>
+                            <Route path="/register" element={<Register />} />
+                            <Route path="/login" element={<Login />} />
+                            <Route element={<RequireAuth />} >
+                                <Route path="/" element={<Landing />} />
+                                <Route path="/home" element={<Home />} />
+                                <Route path="/verify" element={<Verify />} />
+                                <Route path="/service-setup" element={<Service />} />
+                                <Route path="*" element={<NotFound />} />
+                            </Route>
+                        </Route>
                     </Routes>
                 </Suspense>
             </BrowserRouter>

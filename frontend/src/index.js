@@ -6,6 +6,8 @@ import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import store from "./store";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import history from "./history";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

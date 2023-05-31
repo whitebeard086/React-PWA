@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom";
 import OtpInput from "./OtpInput";
 import { useEffect, useState } from "react";
-import { Alert, Button } from "components/ui";
+import { Alert, Button, Notification, toast } from "components/ui";
 import Countdown from "react-countdown";
 import { resetStatus, setTimer, updatePhone, verifyPhone } from "../store/dataSlice";
 import useTimeOutMessage from "utils/hooks/useTimeOutMessage";
@@ -22,9 +22,25 @@ const Step2 = ({ onBack }) => {
     const { status, verifyMessage, verifying, resending, timer } = useSelector((state) => state.verify.data)
 
     useEffect(() => {
+        const popNotification = (keyword) => {
+            toast.push(
+                <Notification
+                    title={`${status === "success" ? "Success" : "Error"}`}
+                    type={`${status === "success" ? "success" : "danger"}`}
+                    duration={2000}
+                >
+                    {status === "success" ? "Phone number verified successfully!" : "Looks like something went wrong, please try again."}
+                </Notification>,
+                {
+                    placement: "top-center",
+                }
+            );
+        };
+            
         if (status === 'success' || status === 'error') {
             setMessage(verifyMessage)
             setOtp("")
+            popNotification()
             dispatch(getUser())
 
             setTimeout(() => {
@@ -33,7 +49,7 @@ const Step2 = ({ onBack }) => {
                 if (status === 'success') {
                     navigate('/home')
                 }
-            }, 3200)
+            }, 1200)
         }
     }, [dispatch, navigate, setMessage, status, verifyMessage])
 
@@ -79,9 +95,9 @@ const Step2 = ({ onBack }) => {
                 <div>
                     <h1 className="text-center mt-4 text-2xl font-bold">Verify Phone Number</h1>
                     {resent ? (
-                        <p className="font-semibold text-center text-gray-400">We have sent a new OTP to {profile?.phone.replace(/(\d{3})(\d{4})(\d{3})(\d{4})/, "$1 $2 $3 $4")}</p>
+                        <p className="font-semibold text-center text-gray-400">We have sent a new OTP to {profile?.phone?.replace(/(\d{3})(\d{4})(\d{3})(\d{4})/, "$1 $2 $3 $4")}</p>
                     ):(
-                        <p className="font-semibold text-center text-gray-400">Enter the OTP code sent to {profile?.phone.replace(/(\d{3})(\d{4})(\d{3})(\d{4})/, "$1 $2 $3 $4")}</p>
+                        <p className="font-semibold text-center text-gray-400">Enter the OTP code sent to {profile?.phone?.replace(/(\d{3})(\d{4})(\d{3})(\d{4})/, "$1 $2 $3 $4")}</p>
                     )}
                 </div>
 

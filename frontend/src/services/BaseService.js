@@ -6,6 +6,7 @@ import deepParseJson from "utils/deepParseJson";
 import store from "../store";
 import { onSignOutSuccess } from "../store/auth/sessionSlice";
 import { get } from "idb-keyval";
+import { initialState, setUser } from "store/auth/userSlice";
 
 const unauthorizedCode = [401];
 
@@ -64,9 +65,10 @@ BaseService.interceptors.response.use(
     (response) => response,
     (error) => {
         const { response } = error;
-        console.log(response);
+        
         if (response && unauthorizedCode.includes(response.status)) {
             store.dispatch(onSignOutSuccess());
+            store.dispatch(setUser(initialState))
         }
 
         return Promise.reject(error);
