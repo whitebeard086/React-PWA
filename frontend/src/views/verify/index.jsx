@@ -1,6 +1,6 @@
 import { Container } from "components/shared"
 import { Suspense, lazy, useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import reducer from "./store";
 import { injectReducer } from "store/index";
@@ -15,7 +15,15 @@ const Verify = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    const { verifiedPhone } = useSelector((state) => state.auth.user);
+
     const [step, setStep] = useState(1);
+
+    useEffect(() => {
+        if (verifiedPhone) {
+            navigate(-1)
+        }
+    }, [navigate, verifiedPhone]) 
 
     useEffect(() => {
         dispatch(getCountries())

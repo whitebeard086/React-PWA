@@ -10,6 +10,9 @@ import { getUser } from "store/auth/userSlice";
 import Layout from "views/route/Layout";
 import NotFound from "views/notfound";
 import RequireAuth from "views/route/RequireAuth";
+import RequireServiceProvider from "views/route/RequireServiceProvider";
+import Unauthorized from "views/notfound/Unauthorized";
+import CheckVerifications from "views/route/CheckVerifications";
 
 const Landing = lazy(() => import("./views/landing"));
 const Register = lazy(() => import("./views/auth/Register"));
@@ -27,35 +30,25 @@ function App() {
         dispatch(getUser());
     }, [dispatch]);
 
-    // useEffect(() => {
-    //     if (userType === "Service Provider" && !hasService) {
-    //         // return <Navigate to="/verify-setup" />
-    //         console.log("go to service-setup");
-    //     } else if (userType === "Normal User" && !verifiedPhone) {
-    //         <Navigate to="/verify" />
-    //         console.log("go to phone-verification");   
-    //     }
-
-    //     if ((userType === "Service Provider" && hasService) && !verifiedPhone) {
-    //         // return <Navigate to="/verify" />
-    //         console.log("go to phone-verification");
-    //     }
-    // }, [hasService, userType, verifiedPhone])
-
     return (
         <PersistGate loading={null} persistor={persistor}>
             <BrowserRouter history={history}>
                 <Suspense fallback={<></>}>
                     <Routes>
+                        <Route path="/" element={<Landing />} />
                         <Route path="/" element={<Layout />}>
                             <Route path="/register" element={<Register />} />
                             <Route path="/login" element={<Login />} />
                             <Route element={<RequireAuth />} >
-                                <Route path="/" element={<Landing />} />
-                                <Route path="/home" element={<Home />} />
                                 <Route path="/verify" element={<Verify />} />
-                                <Route path="/service-setup" element={<Service />} />
-                                <Route path="*" element={<NotFound />} />
+                                <Route element={<RequireServiceProvider />}>
+                                    <Route path="/service-setup" element={<Service />} />
+                                </Route>
+                                <Route element={<CheckVerifications />} >
+                                    <Route path="/home" element={<Home />} />
+                                    <Route path="/unauthorized" element={<Unauthorized />} />
+                                    <Route path="*" element={<NotFound />} />
+                                </Route>
                             </Route>
                         </Route>
                     </Routes>
