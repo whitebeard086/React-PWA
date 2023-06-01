@@ -19,10 +19,6 @@ const Home = () => {
         }
     }, [hasService, navigate, userType])
 
-    const onSignOut = async () => {
-        // await signOut()
-    }
-
     return (
         <div>
             Home

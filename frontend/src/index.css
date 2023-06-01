@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "./styles/app.css";
+@import "./assets/styles/app.css";
 
 body {
   margin: 0;

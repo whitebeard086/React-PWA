@@ -7,12 +7,12 @@ import { PersistGate } from "redux-persist/integration/react";
 import { BrowserRouter, Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import history from "./history";
 import { getUser } from "store/auth/userSlice";
-import Layout from "views/route/Layout";
 import NotFound from "views/notfound";
 import RequireAuth from "views/route/RequireAuth";
 import RequireServiceProvider from "views/route/RequireServiceProvider";
 import Unauthorized from "views/notfound/Unauthorized";
 import CheckVerifications from "views/route/CheckVerifications";
+import Layout from "views/layout";
 
 const Landing = lazy(() => import("./views/landing"));
 const Register = lazy(() => import("./views/auth/Register"));
