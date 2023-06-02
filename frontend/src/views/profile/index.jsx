@@ -3,6 +3,10 @@ import Banner from "./components/Banner"
 import ServiceCard from "./components/ServiceCard"
 import { BiEditAlt } from "react-icons/bi"
 import { useNavigate } from "react-router-dom"
+import reducer from "./store";
+import { injectReducer } from "store/index";
+
+injectReducer("profile", reducer);
 
 const Profile = () => {
     const navigate = useNavigate();

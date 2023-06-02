@@ -15,6 +15,7 @@ class Service extends Model
         'sub_category_id',
         'workdays_id',
         'title',
+        'banner',
         'slug',
         'description',
         'starting_price',

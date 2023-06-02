@@ -143,3 +143,11 @@ export async function apiUpdateService (data) {
         data
     })
 }
+
+export async function apiUploadBanner (data) {
+    return ApiService.fetchData({
+        url: '/profile/banner/upload',
+        method: 'post',
+        data
+    })
+}

@@ -4,9 +4,15 @@ import { AiFillStar } from "react-icons/ai"
 import { HiOutlineCloudUpload } from "react-icons/hi"
 import { useSelector } from "react-redux"
 import { formatNumber } from "utils"
+import UploadBanner from "./UploadBanner"
+import appConfig from "configs/app.config"
+import { Loading } from "components/shared"
 
 const Banner = () => {
-    const { profile } = useSelector((state) => state.auth.user)
+    const { profile, gettingUser } = useSelector((state) => state.auth.user)
+    const { uploading } = useSelector((state) => state.profile.data)
+
+    const { imagePath } = appConfig
 
     // const startingPrice = formatNumber(profile.service?.starting_price, 2)
     const startingPrice = profile.service?.starting_price.toLocaleString()
@@ -14,14 +20,23 @@ const Banner = () => {
     return (
         <div>
             <div className="relative">
-                <div className="h-48 w-full bg-gray-300 rounded-2xl grid place-content-center relative">
-                    <Upload className="absolute top-4 right-4">
-                        <Button size="xs" className="!bg-blue-500 hover:!bg-blue-600" variant="solid" icon={<HiOutlineCloudUpload />}>
-                            Replace Photo
-                        </Button>
-                    </Upload>
-                    <img className="w-14" src="/img/gallery.png" alt="" />
-                </div>
+                {!profile.service?.banner && (
+                    <div className="h-48 w-full bg-gray-300 rounded-2xl grid place-content-center relative">
+                        <UploadBanner />
+                        <img className="w-14" src="/img/gallery.png" alt="" />
+                    </div>
+                )}
+                {profile.service?.banner && (
+                    <div className="h-56 w-full bg-gray-300 rounded-2xl relative">
+                        {(gettingUser || uploading) && (
+                            <div className="w-full h-56 rounded-2xl bg-black/60 absolute">
+                                <Loading loading={true} />
+                            </div>
+                        )}
+                        <UploadBanner />
+                        <img className="w-full rounded-2xl h-56 object-cover" src={`${imagePath}/${profile.service?.banner}`} alt={`${profile.service?.title} Banner`} />
+                    </div>
+                )}
 
                 <div className="absolute w-full -bottom-10">
                     <div className="bg-black rounded-2xl p-4 w-[80%] mx-auto">

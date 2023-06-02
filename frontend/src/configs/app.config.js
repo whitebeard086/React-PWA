@@ -3,7 +3,7 @@ const appConfig = {
     // imagePrefix: 'https://api.anipartna.com/storage',
     // videoPrefix: 'https://api.anipartna.com/storage',
     apiPrefix: 'http://localhost:8000/api',
-    imagePrefix: 'https://s3.eu-central-1.wasabisys.com/nganipartna',
+    imagePath: 'https://s3.eu-central-1.wasabisys.com/taskitly',
     videoPrefix: 'http://localhost:8000/storage',
     authenticatedEntryPath: '/home',
     unAuthenticatedEntryPath: '/login',

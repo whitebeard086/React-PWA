@@ -32,4 +32,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/profile/phone', [UserController::class, 'update_phone']);
     Route::post('/profile/phone/verify', [UserController::class, 'verify_phone']);
     Route::post('/profile/service/new', [UserController::class, 'new_service']);
+    Route::post('/profile/service/update', [UserController::class, 'update_service']);
+    Route::post('/profile/banner/upload', [UserController::class, 'upload_banner']);
 });

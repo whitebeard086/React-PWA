@@ -13,6 +13,7 @@ use App\Models\SubCategory;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -32,7 +33,7 @@ class UserController extends Controller
 
     public function get_user()
     {
-        $user = User::with('ProfileType', 'Service.Category', 'Service.Workdays')->where('id', auth()->user()->id)->first();
+        $user = User::with('ProfileType', 'Service.Category', 'Service.Workdays', 'Service.SubCategory')->where('id', auth()->user()->id)->first();
 
         if (isset($user) && $user->phone_verified_at == null) {
             return response()->json([
@@ -196,6 +197,68 @@ class UserController extends Controller
             'service' => $service,
             'workdays' => $workdays,
         ], 200);
+    }
+
+    public function update_service(Request $request)
+    {
+        $workdays = Workdays::where('id', $request->workdays_id)->first();
+        $workdays->monday_start = $request->monday1;
+        $workdays->monday_end = $request->monday2;
+        $workdays->tuesday_start = $request->tuesday1;
+        $workdays->tuesday_end = $request->tuesday2;
+        $workdays->wednesday_start = $request->wednesday1;
+        $workdays->wednesday_end = $request->wednesday2;
+        $workdays->thursday_start = $request->thursday1;
+        $workdays->thursday_end = $request->thursday2;
+        $workdays->friday_start = $request->friday1;
+        $workdays->friday_end = $request->friday2;
+        $workdays->saturday_start = $request->saturday1;
+        $workdays->saturday_end = $request->saturday2;
+        $workdays->sunday_start = $request->sunday1;
+        $workdays->sunday_end = $request->sunday2;
+        $workdays->save();
+
+        $service = Service::where('id', $request->service_id)->first();
+        $service->user_id = auth()->user()->id;
+        $service->category_id = $request->category;
+        $service->sub_category_id = $request->subcategory;
+        $service->workdays_id = $workdays->id;
+        $service->title = $request->title;
+        $service->slug = Str::slug($request->title);
+        $service->description = $request->description;
+        $service->starting_price = $request->starting_price;
+        $service->save();
+
+        return response()->json([
+            'status' => 'success',
+            'service' => $service,
+            'workdays' => $workdays,
+        ], 200);
+    }
+
+    public function upload_banner(Request $request)
+    {
+        $service = Service::where('id', $request->service_id)->first();
+        $user = User::where('id', $service->user_id)->first();
+        
+        if ($request->hasFile('banner')) {
+            if ($service->banner) {
+                Storage::disk('wasabi')->delete($service->banner);
+            }
+
+            $service->banner = $request->file('banner')->storePublicly(
+                "Services/banners/$user->username",
+                'wasabi'
+            );
+        }
+
+        $service->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Banner uploaded successfully',
+            'service' => $service,
+        ], 201);
     }
     
 }
