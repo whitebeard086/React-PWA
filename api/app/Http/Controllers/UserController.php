@@ -32,7 +32,7 @@ class UserController extends Controller
 
     public function get_user()
     {
-        $user = User::with('ProfileType', 'Service')->where('id', auth()->user()->id)->first();
+        $user = User::with('ProfileType', 'Service.Category', 'Service.Workdays')->where('id', auth()->user()->id)->first();
 
         if (isset($user) && $user->phone_verified_at == null) {
             return response()->json([

@@ -20,11 +20,10 @@ const Login = lazy(() => import("./views/auth/Login"));
 const Home = lazy(() => import("./views/home"));
 const Verify = lazy(() => import("./views/verify"));
 const Service = lazy(() => import("./views/service"));
+const Profile = lazy(() => import("./views/profile"));
 
 function App() {
     const dispatch = useDispatch();
-
-    const { hasService, verifiedPhone, userType } = useSelector((state) => state.auth.user)
 
     useEffect(() => {
         dispatch(getUser());
@@ -47,6 +46,7 @@ function App() {
                                 <Route element={<CheckVerifications />} >
                                     <Route path="/home" element={<Home />} />
                                     <Route path="/unauthorized" element={<Unauthorized />} />
+                                    <Route path="/profile" element={<Profile />} />
                                     <Route path="*" element={<NotFound />} />
                                 </Route>
                             </Route>

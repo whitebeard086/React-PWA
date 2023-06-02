@@ -69,30 +69,30 @@ const Button =  React.forwardRef((props, ref) => {
 
 	const twoToneColor = () => {
 		const btn = {
-			bgColor: active ? `bg-${buttonColor}-200 dark:bg-${buttonColor}-50` : `bg-${buttonColor}-50 dark:bg-${buttonColor}-500 dark:bg-opacity-20`,
-			textColor: `text-${buttonColor}-${buttonColorLevel} dark:text-${buttonColor}-50`,
-			hoverColor: active ? '' : `hover:bg-${buttonColor}-100 dark:hover:bg-${buttonColor}-500 dark:hover:bg-opacity-30`,
-			activeColor: `active:bg-${buttonColor}-200 dark:active:bg-${buttonColor}-500 dark:active:bg-opacity-40`
+			bgColor: active ? `bg-${buttonColor}-200` : `bg-${buttonColor}-50`,
+			textColor: `text-${buttonColor}-${buttonColorLevel}`,
+			hoverColor: active ? '' : `hover:bg-${buttonColor}-100`,
+			activeColor: `active:bg-${buttonColor}-200`
 		}
 		return getBtnColor(btn)
 	}
 
 	const defaultColor = () => {
 		const btn = {
-			bgColor: active ? `bg-gray-100 border border-gray-300 dark:bg-gray-500 dark:border-gray-500` : `bg-white border border-gray-300 dark:bg-gray-700 dark:border-gray-700`,
-			textColor: `text-gray-600 dark:text-gray-100`,
-			hoverColor: active ? '' : `hover:bg-gray-50 dark:hover:bg-gray-600`,
-			activeColor: `active:bg-gray-100 dark:active:bg-gray-500 dark:active:border-gray-500`
+			bgColor: active ? `bg-gray-100 border border-gray-300` : `bg-white border border-gray-300`,
+			textColor: `text-gray-600`,
+			hoverColor: active ? '' : `hover:bg-gray-50`,
+			activeColor: `active:bg-gray-100`
 		}
 		return getBtnColor(btn)
 	}
 
 	const plainColor = () => {
 		const btn = {
-			bgColor: active ? `bg-gray-100 dark:bg-gray-500` : 'bg-transparent border border-transparent',
-			textColor: `text-gray-600 dark:text-gray-100`,
-			hoverColor: active ? '' : `hover:bg-gray-50 dark:hover:bg-gray-600`,
-			activeColor: `active:bg-gray-100 dark:active:bg-gray-500 dark:active:border-gray-500`
+			bgColor: active ? `bg-gray-100` : 'bg-transparent border border-transparent',
+			textColor: `text-gray-600`,
+			hoverColor: active ? '' : `hover:bg-gray-50`,
+			activeColor: `active:bg-gray-100`
 		}
 		return getBtnColor(btn)
 	}
@@ -157,7 +157,7 @@ const Button =  React.forwardRef((props, ref) => {
 			return (
 			<span className="flex items-center justify-center">
 				<span className="text-lg">{icon}</span>
-				<span className="ltr:ml-1 rtl:mr-1">{children}</span>
+				<span className="ml-1">{children}</span>
 			</span>
 			)
 		}

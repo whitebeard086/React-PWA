@@ -53,7 +53,7 @@ const Header = ({ className }) => {
     }
 
     return (
-        <div className="border-2 border-primary-500 p-5 flex w-full justify-between items-center sticky top-0 bg-white">
+        <div className="p-5 flex w-full justify-between items-center sticky top-0 bg-white z-10">
             <h2 className="text-lg font-bold text-primary-500">
                 Hey {profile?.username}!
             </h2>
