@@ -15,16 +15,16 @@ const Banner = () => {
         <div>
             <div className="relative">
                 <div className="h-48 w-full bg-gray-300 rounded-2xl grid place-content-center relative">
-                    <Upload className="absolute top-4 left-4">
-                        <Button size="xs" variant="solid" icon={<HiOutlineCloudUpload />}>
-                            Upload
+                    <Upload className="absolute top-4 right-4">
+                        <Button size="xs" className="!bg-blue-500 hover:!bg-blue-600" variant="solid" icon={<HiOutlineCloudUpload />}>
+                            Replace Photo
                         </Button>
                     </Upload>
                     <img className="w-14" src="/img/gallery.png" alt="" />
                 </div>
 
                 <div className="absolute w-full -bottom-10">
-                    <div className="bg-black rounded-2xl p-4 w-[80vw] mx-auto">
+                    <div className="bg-black rounded-2xl p-4 w-[80%] mx-auto">
                         <div className="flex items-center gap-4 justify-between">
                             <h4 className="text-white font-bold text-lg">
                                 {profile.service?.title}

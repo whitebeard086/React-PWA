@@ -58,7 +58,6 @@ const Header = ({ className }) => {
                 Hey {profile?.username}!
             </h2>
 
-
             <div className="flex gap-3 items-center">
                 <Dropdown
                     renderTitle={<NotificationToggle />}

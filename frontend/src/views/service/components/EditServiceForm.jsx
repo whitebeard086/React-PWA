@@ -11,15 +11,15 @@ import Friday from "./friday";
 import Saturday from "./saturday";
 import Sunday from "./sunday";
 import { FormNumericInput, Loading, RichTextEditor } from "components/shared";
-import { createService, getSubCategories, setServiceStatus } from "../store/dataSlice";
+import { createService, getSubCategories, setServiceStatus, updateService } from "../store/dataSlice";
 import { useNavigate } from "react-router-dom";
 import { getUser } from "store/auth/userSlice";
 
-const ServiceForm = () => {
+const EditServiceForm = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { verifiedPhone } = useSelector((state) => state.auth.user)
+    const { profile } = useSelector((state) => state.auth.user)
 
     const {
         loadingCategories,
@@ -56,11 +56,11 @@ const ServiceForm = () => {
     })
 
     const initialValues = {
-        title: "",
-        category: "",
-        subcategory: "",
-        description: "",
-        startingPrice: "",
+        title: profile.service?.title,
+        category: profile.service?.category_id,
+        subcategory: profile.service?.sub_category_id,
+        description: profile.service?.description,
+        startingPrice: profile.service?.starting_price,
     }
 
     const categoryOptions = categories?.map((item) => {
@@ -75,6 +75,8 @@ const ServiceForm = () => {
         const { title, category, subcategory, description, startingPrice } = values
 
         const data = {
+            service_id: profile.service?.id,
+            workdays_id: profile.service?.workdays_id,
             monday1: mondayValue,
             monday2: mondayValue2,
             tuesday1: tuesdayValue,
@@ -96,7 +98,7 @@ const ServiceForm = () => {
             starting_price: startingPrice
         }
 
-        dispatch(createService(data))
+        dispatch(updateService(data))
     }
 
     useEffect(() => {
@@ -107,7 +109,7 @@ const ServiceForm = () => {
                     type={`${serviceStatus === "success" ? "success" : "danger"}`}
                     duration={5000}
                 >
-                    {serviceStatus === "success" ? "Service added successfully!" : "Looks like something went wrong, please try again."}
+                    {serviceStatus === "success" ? "Service updated successfully!" : "Looks like something went wrong, please try again."}
                 </Notification>,
                 {
                     placement: "top-center",
@@ -120,19 +122,16 @@ const ServiceForm = () => {
         }
 
         setTimeout(() => {
-            if (serviceStatus === "success" && verifiedPhone) {
+            if (serviceStatus === "success") {
                 dispatch(getUser())
-                navigate('/home')
-            } else if (serviceStatus === "success" && !verifiedPhone) {
-                dispatch(getUser())
-                navigate('/verify')
-            }
+                navigate(-1)
+            } 
         }, 2000)
 
         if (serviceStatus === "success" || serviceStatus === "error") {
             dispatch(setServiceStatus("idle"))
         }
-    }, [dispatch, navigate, serviceStatus, verifiedPhone])
+    }, [dispatch, navigate, serviceStatus])
 
     return (
         <div className="mt-8">
@@ -145,6 +144,7 @@ const ServiceForm = () => {
             >
                 {({ isSubmitting, touched, errors, values, setFieldValue }) => {
                     console.log(values);
+
                     return (
                         <Form>
                             <FormContainer>
@@ -201,7 +201,7 @@ const ServiceForm = () => {
                                                         console.log(inputValue); 
                                                     }}
                                                     options={categoryOptions}
-                                                    // defaultValue={categoryOptions[0]}
+                                                    defaultValue={{ label: profile.service?.category?.name, value: profile.service?.category_id }}
                                                     value={
                                                         categoryOptions?.value
                                                     }
@@ -231,7 +231,7 @@ const ServiceForm = () => {
                                             autoComplete="off"
                                         >
                                             {({ field, form }) => (
-                                                loadingSubCategories ? (
+                                                loadingSubCategories || loadingCategories ? (
                                                     <div className="border-2 h-11 rounded-md">
                                                         <Loading size={30} loading={true} />
                                                     </div>
@@ -241,12 +241,12 @@ const ServiceForm = () => {
                                                         field={field}
                                                         form={form}
                                                         className="w-full"
-                                                        isLoading={loadingSubCategories}
+                                                        isLoading={loadingSubCategories || loadingCategories}
                                                         onInputChange={(inputValue) => {
                                                             console.log(inputValue);
                                                         }}
                                                         options={subCategoryOptions}
-                                                        // defaultValue={subCategoryOptions[0]}
+                                                        defaultValue={{ label: profile.service?.sub_category?.name, value: profile.service?.category_id }}
                                                         value={
                                                             subCategoryOptions?.value
                                                         }
@@ -260,65 +260,66 @@ const ServiceForm = () => {
                                     </FormItem>
 
                                 </div>
-                                    <FormItem
-                                        label={
-                                            <p className="text-gray-400">
-                                                Describe the nature of your services
-                                            </p>
-                                        }
-                                        labelClass="!justify-start"
-                                        invalid={errors.description && touched.description}
-                                        errorMessage={errors.description}
-                                    >
-                                        <Field name="description">
-                                        {({ field, form }) => (
-                                            <RichTextEditor
-                                                value={field.value}
-                                                onChange={(val) =>
-                                                    form.setFieldValue(field.name, val)
-                                                }
-                                            />
-                                        )}
-                                        </Field>
-                                    </FormItem>
 
-                                    <FormItem
-                                        label=""
-                                        invalid={errors.startingPrice && touched.startingPrice}
-                                        errorMessage={errors.startingPrice}
-                                    >
-                                        <Field name="startingPrice">
-                                            {({ field, form }) => {
-                                                return (
-                                                    <FormNumericInput
-                                                        thousandSeparator={true}
-                                                        form={form}
-                                                        field={field}
-                                                        placeholder="Service Starting Price"
-                                                        decimalScale={2}
-                                                        onValueChange={(e) => {
-                                                            form.setFieldValue(field.name, e.floatValue);
-                                                        }}
-                                                        value={field.value}
-                                                        inputPrefix={
-                                                            <span className="font-semibold">₦</span>
-                                                        }
-                                                    />
-                                                );
-                                            }}
-                                        </Field>
-                                    </FormItem>
+                                <FormItem
+                                    label={
+                                        <p className="text-gray-400">
+                                            Describe the nature of your services
+                                        </p>
+                                    }
+                                    labelClass="!justify-start"
+                                    invalid={errors.description && touched.description}
+                                    errorMessage={errors.description}
+                                >
+                                    <Field name="description">
+                                    {({ field, form }) => (
+                                        <RichTextEditor
+                                            value={field.value}
+                                            onChange={(val) =>
+                                                form.setFieldValue(field.name, val)
+                                            }
+                                        />
+                                    )}
+                                    </Field>
+                                </FormItem>
 
-                                    <div className="mt-8">
-                                        <Button
-                                            block
-                                            variant="solid"
-                                            type="submit"
-                                            loading={creatingService}
-                                        >
-                                            Finish
-                                        </Button>
-                                    </div>
+                                <FormItem
+                                    label=""
+                                    invalid={errors.startingPrice && touched.startingPrice}
+                                    errorMessage={errors.startingPrice}
+                                >
+                                    <Field name="startingPrice">
+                                        {({ field, form }) => {
+                                            return (
+                                                <FormNumericInput
+                                                    thousandSeparator={true}
+                                                    form={form}
+                                                    field={field}
+                                                    placeholder="Service Starting Price"
+                                                    decimalScale={2}
+                                                    onValueChange={(e) => {
+                                                        form.setFieldValue(field.name, e.floatValue);
+                                                    }}
+                                                    value={field.value}
+                                                    inputPrefix={
+                                                        <span className="font-semibold">₦</span>
+                                                    }
+                                                />
+                                            );
+                                        }}
+                                    </Field>
+                                </FormItem>
+
+                                <div className="mt-8">
+                                    <Button
+                                        block
+                                        variant="solid"
+                                        type="submit"
+                                        loading={creatingService}
+                                    >
+                                        Finish
+                                    </Button>
+                                </div>
                             </FormContainer>
                         </Form>
                     )
@@ -327,4 +328,4 @@ const ServiceForm = () => {
         </div>
     )
 }
-export default ServiceForm
+export default EditServiceForm

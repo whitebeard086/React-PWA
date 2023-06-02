@@ -1,4 +1,4 @@
-import { apiCreateService, apiGetCategories, apiGetSubCategories } from "services/AuthService";
+import { apiCreateService, apiGetCategories, apiGetSubCategories, apiUpdateService } from "services/AuthService";
 
 const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
 
@@ -31,6 +31,18 @@ export const createService = createAsyncThunk(
     async (data, { rejectWithValue }) => {
         try {
             const response = await apiCreateService(data);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const updateService = createAsyncThunk(
+    "service/data/updateService",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await apiUpdateService(data);
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response.data);
@@ -87,6 +99,18 @@ const dataSlice = createSlice({
                 state.serviceStatus = 'success'
             })
             .addCase(createService.rejected, (state) => {
+                state.creatingService = false
+                state.serviceStatus = 'error'
+            })
+
+            .addCase(updateService.pending, (state) => {
+                state.creatingService = true
+            })
+            .addCase(updateService.fulfilled, (state) => {
+                state.creatingService = false
+                state.serviceStatus = 'success'
+            })
+            .addCase(updateService.rejected, (state) => {
                 state.creatingService = false
                 state.serviceStatus = 'error'
             })

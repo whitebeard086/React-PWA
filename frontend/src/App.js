@@ -20,6 +20,7 @@ const Login = lazy(() => import("./views/auth/Login"));
 const Home = lazy(() => import("./views/home"));
 const Verify = lazy(() => import("./views/verify"));
 const Service = lazy(() => import("./views/service"));
+const EditService = lazy(() => import("./views/service/components/EditService"));
 const Profile = lazy(() => import("./views/profile"));
 
 function App() {
@@ -42,11 +43,12 @@ function App() {
                                 <Route path="/verify" element={<Verify />} />
                                 <Route element={<RequireServiceProvider />}>
                                     <Route path="/service-setup" element={<Service />} />
+                                    <Route path="/profile" element={<Profile />} />
+                                    <Route path="/service/edit" element={<EditService />} />
                                 </Route>
                                 <Route element={<CheckVerifications />} >
                                     <Route path="/home" element={<Home />} />
                                     <Route path="/unauthorized" element={<Unauthorized />} />
-                                    <Route path="/profile" element={<Profile />} />
                                     <Route path="*" element={<NotFound />} />
                                 </Route>
                             </Route>

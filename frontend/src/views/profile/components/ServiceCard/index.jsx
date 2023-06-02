@@ -13,7 +13,7 @@ const ServiceCard = () => {
     return (
         <Card className="mt-14">
             <div className="flex flex-col gap-4">
-                <h4 className="py-1 px-3 font-semibold text-base rounded-md text-white bg-blue-600 w-fit">
+                <h4 className="py-1 px-3 font-semibold text-base rounded-md text-white bg-blue-500 w-fit">
                     {profile.service?.category?.name}
                 </h4>
 
@@ -27,12 +27,11 @@ const ServiceCard = () => {
                         value={profile.service?.description}
                         readOnly={true}
                         theme="bubble"
-                        className="p-0"
+                        className="p-0 "
                         style={{
                             marginRight: "",
                             marginLeft: "",
                             marginBottom: '-2rem',
-                            fontSize: "16px"
                         }}
                     />
                 </div>

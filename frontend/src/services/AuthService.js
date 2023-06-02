@@ -135,3 +135,11 @@ export async function apiCreateService (data) {
         data
     })
 }
+
+export async function apiUpdateService (data) {
+    return ApiService.fetchData({
+        url: '/profile/service/update',
+        method: 'post',
+        data
+    })
+}

@@ -12,7 +12,7 @@ const Wednesday = () => {
     const { wednesdayValue, wednesdayValue2 } = useSelector((state) => state.service.state);
 
     return (
-        <div className="mt-4">
+        <div className="mt-4 bg-white">
             <div className="p-3 border-2 rounded-md flex items-center gap-4 justify-between flex-wrap">
                 <p className="font-bold ">Wednesday</p>
 
