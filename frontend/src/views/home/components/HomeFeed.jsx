@@ -15,7 +15,7 @@ const HomeFeed = () => {
             <div className="col-span-4 w-full">
                 <div className="grid grid-cols-4 gap-4">
                     {categories?.map((item) => (
-                        <Card key={item.id} bordered bodyClass="" className="bg-amber-50">
+                        <Card clickable key={item.id} bordered bodyClass="" className="bg-amber-50">
                             <div className="flex flex-col gap-2 justify-center items-center">
                                 <Avatar 
                                     size={45}
@@ -42,9 +42,9 @@ const HomeFeed = () => {
 
                 <div className="flex overflow-auto gap-4 w-full pb-2">
                     {services?.map((item) => (
-                        <Card key={item.id} bodyClass="w-full flex items-center gap-4" className="min-w-[20rem] bg-primary-500">
+                        <Card clickable key={item.id} bodyClass="w-full flex items-center gap-4" className="min-w-[20rem] bg-primary-500">
                             <Card bordered bodyClass="p-0 h-32" className="p-0 w-1/2">
-
+                                <img className="w-full h-full object-fit rounded-lg" src={`${imagePath}/${item.user.image}`} alt={`${item.user.username}`} />
                             </Card>
 
                             <div className="w-1/2 flex flex-col gap-4">
@@ -84,7 +84,7 @@ const HomeFeed = () => {
                         <h4 className="text-lg font-bold mb-4 text-white">Bill Payments</h4>
 
                         <div className="grid grid-cols-4 gap-4">
-                            <div className="flex flex-col justify-center items-center">
+                            <div className="flex cursor-pointer flex-col justify-center items-center">
                                 <Card className="flex justify-center items-center">
                                     <BiUserVoice className="text-3xl" />
                                 </Card>
@@ -92,7 +92,7 @@ const HomeFeed = () => {
                                     Airtime
                                 </p>
                             </div>
-                            <div className="flex flex-col justify-center items-center">
+                            <div className="flex cursor-pointer flex-col justify-center items-center">
                                 <Card className="flex justify-center items-center">
                                     <MdMobiledataOff className="text-3xl" />
                                 </Card>
@@ -100,7 +100,7 @@ const HomeFeed = () => {
                                     Data
                                 </p>
                             </div>
-                            <div className="flex flex-col justify-center items-center">
+                            <div className="flex cursor-pointer flex-col justify-center items-center">
                                 <Card className="flex justify-center items-center">
                                     <MdOutlineElectricalServices className="text-3xl" />
                                 </Card>
@@ -108,7 +108,7 @@ const HomeFeed = () => {
                                     Electricity
                                 </p>
                             </div>
-                            <div className="flex flex-col justify-center items-center">
+                            <div className="flex cursor-pointer flex-col justify-center items-center">
                                 <Card className="flex justify-center items-center">
                                     <BiCameraMovie className="text-3xl" />
                                 </Card>
@@ -116,7 +116,7 @@ const HomeFeed = () => {
                                     Television
                                 </p>
                             </div>
-                            <div className="flex flex-col justify-center items-center">
+                            <div className="flex cursor-pointer flex-col justify-center items-center">
                                 <Card className="flex justify-center items-center">
                                     <MdOutlineGames className="text-3xl" />
                                 </Card>
@@ -124,7 +124,7 @@ const HomeFeed = () => {
                                     Betting
                                 </p>
                             </div>
-                            <div className="flex flex-col justify-center items-center">
+                            <div className="flex cursor-pointer flex-col justify-center items-center">
                                 <Card className="flex justify-center items-center">
                                     <MdOutlineSignalCellularConnectedNoInternet0Bar className="text-3xl" />
                                 </Card>
@@ -132,7 +132,7 @@ const HomeFeed = () => {
                                     Internet
                                 </p>
                             </div>
-                            <div className="flex flex-col justify-center items-center">
+                            <div className="flex cursor-pointer flex-col justify-center items-center">
                                 <Card className="flex justify-center items-center">
                                     <MdOutlineHotel className="text-3xl" />
                                 </Card>
@@ -140,7 +140,7 @@ const HomeFeed = () => {
                                     Hotels
                                 </p>
                             </div>
-                            <div className="flex flex-col justify-center items-center">
+                            <div className="flex cursor-pointer flex-col justify-center items-center">
                                 <Card className="flex justify-center items-center">
                                     <MdOutlineFlightTakeoff className="text-3xl" />
                                 </Card>

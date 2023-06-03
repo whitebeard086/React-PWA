@@ -13,7 +13,7 @@ class HomeController extends Controller
     public function index()
     {
         $categories = Category::all();
-        $services = Service::with('Category', 'SubCategory', 'Workdays')->get();
+        $services = Service::with('Category', 'SubCategory', 'Workdays', 'User')->get();
 
         return response()->json([
             'status' => 'success',

@@ -44,9 +44,9 @@ const Header = ({ className }) => {
         return (
             <div className="cursor-pointer transition duration-500 hover:bg-gray-200 h-9 w-9 rounded-full grid place-content-center">
                 <div className="relative w-full h-full">
-                    <div className="h-2 w-2 animate-ping rounded-full bg-primary-500 absolute left-3" />
-                    <div className="h-2 w-2 rounded-full bg-primary-500 absolute left-3" />
-                    <IoMdNotificationsOutline className="text-2xl" />
+                    <div className="h-3 w-3 animate-ping rounded-full bg-primary-500 absolute left-4" />
+                    <div className="h-3 w-3 rounded-full bg-primary-500 absolute left-4" />
+                    <IoMdNotificationsOutline className="text-3xl" />
                 </div>
             </div>
         )
@@ -95,7 +95,7 @@ const Header = ({ className }) => {
                     <Avatar shape="circle" size="sm" icon={<HiOutlineUser />} />
                 </div> */}
 
-                <Dropdown
+                {/* <Dropdown
                     menuStyle={{ minWidth: 240 }}
                     renderTitle={UserAvatar}
                     placement="bottom-end"
@@ -138,7 +138,7 @@ const Header = ({ className }) => {
                         </span>
                         <span className="w-full text-red-500">Sign Out</span>
 				    </Dropdown.Item>
-                </Dropdown>
+                </Dropdown> */}
             </div>
         </div>
     )

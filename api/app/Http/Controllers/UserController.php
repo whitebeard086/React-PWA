@@ -236,6 +236,30 @@ class UserController extends Controller
         ], 200);
     }
 
+    public function user_image(Request $request)
+    {
+        $user = $request->user();
+
+        if ($request->hasFile('image')) {
+            if ($user->image) {
+                Storage::disk('wasabi')->delete($user->image);
+            }
+
+            $user->image = $request->file('image')->storePublicly(
+                "Users/$user->username",
+                'wasabi'
+            );
+        }
+
+        $user->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Image uploaded successfully',
+            'user' => $user,
+        ], 201);
+    }
+
     public function upload_banner(Request $request)
     {
         $service = Service::where('id', $request->service_id)->first();
