@@ -2,33 +2,35 @@ import { Button } from "components/ui"
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom";
-import { onSignOutSuccess } from "store/auth/sessionSlice";
 import useAuth from "utils/hooks/useAuth";
+import reducer from "./store";
+import { injectReducer } from "store/index";
+import { getHomeData } from "./store/dataSlice";
+import GettingHomeFeed from "./components/GettingHomeFeed";
+import HomeFeed from "./components/HomeFeed";
+
+injectReducer("home", reducer);
 
 const Home = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { handleSignOut } = useAuth();
+    // const { handleSignOut } = useAuth();
 
-    const { hasService, userType } = useSelector((state) => state.auth.user)
+    const { loading } = useSelector((state) => state.home.data)
+    // const loading = true
 
     useEffect(() => {
-        if (userType === "Service Provider" && !hasService) {
-            // navigate('/service-setup')
-        }
-    }, [hasService, navigate, userType])
+        dispatch(getHomeData())
+    }, [dispatch])
 
     return (
-        <div>
-            Home
-            <Button
-                size="sm"
-                variant="solid"
-                onClick={() => handleSignOut()}
-            >
-                Sign Out
-            </Button>
+        <div className="mt-10">
+            {loading ? (
+                <GettingHomeFeed />
+            ) : (
+                <HomeFeed />
+            )}
         </div>
     )
 }

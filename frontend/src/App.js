@@ -22,6 +22,7 @@ const Verify = lazy(() => import("./views/verify"));
 const Service = lazy(() => import("./views/service"));
 const EditService = lazy(() => import("./views/service/components/EditService"));
 const Profile = lazy(() => import("./views/profile"));
+const Settings = lazy(() => import("./views/settings"));
 
 function App() {
     const dispatch = useDispatch();
@@ -36,9 +37,9 @@ function App() {
                 <Suspense fallback={<></>}>
                     <Routes>
                         <Route path="/" element={<Landing />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/login" element={<Login />} />
                         <Route path="/" element={<Layout />}>
-                            <Route path="/register" element={<Register />} />
-                            <Route path="/login" element={<Login />} />
                             <Route element={<RequireAuth />} >
                                 <Route path="/verify" element={<Verify />} />
                                 <Route element={<RequireServiceProvider />}>
@@ -48,6 +49,7 @@ function App() {
                                 </Route>
                                 <Route element={<CheckVerifications />} >
                                     <Route path="/home" element={<Home />} />
+                                    <Route path="/settings" element={<Settings />} />
                                     <Route path="/unauthorized" element={<Unauthorized />} />
                                     <Route path="*" element={<NotFound />} />
                                 </Route>

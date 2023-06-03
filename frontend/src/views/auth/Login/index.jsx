@@ -3,7 +3,7 @@ import SignInForm from "./components/SignInForm"
 
 const Login = () => {
     return (
-        <Container className="max-w-sm h-screen">
+        <Container className="max-w-xl h-screen bg-white p-4">
             <div className="h-full flex flex-col justify-center">
                 <div className="w-full flex justify-center">
                     <img className="w-80" src="/img/signin.png" alt="" />

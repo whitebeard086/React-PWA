@@ -2,8 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Auth\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,7 @@ Route::get('/register', [UserController::class, 'register']);
 
 // Protected Routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    // Authentication routes
     Route::get('/profile/user', [UserController::class, 'get_user']);
     Route::get('/countries', [UserController::class, 'get_countries']);
     Route::get('/categories', [UserController::class, 'get_categories']);
@@ -34,4 +36,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/profile/service/new', [UserController::class, 'new_service']);
     Route::post('/profile/service/update', [UserController::class, 'update_service']);
     Route::post('/profile/banner/upload', [UserController::class, 'upload_banner']);
+
+    // Home routes
+    Route::get('/home', [HomeController::class, 'index']);
+    Route::post('/category', [HomeController::class, 'create_category']);
 });
