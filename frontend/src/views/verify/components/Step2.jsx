@@ -86,7 +86,7 @@ const Step2 = ({ onBack }) => {
     };
  
     return (
-        <div className="h-full flex flex-col justify-center">
+        <div className="h-full flex flex-col justify-center p-6">
             <div className="w-full flex flex-col gap-4 justify-center">
                 <div className="w-full flex justify-center items-center">
                     <img className="w-72" src="/img/signup.png" alt="" />
@@ -113,7 +113,7 @@ const Step2 = ({ onBack }) => {
                             onVerify();
                         }}
                     >
-                        <div className="grid place-content-center bg-base-100">
+                        <div className="grid place-content-center bg-base-100 max-w-sm mx-auto">
                             <OtpInput 
                                 inputSize="lg"
                                 size={4}

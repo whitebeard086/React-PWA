@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Category;
+use Illuminate\Http\Request;
+
+class BrowseController extends Controller
+{
+    public function index(Request $request)
+    {
+        $categories = Category::with('Services')->get();
+
+        return response()->json([
+            'status' => 'success',
+            'categories' => $categories,
+        ]);
+    }
+
+    public function get_category(Request $request)
+    {
+        $category = Category::where('slug', $request->slug)->with('Services.User', 'SubCategories')->first();
+
+        return response()->json([
+            'status' => 'success',
+            'category' => $category,
+        ]);
+    }
+}

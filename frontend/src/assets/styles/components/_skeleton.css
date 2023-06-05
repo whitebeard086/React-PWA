@@ -1,5 +1,5 @@
 .skeleton {
-    @apply bg-orange-50 flex;
+    @apply bg-gray-300 flex;
 }
 
 .skeleton-circle {

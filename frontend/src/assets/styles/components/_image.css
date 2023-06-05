@@ -1,0 +1,7 @@
+.lazy-load-image-background.blur {
+    @apply !blur-[2px]
+}
+
+.lazy-load-image-background.blur.lazy-load-image-loaded {
+    @apply !blur-0 transition duration-300   
+}

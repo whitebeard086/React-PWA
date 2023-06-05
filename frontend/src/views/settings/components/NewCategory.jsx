@@ -49,7 +49,7 @@ const NewCategory = () => {
                     <Form>
                         <FormContainer>
                             <FormItem
-                                label="Full Name"
+                                label=""
                                 invalid={errors.name && touched.name}
                                 errorMessage={errors.name}
                             >

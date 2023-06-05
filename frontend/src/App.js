@@ -23,6 +23,8 @@ const Service = lazy(() => import("./views/service"));
 const EditService = lazy(() => import("./views/service/components/EditService"));
 const Profile = lazy(() => import("./views/profile"));
 const Settings = lazy(() => import("./views/settings"));
+const Browse = lazy(() => import("./views/browse"));
+const Category = lazy(() => import("./views/browse/components/category"));
 
 function App() {
     const dispatch = useDispatch();
@@ -39,17 +41,21 @@ function App() {
                         <Route path="/" element={<Landing />} />
                         <Route path="/register" element={<Register />} />
                         <Route path="/login" element={<Login />} />
-                        <Route path="/" element={<Layout />}>
                             <Route element={<RequireAuth />} >
-                                <Route path="/verify" element={<Verify />} />
+                            <Route path="/verify" element={<Verify />} />
+                            <Route element={<RequireServiceProvider />}>
+                                <Route path="/service-setup" element={<Service />} />
+                            </Route>
+                            <Route path="/" element={<Layout />}>
                                 <Route element={<RequireServiceProvider />}>
-                                    <Route path="/service-setup" element={<Service />} />
                                     <Route path="/profile" element={<Profile />} />
                                     <Route path="/service/edit" element={<EditService />} />
                                 </Route>
                                 <Route element={<CheckVerifications />} >
                                     <Route path="/home" element={<Home />} />
                                     <Route path="/settings" element={<Settings />} />
+                                    <Route path="/browse" element={<Browse />} />
+                                    <Route path="/browse/:categorySlug" element={<Category />} />
                                     <Route path="/unauthorized" element={<Unauthorized />} />
                                     <Route path="*" element={<NotFound />} />
                                 </Route>

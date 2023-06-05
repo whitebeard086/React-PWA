@@ -22,6 +22,7 @@ const Radio = React.forwardRef((props, ref) => {
 		className,
 		checked: checkedProp,
 		color,
+		customLabelClass,
 		defaultChecked,
 		disabled = disabledContext,
 		field,
@@ -89,6 +90,7 @@ const Radio = React.forwardRef((props, ref) => {
 		'radio-label gap-2',
 		labelDisabledClass,
 		className,
+		customLabelClass,
 		`${'inline-flex'}`,
 		`${radioGutter ? 'm' + (vertical ? 'b-': 'r-') + radioGutter : ''}`
 	)
@@ -121,6 +123,7 @@ Radio.propTypes = {
 	color: PropTypes.string,
 	onChange: PropTypes.func,
 	labelRef: PropTypes.string,
+	customLabelClass: PropTypes.string,
 	value: PropTypes.any,
 	vertical: PropTypes.bool,
 }

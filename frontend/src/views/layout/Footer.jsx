@@ -26,7 +26,7 @@ const Footer = () => {
             </NavLink>
             {userType === "Normal User" && (
                 <NavLink
-                    to="/explore"
+                    to="/browse"
                     className={({ isActive }) =>
                         isActive
                             ? "bg-emerald-50 text-emerald-500 flex flex-col items-center p-2 rounded-md shadow-md font-bold"
@@ -34,7 +34,7 @@ const Footer = () => {
                     }
                 >
                     <AiOutlineFileSearch className="text-2xl" />
-                    <p className="text-sm">Explore</p>
+                    <p className="text-sm">Browse</p>
                 </NavLink>
             )}
             {userType === "Service Provider" && (

@@ -24,7 +24,7 @@ const Service = () => {
     }, [dispatch, hasService, navigate]);
 
     return (
-        <Container className="max-w-2xl">
+        <Container className="max-w-xl">
             <div className="flex h-full justify-center items-center p-8">
                 <div className="w-full h-full">
                     <h1 className="font-bold text-xl text-center">

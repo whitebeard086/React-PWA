@@ -34,7 +34,7 @@ const Landing = () => {
     // }, [navigate])
 
     return (
-        <Container className="max-w-sm">
+        <Container className="max-w-xl">
             <Suspense fallback={<div className="bg-primary-500 w-full h-screen"></div>}>
                 {step === 0 && <Step1 onNext={handleNext} onSkip={handleSkip} />}
                 {step === 1 && <Step2 onNext={handleNext} onSkip={handleSkip} />}

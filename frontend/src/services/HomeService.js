@@ -15,3 +15,11 @@ export async function apiCreateCategory (data) {
         data
     })
 }
+
+export async function apiUpdateCategory (data) {
+    return ApiService.fetchData({
+        url: '/category/update',
+        method: 'post',
+        data
+    })
+}

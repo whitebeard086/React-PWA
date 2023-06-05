@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BrowseController;
 use App\Http\Controllers\Auth\AuthController;
 
 /*
@@ -41,4 +42,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Home routes
     Route::get('/home', [HomeController::class, 'index']);
     Route::post('/category', [HomeController::class, 'create_category']);
+    Route::post('/category/update', [HomeController::class, 'update_category']);
+
+    // Browse routes
+    Route::get('/browse', [BrowseController::class, 'index']);
+    Route::post('/browse/category', [BrowseController::class, 'get_category']);
 });

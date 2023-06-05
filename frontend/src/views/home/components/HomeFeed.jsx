@@ -1,4 +1,4 @@
-import { Avatar, Card } from "components/ui"
+import { Avatar, Card, Image } from "components/ui"
 import appConfig from "configs/app.config"
 import { AiFillStar } from "react-icons/ai"
 import { BiCameraMovie, BiUserVoice } from "react-icons/bi"
@@ -44,7 +44,12 @@ const HomeFeed = () => {
                     {services?.map((item) => (
                         <Card clickable key={item.id} bodyClass="w-full flex items-center gap-4" className="min-w-[20rem] bg-primary-500">
                             <Card bordered bodyClass="p-0 h-32" className="p-0 w-1/2">
-                                <img className="w-full h-full object-fit rounded-lg" src={`${imagePath}/${item.user.image}`} alt={`${item.user.username}`} />
+                                <Image 
+                                    src={`${imagePath}/${item.user.image}`}
+                                    alt={`${item.user.username}`}
+                                    wrapperClassName="rounded-lg"
+                                    className="w-full h-full object-fit rounded-lg"
+                                />
                             </Card>
 
                             <div className="w-1/2 flex flex-col gap-4">
@@ -62,15 +67,15 @@ const HomeFeed = () => {
                                     </h4>
 
                                     <div className="flex items-center gap-2">
-                                    <div className="flex items center">
-                                        <AiFillStar className="text-amber-200 text-md" />
-                                        <AiFillStar className="text-amber-200 text-md" />
-                                        <AiFillStar className="text-amber-200 text-md" />
-                                        <AiFillStar className="text-amber-200 text-md" />
-                                        <AiFillStar className="text-amber-200 text-md" />
+                                        <div className="flex items center">
+                                            <AiFillStar className="text-amber-200 text-md" />
+                                            <AiFillStar className="text-amber-200 text-md" />
+                                            <AiFillStar className="text-amber-200 text-md" />
+                                            <AiFillStar className="text-amber-200 text-md" />
+                                            <AiFillStar className="text-amber-200 text-md" />
+                                        </div>
+                                        <p className="text-gray-200 font-semibold">5 stars</p>
                                     </div>
-                                    <p className="text-gray-200 font-semibold">5 stars</p>
-                            </div>
                                 </div>
                             </div>
                         </Card>

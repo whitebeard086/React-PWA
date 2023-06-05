@@ -12,13 +12,14 @@ class Category extends Model
     protected $fillable = [
         'name',
         'icon',
+        'banner',
         'slug',
         'description',
     ];
 
     public function Services()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(Service::class);
     }
 
     public function SubCategories()

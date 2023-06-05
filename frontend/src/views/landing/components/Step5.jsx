@@ -14,6 +14,7 @@ const Step5 = ({ onNext, onSkip }) => {
                     className="!bg-black hover:!bg-gray-900"    
                     block
                     onClick={onSkip}
+                    variant="solid"
                 >
                     Get Started
                 </Button>

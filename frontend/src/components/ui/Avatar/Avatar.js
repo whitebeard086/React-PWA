@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import useMergedRef from '../hooks/useMergeRef'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
+import Image from '../Image'
 
 const Avatar = React.forwardRef((props, ref) => {
 
@@ -13,6 +15,9 @@ const Avatar = React.forwardRef((props, ref) => {
 		alt, 
 		className, 
 		icon,
+		effect,
+		placeholderSrc,
+        wrapperClassName,
 		...rest 
 	} = props
 
@@ -56,7 +61,16 @@ const Avatar = React.forwardRef((props, ref) => {
 	)
 
 	if (src) {
-		children = <img className={`avatar-img avatar-${shape}`} src={src} srcSet={srcSet} alt={alt} loading="lazy" />
+		// children = <img className={`avatar-img avatar-${shape}`} src={src} srcSet={srcSet} alt={alt} loading="lazy" />
+		children = <Image 
+			className={`avatar-img avatar-${shape}`} 
+			src={src} 
+			srcSet={srcSet} 
+			alt={alt}
+			effect={effect}
+			placeholderSrc={placeholderSrc}
+			wrapperClassName={wrapperClassName}
+		/>
 	} else if (icon) {
 		children = (
 			<span className={classNames('avatar-icon', `avatar-icon-${size}`)}>{icon}</span>
@@ -87,6 +101,8 @@ const Avatar = React.forwardRef((props, ref) => {
 Avatar.defaultProps = {
 	shape: 'rounded',
 	size: 'md',
+	placeholderSrc: '',
+	effect: 'blur',
 	
 }
 
@@ -100,6 +116,9 @@ Avatar.propTypes = {
 	src: PropTypes.string,
 	srcSet: PropTypes.string,
 	alt: PropTypes.string,
+	placeholderSrc: PropTypes.string,
+    effect: PropTypes.string,
+	wrapperClassName: PropTypes.string,
 }
 
 

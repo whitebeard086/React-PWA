@@ -41,7 +41,7 @@ const Verify = () => {
     console.log(step);
 
     return (
-        <Container className="max-w-sm h-screen">
+        <Container className="max-w-xl h-screen bg-white">
             <Suspense fallback={<></>}>
                 {step === 1 && <Step1 onNext={handleNext} />}
                 {step === 2 && <Step2 onNext={handleNext} onBack={handleBack} />}
