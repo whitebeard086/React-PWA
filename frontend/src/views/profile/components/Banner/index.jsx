@@ -1,4 +1,4 @@
-import { Button, Upload } from "components/ui"
+import { Button, Card, Upload } from "components/ui"
 import millify from "millify"
 import { AiFillStar } from "react-icons/ai"
 import { HiOutlineCloudUpload } from "react-icons/hi"
@@ -15,7 +15,7 @@ const Banner = () => {
     const { imagePath } = appConfig
 
     // const startingPrice = formatNumber(profile.service?.starting_price, 2)
-    const startingPrice = profile.service?.starting_price.toLocaleString()
+    const startingPrice = profile.service?.starting_price?.toLocaleString()
 
     return (
         <div>
@@ -39,7 +39,7 @@ const Banner = () => {
                 )}
 
                 <div className="absolute w-full -bottom-10">
-                    <div className="bg-black rounded-2xl p-4 w-[80%] mx-auto">
+                    <Card bordered className="bg-black w-[80%] mx-auto">
                         <div className="flex items-center gap-4 justify-between">
                             <h4 className="text-white font-bold text-lg">
                                 {profile.service?.title}
@@ -63,7 +63,7 @@ const Banner = () => {
 
                             <p className="text-gray-300 font-semibold">{millify(2300)} Orders</p>
                         </div>
-                    </div>
+                    </Card>
                 </div>
             </div>
         </div>

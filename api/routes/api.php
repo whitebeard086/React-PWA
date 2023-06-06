@@ -29,6 +29,7 @@ Route::get('/register', [UserController::class, 'register']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
     // Authentication routes
     Route::get('/profile/user', [UserController::class, 'get_user']);
+    Route::post('/profile/provider', [UserController::class, 'get_provider']);
     Route::get('/countries', [UserController::class, 'get_countries']);
     Route::get('/categories', [UserController::class, 'get_categories']);
     Route::post('/category/subcategories', [UserController::class, 'get_subcategories']);

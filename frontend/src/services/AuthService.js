@@ -16,6 +16,14 @@ export async function apiGetUser (data) {
     })
 }
 
+export async function apiGetProvider (data) {
+    return ApiService.fetchData({
+        url: '/profile/provider',
+        method: 'post',
+        data
+    })
+}
+
 export async function apiSignIn (data) {
     return ApiService.fetchData({
         url: '/login',

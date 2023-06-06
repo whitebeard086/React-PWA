@@ -282,7 +282,17 @@ class UserController extends Controller
             'status' => 'success',
             'message' => 'Banner uploaded successfully',
             'service' => $service,
-        ], 201);
+        ], 200);
+    }
+
+    public function get_provider(Request $request)
+    {
+        $provider = User::with('Service.Workdays', 'Service.Category')->where('slug', $request->slug)->first(); 
+
+        return response()->json([
+            'status' => 'success',
+            'provider' => $provider,
+        ], 200);
     }
     
 }

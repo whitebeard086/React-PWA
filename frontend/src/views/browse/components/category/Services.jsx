@@ -14,6 +14,7 @@ const Services = () => {
         setValue(val)
     }
 
+    // const { profile } = useSelector((state) => state.auth.user)
     const { category, services } = useSelector((state) => state.browse.data)
 
     return (
@@ -48,7 +49,7 @@ const Services = () => {
             ):(
                 <div className="flex flex-col gap-4">
                     {services?.map((item) => (
-                        <Link key={item.id} to={`/profile/${item.user?.slug}`}>
+                        <Link key={item.id} to={`/browse/profile/${item.user?.slug}`}>
                             <Card>
                                 <div className="flex gap-4 justify-between">
                                     <div className="flex items-center gap-4 w-3/4">

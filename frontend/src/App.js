@@ -22,6 +22,7 @@ const Verify = lazy(() => import("./views/verify"));
 const Service = lazy(() => import("./views/service"));
 const EditService = lazy(() => import("./views/service/components/EditService"));
 const Profile = lazy(() => import("./views/profile"));
+const ProviderProfile = lazy(() => import("./views/profile/components/ProviderProfile"));
 const Settings = lazy(() => import("./views/settings"));
 const Browse = lazy(() => import("./views/browse"));
 const Category = lazy(() => import("./views/browse/components/category"));
@@ -56,6 +57,7 @@ function App() {
                                     <Route path="/settings" element={<Settings />} />
                                     <Route path="/browse" element={<Browse />} />
                                     <Route path="/browse/:categorySlug" element={<Category />} />
+                                    <Route path="/browse/profile/:providerSlug" element={<ProviderProfile />} />
                                     <Route path="/unauthorized" element={<Unauthorized />} />
                                     <Route path="*" element={<NotFound />} />
                                 </Route>
