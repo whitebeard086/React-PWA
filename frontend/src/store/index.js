@@ -12,7 +12,7 @@ const persistConfig = {
     keyPrefix: "",
     // storage: createIdbStorage({name: 'keyval-store', storeName: 'keyval'}),
     storage,
-    whitelist: ["auth"],
+    whitelist: ["auth", "payments"],
     // serialize: false,
     // deserialize: false,
 };

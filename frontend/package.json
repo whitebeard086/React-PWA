@@ -28,6 +28,7 @@
     "react-modal": "^3.16.1",
     "react-number-format": "^4.9.1",
     "react-paginate": "^8.2.0",
+    "react-paystack": "^4.0.3",
     "react-popper": "^2.3.0",
     "react-portal": "^4.2.2",
     "react-quill": "^2.0.0",

@@ -47,6 +47,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'profile_type_id' => 'float',
+        'balance' => 'float',
     ];
 
     public function ProfileType()
@@ -57,5 +58,10 @@ class User extends Authenticatable
     public function Service()
     {
         return $this->hasOne(Service::class);
+    }
+
+    public function Transactions()
+    {
+        return $this->hasMany(Transaction::class)->orderBy('id', 'desc');
     }
 }

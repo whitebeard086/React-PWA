@@ -24,15 +24,12 @@ const EditService = lazy(() => import("./views/service/components/EditService"))
 const Profile = lazy(() => import("./views/profile"));
 const ProviderProfile = lazy(() => import("./views/profile/components/ProviderProfile"));
 const Settings = lazy(() => import("./views/settings"));
+const Payments = lazy(() => import("./views/payments"));
 const Browse = lazy(() => import("./views/browse"));
 const Category = lazy(() => import("./views/browse/components/category"));
 
 function App() {
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(getUser());
-    }, [dispatch]);
+    
 
     return (
         <PersistGate loading={null} persistor={persistor}>
@@ -55,6 +52,7 @@ function App() {
                                 <Route element={<CheckVerifications />} >
                                     <Route path="/home" element={<Home />} />
                                     <Route path="/settings" element={<Settings />} />
+                                    <Route path="/payments" element={<Payments />} />
                                     <Route path="/browse" element={<Browse />} />
                                     <Route path="/browse/:categorySlug" element={<Category />} />
                                     <Route path="/browse/profile/:providerSlug" element={<ProviderProfile />} />

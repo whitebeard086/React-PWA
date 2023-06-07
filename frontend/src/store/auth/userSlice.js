@@ -21,6 +21,7 @@ export const initialState = {
     userSet: null,
     gettingUser: false,
     verifiedPhone: null,
+    verifyingDeposits: false,
 };
 
 export const userSlice = createSlice({
@@ -35,6 +36,9 @@ export const userSlice = createSlice({
             state.hasVisited = action.payload;
         },
         userLoggedOut: () => initialState,
+        setVerifyingDeposits: (state, action) => {
+            state.verifyingDeposits = action.payload;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -64,6 +68,12 @@ export const userSlice = createSlice({
     },
 });
 
-export const { setUser, updateUser, setHasVisited, userLoggedOut } = userSlice.actions;
+export const { 
+    setUser, 
+    updateUser, 
+    setHasVisited, 
+    userLoggedOut,
+    setVerifyingDeposits,
+} = userSlice.actions;
 
 export default userSlice.reducer;

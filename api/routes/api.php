@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BrowseController;
+use App\Http\Controllers\GatewayController;
+use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\Auth\AuthController;
 
 /*
@@ -48,4 +50,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Browse routes
     Route::get('/browse', [BrowseController::class, 'index']);
     Route::post('/browse/category', [BrowseController::class, 'get_category']);
+
+    // Payment Routes
+    Route::get('/payments', [PaymentsController::class, 'index']);
+
+    // Deposit Routes
+    Route::post('/paystack/deposit', [GatewayController::class, 'paystackDeposit'])->middleware('verified');
+    Route::post('/paystack/verify', [GatewayController::class, 'verifyPaystackPayment'])->middleware('verified');
 });
