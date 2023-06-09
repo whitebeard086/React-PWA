@@ -3,7 +3,7 @@ import { Field, Form, Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "store/auth/userSlice";
 import { paystackDeposit, verifyPaystackDeposit } from "views/payments/store/dataSlice";
-import { setAmount } from "views/payments/store/stateSlice";
+import { setAmount, toggleDepositDialog } from "views/payments/store/stateSlice";
 import * as Yup from "yup";
 import { motion } from "framer-motion";
 import { FormNumericInput } from "components/shared";
@@ -56,6 +56,7 @@ const DepositForm = () => {
                         }))
                         dispatch(verifyPaystackDeposit());
                         dispatch(setAmount(""));
+                        dispatch(toggleDepositDialog(false));
                         dispatch(getUser());
                     },
                     onClose: () => {},
