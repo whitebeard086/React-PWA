@@ -44,6 +44,7 @@ const Dropdown = React.forwardRef((props, ref) => {
   	const triggerTarget = useRef()
 	const menuControl = useDropdownMenuContext(overlayTarget)
 	const open = menuControl.open
+	// console.log(open);
 
 	const buttonId = useUniqueId('dropdown-toggle-')
   	const menuId = useUniqueId('base-menu-')

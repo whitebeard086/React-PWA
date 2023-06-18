@@ -6,7 +6,7 @@
         @apply text-gray-600;
 
         &.menu-item-hoverable {
-            @apply hover:text-emerald-900 hover:bg-emerald-50;
+            @apply hover:text-emerald-900 hover:bg-gray-100 transition duration-300;
         }
 
         &.menu-item-active {

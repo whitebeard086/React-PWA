@@ -9,11 +9,11 @@ import { toggleDepositDialog } from "views/payments/store/stateSlice"
 import DepositDialog from "views/payments/components/Deposit/DepositDialog"
 import { useEffect } from "react"
 import { getUser } from "store/auth/userSlice"
+import classNames from "classnames"
 
-const Layout = () => {
+const Layout = ({ noPad }) => {
     const dispatch = useDispatch();
     const location = useLocation();
-    console.log(location);
 
     const { profile, userType } = useSelector((state) => state.auth.user)
     const { verifying } = useSelector((state) => state.payments.data)
@@ -61,7 +61,7 @@ const Layout = () => {
                     )}
                 </div>
             </div>
-            <div className="bg-gray-100 min-h-[72vh] px-2">
+            <div className={classNames('bg-gray-100 min-h-[72vh]')}>
                 <Outlet />
             </div>
             <Footer />

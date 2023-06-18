@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { apiGetBrowseData, apiGetCategory } from "services/BrowseService";
+import { deleteMessage } from "views/chat/store/dataSlice";
 
 export const getBrowseData = createAsyncThunk(
     "browse/data/getBrowseData",
@@ -70,6 +71,10 @@ const dataSlice = createSlice({
                 state.gettingCategory = false;
                 state.categoryStatus = 'error';
             })
+
+            // .addCase(deleteMessage.fulfilled, (state) => {
+            //     // state
+            // })
     }
 })
 

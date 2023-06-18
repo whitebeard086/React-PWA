@@ -60,7 +60,7 @@ class PaymentsController extends Controller
             }
         }
 
-        $txns = Transaction::where('user_id', auth()->user()->id)->get();
+        $txns = Transaction::orderBy('id', 'desc')->where('user_id', auth()->user()->id)->get();
 
         return response()->json([
             'status' => 'success',

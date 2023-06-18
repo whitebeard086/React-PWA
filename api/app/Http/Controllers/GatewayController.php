@@ -22,7 +22,7 @@ class GatewayController extends Controller
         ]);
 
         $formFields['user_id'] = auth()->user()->id;
-        $formFields['type'] = 'deposit';
+        $formFields['type'] = 'Wallet Topup';
         $formFields['method'] = 'paystack';
 
         $txn = Transaction::create($formFields);

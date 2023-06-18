@@ -37,6 +37,7 @@
     "react-scripts": "5.0.1",
     "react-select": "^5.7.3",
     "react-slider": "^2.0.4",
+    "react-textarea-autosize": "^8.4.1",
     "react-time-picker": "^6.2.0",
     "redux-persist": "^6.0.0",
     "tailwind-safelist-generator": "^1.0.0",

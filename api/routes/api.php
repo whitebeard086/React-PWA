@@ -8,6 +8,7 @@ use App\Http\Controllers\BrowseController;
 use App\Http\Controllers\GatewayController;
 use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\ChatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +56,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/payments', [PaymentsController::class, 'index']);
 
     // Deposit Routes
-    Route::post('/paystack/deposit', [GatewayController::class, 'paystackDeposit'])->middleware('verified');
-    Route::post('/paystack/verify', [GatewayController::class, 'verifyPaystackPayment'])->middleware('verified');
+    Route::post('/paystack/deposit', [GatewayController::class, 'paystackDeposit']);
+    Route::post('/paystack/verify', [GatewayController::class, 'verifyPaystackPayment']);
+
+    // Chat Routes
+    Route::post('/chat', [ChatController::class, 'chat']);
+    Route::post('/chat/send-message', [ChatController::class, 'send_message']);
+    Route::post('/chat/delete-message', [ChatController::class, 'delete_message']);
 });

@@ -25,7 +25,7 @@ const Home = () => {
     }, [dispatch])
 
     return (
-        <div className="mt-10 mb-8">
+        <div className="mt-10 mb-8 px-4">
             {loading ? (
                 <GettingHomeFeed />
             ) : (

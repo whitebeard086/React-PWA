@@ -49,11 +49,12 @@ const DropdownToggle = React.forwardRef((props, ref) => {
 		placement,
 		inSidenav,
 		disabled,
+		customToggleClass = "",
 		toggleClassName,
 		...rest
 	} = props
 
-	const toggleClass = 'dropdown-toggle'
+	const toggleClass = `dropdown-toggle ${customToggleClass}`
 	const disabledClass = 'dropdown-toggle-disabled'
 
 	const dropdownToggleClass = classNames(

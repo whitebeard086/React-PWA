@@ -7,7 +7,7 @@ import { AiFillStar, AiFillWechat } from "react-icons/ai"
 import { BsDashLg } from "react-icons/bs"
 import ReactQuill from "react-quill"
 import { useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 const Provider = () => {
     const { imagePath } = appConfig;
@@ -212,14 +212,16 @@ const Provider = () => {
             </Card>
 
             <div className="mt-4">
-                <Button
-                    variant="solid"
-                    block
-                    icon={<AiFillWechat />}
-                    // onClick={() => navigate('/service/edit')}
-                >
-                    Chat Now
-                </Button>
+                <Link to={`/chat/${provider?.slug}`}>
+                    <Button
+                        variant="solid"
+                        block
+                        icon={<AiFillWechat />}
+                        // onClick={() => navigate('/service/edit')}
+                    >
+                        Chat Now
+                    </Button>
+                </Link>
             </div>
         </div>
     )

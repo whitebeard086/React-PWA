@@ -64,4 +64,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Transaction::class)->orderBy('id', 'desc');
     }
+
+    public function Chats()
+    {
+        return $this->hasMany(Chat::class);
+    }
 }
