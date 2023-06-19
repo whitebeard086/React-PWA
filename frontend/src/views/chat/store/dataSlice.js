@@ -79,7 +79,7 @@ const dataSlice = createSlice({
             })
             .addCase(sendMessage.fulfilled, (state, action) => {
                 state.sendingMessage = false
-                state.message = action.payload.message
+                state.messages = [...state.messages, action.payload.message]
                 state.messageStatus = action.payload.status
             })
             .addCase(sendMessage.rejected, (state) => {

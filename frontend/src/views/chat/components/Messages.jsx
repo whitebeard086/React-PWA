@@ -6,12 +6,14 @@ import { BsReplyFill } from "react-icons/bs"
 import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux"
 import { deleteMessage, removeMessage, setDeleteMessageStatus } from "../store/dataSlice";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from 'framer-motion'
+import dayjs from "dayjs";
 
 const Messages = () => {
     const dispatch = useDispatch();
     const { imagePath } = appConfig;
+    const scroll = useRef()
 
     const { messages, provider, deleteMessageStatus } = useSelector((state) => state.chat.data)
     
@@ -42,15 +44,22 @@ const Messages = () => {
         dispatch(setDeleteMessageStatus('idle'))
     }, [deleteMessageStatus, dispatch])
 
+    // Scroll to last message
+    useEffect(() => {
+        scroll.current?.scrollIntoView({ behavior: 'smooth' })
+    }, [messages])
+
     return (
         <AnimatePresence>
             {messages?.map((message) => (
                 <motion.div 
                     key={message.id}
+                    ref={scroll}
                     initial={{ opacity: 0, visibility: 'hidden' }}
                     animate={{opacity: 1, visibility: 'visible'}}
-                    transition={{ duration: 1, type: 'tween' }}
+                    transition={{ duration: .3, type: 'tween' }}
                     exit={{ opacity: 0, visibility: 'hidden' }}
+                    layoutId={message.id}
                     className="flex justify-end gap-2 items-start"
                 >
                     <div className="mb-4 max-w-[80%] w-fit">
@@ -80,7 +89,7 @@ const Messages = () => {
                             </div>
                         </Card>
                         <div>
-                            <p className="text-left">8:02 PM</p>
+                            <p className="text-left">{dayjs(message.created_at).format('h:mm A')}</p>
                         </div>
                     </div>
                     <div>

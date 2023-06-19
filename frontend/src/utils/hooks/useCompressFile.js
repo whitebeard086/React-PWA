@@ -20,10 +20,16 @@ const useCompressFile = () => {
         }
     }
 
+    const resetCompressedFile = () => {
+        setCompressedFile(null)
+        setCompressedFileError(null)
+    }
+
     return {
         compressFile,
         compressedFile,
         compressedFileError,
+        resetCompressedFile
     }
 }
 

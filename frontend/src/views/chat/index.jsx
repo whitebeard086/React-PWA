@@ -19,6 +19,7 @@ import { FaFileImage, FaFileInvoiceDollar } from "react-icons/fa";
 import useCompressFile from "utils/hooks/useCompressFile";
 import { useDropdownMenuContext } from "components/ui/Dropdown/context/dropdownMenuContext";
 import Messages from "./components/Messages";
+import MessageBox from "./components/MessageBox";
 
 injectReducer("chat", reducer);
 
@@ -27,55 +28,16 @@ const Chat = () => {
     const dispatch = useDispatch();
     const { imagePath } = appConfig;
     const { providerSlug } = useParams();
-    const { compressFile, compressedFile, compressedFileError } = useCompressFile();
-    const [avatarImg, setAvatarImg] = useState(null)
-    const menuControl = useDropdownMenuContext()
+    const { compressFile, compressedFile, compressedFileError, resetCompressedFile } = useCompressFile();
+    
 
     const { message, file, invoice } = useSelector((state) => state.chat.state)
     const { chat } = useSelector((state) => state.chat.data)
     const { userType, profile } = useSelector((state) => state.auth.user)
 
-    const onFileUpload = (file) => {
-        setAvatarImg(URL.createObjectURL(file[0]))
-        compressFile(file[0], 0.15)
-    }
-
-    useEffect(() => {
-        if (compressedFile !== null) {
-            dispatch(setFile(compressedFile))
-            dispatch(sendMessage({
-                chat_id: chat?.id,
-                sender_id: profile?.id,
-                file,
-            }))
-
-            dispatch(setFile({}))
-        }
-        menuControl.closeMenu()
-    }, [compressedFile, dispatch])
-
-    const beforeUpload = (files) => {
-        
-        let valid = true
-
-        const allowedFileType = ['image/jpeg', 'image/png']
-
-        for (let file of files) {
-            if (!allowedFileType.includes(file.type)) {
-                valid = 'Please upload a .jpeg or .png file!'
-            }
-        }
-
-        return valid
-    }
-
-    console.log(compressedFileError);
-    console.log(compressedFile);
+    // console.log(compressedFileError);
+    // console.log(compressedFile);
     
-
-    const handleChange = (e) => {
-        dispatch(setMessage(e.target?.value))
-    };
 
     const { gettingProvider, provider } = useSelector((state) => state.chat.data);
 
@@ -155,57 +117,14 @@ const Chat = () => {
                                 <Avatar src={`${imagePath}/${provider?.image}`} size="sm" shape="circle" />
                             </div>
                         </div>
-
-                        <Messages />
+                        
+                        <div className="mb-14">
+                            <Messages />
+                        </div>
                     </div>
 
-                    <div className="fixed w-full p-4 pb-5 bg-white max-w-2xl left-auto right-auto bottom-[5.3rem] border-b-2">
-                        <div className="flex items-center gap-2">
-                            <TextareaAutosize  
-                                className="w-full block text-sm outline-none p-3 bg-gray-100 overflow-auto resize-none rounded-md border-0 active:border-0" 
-                                onChange={handleChange}
-                                placeholder="Type here..."
-                                maxRows={6}
-                                minRows={1}
-                                // ref={textAreaRef}
-                                // rows={1}
-                                // value={value}
-                            />
-
-                            <div className="hover:bg-emerald-50 hover:shadow-md cursor-pointer transition duration-300 w-8 h-8 flex items-center justify-center rounded-full">
-                                <BsEmojiSmile className="text-2xl" />
-                            </div>
-                            <div className="hover:bg-emerald-50 hover:shadow-md cursor-pointer transition duration-300 w-8 h-8 flex items-center justify-center rounded-full">
-                                {/* <IoIosAddCircleOutline className="text-3xl" /> */}
-                                <Dropdown customToggleClass="flex" placement="top-end" renderTitle={<EllipsisButton icon={<IoIosAddCircleOutline className="text-3xl text-gray-600" />} variant="twoTone" shape="round" />}>
-                                    <Dropdown.Item style={{justifyContent: "flex-start"}}>
-                                        <Upload 
-                                            className="flex items-center gap-2 w-full h-full"
-                                            onChange={onFileUpload}
-                                            showList={false}
-                                            uploadLimit={1}
-                                            accept='image/*'
-                                            // beforeUpload={beforeUpload}
-                                            // onClick={() => menuControl.closeMenu()}
-                                        >
-                                            <span><FaFileImage className="text-lg" /></span>
-                                            <span>File</span>
-                                        </Upload>
-                                    </Dropdown.Item>
-                                    {userType === "Provider" && (
-                                        <Dropdown.Item eventKey="Invoice" style={{justifyContent: "flex-start"}}>
-                                            <span><FaFileInvoiceDollar className="text-lg" /></span>
-                                            <span>Invoice</span>
-                                        </Dropdown.Item>
-                                    )}
-                                </Dropdown>
-                            </div>
-                            <div className="w-fit">
-                                <div className="bg-blue-500 hover:bg-blue-600 text-white hover:shadow-md cursor-pointer transition duration-300 w-12 h-12 flex items-center justify-center rounded-full">
-                                    <IoIosSend className="text-3xl" />
-                                </div>
-                            </div>
-                        </div>
+                    <div className="fixed w-full p-4 pb-5 bg-white max-w-2xl left-auto right-auto bottom-[5.2rem] border-b-2">
+                        <MessageBox />
                     </div>
                 </div>
             )}
