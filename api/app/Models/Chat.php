@@ -23,6 +23,11 @@ class Chat extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function Receiver()
+    {
+        return $this->belongsTo(User::class, 'receiver_id');
+    }
     
     public function Messages()
     {

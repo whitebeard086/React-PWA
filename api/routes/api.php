@@ -9,6 +9,7 @@ use App\Http\Controllers\GatewayController;
 use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\RequestsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Browse routes
     Route::get('/browse', [BrowseController::class, 'index']);
     Route::post('/browse/category', [BrowseController::class, 'get_category']);
+
+    // Request routes
+    Route::get('/requests', [RequestsController::class, 'index']);
 
     // Payment Routes
     Route::get('/payments', [PaymentsController::class, 'index']);

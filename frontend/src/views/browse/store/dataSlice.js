@@ -51,7 +51,6 @@ const dataSlice = createSlice({
                 state.loading = false;
                 state.status = action.payload.status;
                 state.categories = action.payload.categories;
-                // state.services = action.payload.services;
             })
             .addCase(getBrowseData.rejected, (state) => {
                 state.loading = false;

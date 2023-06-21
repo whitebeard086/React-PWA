@@ -217,7 +217,6 @@ const Provider = () => {
                         variant="solid"
                         block
                         icon={<AiFillWechat />}
-                        // onClick={() => navigate('/service/edit')}
                     >
                         Chat Now
                     </Button>

@@ -27,6 +27,7 @@ const Settings = lazy(() => import("./views/settings"));
 const Payments = lazy(() => import("./views/payments"));
 const Browse = lazy(() => import("./views/browse"));
 const Chat = lazy(() => import("./views/chat"));
+const Requests = lazy(() => import("./views/requests"));
 const Category = lazy(() => import("./views/browse/components/category"));
 
 function App() {
@@ -55,6 +56,7 @@ function App() {
                                     <Route path="/chat/:providerSlug" element={<Chat />} />
                                     <Route path="/settings" element={<Settings />} />
                                     <Route path="/payments" element={<Payments />} />
+                                    <Route path="/requests" element={<Requests />} />
                                     <Route path="/browse" element={<Browse />} />
                                     <Route path="/browse/:categorySlug" element={<Category />} />
                                     <Route path="/browse/profile/:providerSlug" element={<ProviderProfile />} />
