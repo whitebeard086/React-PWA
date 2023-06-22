@@ -10,30 +10,98 @@ use Illuminate\Support\Facades\Storage;
 
 class ChatController extends Controller
 {
+    // public function chat(Request $request)
+    // {
+    //     $provider = User::with('Service.Workdays', 'Service.Category')->where('slug', $request->slug)->firstOrFail();
+    //     $id = $request->id;
+    //     $provider_id = $request->provider_id;
+    //     $userId = Auth::id();
+
+    //     $chat = Chat::with('Messages', 'User.Service', 'Receiver.Service')
+    //             ->where(function ($query) use ($id, $provider_id, $userId) {
+    //                 if (isset($id)) {
+    //                     $query->where('id', $id);
+    //                 }
+
+    //                 if (isset($provider_id)) {
+    //                     $query->orWhere(function ($query) use ($provider_id, $userId) {
+    //                         $query->where('receiver_id', $provider_id)
+    //                             ->where('user_id', $userId);
+    //                     });
+    //                 }
+    //             })
+    //             ->first();
+
+    //     if (!$chat) {
+    //         $n_chat = new Chat;
+    //         $n_chat->user_id = auth()->user()->id;
+    //         $n_chat->receiver_id = $provider->id;
+    //         $n_chat->save();
+
+    //         return response()->json([
+    //             'status' => 'new chat',
+    //             'provider' => $provider,
+    //             'chat' => $n_chat,
+    //         ], 201);
+    //     }
+
+    //     return response()->json([
+    //         'status' => 'chat',
+    //         'provider' => $provider,
+    //         'chat' => $chat,
+    //     ], 200);
+    // }
+
+
     public function chat(Request $request)
     {
-        $provider = User::with('Service.Workdays', 'Service.Category')->where('slug', $request->slug)->first(); 
-        $chat = Chat::with('Messages')->where('user_id', auth()->user()->id)->where('receiver_id', $provider->id)->first();
+        try {
+            $provider = User::with('Service.Workdays', 'Service.Category')
+                ->where('slug', $request->slug)
+                ->firstOrFail();
 
-        if (isset($chat)) {
+            if (isset($request->id)) {
+                $chat = Chat::with('Messages', 'User.Service', 'Receiver.Service')
+                    ->findOrFail($request->id);
+                    
+            } elseif (isset($request->provider_id)) {
+                $userId = auth()->user()->id;
+                
+                $chat = Chat::with('Messages', 'User.Service', 'Receiver.Service')
+                    ->where('receiver_id', $request->provider_id)
+                    ->where('user_id', $userId)
+                    ->first();
+
+                if (!$chat) {
+                    $n_chat = new Chat;
+                    $n_chat->user_id = $userId;
+                    $n_chat->receiver_id = $provider->id;
+                    $n_chat->save();
+
+                    return response()->json([
+                        'status' => 'new chat',
+                        'provider' => $provider,
+                        'chat' => $n_chat,
+                    ], 201);
+                }
+            }
+
             return response()->json([
                 'status' => 'chat',
                 'provider' => $provider,
                 'chat' => $chat,
             ], 200);
-        } else {
-            $n_chat = new Chat;
-            $n_chat->user_id = auth()->user()->id;
-            $n_chat->receiver_id = $provider->id;
-            $n_chat->save();
-
+            
+        } catch (\Throwable $e) {
             return response()->json([
-                'status' => 'new chat',
-                'provider' => $provider,
-                'chat' => $n_chat,
-            ], 201);
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
         }
     }
+
+
+
 
     public function send_message(Request $request)
     {

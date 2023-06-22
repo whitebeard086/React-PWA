@@ -12,10 +12,10 @@ import useCompressFile from "utils/hooks/useCompressFile"
 import TextareaAutosize from 'react-textarea-autosize';
 import { setFile, setInvoice, setMessage } from "../store/stateSlice"
 import { useEffect } from "react"
-import { sendMessage } from "../store/dataSlice"
+import { sendMessage, setMessageStatus, setMessages } from "../store/dataSlice"
 import useFocus from "./useFocus"
 
-const MessageBox = () => {
+const MessageBox = ({ receiver, socket }) => {
     const dispatch = useDispatch();
     const { compressFile, compressedFile, compressedFileError, resetCompressedFile } = useCompressFile();
     const [avatarImg, setAvatarImg] = useState(null)
@@ -24,7 +24,7 @@ const MessageBox = () => {
     const menuControl = useDropdownMenuContext()
 
     const {file, invoice } = useSelector((state) => state.chat.state)
-    const { chat } = useSelector((state) => state.chat.data)
+    const { chat, messageStatus, sentMessage } = useSelector((state) => state.chat.data)
     const { userType, profile } = useSelector((state) => state.auth.user)
 
     const onFileUpload = (file) => {
@@ -68,10 +68,33 @@ const MessageBox = () => {
         }))
 
         dispatch(setFile({}))
-        setMessage("")
+        // setMessage("")
         dispatch(setInvoice({}))
         resetCompressedFile()
     }
+
+    // Send message to the socket server
+    useEffect(() => {
+        if (messageStatus === 'sent') {
+            socket?.emit("sendMessage", [sentMessage, receiver?.id])
+            dispatch(setMessages(sentMessage))
+            setMessage("")
+        }
+    }, [dispatch, messageStatus, receiver?.id, sentMessage, socket])
+
+    // Receive message from socket server
+    useEffect(() => {
+        socket?.on("receiveMessage", (data) => {
+            dispatch(setMessages(data))
+        })
+    }, [dispatch, socket])
+
+    // Reset message status
+    useEffect(() => {
+        if (messageStatus !== 'idle') {
+            dispatch(setMessageStatus('idle'))
+        }
+    }, [dispatch, messageStatus])
 
     useEffect(() => {
         if (compressedFile !== null) {

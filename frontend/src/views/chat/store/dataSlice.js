@@ -44,7 +44,7 @@ const dataSlice = createSlice({
         chat: {},
         messages: [],
         sendingMessage: false,
-        message: {},
+        sentMessage: {},
         messageStatus: 'idle',
         deleteMessageStatus: 'idle',
     },
@@ -57,6 +57,9 @@ const dataSlice = createSlice({
         },
         setDeleteMessageStatus: (state, action) => {
             state.deleteMessageStatus = action.payload
+        },
+        setMessages: (state, action) => {
+            state.messages = [...state.messages, action.payload]
         },
     },
     extraReducers: (builder) => {
@@ -79,8 +82,8 @@ const dataSlice = createSlice({
             })
             .addCase(sendMessage.fulfilled, (state, action) => {
                 state.sendingMessage = false
-                state.messages = [...state.messages, action.payload.message]
                 state.messageStatus = action.payload.status
+                state.sentMessage = action.payload.message
             })
             .addCase(sendMessage.rejected, (state) => {
                 state.sendingMessage = false
@@ -100,6 +103,7 @@ const dataSlice = createSlice({
 export const {
     setMessageStatus,
     removeMessage,
+    setMessages,
     setDeleteMessageStatus
 } = dataSlice.actions
 

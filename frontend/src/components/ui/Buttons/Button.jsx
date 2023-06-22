@@ -169,7 +169,7 @@ const Button =  React.forwardRef((props, ref) => {
 	return (
 		<button 
 			ref={ref} 
-			className={classNames(classes, "")} 
+			className={classNames(classes, "transition duration-200")} 
 			{...rest} 
 			onClick={handleClick}
 		>

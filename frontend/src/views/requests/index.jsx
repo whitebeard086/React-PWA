@@ -4,18 +4,18 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getRequestsData } from "./store/dataSlice";
 import GettingData from "./components/GettingData";
-import { Avatar, Card } from "components/ui";
+import { Avatar, Button, Card, Skeleton } from "components/ui";
 import { Link } from "react-router-dom";
 import { HiOutlineUser } from "react-icons/hi";
 import Enquiries from "./components/Enquiries";
+import { BsThreeDotsVertical } from "react-icons/bs";
 
 injectReducer("requests", reducer);
 
 const Requests = () => {
     const dispatch = useDispatch();
 
-    const { loading, enquiries } = useSelector((state) => state.requests?.data)
-    const { profile } = useSelector((state) => state.auth.user)
+    const { loading } = useSelector((state) => state.requests?.data)
 
     useEffect(() => {
         dispatch(getRequestsData())
@@ -42,6 +42,16 @@ const Requests = () => {
                     <Enquiries />
                 </div>
             )}
+
+            <div className="sticky bottom-24 flex justify-end mr-5">
+                <Link to="history">
+                    <Button
+                        variant="solid"
+                    >
+                        Booking History
+                    </Button>
+                </Link>
+            </div>
         </div>
     )
 }

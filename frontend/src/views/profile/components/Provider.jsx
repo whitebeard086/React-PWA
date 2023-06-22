@@ -212,7 +212,7 @@ const Provider = () => {
             </Card>
 
             <div className="mt-4">
-                <Link to={`/chat/${provider?.slug}`}>
+                <Link to={`/chat/${provider?.slug}`} state={{ provider_id: provider?.id }}>
                     <Button
                         variant="solid"
                         block

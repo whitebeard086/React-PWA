@@ -8,12 +8,17 @@ import { FaSpinner } from "react-icons/fa"
 import { toggleDepositDialog } from "views/payments/store/stateSlice"
 import DepositDialog from "views/payments/components/Deposit/DepositDialog"
 import { useEffect } from "react"
-import { getUser } from "store/auth/userSlice"
+import { getUser, setOnlineUsers } from "store/auth/userSlice"
 import classNames from "classnames"
+import { io } from "socket.io-client"
+import { useRef } from "react"
+import appConfig from "configs/app.config"
 
 const Layout = ({ noPad }) => {
     const dispatch = useDispatch();
     const location = useLocation();
+    const socket = useRef();
+    const { socketURL } = appConfig;
 
     const { profile, userType } = useSelector((state) => state.auth.user)
     const { verifying } = useSelector((state) => state.payments.data)
@@ -25,6 +30,14 @@ const Layout = ({ noPad }) => {
     useEffect(() => {
         dispatch(getUser());
     }, [dispatch, location]);
+
+    useEffect(() => {
+        socket.current = io(socketURL);
+        socket.current.emit("addNewUser", profile?.id)
+        socket.current.on("getUsers", (users) => {
+            dispatch(setOnlineUsers(users));
+        })
+    }, [profile, socketURL])
 
     return (
         <Container className="max-w-2xl">

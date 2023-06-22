@@ -26,7 +26,7 @@ const Enquiries = () => {
                                     const receiver = profile?.id === enquiry?.receiver?.id ? enquiry?.user : enquiry?.receiver
                                     
                                     return (
-                                        <Link key={enquiry.id} to={`/chat/${receiver?.slug}`}>
+                                        <Link key={enquiry.id} to={`/chat/${receiver?.slug}`} state={{ chat: enquiry.id }}>
                                             <Card className="rounded-none">
                                                 <div className="w-full flex items-center justify-between">
                                                     <div className="w-full flex gap-4 items-center">

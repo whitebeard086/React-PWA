@@ -15,6 +15,7 @@ export const getUser = createAsyncThunk(
 
 export const initialState = {
     profile: {},
+    onlineUsers: [],
     userType: "",
     hasVisited: false,
     hasService: null,
@@ -38,7 +39,10 @@ export const userSlice = createSlice({
         userLoggedOut: () => initialState,
         setVerifyingDeposits: (state, action) => {
             state.verifyingDeposits = action.payload;
-        }
+        },
+        setOnlineUsers: (state, action) => {
+            state.onlineUsers = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -73,6 +77,7 @@ export const {
     updateUser, 
     setHasVisited, 
     userLoggedOut,
+    setOnlineUsers,
     setVerifyingDeposits,
 } = userSlice.actions;
 

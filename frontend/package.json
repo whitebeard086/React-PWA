@@ -40,6 +40,7 @@
     "react-textarea-autosize": "^8.4.1",
     "react-time-picker": "^6.2.0",
     "redux-persist": "^6.0.0",
+    "socket.io-client": "^4.7.0",
     "tailwind-safelist-generator": "^1.0.0",
     "twin.macro": "^3.3.1",
     "web-vitals": "^2.1.4",
@@ -59,11 +60,11 @@
   },
   "scripts": {
     "start": "run-p watch:css react-scripts:start",
-		"build": "run-s build:css react-scripts:build",
+    "build": "run-s build:css react-scripts:build",
     "build:css": "cross-env TAILWIND_MODE=build NODE_ENV=production postcss src/assets/styles/app.css -o src/index.css",
-		"watch:css": "cross-env TAILWIND_MODE=watch NODE_ENV=development postcss src/assets/styles/app.css -o src/index.css --watch",
+    "watch:css": "cross-env TAILWIND_MODE=watch NODE_ENV=development postcss src/assets/styles/app.css -o src/index.css --watch",
     "react-scripts:start": "delay 5 && react-scripts start",
-		"react-scripts:build": "react-scripts build",
+    "react-scripts:build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
