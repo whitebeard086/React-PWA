@@ -4,12 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Chat;
 use App\Models\User;
+use App\Models\Invoice;
 use App\Models\Message;
+use App\Models\InvoiceItem;
 use Illuminate\Http\Request;
+use App\Traits\UploadImageTrait;
 use Illuminate\Support\Facades\Storage;
 
 class ChatController extends Controller
 {
+    use UploadImageTrait;
+    
     // public function chat(Request $request)
     // {
     //     $provider = User::with('Service.Workdays', 'Service.Category')->where('slug', $request->slug)->firstOrFail();
@@ -138,6 +143,46 @@ class ChatController extends Controller
             'status' => 'sent',
             'message' => $message,
         ], 201);
+    }
+
+    public function invoice(Request $request)
+    {
+        try {
+            $invoices = Invoice::where('chat_id', $request->chat_id)->get();
+            
+            if ($invoices) {
+                foreach ($invoices as $inv) {
+                    $this->deleteImage($inv->file);
+
+                    $inv->delete();
+                }
+            }
+            
+            $invoice = new Invoice;
+            $invoice->invoice_number = $request->invoice_number;
+            $invoice->price = $request->price;
+            $invoice->chat_id = $request->chat_id;
+            $invoice->receiver_id = $request->receiver_id;
+
+            $this->deleteImage($invoice->file);
+
+            $folder = 'Invoices';
+            $identifier = 'invoice';
+
+            $invoice->file = $this->uploadImage($request, $folder, $identifier);
+            $invoice->save();
+
+            return response()->json([
+                'status' => 'success',
+                'invoice' => Invoice::where('id', $invoice->id)->first(),
+            ], 200);
+            
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function delete_message(Request $request)

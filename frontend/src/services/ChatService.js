@@ -23,3 +23,11 @@ export const apiDeleteMessage = async (data) => {
 		data,
 	});
 };
+
+export const apiMakeInvoice = async (data) => {
+	return ApiService.fetchData({
+		url: `/chat/invoice`,
+		method: 'post',
+		data,
+	});
+};

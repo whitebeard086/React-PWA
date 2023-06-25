@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import useCompressFile from "utils/hooks/useCompressFile"
 import TextareaAutosize from 'react-textarea-autosize';
-import { setFile, setInvoice, setMessage } from "../store/stateSlice"
+import { setFile, setInvoice, setMessage, toggleInvoiceDialog } from "../store/stateSlice"
 import { useEffect } from "react"
 import { sendMessage, setMessageStatus, setMessages } from "../store/dataSlice"
 import useFocus from "./useFocus"
@@ -143,8 +143,8 @@ const MessageBox = ({ receiver, socket }) => {
                             <span>File</span>
                         </Upload>
                     </Dropdown.Item>
-                    {userType === "Provider" && (
-                        <Dropdown.Item eventKey="Invoice" style={{justifyContent: "flex-start"}}>
+                    {userType === "Service Provider" && (
+                        <Dropdown.Item eventKey="Invoice" onClick={() => dispatch(toggleInvoiceDialog(true))} style={{justifyContent: "flex-start"}}>
                             <span><FaFileInvoiceDollar className="text-lg" /></span>
                             <span>Invoice</span>
                         </Dropdown.Item>

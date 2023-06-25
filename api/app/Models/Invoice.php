@@ -5,37 +5,36 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Chat extends Model
+class Invoice extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
+        'invoice_number',
+        'price',
+        'chat_id',
         'receiver_id',
+        'file',
     ];
 
     protected $casts = [
-        'user_id' => 'float',
+        'price' => 'float',
+        'chat_id' => 'float',
         'receiver_id' => 'float',
     ];
 
-    public function User()
+    public function Chat()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Chat::class);
     }
 
     public function Receiver()
     {
         return $this->belongsTo(User::class, 'receiver_id');
     }
-    
-    public function Messages()
-    {
-        return $this->hasMany(Message::class);
-    }
 
-    public function Invoice()
+    public function Items()
     {
-        return $this->hasOne(Invoice::class);
+        return $this->hasMany(InvoiceItem::class);
     }
 }

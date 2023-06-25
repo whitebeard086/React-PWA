@@ -1,12 +1,23 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { apiGetProvider } from "services/AuthService";
-import { apiDeleteMessage, apiInitiateChat, apiSendMessage } from "services/ChatService";
+import { apiDeleteMessage, apiInitiateChat, apiMakeInvoice, apiSendMessage } from "services/ChatService";
 
 export const initiateChat = createAsyncThunk(
     "chat/data/initiateChat",
     async (data, { rejectWithValue }) => {
         try {
             const response = await apiInitiateChat(data);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+export const makeInvoice = createAsyncThunk(
+    "chat/data/makeInvoice",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await apiMakeInvoice(data);
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response.data);
@@ -44,13 +55,19 @@ const dataSlice = createSlice({
         chat: {},
         messages: [],
         sendingMessage: false,
+        makingInvoice: false,
         sentMessage: {},
+        invoice: {},
         messageStatus: 'idle',
+        invoiceStatus: 'idle',
         deleteMessageStatus: 'idle',
     },
     reducers: {
         setMessageStatus: (state, action) => {
             state.messageStatus = action.payload
+        },
+        setInvoiceStatus: (state, action) => {
+            state.invoiceStatus = action.payload
         },
         removeMessage: (state, action) => {
             state.messages.filter((message) => message.id === action.payload)
@@ -90,6 +107,20 @@ const dataSlice = createSlice({
                 state.messageStatus = 'error'
             })
 
+            .addCase(makeInvoice.pending, (state) => {
+                state.makingInvoice = true
+            })
+            .addCase(makeInvoice.fulfilled, (state, action) => {
+                state.makingInvoice = false
+                const { status, invoice } = action.payload
+                state.invoice = invoice
+                state.invoiceStatus = status
+            })
+            .addCase(makeInvoice.rejected, (state, action) => {
+                state.makingInvoice = false
+                state.invoiceStatus = 'error'
+            })
+
             .addCase(deleteMessage.fulfilled, (state, action) => {
                 state.messages = state.messages.filter((message) => message.id !== Number(action.payload.message))
                 state.deleteMessageStatus = 'success'
@@ -102,6 +133,7 @@ const dataSlice = createSlice({
 
 export const {
     setMessageStatus,
+    setInvoiceStatus,
     removeMessage,
     setMessages,
     setDeleteMessageStatus

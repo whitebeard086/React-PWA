@@ -65,6 +65,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // Chat Routes
     Route::post('/chat', [ChatController::class, 'chat']);
+    Route::post('/chat/invoice', [ChatController::class, 'invoice']);
     Route::post('/chat/send-message', [ChatController::class, 'send_message']);
     Route::post('/chat/delete-message', [ChatController::class, 'delete_message']);
 });

@@ -21,6 +21,7 @@ import { useDropdownMenuContext } from "components/ui/Dropdown/context/dropdownM
 import Messages from "./components/Messages";
 import MessageBox from "./components/MessageBox";
 import { io } from "socket.io-client"
+import InvoiceDialog from "./components/invoice/InvoiceDialog";
 
 injectReducer("chat", reducer);
 
@@ -100,6 +101,10 @@ const Chat = () => {
                     </div>
                 </div>
             )}
+
+            <InvoiceDialog 
+                receiver={receiver}
+            />
         </div>
     );
 };
