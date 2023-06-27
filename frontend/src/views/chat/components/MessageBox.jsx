@@ -10,10 +10,11 @@ import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import useCompressFile from "utils/hooks/useCompressFile"
 import TextareaAutosize from 'react-textarea-autosize';
-import { setFile, setInvoice, setMessage, toggleInvoiceDialog } from "../store/stateSlice"
+import { setFile, setInvoice, setInvoiceNumber, setMessage, toggleInvoiceDialog } from "../store/stateSlice"
 import { useEffect } from "react"
 import { sendMessage, setMessageStatus, setMessages } from "../store/dataSlice"
 import useFocus from "./useFocus"
+import createUID from "components/ui/utils/createUid"
 
 const MessageBox = ({ receiver, socket }) => {
     const dispatch = useDispatch();
@@ -35,6 +36,11 @@ const MessageBox = ({ receiver, socket }) => {
     const handleChange = (e) => {
         setMessage(e.target?.value)
     };
+
+    const onCreateInvoice = () => {
+        dispatch(toggleInvoiceDialog(true))
+        dispatch(setInvoiceNumber(createUID(8)))
+    }
 
     // Handle Message Sending
     const onSendMessage = () => {
@@ -144,7 +150,7 @@ const MessageBox = ({ receiver, socket }) => {
                         </Upload>
                     </Dropdown.Item>
                     {userType === "Service Provider" && (
-                        <Dropdown.Item eventKey="Invoice" onClick={() => dispatch(toggleInvoiceDialog(true))} style={{justifyContent: "flex-start"}}>
+                        <Dropdown.Item eventKey="Invoice" onClick={onCreateInvoice} style={{justifyContent: "flex-start"}}>
                             <span><FaFileInvoiceDollar className="text-lg" /></span>
                             <span>Invoice</span>
                         </Dropdown.Item>

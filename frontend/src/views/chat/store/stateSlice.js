@@ -10,6 +10,7 @@ const stateSlice = createSlice({
         file: {},
         invoice: {},
         invoiceData: [],
+        invoiceNumber: null,
     },
     reducers: {
         setMessage: (state, action) => {
@@ -26,6 +27,9 @@ const stateSlice = createSlice({
         },
         setAddingItem: (state, action) => {
             state.addingItem = action.payload
+        },
+        setInvoiceNumber: (state, action) => {
+            state.invoiceNumber = action.payload
         },
         removeInvoiceItem: (state, action) => {
             state.invoiceData = state.invoiceData.filter((item) => item.tid !== action.payload)
@@ -45,6 +49,7 @@ export const {
     setMessage,
     setAddingItem,
     setInvoiceData,
+    setInvoiceNumber,
     removeInvoiceItem,
     setInvoiceComplete,
     toggleInvoiceDialog,

@@ -19,6 +19,7 @@ const Dialog = (props) => {
 		style,
 		isOpen,
 		onClose,
+		scrollable,
 		bodyOpenClassName,
 		portalClassName,
 		overlayClassName,
@@ -73,7 +74,7 @@ const Dialog = (props) => {
 			}}
 			overlayClassName={{
 				base: classNames('dialog-overlay', overlayClassName),
-				afterOpen: 'dialog-overlay-after-open',
+				afterOpen: classNames('dialog-overlay-after-open', scrollable && 'overflow-y-auto'),
 				beforeClose: 'dialog-overlay-before-close',
 			}}
 			portalClassName={classNames('dialog-portal', portalClassName)}
@@ -85,7 +86,7 @@ const Dialog = (props) => {
 			{...rest}
 		>
 			<motion.div
-				className={dialogClass}
+				className={classNames(dialogClass, 'overflow-y-auto')}
 				initial={{ transform: 'scale(0.9)' }}
 				animate={{
 					transform: isOpen ? 'scale(1)' : 'scale(0.9)',
@@ -100,6 +101,7 @@ const Dialog = (props) => {
 
 Dialog.propTypes = {
 	closable: PropTypes.bool,
+	scrollable: PropTypes.bool,
 	isOpen: PropTypes.bool.isRequired,
 	overlayClassName: PropTypes.string,
 	width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -112,6 +114,7 @@ Dialog.propTypes = {
 };
 
 Dialog.defaultProps = {
+	scrollable: false,
 	closable: true,
 	width: 520,
 	closeTimeoutMS: 150,

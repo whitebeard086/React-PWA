@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import dayjs from "dayjs";
@@ -16,26 +16,38 @@ import {
     Card,
     Dropdown,
     Image,
+    Button,
 } from "components/ui";
 import appConfig from "configs/app.config";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { BsReplyFill } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
 import { EllipsisButton } from "components/shared";
+import { Document, Page, pdfjs } from "react-pdf";
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+import 'react-pdf/dist/esm/Page/TextLayer.css';
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
 
 const Messages = ({ isOwner, sender, receiver }) => {
     const dispatch = useDispatch();
     const scroll = useRef();
-    const { imagePath } = appConfig;
+    const { imagePath, filePath } = appConfig;
+    const [numPages, setNumPages] = useState(null);
+    const [pageNumber, setPageNumber] = useState(1);
 
     // Select data from the Redux store
     const { chat, messages, provider, deleteMessageStatus } = useSelector(
         (state) => state.chat.data
     );
+    console.log(numPages);
+    console.log(pageNumber);
 
     const { profile } = useSelector((state) => state.auth.user);
 
-    
+    const onDocumentLoadSuccess = ({ numPages }) => {
+        setNumPages(numPages);
+    }
 
     const onRemoveMessage = (message) => {
         dispatch(deleteMessage({ message_id: message.id }));
@@ -123,6 +135,49 @@ const Messages = ({ isOwner, sender, receiver }) => {
                                             src={`${imagePath}/${message.file}`}
                                             alt=""
                                         />
+                                    )}
+                                    {message.invoice && (
+                                        <div>
+                                            <Document file={`${filePath}/${message.invoice}`} onLoadSuccess={onDocumentLoadSuccess}>
+                                                <Page pageNumber={pageNumber}  />
+                                            </Document>
+                                            {numPages > 1 && (
+                                                <div className="mt-2 flex items-center gap-4 justify-between">
+                                                    <p>
+                                                        Page {pageNumber} of {numPages}
+                                                    </p>
+                                                    <div className="flex items-center gap-2">
+                                                        <Button
+                                                            size="xs"
+                                                            variant="solid"
+                                                            disabled={pageNumber === 1}
+                                                            onClick={() => setPageNumber(pageNumber - 1)}
+                                                        >
+                                                            Prev
+                                                        </Button>
+                                                        <Button
+                                                            size="xs"
+                                                            variant="solid"
+                                                            disabled={pageNumber === numPages}
+                                                            onClick={() => setPageNumber(pageNumber + 1)}
+                                                        >
+                                                            Next
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {!owner && (
+                                                <div className="mt-4">
+                                                    <Button
+                                                        variant="solid"
+                                                        size="xs"
+                                                    >
+                                                        Pay for Service
+                                                    </Button>
+                                                </div>
+                                            )}
+                                        </div>
                                     )}
                                     <Dropdown
                                         placement={
