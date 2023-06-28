@@ -22,6 +22,7 @@ import Messages from "./components/Messages";
 import MessageBox from "./components/MessageBox";
 import { io } from "socket.io-client"
 import InvoiceDialog from "./components/invoice/InvoiceDialog";
+import PaymentDialog from "./components/PaymentDialog";
 
 injectReducer("chat", reducer);
 
@@ -93,7 +94,7 @@ const Chat = () => {
                         </div>
                     </div>
 
-                    <div className="fixed w-full p-4 pb-5 bg-white max-w-2xl left-auto right-auto bottom-[5.2rem] border-b-2">
+                    <div className="sticky w-full min-w-full p-4 pb-5 bg-white max-w-2xl bottom-[5.2rem] border-b-2">
                         <MessageBox 
                             receiver={receiver}
                             socket={socket.current}
@@ -105,6 +106,7 @@ const Chat = () => {
             <InvoiceDialog 
                 receiver={receiver}
             />
+            <PaymentDialog />
         </div>
     );
 };

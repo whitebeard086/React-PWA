@@ -5,6 +5,7 @@ const stateSlice = createSlice({
     initialState: {
         message: "",
         invoiceDialog: false,
+        paymentDialog: false,
         addingItem: false,
         invoiceComplete: false,
         file: {},
@@ -40,6 +41,9 @@ const stateSlice = createSlice({
         toggleInvoiceDialog: (state, action) => {
             state.invoiceDialog = action.payload;
         },
+        togglePaymentDialog: (state, action) => {
+            state.paymentDialog = action.payload;
+        },
     },
 })
 
@@ -53,6 +57,7 @@ export const {
     removeInvoiceItem,
     setInvoiceComplete,
     toggleInvoiceDialog,
+    togglePaymentDialog,
 } = stateSlice.actions
 
 export default stateSlice.reducer

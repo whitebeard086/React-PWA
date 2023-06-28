@@ -136,6 +136,14 @@ export async function apiGetSubCategories (data) {
     })
 }
 
+export async function apiAssignVirtualAccount (data) {
+    return ApiService.fetchData({
+        url: '/profile/virtual-account',
+        method: 'post',
+        data
+    })
+}
+
 export async function apiCreateService (data) {
     return ApiService.fetchData({
         url: '/profile/service/new',

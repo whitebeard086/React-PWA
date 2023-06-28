@@ -12,7 +12,7 @@ const Footer = () => {
     const { userType } = useSelector((state) => state.auth.user)
 
     return (
-        <div className="sticky bottom-0 bg-white flex gap-4 p-3 justify-between">
+        <div className="sticky max-w-full min-w-full w-full bottom-0 bg-white flex gap-1 p-3 justify-between">
             <NavLink
                 to="/home"
                 className={({ isActive }) =>
@@ -22,7 +22,7 @@ const Footer = () => {
                 }
             >
                 <AiOutlineHome className="text-2xl" />
-                <p className="text-sm">Home</p>
+                <p className="text-xs sm:text-sm">Home</p>
             </NavLink>
             {userType === "Normal User" && (
                 <NavLink
@@ -34,7 +34,7 @@ const Footer = () => {
                     }
                 >
                     <AiOutlineFileSearch className="text-2xl" />
-                    <p className="text-sm">Browse</p>
+                    <p className="text-xs sm:text-sm">Browse</p>
                 </NavLink>
             )}
             {userType === "Service Provider" && (
@@ -47,7 +47,7 @@ const Footer = () => {
                     }
                 >
                     <AiOutlineFileSearch className="text-2xl" />
-                    <p className="text-sm">History</p>
+                    <p className="text-xs sm:text-sm">History</p>
                 </NavLink>
             )}
             <NavLink
@@ -59,7 +59,7 @@ const Footer = () => {
                 }
             >
                 <VscGitPullRequestGoToChanges className="text-2xl" />
-                <p className="text-sm">Requests</p>
+                <p className="text-xs sm:text-sm">Requests</p>
             </NavLink>
             {userType === "Normal User" && (
                 <NavLink
@@ -71,7 +71,7 @@ const Footer = () => {
                     }
                 >
                     <MdPayment className="text-2xl" />
-                    <p className="text-sm">Payments</p>
+                    <p className="text-xs sm:text-sm">Payments</p>
                 </NavLink>
             )}
             {userType === "Service Provider" && (
@@ -84,7 +84,7 @@ const Footer = () => {
                     }
                 >
                     <MdPayment className="text-2xl" />
-                    <p className="text-sm">Withdrawals</p>
+                    <p className="text-xs sm:text-sm">Withdrawals</p>
                 </NavLink>
             )}
             <NavLink
@@ -96,7 +96,7 @@ const Footer = () => {
                 }
             >
                 <AiOutlineSetting className="text-2xl" />
-                <p className="text-sm">Settings</p>
+                <p className="text-xs sm:text-sm">Settings</p>
             </NavLink>
         </div>
     );

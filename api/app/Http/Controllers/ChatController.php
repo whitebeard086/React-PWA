@@ -66,13 +66,13 @@ class ChatController extends Controller
                 ->firstOrFail();
 
             if (isset($request->id)) {
-                $chat = Chat::with('Messages', 'User.Service', 'Receiver.Service')
+                $chat = Chat::with('Messages', 'User.Service', 'Receiver.Service', 'Invoice.Items')
                     ->findOrFail($request->id);
                     
             } elseif (isset($request->provider_id)) {
                 $userId = auth()->user()->id;
                 
-                $chat = Chat::with('Messages', 'User.Service', 'Receiver.Service')
+                $chat = Chat::with('Messages', 'User.Service', 'Receiver.Service', 'Invoice.Items')
                     ->where('receiver_id', $request->provider_id)
                     ->where('user_id', $userId)
                     ->first();
@@ -171,6 +171,18 @@ class ChatController extends Controller
 
             $invoice->file = $this->uploadImage($request, $folder, $identifier);
             $invoice->save();
+
+            $invoiceData = json_decode($request->invoiceData);
+            
+            if (isset($invoiceData)) {
+                foreach ($invoiceData as $invItem) {
+                    $item = new InvoiceItem;
+                    $item->invoice_id = $invoice->id;
+                    $item->item = $invItem->item;
+                    $item->price = $invItem->price;
+                    $item->save();
+                }
+            }
 
             return response()->json([
                 'status' => 'success',

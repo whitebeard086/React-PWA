@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { apiGetProvider } from "services/AuthService";
+import { apiBookService } from "services/BookingService";
 import { apiDeleteMessage, apiInitiateChat, apiMakeInvoice, apiSendMessage } from "services/ChatService";
 
 export const initiateChat = createAsyncThunk(
@@ -35,11 +36,24 @@ export const sendMessage = createAsyncThunk(
         }
     }
 );
+
 export const deleteMessage = createAsyncThunk(
     "chat/data/deleteMessage",
     async (data, { rejectWithValue }) => {
         try {
             const response = await apiDeleteMessage(data);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const bookService = createAsyncThunk(
+    "chat/data/bookService",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await apiBookService(data);
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response.data);
@@ -56,10 +70,15 @@ const dataSlice = createSlice({
         messages: [],
         sendingMessage: false,
         makingInvoice: false,
+        bookingService: false,
+        booking: {},
         sentMessage: {},
         invoice: {},
+        escrow: {},
         messageStatus: 'idle',
         invoiceStatus: 'idle',
+        bookingStatus: 'idle',
+        bookingMessage: '',
         deleteMessageStatus: 'idle',
     },
     reducers: {
@@ -86,9 +105,11 @@ const dataSlice = createSlice({
             })
             .addCase(initiateChat.fulfilled, (state, action) => {
                 state.gettingProvider = false
-                state.provider = action.payload.provider
-                state.chat = action.payload.chat
-                state.messages = action.payload.chat.messages ? action.payload.chat.messages : []
+                const { provider, chat } = action.payload
+                state.invoice = chat.invoice
+                state.provider = provider
+                state.chat = chat
+                state.messages = chat.messages ? chat.messages : []
             })
             .addCase(initiateChat.rejected, (state) => {
                 state.gettingProvider = false
@@ -119,6 +140,23 @@ const dataSlice = createSlice({
             .addCase(makeInvoice.rejected, (state, action) => {
                 state.makingInvoice = false
                 state.invoiceStatus = 'error'
+            })
+
+            .addCase(bookService.pending, (state) => {
+                state.bookingService = true
+            })
+            .addCase(bookService.fulfilled, (state, action) => {
+                state.bookingService = false
+                const { status, booking, escrow } = action.payload
+                state.bookingStatus = status
+                state.booking = booking
+                state.escrow = escrow
+            })
+            .addCase(bookService.rejected, (state, action) => {
+                state.bookingService = false
+                const { status, message } = action.payload
+                state.bookingStatus = status
+                state.bookingMessage = message
             })
 
             .addCase(deleteMessage.fulfilled, (state, action) => {

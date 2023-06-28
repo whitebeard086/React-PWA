@@ -4,7 +4,7 @@ import OtpInput from "./OtpInput";
 import { useEffect, useState } from "react";
 import { Alert, Button, Notification, toast } from "components/ui";
 import Countdown from "react-countdown";
-import { resetStatus, setTimer, updatePhone, verifyPhone } from "../store/dataSlice";
+import { assignVirtualAccount, resetStatus, setTimer, updatePhone, verifyPhone } from "../store/dataSlice";
 import useTimeOutMessage from "utils/hooks/useTimeOutMessage";
 import { getUser } from "store/auth/userSlice";
 import { Loading } from "components/shared";
@@ -20,6 +20,7 @@ const Step2 = ({ onBack }) => {
     const { profile } = useSelector((state) => state.auth.user)
     const { resent } = useSelector((state) => state.verify.state)
     const { status, verifyMessage, verifying, resending, timer } = useSelector((state) => state.verify.data)
+    const { token } = useSelector((state) => state.auth.session)
 
     useEffect(() => {
         const popNotification = (keyword) => {
@@ -36,6 +37,12 @@ const Step2 = ({ onBack }) => {
                 }
             );
         };
+
+        // if (status === 'error') {
+        //     setMessage(verifyMessage)
+        //     popNotification()
+        //     setOtp("")
+        // }
             
         if (status === 'success' || status === 'error') {
             setMessage(verifyMessage)
@@ -52,6 +59,14 @@ const Step2 = ({ onBack }) => {
             }, 1200)
         }
     }, [dispatch, navigate, setMessage, status, verifyMessage])
+
+    // useEffect(() => {
+    //     if(status === 'success') {
+    //         setMessage(verifyMessage)
+    //         setOtp("")
+    //         dispatch(assignVirtualAccount({ token: token }))
+    //     }
+    // }, [dispatch, setMessage, status, token, verifyMessage])
 
     const onResendOtp = () => {
         dispatch(setTimer(true))

@@ -1,15 +1,17 @@
 <?php
 
+use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BrowseController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\GatewayController;
 use App\Http\Controllers\PaymentsController;
-use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\ChatController;
 use App\Http\Controllers\RequestsController;
+use App\Http\Controllers\Auth\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +39,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/countries', [UserController::class, 'get_countries']);
     Route::get('/categories', [UserController::class, 'get_categories']);
     Route::post('/category/subcategories', [UserController::class, 'get_subcategories']);
+    Route::post('/profile/virtual-account', [UserController::class, 'assign_virtual_account']);
     Route::post('/profile/image', [UserController::class, 'user_image']);
     Route::post('/profile/phone', [UserController::class, 'update_phone']);
     Route::post('/profile/phone/verify', [UserController::class, 'verify_phone']);
@@ -68,4 +71,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/chat/invoice', [ChatController::class, 'invoice']);
     Route::post('/chat/send-message', [ChatController::class, 'send_message']);
     Route::post('/chat/delete-message', [ChatController::class, 'delete_message']);
+
+    // Booking Routes
+    Route::post('/book-service', [BookingController::class, 'book_service']);
 });

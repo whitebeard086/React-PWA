@@ -1,4 +1,4 @@
-import { apiGetCountries, apiUpdatePhone, apiVerifyPhone } from "services/AuthService";
+import { apiAssignVirtualAccount, apiGetCountries, apiUpdatePhone, apiVerifyPhone } from "services/AuthService";
 
 const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
 
@@ -38,16 +38,30 @@ export const verifyPhone = createAsyncThunk(
     }
 );
 
+export const assignVirtualAccount = createAsyncThunk(
+    "verify/data/assignVirtualAccount",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await apiAssignVirtualAccount(data);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 const dataSlice = createSlice({
     name: 'verify/data',
     initialState: {
         countries: [],
         loading: false,
         phone: null,
+        assigningAccount: false,
         settingPhone: false,
         verifying: false,
         resending: false,
         phoneStatus: 'idle',
+        accountStatus: 'idle',
         message: '',
         verifyMessage: '',
         status: 'idle',
@@ -110,6 +124,17 @@ const dataSlice = createSlice({
                 state.verifying = false
                 state.status = action.payload.status;
                 state.verifyMessage = action.payload.message
+            })
+
+            .addCase(assignVirtualAccount.pending, (state) => {
+                state.assigningAccount = true
+            })
+            .addCase(assignVirtualAccount.fulfilled, (state, action) => {
+                state.assigningAccount = false
+                state.accountStatus = action.payload.status
+            })
+            .addCase(assignVirtualAccount.rejected, (state) => {
+                state.assigningAccount = false
             })
     }
 })

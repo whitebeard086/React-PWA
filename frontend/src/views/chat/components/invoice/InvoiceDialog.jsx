@@ -74,6 +74,7 @@ const InvoiceDialog = ({ receiver }) => {
         onDialogClose()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [messageStatus])
+    console.log(JSON.stringify(invoiceData));
     
 
     const handleSend = () => {
@@ -142,6 +143,7 @@ const InvoiceDialog = ({ receiver }) => {
                         price: totalPrice,
                         chat_id: chat?.id,
                         receiver_id: receiver?.id,
+                        invoiceData: JSON.stringify(invoiceData),
                         invoice: pdf.output('blob'),
                     })) 
                 }
@@ -167,8 +169,8 @@ const InvoiceDialog = ({ receiver }) => {
             title="Invoice"
         >
             <h4 className="text-lg font-bold text-gray-700">Generate Invoice</h4>
-            <div className=" mt-4">
-                <div id="print" ref={invoiceRef} className="pb-4">
+            <div className=" ">
+                <div id="print" ref={invoiceRef} className="pb-4 mt-4">
                     <div className="flex items-center gap-4 px-4 justify-between">
                         <h4 className="text-primary-500 font-bold">TASKITLY</h4>
                         <h4 className="font-bold text-2xl">INVOICE</h4>

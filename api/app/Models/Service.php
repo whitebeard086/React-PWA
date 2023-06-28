@@ -49,5 +49,13 @@ class Service extends Model
         return $this->belongsTo(SubCategory::class);
     }
 
-    
+    public function Escrows()
+    {
+        return $this->hasMany(Escrow::class);
+    }
+
+    public function Bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
 }

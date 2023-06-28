@@ -77,6 +77,68 @@ class UserController extends Controller
         ], 200);
     }
 
+    public function assign_virtual_account(Request $request)
+    {
+        $user = $request->user();
+
+        try {
+            $curl = curl_init();
+            $data = array(
+                // "api_key" => env('PAYSTACK_SECRET_KEY'), 
+                "email" => $user->email,
+                "first_name" => $user->first_name,
+                "last_name" => $user->last_name,
+                "phone" => $user->phone,
+                "preferred_bank" => "test-bank",
+                "country" => "NG"
+            );
+
+            $post_data = json_encode($data);
+
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://api.paystack.co/dedicated_account/assign",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => $post_data,
+                CURLOPT_HTTPHEADER => array(
+                    "Authorization: Bearer $request->token",
+                    "Content-Type: application/json"
+                ),
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+
+            curl_close($curl);
+            
+            if ($err) {
+                return response()->json([
+                    'status' => 'error',
+                    'response' => json_decode($err)
+                ]);
+            } else {
+                $res = json_decode($response);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Virtual account created successfully',
+                'response' => $res
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+        
+    }
+
     public function update_phone(Request $request)
     {
         $user = $request->user();

@@ -27,6 +27,8 @@ const SignupForm = (props) => {
 
     const validationSchema = Yup.object().shape({
         username: Yup.string().required("Please enter your user name"),
+        first_name: Yup.string().required("Please enter your first name"),
+        last_name: Yup.string().required("Please enter your last name"),
         userType: Yup.string().required("Please choose a profile type"),
         email: Yup.string()
             .email("Invalid email")
@@ -130,9 +132,9 @@ const SignupForm = (props) => {
     }, [emailStatus, emailStatusMessage, setEmailMessage])
 
     const onSignUp = async (values, setSubmitting) => {
-        const { username, password, email, password_confirmation, userType } = values;
+        const { username, password, email, password_confirmation, userType, first_name, last_name } = values;
         setSubmitting(true);
-        const result = await signUp({ username, password, email, password_confirmation, profile_type_id: userType });
+        const result = await signUp({ username, first_name, last_name, password, email, password_confirmation, profile_type_id: userType });
 
         const data = {
             username: username,
@@ -164,6 +166,8 @@ const SignupForm = (props) => {
             <Formik
                 initialValues={{
                     username: "",
+                    first_name: "",
+                    last_name: "",
                     password: "",
                     password_confirmation: "",
                     email: "",
@@ -306,6 +310,34 @@ const SignupForm = (props) => {
                                     />
                                 </FormItem>
 
+                                <FormItem
+                                    label=""
+                                    invalid={errors.first_name && touched.first_name}
+                                    errorMessage={errors.first_name}
+                                >
+                                    <Field
+                                        type="text"
+                                        autoComplete="off"
+                                        name="first_name"
+                                        placeholder="First Name"
+                                        component={Input}
+                                    />
+                                </FormItem>
+
+                                <FormItem
+                                    label=""
+                                    invalid={errors.last_name && touched.last_name}
+                                    errorMessage={errors.last_name}
+                                >
+                                    <Field
+                                        type="text"
+                                        autoComplete="off"
+                                        name="last_name"
+                                        placeholder="Last Name"
+                                        component={Input}
+                                    />
+                                </FormItem>
+
                                 {((emailStatus === 'success' || emailStatus === 'error') && emailMessage) && (
                                     <Alert className="mb-4" type={emailAvail ? 'success' : 'danger'} showIcon>
                                         {emailMessage}
@@ -431,7 +463,7 @@ const SignupForm = (props) => {
                                     loading={isSubmitting}
                                     variant="solid"
                                     type="submit"
-                                    disabled={!passwordCheck || !usernameAvail || !emailAvail || !passwordMatch || !terms || !values.userType}
+                                    disabled={!passwordCheck || !usernameAvail || !emailAvail || !passwordMatch || !terms || !values.userType || !values.first_name || !values.last_name}
                                 >
                                     {isSubmitting
                                         ? "Creating Account..."

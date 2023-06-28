@@ -56,6 +56,8 @@ class AuthController extends Controller
     {
         $request->validate([
             'username' => 'required|string|alpha_dash|unique:users,username',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
             'slug' => 'nullable',
             'profile_type_id' => 'required',
             'email' => 'required|string|unique:users,email',
@@ -72,6 +74,8 @@ class AuthController extends Controller
 
         $new_user = User::create([
             'username' => $request->username,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
             'profile_type_id' => $request->profile_type_id,
             'slug' => Str::slug($request->username),
             'email' => $request->email,

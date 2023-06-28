@@ -40,7 +40,7 @@ const Layout = ({ noPad }) => {
     }, [profile, socketURL])
 
     return (
-        <Container className="max-w-2xl">
+        <Container className="max-w-2xl w-full">
             <Header />
             <div className="bg-white pb-4">
                 <div className="bg-primary-500 w-[96%] mx-auto rounded-2xl py-3 px-4 flex items-center gap-4 justify-between">

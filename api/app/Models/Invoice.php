@@ -33,6 +33,11 @@ class Invoice extends Model
         return $this->belongsTo(User::class, 'receiver_id');
     }
 
+    public function Booking()
+    {
+        return $this->hasOne(Booking:: class);
+    }
+
     public function Items()
     {
         return $this->hasMany(InvoiceItem::class);

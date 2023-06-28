@@ -26,6 +26,7 @@ import { EllipsisButton } from "components/shared";
 import { Document, Page, pdfjs } from "react-pdf";
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
+import { togglePaymentDialog } from "../store/stateSlice";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 
@@ -37,13 +38,14 @@ const Messages = ({ isOwner, sender, receiver }) => {
     const [pageNumber, setPageNumber] = useState(1);
 
     // Select data from the Redux store
-    const { chat, messages, provider, deleteMessageStatus } = useSelector(
+    const { chat, invoice, messages, deleteMessageStatus } = useSelector(
         (state) => state.chat.data
     );
+    const { profile } = useSelector((state) => state.auth.user);
+    const provider = profile?.service ? true : false
     console.log(numPages);
     console.log(pageNumber);
 
-    const { profile } = useSelector((state) => state.auth.user);
 
     const onDocumentLoadSuccess = ({ numPages }) => {
         setNumPages(numPages);
@@ -172,6 +174,7 @@ const Messages = ({ isOwner, sender, receiver }) => {
                                                     <Button
                                                         variant="solid"
                                                         size="xs"
+                                                        onClick={() => dispatch(togglePaymentDialog(true))}
                                                     >
                                                         Pay for Service
                                                     </Button>
@@ -248,6 +251,150 @@ const Messages = ({ isOwner, sender, receiver }) => {
                     </motion.div>
                 );
             })}
+
+            {chat.invoice && (
+                <motion.div
+                    ref={scroll}
+                    initial={{ opacity: 0, visibility: "hidden" }}
+                    animate={{ opacity: 1, visibility: "visible" }}
+                    transition={{ duration: 0.3, type: "tween" }}
+                    exit={{ opacity: 0, visibility: "hidden" }}
+                    layoutId={invoice.id}
+                    className={classNames(
+                        "flex gap-2 items-start",
+                        provider ? "justify-end" : "justify-start"
+                    )}
+                >
+                    {!provider && (
+                        <div>
+                            <Avatar
+                                src={`${imagePath}/${
+                                    receiver?.service?.banner ||
+                                    receiver?.image
+                                }`}
+                                size="sm"
+                                shape="circle"
+                            />
+                        </div>
+                    )}
+                    <div className="mb-4 max-w-[80%] w-fit">
+                        <Card
+                            className={classNames(
+                                "max-w-[100%] w-fit",
+                                provider ? "bg-primary-500 text-white" : ""
+                            )}
+                        >
+                            <div className="flex gap-2">
+                                <div>
+                                    <Document file={`${filePath}/${invoice.file}`} onLoadSuccess={onDocumentLoadSuccess}>
+                                        <Page pageNumber={pageNumber}  />
+                                    </Document>
+                                    {numPages > 1 && (
+                                        <div className="mt-2 flex items-center gap-4 justify-between">
+                                            <p>
+                                                Page {pageNumber} of {numPages}
+                                            </p>
+                                            <div className="flex items-center gap-2">
+                                                <Button
+                                                    size="xs"
+                                                    variant="solid"
+                                                    disabled={pageNumber === 1}
+                                                    onClick={() => setPageNumber(pageNumber - 1)}
+                                                >
+                                                    Prev
+                                                </Button>
+                                                <Button
+                                                    size="xs"
+                                                    variant="solid"
+                                                    disabled={pageNumber === numPages}
+                                                    onClick={() => setPageNumber(pageNumber + 1)}
+                                                >
+                                                    Next
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {!provider && (
+                                        <div className="mt-4">
+                                            <Button
+                                                variant="solid"
+                                                size="xs"
+                                                onClick={() => dispatch(togglePaymentDialog(true))}
+                                            >
+                                                Pay for Service
+                                            </Button>
+                                        </div>
+                                    )}
+                                </div>
+                                <Dropdown
+                                    placement={
+                                        provider ? "top-end" : "top-start"
+                                    }
+                                    renderTitle={
+                                        <EllipsisButton
+                                            icon={
+                                                <BiDotsVerticalRounded
+                                                    className={
+                                                        provider
+                                                            ? "text-white"
+                                                            : ""
+                                                    }
+                                                />
+                                            }
+                                            variant="twoTone"
+                                            shape="round"
+                                        />
+                                    }
+                                >
+                                    <Dropdown.Item
+                                        eventKey="Reply"
+                                        style={{
+                                            justifyContent: "flex-start",
+                                        }}
+                                    >
+                                        <span>
+                                            <BsReplyFill className="text-lg" />
+                                        </span>
+                                        <span>Reply</span>
+                                    </Dropdown.Item>
+                                    <Dropdown.Item
+                                        eventKey="Delete"
+                                        onClick={() =>
+                                            onRemoveMessage(invoice.id)
+                                        }
+                                        style={{
+                                            justifyContent: "flex-start",
+                                        }}
+                                    >
+                                        <span>
+                                            <MdDelete className="text-lg" />
+                                        </span>
+                                        <span>Delete</span>
+                                    </Dropdown.Item>
+                                </Dropdown>
+                            </div>
+                        </Card>
+                        <div>
+                            <p className="text-left">
+                                {dayjs(invoice.created_at).format("h:mm A")}
+                            </p>
+                        </div>
+                    </div>
+                    {provider && (
+                        <div>
+                            <Avatar
+                                src={`${imagePath}/${
+                                    profile?.service?.banner ||
+                                    profile?.image
+                                }`}
+                                size="sm"
+                                shape="circle"
+                            />
+                        </div>
+                    )}
+                </motion.div>
+            )}
         </AnimatePresence>
     );
 };
