@@ -138,7 +138,7 @@ const Messages = ({ isOwner, sender, receiver }) => {
                                             alt=""
                                         />
                                     )}
-                                    {message.invoice && (
+                                    {/* {message.invoice && (
                                         <div>
                                             <Document file={`${filePath}/${message.invoice}`} onLoadSuccess={onDocumentLoadSuccess}>
                                                 <Page pageNumber={pageNumber}  />
@@ -181,7 +181,7 @@ const Messages = ({ isOwner, sender, receiver }) => {
                                                 </div>
                                             )}
                                         </div>
-                                    )}
+                                    )} */}
                                     <Dropdown
                                         placement={
                                             owner ? "top-end" : "top-start"
@@ -252,7 +252,7 @@ const Messages = ({ isOwner, sender, receiver }) => {
                 );
             })}
 
-            {chat.invoice && (
+            {/* {chat.invoice && (
                 <motion.div
                     ref={scroll}
                     initial={{ opacity: 0, visibility: "hidden" }}
@@ -394,7 +394,7 @@ const Messages = ({ isOwner, sender, receiver }) => {
                         </div>
                     )}
                 </motion.div>
-            )}
+            )} */}
         </AnimatePresence>
     );
 };

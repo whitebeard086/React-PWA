@@ -21,7 +21,7 @@ const CloseButton = React.forwardRef((props, ref) => {
 			{...rest}
 			ref={ref}
 		>
-			<HiX />
+			<HiX className='text-xl' />
 		</span>
 	)
 })

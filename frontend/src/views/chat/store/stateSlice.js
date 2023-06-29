@@ -8,6 +8,7 @@ const stateSlice = createSlice({
         paymentDialog: false,
         addingItem: false,
         invoiceComplete: false,
+        viewingInvoice: false,
         file: {},
         invoice: {},
         invoiceData: [],
@@ -32,6 +33,9 @@ const stateSlice = createSlice({
         setInvoiceNumber: (state, action) => {
             state.invoiceNumber = action.payload
         },
+        setViewingInvoice: (state, action) => {
+            state.viewingInvoice = action.payload
+        },
         removeInvoiceItem: (state, action) => {
             state.invoiceData = state.invoiceData.filter((item) => item.tid !== action.payload)
         },
@@ -55,6 +59,7 @@ export const {
     setInvoiceData,
     setInvoiceNumber,
     removeInvoiceItem,
+    setViewingInvoice,
     setInvoiceComplete,
     toggleInvoiceDialog,
     togglePaymentDialog,

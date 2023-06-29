@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { apiGetProvider } from "services/AuthService";
 import { apiBookService } from "services/BookingService";
 import { apiDeleteMessage, apiInitiateChat, apiMakeInvoice, apiSendMessage } from "services/ChatService";
+import { initialState } from "store/auth/userSlice";
 
 export const initiateChat = createAsyncThunk(
     "chat/data/initiateChat",
@@ -91,6 +92,10 @@ const dataSlice = createSlice({
         removeMessage: (state, action) => {
             state.messages.filter((message) => message.id === action.payload)
         },
+        resetBookingStatus: (state) => {
+            state.bookingStatus = 'idle'
+            state.bookingMessage = ''
+        },
         setDeleteMessageStatus: (state, action) => {
             state.deleteMessageStatus = action.payload
         },
@@ -174,6 +179,7 @@ export const {
     setInvoiceStatus,
     removeMessage,
     setMessages,
+    resetBookingStatus,
     setDeleteMessageStatus
 } = dataSlice.actions
 

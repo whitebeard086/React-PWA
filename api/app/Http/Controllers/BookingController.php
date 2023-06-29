@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Escrow;
 use App\Models\Booking;
+use App\Models\Invoice;
 use Illuminate\Http\Request;
 
 class BookingController extends Controller
@@ -29,9 +30,20 @@ class BookingController extends Controller
 
             $user = User::findOrFail($booking->user_id);
             $escrowAccount = User::where('username', 'escrow')->firstOrFail();
+
+            if (isset($user) && $user->balance < $request->amount) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'insufficient balance',
+                ], 400);
+            }
             
             $user->decrement('balance', $escrow->amount);
             $escrowAccount->increment('balance', $escrow->amount);
+
+            $invoice = Invoice::findOrFail($request->invoice_id);
+            $invoice->status = 'paid';
+            $invoice->save();
 
             return response()->json([
                 'status' => 'success',

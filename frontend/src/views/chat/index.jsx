@@ -14,7 +14,7 @@ import { BsEmojiSmile, BsReplyFill } from "react-icons/bs";
 import { IoIosAddCircleOutline, IoIosSend } from "react-icons/io";
 import dayjs from "dayjs";
 import { BiDotsVerticalRounded } from "react-icons/bi";
-import { setFile, setMessage } from "./store/stateSlice";
+import { setFile, setInvoiceNumber, setMessage, toggleInvoiceDialog } from "./store/stateSlice";
 import { FaFileImage, FaFileInvoiceDollar } from "react-icons/fa";
 import useCompressFile from "utils/hooks/useCompressFile";
 import { useDropdownMenuContext } from "components/ui/Dropdown/context/dropdownMenuContext";
@@ -23,6 +23,8 @@ import MessageBox from "./components/MessageBox";
 import { io } from "socket.io-client"
 import InvoiceDialog from "./components/invoice/InvoiceDialog";
 import PaymentDialog from "./components/PaymentDialog";
+import ChatBar from "./components/chatBar";
+import createUID from "components/ui/utils/createUid";
 
 injectReducer("chat", reducer);
 
@@ -49,6 +51,11 @@ const Chat = () => {
 
     const { gettingProvider, provider } = useSelector((state) => state.chat.data);
 
+    const onCreateInvoice = () => {
+        dispatch(toggleInvoiceDialog(true))
+        dispatch(setInvoiceNumber(createUID(8)))
+    }
+
     useEffect(() => {
         socket.current = io("http://localhost:8800")
         socket.current.emit("addNewUser", profile?.id)
@@ -67,20 +74,9 @@ const Chat = () => {
             ) : (
                 <div className="relative min-h-[72vh]">
                     {/* <hr /> */}
-                    <div className="p-4 bg-white border-t-2 sticky top-[4.7rem] z-10">
-                        <div className="flex gap-2 items-center">
-                            <div onClick={() => navigate(-1)} className="hover:bg-emerald-50 transition duration-300 h-10 w-10 flex items-center justify-center rounded-full cursor-pointer">
-                                <HiArrowNarrowLeft className="text-2xl" />
-                            </div>
-                            <Link to={`/browse/profile/${provider?.username}`} className="flex gap-2 items-center">
-                                <Avatar src={`${imagePath}/${provider?.service?.banner || provider?.image}`} size="lg" shape="circle" />
-                                <div className="flex flex-col">
-                                    <h4 className="font-bold text-base">{provider?.service?.title || provider?.username}</h4>
-                                    <p className="font-semibold text-green-500">Online</p>
-                                </div>
-                            </Link>
-                        </div>
-                    </div>
+                    <ChatBar 
+                        onCreateInvoice={onCreateInvoice}
+                    />
 
                     <div className="p-4">
                         
@@ -98,6 +94,7 @@ const Chat = () => {
                         <MessageBox 
                             receiver={receiver}
                             socket={socket.current}
+                            onCreateInvoice={onCreateInvoice}
                         />
                     </div>
                 </div>

@@ -16,7 +16,7 @@ import { sendMessage, setMessageStatus, setMessages } from "../store/dataSlice"
 import useFocus from "./useFocus"
 import createUID from "components/ui/utils/createUid"
 
-const MessageBox = ({ receiver, socket }) => {
+const MessageBox = ({ receiver, socket, onCreateInvoice }) => {
     const dispatch = useDispatch();
     const { compressFile, compressedFile, compressedFileError, resetCompressedFile } = useCompressFile();
     const [avatarImg, setAvatarImg] = useState(null)
@@ -36,11 +36,6 @@ const MessageBox = ({ receiver, socket }) => {
     const handleChange = (e) => {
         setMessage(e.target?.value)
     };
-
-    const onCreateInvoice = () => {
-        dispatch(toggleInvoiceDialog(true))
-        dispatch(setInvoiceNumber(createUID(8)))
-    }
 
     // Handle Message Sending
     const onSendMessage = () => {

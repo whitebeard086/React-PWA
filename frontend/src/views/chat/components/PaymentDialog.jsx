@@ -1,23 +1,27 @@
 import { useDispatch, useSelector } from "react-redux";
-import { togglePaymentDialog } from "../store/stateSlice";
+import { setViewingInvoice, togglePaymentDialog } from "../store/stateSlice";
 import { Button, Dialog, Notification, Table, toast } from "components/ui";
 import dayjs from "dayjs";
 import useInvoiceData from "./invoice/useInvoiceData";
 import { MdOutlineCancel } from "react-icons/md";
 import { BiCheckDouble } from "react-icons/bi";
-import { bookService } from "../store/dataSlice";
+import { bookService, resetBookingStatus } from "../store/dataSlice";
+import { useEffect } from "react";
+import classNames from "classnames";
 
 const PaymentDialog = () => {
     const dispatch = useDispatch();
 
     const { Tr, Th, Td, THead, TBody } = Table;
 
-    const { paymentDialog, invoiceData } = useSelector((state) => state.chat.state)
-    const { invoice, chat, bookingService } = useSelector((state) => state.chat.data)
+    const { paymentDialog, viewingInvoice } = useSelector((state) => state.chat.state)
+    const { invoice, chat, bookingService, bookingMessage, bookingStatus } = useSelector((state) => state.chat.data)
     const { profile } = useSelector((state) => state.auth.user)
 
     const provider = chat?.user?.service ? chat?.user : chat?.receiver
-    console.log(provider);
+    const receiver = chat?.user?.service ? chat.receiver : chat.user
+    const isReceiver = profile?.service ? false : true
+    const isPaid = invoice?.status === 'paid' ? true : false
 
     const { totalPrice } = useInvoiceData(invoice?.items);
 
@@ -25,12 +29,12 @@ const PaymentDialog = () => {
         dispatch(togglePaymentDialog(false));
     }
 
-    const popNotification = (message, type, title) => {
+    const popNotification = (message, type, title, duration) => {
         toast.push(
             <Notification
                 title={title || `${"Error"}`}
                 type={type || `${"warning"}`}
-                duration={3000}
+                duration={duration || 3000}
             >
                 {message}
             </Notification>,
@@ -39,6 +43,36 @@ const PaymentDialog = () => {
             }
         );
     };
+
+    useEffect(() => {
+        if (bookingMessage === "insufficient balance") {
+            popNotification(
+                'Insufficient balance, please top up and try again',
+                'warning',
+                'Error',
+                5000
+            )
+        }
+
+        dispatch(resetBookingStatus())
+    }, [bookingMessage, dispatch])
+
+    useEffect(() => {
+        if (bookingStatus === "success") {
+            popNotification(
+                'Service booked successfully',
+                'success',
+                'Success',
+                5000
+            )
+        }
+
+        dispatch(resetBookingStatus())
+    }, [bookingStatus, dispatch])
+
+    const onReady = () => {
+        dispatch(setViewingInvoice(false))
+    }
 
     const onBookService = () => {
         dispatch(bookService({
@@ -58,16 +92,20 @@ const PaymentDialog = () => {
             scrollable
             className="overflow-y-auto"
             bodyOpenClassName="overflow-hidden"
-            title="Confirm Service Payment"
+            title={viewingInvoice ? `Invoice #${invoice?.invoice_number}` : "Confirm Service Payment"}
         >
-            <h4 className="text-lg font-bold text-gray-700">Confirm Service Payment</h4>
+            {!viewingInvoice && (
+                <h4 className="text-lg font-bold text-gray-700">Confirm Service Payment</h4>
+            )}
 
-            <div className="mt-4">
-                <p>
-                    Confirm payment for the following invoice. Don't worry, 
-                    we will hold onto the payment until the service has
-                    been completed before we release it to the service provider. 
-                </p>
+            <div className="mt-6">
+                {!viewingInvoice && (
+                    <p>
+                        Confirm payment for the following invoice. Don't worry, 
+                        we will hold onto the payment until the service has
+                        been completed before we release it to the service provider. 
+                    </p>
+                )}
 
                 <div className="mt-4">
                     <div className="flex items-center gap-4 px-4 justify-between">
@@ -91,7 +129,7 @@ const PaymentDialog = () => {
 
                     <div className="mt-4 px-4">
                         <p className="font-semibold">
-                            Invoice To: {profile?.username}
+                            Invoice To: {receiver?.username}
                         </p>
                     </div>
 
@@ -115,35 +153,51 @@ const PaymentDialog = () => {
                             </TBody>
                         </Table>
 
-                        <div className="mt-4 flex justify-end">
+                        <div className={classNames("mt-4 flex items-center gap-4", isPaid ? "justify-between" : "justify-end")}>
+                            <h4 className="text-base px-4 py-2 bg-primary-500 rounded-md text-white">Fully Paid</h4>
                             <h4 className="text-right text-base text-white bg-blue-500 px-4 py-2">
                                 Total: ₦{totalPrice?.toLocaleString()}
                             </h4>
                         </div>
 
-                        <div className="mt-4 flex items-center gap-4">
-                            <Button
-                                variant="solid"
-                                block
-                                size="sm"
-                                loading={bookingService}
-                                icon={<BiCheckDouble />}
-                                onClick={onBookService}
-                            >
-                                Pay {invoice?.price?.toLocaleString()}
-                            </Button>
-                            <Button
-                                variant="solid"
-                                className="bg-red-500 hover:bg-red-600"
-                                block
-                                size="sm"
-                                disabled={bookingService}
-                                icon={<MdOutlineCancel />}
-                                onClick={onDialogClose}
-                            >
-                                Cancel
-                            </Button>
-                        </div>
+                        {(!viewingInvoice && !isPaid) && (
+                            <div className="mt-4 flex items-center gap-4">
+                                <Button
+                                    variant="solid"
+                                    block
+                                    size="sm"
+                                    loading={bookingService}
+                                    icon={<BiCheckDouble />}
+                                    onClick={onBookService}
+                                >
+                                    Pay {invoice?.price?.toLocaleString()}
+                                </Button>
+                                <Button
+                                    variant="solid"
+                                    className="bg-red-500 hover:bg-red-600"
+                                    block
+                                    size="sm"
+                                    disabled={bookingService}
+                                    icon={<MdOutlineCancel />}
+                                    onClick={onDialogClose}
+                                >
+                                    Cancel
+                                </Button>
+                            </div>
+                        )}
+
+                        {(isReceiver && viewingInvoice && !isPaid) && (
+                            <div className="mt-4">
+                                <Button
+                                    variant="solid"
+                                    block
+                                    size="sm"
+                                    onClick={onReady}
+                                >
+                                    Ready to Pay
+                                </Button>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

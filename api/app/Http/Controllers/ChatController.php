@@ -148,7 +148,7 @@ class ChatController extends Controller
     public function invoice(Request $request)
     {
         try {
-            $invoices = Invoice::where('chat_id', $request->chat_id)->get();
+            $invoices = Invoice::where('chat_id', $request->chat_id)->where('status', '!=', 'paid')->get();
             
             if ($invoices) {
                 foreach ($invoices as $inv) {
