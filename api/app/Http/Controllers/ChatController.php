@@ -66,13 +66,13 @@ class ChatController extends Controller
                 ->firstOrFail();
 
             if (isset($request->id)) {
-                $chat = Chat::with('Messages', 'User.Service', 'Receiver.Service', 'Invoice.Items')
+                $chat = Chat::with('Messages', 'User.Service', 'Receiver.Service', 'Invoices.Items')
                     ->findOrFail($request->id);
                     
             } elseif (isset($request->provider_id)) {
                 $userId = auth()->user()->id;
                 
-                $chat = Chat::with('Messages', 'User.Service', 'Receiver.Service', 'Invoice.Items')
+                $chat = Chat::with('Messages', 'User.Service', 'Receiver.Service', 'Invoices.Items')
                     ->where('receiver_id', $request->provider_id)
                     ->where('user_id', $userId)
                     ->first();

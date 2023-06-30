@@ -5,11 +5,11 @@ import dayjs from "dayjs";
 import useInvoiceData from "./invoice/useInvoiceData";
 import { MdOutlineCancel } from "react-icons/md";
 import { BiCheckDouble } from "react-icons/bi";
-import { bookService, resetBookingStatus } from "../store/dataSlice";
+import { bookService, resetBookingStatus, setServiceBooked } from "../store/dataSlice";
 import { useEffect } from "react";
 import classNames from "classnames";
 
-const PaymentDialog = () => {
+const PaymentDialog = ({ state, providerSlug, socket }) => {
     const dispatch = useDispatch();
 
     const { Tr, Th, Td, THead, TBody } = Table;
@@ -68,7 +68,18 @@ const PaymentDialog = () => {
         }
 
         dispatch(resetBookingStatus())
-    }, [bookingStatus, dispatch])
+        dispatch(togglePaymentDialog(false))
+        socket?.emit("bookedService", provider?.id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [bookingStatus])
+
+    useEffect(() => {
+        socket?.on("serviceBooked", (data) => {
+            dispatch(setServiceBooked(true))
+        })
+
+        // dispatch(setServiceBooked(false))
+    }, [dispatch, socket])
 
     const onReady = () => {
         dispatch(setViewingInvoice(false))
@@ -77,6 +88,7 @@ const PaymentDialog = () => {
     const onBookService = () => {
         dispatch(bookService({
             service_id: provider?.service?.id,
+            provider_id: provider?.id,
             user_id: profile?.id,
             invoice_id: invoice?.id,
             amount: invoice?.price 
@@ -154,7 +166,7 @@ const PaymentDialog = () => {
                         </Table>
 
                         <div className={classNames("mt-4 flex items-center gap-4", isPaid ? "justify-between" : "justify-end")}>
-                            <h4 className="text-base px-4 py-2 bg-primary-500 rounded-md text-white">Fully Paid</h4>
+                            {/* <h4 className="text-base px-4 py-2 bg-primary-500 rounded-md text-white">Fully Paid</h4> */}
                             <h4 className="text-right text-base text-white bg-blue-500 px-4 py-2">
                                 Total: ₦{totalPrice?.toLocaleString()}
                             </h4>

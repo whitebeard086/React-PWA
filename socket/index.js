@@ -33,6 +33,30 @@ io.on("connection", (socket) => {
         }
     })
 
+    // Send Invoice
+    socket.on("sendInvoice", (data) => {
+        const receiverId = data;
+        const user = activeUsers.find((user) => user.userId === receiverId);
+        console.log("sending invoice to user: ", receiverId);
+
+        if (user) {
+            io.to(user.socketId).emit("receiveInvoice", data)
+            console.log("Invoice Received: ", receiverId);
+        }
+    })
+
+    // Book service
+    socket.on("bookedService", (data) => {
+        const providerId = data
+        const user = activeUsers.find((user) => user.userId === providerId);
+        console.log("service booked");
+
+        if (user) {
+            io.to(user.socketId).emit("serviceBooked", data)
+            console.log("Service provider", providerId);
+        }
+    })
+
     socket.on("disconnect", () => {
         activeUsers = activeUsers.filter((user) => user.socketId !== socket.id)
         console.log("User disconnected", activeUsers);

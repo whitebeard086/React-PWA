@@ -1,23 +1,22 @@
 import { Button, Dialog, Notification, toast } from "components/ui";
-import createUID from "components/ui/utils/createUid";
 import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux"
-import { removeInvoiceItem, setAddingItem, setInvoiceComplete, setInvoiceNumber, toggleInvoiceDialog } from "views/chat/store/stateSlice";
+import { removeInvoiceItem, setAddingItem, setInvoiceComplete, toggleInvoiceDialog } from "views/chat/store/stateSlice";
 import { Table } from 'components/ui'
 import { BiAddToQueue } from "react-icons/bi";
 import InvoiceForm from "./InvoiceForm";
 import { motion, AnimatePresence } from "framer-motion";
-import { MdDelete, MdModeEditOutline, MdOutlineDownloadDone } from "react-icons/md";
+import { MdDelete, MdOutlineDownloadDone } from "react-icons/md";
 import useInvoiceData from "./useInvoiceData";
 import { AiTwotoneEdit } from "react-icons/ai";
 import { toPng } from "html-to-image";
 import { jsPDF } from "jspdf";
 import { useRef, useState } from "react";
-import { makeInvoice, sendMessage, setInvoiceStatus } from "views/chat/store/dataSlice";
+import { makeInvoice, setInvoiceStatus, setReceivedInvoice } from "views/chat/store/dataSlice";
 import { BsFillSendFill } from "react-icons/bs";
 import { useEffect } from "react";
 
-const InvoiceDialog = ({ receiver }) => {
+const InvoiceDialog = ({ receiver, socket }) => {
     const dispatch = useDispatch();
     const invoiceRef = useRef(null);
     const [makingPDF, setMakingPDF] = useState(false);
@@ -25,8 +24,8 @@ const InvoiceDialog = ({ receiver }) => {
     const { Tr, Th, Td, THead, TBody } = Table;
     
     const { invoiceDialog, invoiceComplete, invoiceData, addingItem, invoiceNumber } = useSelector((state) => state.chat.state)
-    const { chat, invoiceStatus, messageStatus, makingInvoice, sendingMessage } = useSelector((state) => state.chat.data)
-    const { profile } = useSelector((state) => state.auth.user)
+    const { chat, invoiceStatus, makingInvoice, sendingMessage } = useSelector((state) => state.chat.data)
+    // const { profile } = useSelector((state) => state.auth.user)
 
     const { totalPrice } = useInvoiceData(invoiceData);
 
@@ -54,27 +53,36 @@ const InvoiceDialog = ({ receiver }) => {
 
     useEffect(() => {
         if (invoiceStatus === "success") {
-            dispatch(sendMessage({
-                chat_id: chat?.id,
-                sender_id: profile?.id,
-                invoice: invoice
-            }))
-        }
-
-        dispatch(setInvoiceStatus('idle'))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [invoiceStatus])
-    console.log(invoice);
-
-    useEffect(() => {
-        if (messageStatus === 'sent') {
+            // dispatch(sendMessage({
+            //     chat_id: chat?.id,
+            //     sender_id: profile?.id,
+            //     invoice: invoice
+            // }))
             popNotification("Invoice sent", "success", "Success")
         }
 
         onDialogClose()
+        dispatch(setInvoiceStatus('idle'))
+        socket?.emit("sendInvoice", receiver?.id)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [messageStatus])
-    console.log(JSON.stringify(invoiceData));
+    }, [invoiceStatus])
+    
+    useEffect(() => {
+        socket?.on("receiveInvoice", (data) => {
+            dispatch(setReceivedInvoice(true))
+        })
+    }, [dispatch, socket])
+
+    // useEffect(() => {
+    //     if (invoiceStatus === 'success' && messageStatus === 'sent') {
+    //         popNotification("Invoice sent", "success", "Success")
+    //     }
+
+    //     onDialogClose()
+    //     dispatch(setInvoiceStatus('idle'))
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [messageStatus, invoiceStatus])
+    // console.log(JSON.stringify(invoiceData));
     
 
     const handleSend = () => {

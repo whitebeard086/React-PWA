@@ -72,9 +72,13 @@ const dataSlice = createSlice({
         sendingMessage: false,
         makingInvoice: false,
         bookingService: false,
+        serviceBooked: false,
+        receivedInvoice: false,
+        booked: false,
         booking: {},
         sentMessage: {},
         invoice: {},
+        invoices: [],
         escrow: {},
         messageStatus: 'idle',
         invoiceStatus: 'idle',
@@ -96,6 +100,15 @@ const dataSlice = createSlice({
             state.bookingStatus = 'idle'
             state.bookingMessage = ''
         },
+        setBookedStatus: (state, action) => {
+            state.booked = action.payload
+        },
+        setServiceBooked: (state, action) => {
+            state.serviceBooked = action.payload
+        },
+        setReceivedInvoice: (state, action) => {
+            state.receivedInvoice = action.payload
+        },
         setDeleteMessageStatus: (state, action) => {
             state.deleteMessageStatus = action.payload
         },
@@ -111,10 +124,23 @@ const dataSlice = createSlice({
             .addCase(initiateChat.fulfilled, (state, action) => {
                 state.gettingProvider = false
                 const { provider, chat } = action.payload
-                state.invoice = chat.invoice
+                state.invoices = chat.invoices
                 state.provider = provider
                 state.chat = chat
                 state.messages = chat.messages ? chat.messages : []
+                state.invoice = state.invoices?.filter((invoice) => invoice.status === 'pending')[0] || {}
+
+                const isBooked = state.invoices?.some((invoice) => invoice.status === 'paid')
+
+                if (isBooked) {
+                    if (state.booked === false) {
+                        state.booked = true
+                    }
+                } else {
+                    if (state.booked === true) {
+                        state.booked = false
+                    }
+                }
             })
             .addCase(initiateChat.rejected, (state) => {
                 state.gettingProvider = false
@@ -179,6 +205,9 @@ export const {
     setInvoiceStatus,
     removeMessage,
     setMessages,
+    setServiceBooked,
+    setReceivedInvoice,
+    setBookedStatus,
     resetBookingStatus,
     setDeleteMessageStatus
 } = dataSlice.actions

@@ -1,24 +1,21 @@
 import { EllipsisButton } from "components/shared"
 import { Dropdown, Notification, Upload, toast } from "components/ui"
 import { useDropdownMenuContext } from "components/ui/Dropdown/context/dropdownMenuContext"
-import appConfig from "configs/app.config"
 import { useState } from "react"
 import { BsEmojiSmile } from "react-icons/bs"
 import { FaFileImage, FaFileInvoiceDollar } from "react-icons/fa"
 import { IoIosAddCircleOutline, IoIosSend } from "react-icons/io"
 import { useDispatch, useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
 import useCompressFile from "utils/hooks/useCompressFile"
 import TextareaAutosize from 'react-textarea-autosize';
-import { setFile, setInvoice, setInvoiceNumber, setMessage, toggleInvoiceDialog } from "../store/stateSlice"
+import { setFile, setInvoice } from "../store/stateSlice"
 import { useEffect } from "react"
 import { sendMessage, setMessageStatus, setMessages } from "../store/dataSlice"
 import useFocus from "./useFocus"
-import createUID from "components/ui/utils/createUid"
 
 const MessageBox = ({ receiver, socket, onCreateInvoice }) => {
     const dispatch = useDispatch();
-    const { compressFile, compressedFile, compressedFileError, resetCompressedFile } = useCompressFile();
+    const { compressFile, compressedFile, resetCompressedFile } = useCompressFile();
     const [avatarImg, setAvatarImg] = useState(null)
     const [message, setMessage] = useState("")
     const [inputRef, setInputFocus] = useFocus()

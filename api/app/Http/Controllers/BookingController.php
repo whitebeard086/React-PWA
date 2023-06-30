@@ -15,6 +15,7 @@ class BookingController extends Controller
         try {
             $bookingData = $request->validate([
                 'service_id' => 'required',
+                'provider_id' => 'required',
                 'user_id' => 'required',
                 'invoice_id' => 'required',
             ]);

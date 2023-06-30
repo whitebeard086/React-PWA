@@ -34,8 +34,8 @@ class Chat extends Model
         return $this->hasMany(Message::class);
     }
 
-    public function Invoice()
+    public function Invoices()
     {
-        return $this->hasOne(Invoice::class);
+        return $this->hasMany(Invoice::class);
     }
 }

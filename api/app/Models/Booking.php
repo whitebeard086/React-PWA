@@ -11,6 +11,7 @@ class Booking extends Model
 
     protected $fillable = [
         'service_id',
+        'provider_id',
         'user_id',
         'invoice_id',
         'service_status',
@@ -20,6 +21,7 @@ class Booking extends Model
 
     protected $casts = [
         'service_id' => 'float',
+        'provider_id' => 'float',
         'user_id' => 'float',
         'invoice_id' => 'float',
     ];

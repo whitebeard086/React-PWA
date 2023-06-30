@@ -6,7 +6,7 @@ import classNames from "classnames";
 
 import {
     deleteMessage,
-    removeMessage,
+    // removeMessage,
     setDeleteMessageStatus,
 } from "../store/dataSlice";
 import {
@@ -16,40 +16,38 @@ import {
     Card,
     Dropdown,
     Image,
-    Button,
 } from "components/ui";
 import appConfig from "configs/app.config";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { BsReplyFill } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
 import { EllipsisButton } from "components/shared";
-import { Document, Page, pdfjs } from "react-pdf";
+import { pdfjs } from "react-pdf";
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
-import { togglePaymentDialog } from "../store/stateSlice";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 
 const Messages = ({ isOwner, sender, receiver }) => {
     const dispatch = useDispatch();
     const scroll = useRef();
-    const { imagePath, filePath } = appConfig;
+    const { imagePath } = appConfig;
     const [numPages, setNumPages] = useState(null);
     const [pageNumber, setPageNumber] = useState(1);
 
     // Select data from the Redux store
-    const { chat, invoice, messages, deleteMessageStatus } = useSelector(
+    const { messages, deleteMessageStatus } = useSelector(
         (state) => state.chat.data
     );
     const { profile } = useSelector((state) => state.auth.user);
-    const provider = profile?.service ? true : false
+    // const provider = profile?.service ? true : false
     console.log(numPages);
     console.log(pageNumber);
 
 
-    const onDocumentLoadSuccess = ({ numPages }) => {
-        setNumPages(numPages);
-    }
+    // const onDocumentLoadSuccess = ({ numPages }) => {
+    //     setNumPages(numPages);
+    // }
 
     const onRemoveMessage = (message) => {
         dispatch(deleteMessage({ message_id: message.id }));
@@ -91,7 +89,7 @@ const Messages = ({ isOwner, sender, receiver }) => {
     }, [messages]);
 
     return (
-        <AnimatePresence>
+        <AnimatePresence className="">
             {messages?.map((message) => {
                 const owner = isOwner(message);
 
