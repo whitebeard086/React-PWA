@@ -41,9 +41,10 @@ const dataSlice = createSlice({
             })
             .addCase(getRequestsData.fulfilled, (state, action) => {
                 state.loading = false;
-                const { status, enquiries } = action.payload;
+                const { status, enquiries, bookings } = action.payload;
                 state.status = status;
                 state.enquiries = enquiries;
+                state.bookings = bookings;
             })
             .addCase(getRequestsData.rejected, (state) => {
                 state.loading = false;

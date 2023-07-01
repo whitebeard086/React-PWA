@@ -61,7 +61,7 @@ const Button =  React.forwardRef((props, ref) => {
 		const btn = {
 			bgColor: active ? `bg-${buttonColor}-${increaseLevel}` : `bg-${buttonColor}-${buttonColorLevel}`,
 			textColor: 'text-white',
-			hoverColor: active ? '' : `hover:bg-primary-600`,
+			hoverColor: active ? '' : `hover:bg-${buttonColor}-${increaseLevel}`,
 			activeColor: `active:bg-${buttonColor}-${increaseLevel}`
 		}
 		return getBtnColor(btn)
