@@ -64,6 +64,7 @@ const ConfirmDialog = (props) => {
 	const {
 		type,
 		title,
+		loading,
 		children,
 		onCancel,
 		onConfirm,
@@ -93,19 +94,20 @@ const ConfirmDialog = (props) => {
 				<div>
 					<StatusIcon status={type} />
 				</div>
-				<div className="ml-4 rtl:mr-4">
+				<div className="ml-4">
 					<h5 className="mb-2">{title}</h5>
 					{children}
 				</div>
 			</div>
-			<div className="text-right px-6 py-3 bg-gray-100 dark:bg-gray-700 rounded-bl-lg rounded-br-lg">
-				<Button size="sm" className="ltr:mr-2 rtl:ml-2" onClick={handleCancel}>
+			<div className="text-right px-6 py-3 bg-gray-100 rounded-bl-lg rounded-br-lg">
+				<Button size="sm" className="mr-2" onClick={handleCancel}>
 					{cancelText}
 				</Button>
 				<Button
 					size="sm"
 					variant="solid"
 					onClick={handleConfirm}
+					loading={loading}
 					color={confirmButtonColor}
 				>
 					{confirmText}
@@ -121,6 +123,7 @@ ConfirmDialog.propTypes = {
 
 ConfirmDialog.defaultProps = {
 	type: 'info',
+	loading: false,
 	cancelText: 'Cancel',
 	confirmText: 'Confirm',
 };

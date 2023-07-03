@@ -39,4 +39,26 @@ class RequestsController extends Controller
         }
     }
 
+    public function complete_service(Request $request)
+    {
+        try {
+            $booking = Booking::findOrFail($request->booking_id);
+            
+            $booking->service_status = 'completed';
+            $booking->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Booking completed',
+                'booking' => Booking::with('Service.User', 'User')->where('id', $booking->id)->firstOrFail(),
+            ], 200);
+            
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
 }

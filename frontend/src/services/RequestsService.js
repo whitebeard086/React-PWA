@@ -7,3 +7,11 @@ export async function apiGetRequestsData (data) {
         data
     })
 }
+
+export async function apiCompleteService (data) {
+    return ApiService.fetchData({
+        url: '/service/complete',
+        method: 'post',
+        data
+    })
+}

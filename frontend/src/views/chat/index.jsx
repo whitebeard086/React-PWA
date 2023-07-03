@@ -13,6 +13,7 @@ import InvoiceDialog from "./components/invoice/InvoiceDialog";
 import PaymentDialog from "./components/PaymentDialog";
 import ChatBar from "./components/chatBar";
 import createUID from "components/ui/utils/createUid";
+import appConfig from "configs/app.config";
 
 injectReducer("chat", reducer);
 
@@ -21,6 +22,7 @@ const Chat = () => {
     const { state } = useLocation();
     const { providerSlug } = useParams();
     const socket = useRef();
+    const { socketURL } = appConfig;
 
     // const { message, file, invoice } = useSelector((state) => state.chat.state)
     const { chat, receivedInvoice, serviceBooked, bookingStatus, invoiceStatus } = useSelector((state) => state.chat.data)
@@ -42,9 +44,9 @@ const Chat = () => {
 
     
     useEffect(() => {
-        socket.current = io("http://localhost:8800")
+        socket.current = io(socketURL)
         socket.current.emit("addNewUser", profile?.id)
-    }, [profile])
+    }, [profile, socketURL])
 
     
 

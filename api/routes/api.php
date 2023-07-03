@@ -74,4 +74,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // Booking Routes
     Route::post('/book-service', [BookingController::class, 'book_service']);
+    Route::post('/service/complete', [RequestsController::class, 'complete_service']);
 });
