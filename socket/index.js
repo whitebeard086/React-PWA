@@ -68,6 +68,16 @@ io.on("connection", (socket) => {
         }
     })
 
+    // Confirm Service
+    socket.on("confirmedService", (data) => {
+        const providerId = data
+        const user = activeUsers.find((user) => user.userId === providerId);
+
+        if (user) {
+            io.to(user.socketId).emit("serviceConfirmed", data)
+        }
+    })
+
     socket.on("disconnect", () => {
         activeUsers = activeUsers.filter((user) => user.socketId !== socket.id)
         console.log("User disconnected", activeUsers);

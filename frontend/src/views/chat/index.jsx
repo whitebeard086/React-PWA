@@ -2,7 +2,7 @@ import { injectReducer } from "store";
 import reducer from "./store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef } from "react";
-import { initiateChat } from "./store/dataSlice";
+import { initiateChat, resetBookingStatus, setInvoiceStatus, setReceivedInvoice, setServiceBooked } from "./store/dataSlice";
 import { useLocation, useParams } from "react-router-dom";
 import { Loading } from "components/shared";
 import { setInvoiceNumber, toggleInvoiceDialog } from "./store/stateSlice";
@@ -61,6 +61,23 @@ const Chat = () => {
         if (receivedInvoice || serviceBooked || bookingStatus === "success" || invoiceStatus === "success") {
             dispatch(initiateChat({ slug: providerSlug, id: state?.chat && state.chat, provider_id: state?.provider_id && state.provider_id }));
         }
+
+        if (receivedInvoice) {
+            dispatch(setReceivedInvoice(false));
+        }
+
+        if (serviceBooked) {
+            dispatch(setServiceBooked(false));
+        }
+
+        if (bookingStatus === "success") {
+            dispatch(resetBookingStatus());
+        }
+
+        if (invoiceStatus === "success") {
+            dispatch(setInvoiceStatus('idle'));
+        }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, receivedInvoice, serviceBooked, bookingStatus, invoiceStatus]);
 

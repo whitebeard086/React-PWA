@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('service_id')->constrained('services')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('booking_id')->constrained('bookings')->onDelete('cascade');
-            $table->decimal('Amount', 20, 2)->default(0.00);
+            $table->decimal('amount', 20, 2)->default(0.00);
             $table->enum('status', ['ongoing', 'completed', 'disputed', 'refunded'])->default('ongoing');
             $table->timestamps();
         });

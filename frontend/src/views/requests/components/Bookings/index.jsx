@@ -4,20 +4,25 @@ import { Avatar, Button, Card, Skeleton } from "components/ui"
 import appConfig from "configs/app.config"
 import { HiOutlineUser } from "react-icons/hi"
 import { useDispatch, useSelector } from "react-redux"
-import { setBookingID, toggleCompleteServiceDialog } from "views/requests/store/stateSlice"
+import { setBookingID, toggleCompleteServiceDialog, toggleConfirmServiceDialog } from "views/requests/store/stateSlice"
 
 const Bookings = () => {
     const dispatch = useDispatch();
     const { imagePath } = appConfig;
 
-    const { bookings, booking, completingService } = useSelector((state) => state.requests.data)
+    const { bookings, booking, completingService, confirmingService } = useSelector((state) => state.requests.data)
     const { bookingID } = useSelector((state) => state.requests.state)
     const { userType } = useSelector((state) => state.auth.user)
     const isProvider = userType === "Service Provider" ? true : false
-    // const completingService = true
+    // const confirmingService = true
 
     const onComplete = (booking) => {
         dispatch(toggleCompleteServiceDialog(true))
+        dispatch(setBookingID(booking?.id))
+    }
+
+    const onConfirm = (booking) => {
+        dispatch(toggleConfirmServiceDialog(true))
         dispatch(setBookingID(booking?.id))
     }
 
@@ -206,8 +211,127 @@ const Bookings = () => {
                                 </div>
                             </Card>
                             )
-                        ) : (
-                            <Card key={item.id} className={classNames(item.service_status === 'ongoing' && "min-w-[18rem] w-80", item.service_status === 'completed' && "min-w-[23rem] w-[23rem]")} bodyClass="flex w-full flex-col justify-center items-center">
+                        ) : ( 
+                            item.id === bookingID ? (
+                                confirmingService ? (
+                                    <Card key={item.id} className={classNames(item.service_status === 'completed' && "min-w-[23rem] w-[23rem]")} bodyClass="flex w-full flex-col justify-center items-center">
+                                        <div className="w-full flex items-center h-24 justify-center gap-4 ">
+                                            <Loading loading />
+                                        </div>
+                                    </Card>
+                                ) : (
+                                    booking.id ? (
+                                        <Card key={item.id} className={classNames(item.service_status === 'ongoing' && "min-w-[18rem] w-80", item.service_status === 'completed' && "min-w-[30rem] w-[30rem]")} bodyClass="flex w-full flex-col justify-center items-center">
+                                            <div className="w-full flex items-center gap-6 justify-between">
+                                                <div className="w-fit flex flex-col items-center gap-1">
+                                                    <Avatar 
+                                                        size="lg"
+                                                        shape="circle"
+                                                        icon={<HiOutlineUser />}
+                                                        src={`${imagePath}/${booking?.service?.banner}`}
+                                                    />
+
+                                                    <h4 className="font-semibold text-base">
+                                                        {`${booking?.service?.title}`}
+                                                    </h4>
+                                                </div>
+
+                                                <div>
+                                                    {booking?.service_status === 'ongoing' && (
+                                                        <p className={classNames("text-sm font-semibold text-primary-500 flex flex-col items-center justify-center w-fit leading-tight")}>
+                                                            <span>Service</span>
+                                                            <span>Ongoing</span>
+                                                        </p>
+                                                    )}
+                                                    {booking?.service_status === 'completed' && (
+                                                        <p className={classNames("text-sm font-semibold flex flex-col items-center justify-center w-fit")}>
+                                                            <span>Service</span>
+                                                            <span>Completed</span>
+                                                        </p>
+                                                    )}
+                                                </div>
+
+                                                <div>
+                                                    {booking?.service_status === 'completed' && (
+                                                        <div className="flex items-center gap-2">
+                                                            <Button
+                                                                variant="solid"
+                                                                size="sm"
+                                                                color="blue-500"
+                                                                onClick={() => onConfirm(booking)}
+                                                            >
+                                                                Confirm
+                                                            </Button>
+                                                            <Button
+                                                                variant="solid"
+                                                                size="sm"
+                                                                color="red-500"
+                                                            >
+                                                                Report
+                                                            </Button>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </Card>
+                                    ) : (
+                                        <Card key={item.id} className={classNames(item.service_status === 'ongoing' && "min-w-[18rem] w-80", item.service_status === 'completed' && "min-w-[30rem] w-[30rem]")} bodyClass="flex w-full flex-col justify-center items-center">
+                                            <div className="w-full flex items-center gap-6 justify-between">
+                                                <div className="w-fit flex flex-col items-center gap-1">
+                                                    <Avatar 
+                                                        size="lg"
+                                                        shape="circle"
+                                                        icon={<HiOutlineUser />}
+                                                        src={`${imagePath}/${item?.service?.banner}`}
+                                                    />
+            
+                                                    <h4 className="font-semibold text-base">
+                                                        {`${item?.service?.title}`}
+                                                    </h4>
+                                                </div>
+            
+                                                <div>
+                                                    {item?.service_status === 'ongoing' && (
+                                                        <p className={classNames("text-sm font-semibold text-primary-500 flex flex-col items-center justify-center w-fit leading-tight")}>
+                                                            <span>Service</span>
+                                                            <span>Ongoing</span>
+                                                        </p>
+                                                    )}
+                                                    {item?.service_status === 'completed' && (
+                                                        <p className={classNames("text-sm font-semibold flex flex-col items-center justify-center w-fit")}>
+                                                            <span>Service</span>
+                                                            <span>Completed</span>
+                                                        </p>
+                                                    )}
+                                                </div>
+            
+                                                <div>
+                                                    {item?.service_status === 'completed' && (
+                                                        <div className="flex items-center gap-2">
+                                                            <Button
+                                                                variant="solid"
+                                                                size="sm"
+                                                                color="blue-500"
+                                                                onClick={() => onConfirm(item)}
+                                                            >
+                                                                Confirm
+                                                            </Button>
+                                                            <Button
+                                                                variant="solid"
+                                                                size="sm"
+                                                                color="red-500"
+                                                            >
+                                                                Report
+                                                            </Button>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </Card>
+                                    )
+                                )
+                            ) : (
+                            <Card key={item.id} className={classNames(item.service_status === 'ongoing' && "min-w-[18rem] w-80", item.service_status === 'completed' && "min-w-[30rem] w-[30rem]")} bodyClass="flex w-full flex-col justify-center items-center">
                                 <div className="w-full flex items-center gap-6 justify-between">
                                     <div className="w-fit flex flex-col items-center gap-1">
                                         <Avatar 
@@ -239,17 +363,28 @@ const Bookings = () => {
 
                                     <div>
                                         {item?.service_status === 'completed' && (
-                                            <Button
-                                                variant="solid"
-                                                size="sm"
-                                                color="blue-500"
-                                            >
-                                                Confirm
-                                            </Button>
+                                            <div className="flex items-center gap-2">
+                                                <Button
+                                                    variant="solid"
+                                                    size="sm"
+                                                    color="blue-500"
+                                                    onClick={() => onConfirm(item)}
+                                                >
+                                                    Confirm
+                                                </Button>
+                                                <Button
+                                                    variant="solid"
+                                                    size="sm"
+                                                    color="red-500"
+                                                >
+                                                    Report
+                                                </Button>
+                                            </div>
                                         )}
                                     </div>
                                 </div>
                             </Card>
+                            )
                         )
                         
                     ))}
