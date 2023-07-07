@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3061c44d228bb957af9ef9d3661984f5",
+    "content-hash": "7629afad5ad01b548e7ebe0bcd38c6d0",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -284,6 +284,71 @@
                 "source": "https://github.com/dflydev/dflydev-dot-access-data/tree/v3.0.2"
             },
             "time": "2022-10-27T11:44:00+00:00"
+        },
+        {
+            "name": "digikraaft/laravel-paystack-webhooks",
+            "version": "v2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/digikraaft/laravel-paystack-webhooks.git",
+                "reference": "6fcf30e778fdb4f0461b1e519d85f72e4145b7c8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/digikraaft/laravel-paystack-webhooks/zipball/6fcf30e778fdb4f0461b1e519d85f72e4145b7c8",
+                "reference": "6fcf30e778fdb4f0461b1e519d85f72e4145b7c8",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.3",
+                "laravel/framework": "^9.0|^10.0",
+                "php": "^8.0|^8.1|^8.2"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^7.0",
+                "phpunit/phpunit": "^9.0",
+                "vimeo/psalm": "^4.20"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Digikraaft\\PaystackWebhooks\\PaystackWebhooksServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Digikraaft\\PaystackWebhooks\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tim Oladoyinbo",
+                    "email": "dev@digikraaft.ng",
+                    "homepage": "https://digikraaft.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Handle Paystack webhooks in a Laravel application",
+            "homepage": "https://github.com/digikraaft/laravel-paystack-webhooks",
+            "keywords": [
+                "billing",
+                "digikraaft",
+                "laravel-paystack-webhooks",
+                "payment",
+                "paystack",
+                "webhooks"
+            ],
+            "support": {
+                "issues": "https://github.com/digikraaft/laravel-paystack-webhooks/issues",
+                "source": "https://github.com/digikraaft/laravel-paystack-webhooks/tree/v2.1.0"
+            },
+            "time": "2023-03-04T01:26:33+00:00"
         },
         {
             "name": "doctrine/inflector",

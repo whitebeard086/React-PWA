@@ -11,8 +11,9 @@ import { PaystackButton } from "react-paystack";
 
 const DepositForm = () => {
     const dispatch = useDispatch();
+    // console.log(process.env.REACT_APP_PAYSTACK_PUBLIC_KEY);
 
-    const publicKey = 'pk_test_abd78b5f53a117719e9152fad5412b26de42b1e0';
+    const publicKey = process.env.REACT_APP_PAYSTACK_PUBLIC_KEY;
 
     const { profile } = useSelector((state) => state.auth.user)
 

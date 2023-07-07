@@ -55,7 +55,7 @@ class GatewayController extends Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "GET",
             CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.env('PAYSTACK_SECRET_KEY'),
+                'Authorization: Bearer '.env('PAYSTACK_SECRET'),
                 'Cache-Control: no-cache',
             ),
         ));
@@ -89,4 +89,5 @@ class GatewayController extends Controller
 
         return response()->json($res);
     }
+
 }

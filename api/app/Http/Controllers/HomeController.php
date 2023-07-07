@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Booking;
 use App\Models\Service;
 use App\Models\Category;
 use Illuminate\Support\Str;
@@ -12,14 +14,31 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $categories = Category::all();
-        $services = Service::with('Category', 'SubCategory', 'Workdays', 'User')->get();
+        try {
+            $userId = auth()->user()->id;
+            $user = User::findOrFail($userId);
 
-        return response()->json([
-            'status' => 'success',
-            'categories' => $categories,
-            'services' => $services,
-        ]);
+            $bookingQuery = Booking::orderBy('id', 'desc')->with('Service.User', 'User', 'Service.Category')->where('status', 'completed');
+            
+            if ($user->profile_type_id == 1) {
+                $bookings = $bookingQuery->where('user_id', $userId)->paginate(5);
+            } elseif ($user->profile_type_id == 2) {
+                $bookings = $bookingQuery->where('provider_id', $userId)->get();
+            }
+
+            $categories = Category::all();
+            $services = Service::with('Category', 'SubCategory', 'Workdays', 'User')->get();
+
+            return response()->json([
+                'status' => 'success',
+                'categories' => $categories,
+                'services' => $services,
+                'bookings' => $bookings
+            ]);
+            
+        } catch (\Exception $e) {
+            //throw $th;
+        }
     }
 
     public function create_category(Request $request)

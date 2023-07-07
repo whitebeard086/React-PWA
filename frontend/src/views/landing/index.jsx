@@ -14,7 +14,7 @@ const Landing = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const [step, setStep] = useState(0);
+    const [step, setStep] = useState(1);
 
     useEffect(() => {
         dispatch(setHasVisited(true))
@@ -36,7 +36,7 @@ const Landing = () => {
     return (
         <Container className="max-w-xl">
             <Suspense fallback={<div className="bg-primary-500 w-full h-screen"></div>}>
-                {step === 0 && <Step1 onNext={handleNext} onSkip={handleSkip} />}
+                {/* {step === 0 && <Step1 onNext={handleNext} onSkip={handleSkip} />} */}
                 {step === 1 && <Step2 onNext={handleNext} onSkip={handleSkip} />}
                 {step === 2 && <Step3 onNext={handleNext} onSkip={handleSkip} />}
                 {step === 3 && <Step4 onNext={handleNext} onSkip={handleSkip} />}

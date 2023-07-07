@@ -50,16 +50,21 @@ const Step2 = ({ onBack }) => {
             popNotification()
             dispatch(getUser())
 
-            setTimeout(() => {
-                dispatch(resetStatus())
+            // setTimeout(() => {
+            //     dispatch(resetStatus())
 
-                if (status === 'success') {
-                    navigate('/home')
-                }
-            }, 1200)
+            //     if (status === 'success') {
+            //         navigate('/home')
+            //     }
+            // }, 1200)
         }
     }, [dispatch, navigate, setMessage, status, verifyMessage])
 
+    useEffect(() => {
+        if (status === 'success') {
+            navigate('/home')
+        }
+    }, [navigate, status])
     // useEffect(() => {
     //     if(status === 'success') {
     //         setMessage(verifyMessage)

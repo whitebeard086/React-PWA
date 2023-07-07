@@ -79,12 +79,11 @@ class UserController extends Controller
 
     public function assign_virtual_account(Request $request)
     {
-        $user = $request->user();
+        $user = User::where('id', auth()->user()->id)->firstOrFail();
 
         try {
             $curl = curl_init();
             $data = array(
-                // "api_key" => env('PAYSTACK_SECRET_KEY'), 
                 "email" => $user->email,
                 "first_name" => $user->first_name,
                 "last_name" => $user->last_name,
@@ -106,7 +105,7 @@ class UserController extends Controller
                 CURLOPT_CUSTOMREQUEST => "POST",
                 CURLOPT_POSTFIELDS => $post_data,
                 CURLOPT_HTTPHEADER => array(
-                    "Authorization: Bearer $request->token",
+                    "Authorization: Bearer ".env('PAYSTACK_SECRET'),
                     "Content-Type: application/json"
                 ),
             ));
@@ -147,49 +146,49 @@ class UserController extends Controller
 
         $otp = (new OTP())->generate($user->phone, 4, 10);
         
-        // $curl = curl_init();
-        // $data = array(
-        //     "api_key" => env('TERMII_API_KEY'), 
-        //     "to" => $user->phone,  
-        //     "from" => "N-Alert",
-        //     "sms" => "Hi $user->username, use the following code to verify your mobile number, $otp->token",  
-        //     "type" => "plain",  
-        //     "channel" => "dnd" 
-        // );
+        $curl = curl_init();
+        $data = array(
+            "api_key" => env('TERMII_API_KEY'), 
+            "to" => $user->phone,  
+            "from" => "N-Alert",
+            "sms" => "Hi $user->username, use the following code to verify your mobile number, $otp->token",  
+            "type" => "plain",  
+            "channel" => "dnd" 
+        );
 
-        // $post_data = json_encode($data);
+        $post_data = json_encode($data);
 
-        // curl_setopt_array($curl, array(
-        //     CURLOPT_URL => "https://api.ng.termii.com/api/sms/send",
-        //     CURLOPT_RETURNTRANSFER => true,
-        //     CURLOPT_ENCODING => "",
-        //     CURLOPT_MAXREDIRS => 10,
-        //     CURLOPT_TIMEOUT => 0,
-        //     CURLOPT_FOLLOWLOCATION => true,
-        //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        //     CURLOPT_CUSTOMREQUEST => "POST",
-        //     CURLOPT_POSTFIELDS => $post_data,
-        //     CURLOPT_HTTPHEADER => array(
-        //         "Content-Type: application/json"
-        //     ),
-        // ));
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.ng.termii.com/api/sms/send",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => $post_data,
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/json"
+            ),
+        ));
 
-        // $response = curl_exec($curl);
-        // $err = curl_error($curl);
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
 
-        // curl_close($curl);
+        curl_close($curl);
 
-        // if ($err) {
-        //     echo "cURL Error #:" . $err;
-        // } else {
-        //     // echo $response;
-        //     $res = json_decode($response);
-        // }
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+            // echo $response;
+            $res = json_decode($response);
+        }
 
         return response()->json([
             'user' => $user,
             'message' => 'Otp sent',
-            // 'response' => $res
+            'response' => $res
         ]);
     }
 

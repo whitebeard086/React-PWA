@@ -12,6 +12,7 @@ use App\Http\Controllers\GatewayController;
 use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\RequestsController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\WebhookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,6 +66,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Deposit Routes
     Route::post('/paystack/deposit', [GatewayController::class, 'paystackDeposit']);
     Route::post('/paystack/verify', [GatewayController::class, 'verifyPaystackPayment']);
+    Route::post('/paystack/webhook', [WebhookController::class, 'handleChargeSuccess']);
 
     // Chat Routes
     Route::post('/chat', [ChatController::class, 'chat']);

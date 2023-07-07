@@ -20,6 +20,7 @@ const dataSlice = createSlice({
         loading: false,
         categories: [],
         services: [],
+        bookings: [],
         status: 'idle',
     },
     reducers: {
@@ -34,9 +35,11 @@ const dataSlice = createSlice({
             })
             .addCase(getHomeData.fulfilled, (state, action) => {
                 state.loading = false;
-                state.status = action.payload.status;
-                state.categories = action.payload.categories;
-                state.services = action.payload.services;
+                const { status, categories, services, bookings } = action.payload;
+                state.status = status;
+                state.categories = categories;
+                state.services = services;
+                state.bookings = bookings?.data;
             })
             .addCase(getHomeData.rejected, (state) => {
                 state.loading = false;

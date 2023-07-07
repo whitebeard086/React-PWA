@@ -21,7 +21,7 @@ const Verify = () => {
 
     useEffect(() => {
         if (verifiedPhone) {
-            navigate(-1)
+            navigate('/home')
         }
     }, [navigate, verifiedPhone]) 
 

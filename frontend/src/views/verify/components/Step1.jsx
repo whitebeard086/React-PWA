@@ -1,6 +1,10 @@
+import { Button } from "components/ui"
 import PhoneForm from "./PhoneForm"
+import { useDispatch } from "react-redux"
+import { assignVirtualAccount } from "../store/dataSlice"
 
 const Step1 = ({ onNext }) => {
+    const dispatch = useDispatch()
     return (
         <div className="h-full flex flex-col justify-center">
             <div className="w-full flex flex-col gap-4 justify-center">
@@ -15,6 +19,14 @@ const Step1 = ({ onNext }) => {
 
                 <PhoneForm onNext={onNext} />
             </div>
+
+            {/* <Button
+                variant="solid"
+                size="sm"
+                onClick={() => dispatch(assignVirtualAccount())}
+            >
+                Assign account
+            </Button> */}
         </div>
     )
 }

@@ -25,7 +25,7 @@ class PaymentsController extends Controller
                     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                     CURLOPT_CUSTOMREQUEST => "GET",
                     CURLOPT_HTTPHEADER => array(
-                        'Authorization: Bearer '.env('PAYSTACK_SECRET_KEY', 'sk_test_c15ca925d91155218193dee6640e95abb2b32af6'),
+                        'Authorization: Bearer '.env('PAYSTACK_SECRET', 'sk_test_c15ca925d91155218193dee6640e95abb2b32af6'),
                         'Cache-Control: no-cache',
                     ),
                 ));
