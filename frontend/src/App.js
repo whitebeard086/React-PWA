@@ -33,6 +33,7 @@ const Category = lazy(() => import("./views/browse/components/category"));
 
 function App() {
     
+  
 
     return (
         <PersistGate loading={null} persistor={persistor}>

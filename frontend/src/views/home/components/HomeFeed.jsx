@@ -11,7 +11,7 @@ import ServicesCard from "./servicesCard"
 const HomeFeed = () => {
     const { imagePath } = appConfig
 
-    const { loading, categories, services, bookings } = useSelector((state) => state.home.data)
+    const { categories, bookings } = useSelector((state) => state.home.data)
 
     return (
         <div className="grid grid-cols-4 gap-4">
