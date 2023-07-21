@@ -24,6 +24,9 @@ const Chat = () => {
     const socket = useRef();
     const { socketURL } = appConfig;
 
+    window.OneSignal = window.OneSignal || [];
+    const OneSignal = window.OneSignal;
+
     // const { message, file, invoice } = useSelector((state) => state.chat.state)
     const { chat, receivedInvoice, serviceBooked, bookingStatus, invoiceStatus } = useSelector((state) => state.chat.data)
     const { profile } = useSelector((state) => state.auth.user)
@@ -52,7 +55,17 @@ const Chat = () => {
 
     
 
+    OneSignal.push(() => {
+        OneSignal.init(
+            {
+                appId: process.env.REACT_APP_ONESIGNAL_APP_ID,
+                allowLocalhostAsSecureOrigin: true,
+                autoResubscribe: true,
+            },
+        );
+    });
     useEffect(() => {
+
         dispatch(initiateChat({ slug: providerSlug, id: state?.chat && state.chat, provider_id: state?.provider_id && state.provider_id }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

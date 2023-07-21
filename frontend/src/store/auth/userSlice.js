@@ -23,6 +23,7 @@ export const initialState = {
     gettingUser: false,
     verifiedPhone: null,
     verifyingDeposits: false,
+    enabledNotifications: false,
 };
 
 export const userSlice = createSlice({
@@ -42,6 +43,9 @@ export const userSlice = createSlice({
         },
         setOnlineUsers: (state, action) => {
             state.onlineUsers = action.payload;
+        },
+        setEnabledNotifications: (state, action) => {
+            state.enabledNotifications = action.payload;
         },
     },
     extraReducers: (builder) => {
@@ -79,6 +83,7 @@ export const {
     userLoggedOut,
     setOnlineUsers,
     setVerifyingDeposits,
+    setEnabledNotifications,
 } = userSlice.actions;
 
 export default userSlice.reducer;
