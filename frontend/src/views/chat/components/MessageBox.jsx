@@ -12,6 +12,7 @@ import { setFile, setInvoice } from "../store/stateSlice";
 import { useEffect } from "react";
 import {
     sendMessage,
+    sendNewMessageEmail,
     sendOneSignalNotification,
     setMessageStatus,
     setMessages,
@@ -115,6 +116,10 @@ const MessageBox = ({ receiver, socket, onCreateInvoice }) => {
             dispatch(setMessages(sentMessage));
             setMessage("");
 
+            dispatch(sendNewMessageEmail({
+                sender_id: profile?.id,
+                receiver_id: receiver?.id,
+            }))
             sendPushNotification({
                 app_id: process.env.REACT_APP_ONESIGNAL_APP_ID,
                 channel_for_external_user_ids: "push",

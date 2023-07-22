@@ -31,3 +31,11 @@ export const apiMakeInvoice = async (data) => {
 		data,
 	});
 };
+
+export const apiSendNewMessageEmail = async (data) => {
+	return ApiService.fetchData({
+		url: `/chat/new-message/mail`,
+		method: 'post',
+		data,
+	});
+};

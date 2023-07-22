@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { apiBookService } from "services/BookingService";
-import { apiDeleteMessage, apiInitiateChat, apiMakeInvoice, apiSendMessage } from "services/ChatService";
+import { apiDeleteMessage, apiInitiateChat, apiMakeInvoice, apiSendMessage, apiSendNewMessageEmail } from "services/ChatService";
 
 export const initiateChat = createAsyncThunk(
     "chat/data/initiateChat",
@@ -18,6 +18,17 @@ export const makeInvoice = createAsyncThunk(
     async (data, { rejectWithValue }) => {
         try {
             const response = await apiMakeInvoice(data);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+export const sendNewMessageEmail = createAsyncThunk(
+    "chat/data/sendNewMessageEmail",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await apiSendNewMessageEmail(data);
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response.data);

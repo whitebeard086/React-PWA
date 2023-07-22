@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Invoice;
 use App\Models\Message;
 use App\Models\InvoiceItem;
+use App\Notifications\NewMessageNotification;
 use App\Notifications\ServiceEnquiryNotification;
 use App\Traits\SmsTrait;
 use Illuminate\Http\Request;
@@ -231,5 +232,24 @@ class ChatController extends Controller
             'status' => 'success',
             'message' => $request->message_id,
         ], 200);
+    }
+
+    public function new_message_email(Request $request)
+    {
+        try {
+            $receiver = User::where('id', $request->receiver_id)->firstOrFail();
+            $sender = User::where('id', $request->sender_id)->firstOrFail();
+            $receiver->notify(new NewMessageNotification($sender));
+            
+            return response()->json([
+                'status' => 'success',
+            ], 200);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

@@ -93,7 +93,6 @@
       "last 1 safari version"
     ]
   },
-  "proxy":  "https://onesignal.com/api/v1",
   "devDependencies": {
     "autoprefixer": "^10.4.14",
     "cross-env": "^7.0.3",
