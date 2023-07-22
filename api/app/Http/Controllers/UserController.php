@@ -181,7 +181,6 @@ class UserController extends Controller
         if ($err) {
             echo "cURL Error #:" . $err;
         } else {
-            // echo $response;
             $res = json_decode($response);
         }
 

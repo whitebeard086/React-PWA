@@ -9,12 +9,14 @@ import { Link } from "react-router-dom"
 const Enquiries = () => {
     const { imagePath } = appConfig
 
-    const { loading, enquiries } = useSelector((state) => state.requests.data)
+    const { enquiries } = useSelector((state) => state.requests.data)
     const { profile } = useSelector((state) => state.auth.user)
+
+    const chats = enquiries?.filter((item) => item?.messages?.length > 0)
 
     return (
         <div className="mt-4 mb-4">
-                        {enquiries?.length < 1 ? (
+                        {chats?.length < 1 ? (
                             <div className="min-h-[20vh] flex flex-col justify-center">
                                 <p className="text-center text-gray-400 font-bold text-2xl">
                                     No enquiries, <br /> check back later...
@@ -22,7 +24,7 @@ const Enquiries = () => {
                             </div>
                         ):(
                             <div>
-                                {enquiries?.map((enquiry) => {
+                                {chats?.map((enquiry) => {
                                     const receiver = profile?.id === enquiry?.receiver?.id ? enquiry?.user : enquiry?.receiver
                                     
                                     return (

@@ -24,7 +24,7 @@ class RequestsController extends Controller
             }
 
             $enquiries = Chat::with('Messages', 'User.Service', 'Receiver.Service')->where('user_id', $userId)
-                ->orWhere('receiver_id', $userId)->get();
+                ->orWhere('receiver_id', $userId)->orderBy('id', 'desc')->get();
 
             return response()->json([
                 'status' => 'success',

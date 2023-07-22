@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Models\Invoice;
 use App\Models\Message;
 use App\Models\InvoiceItem;
+use App\Notifications\ServiceEnquiryNotification;
+use App\Traits\SmsTrait;
 use Illuminate\Http\Request;
 use App\Traits\UploadImageTrait;
 use Illuminate\Support\Facades\Storage;
@@ -14,6 +16,7 @@ use Illuminate\Support\Facades\Storage;
 class ChatController extends Controller
 {
     use UploadImageTrait;
+    use SmsTrait;
     
     // public function chat(Request $request)
     // {
@@ -139,9 +142,24 @@ class ChatController extends Controller
 
         $message->save();
 
+        $chat = Chat::where('id', $request->chat_id)->firstOrFail();
+        $sender = $chat->user;
+        $receiver = $chat->receiver;
+
+        if ($chat->messages->count() === 1) {
+            $chat->receiver->notify(new ServiceEnquiryNotification($sender));
+
+            $receiverPhone = $receiver->phone;
+            $senderUsername = $sender->username;
+            $receiverUsername = $receiver->username;
+            
+            $smsResponse = $this->sendNewEnquirySmsNotification($receiverPhone, $senderUsername, $receiverUsername);
+        }
+
         return response()->json([
             'status' => 'sent',
             'message' => $message,
+            'messages' => $chat->messages->count(),
         ], 201);
     }
 

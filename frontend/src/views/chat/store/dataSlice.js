@@ -1,9 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { apiGetProvider } from "services/AuthService";
 import { apiBookService } from "services/BookingService";
 import { apiDeleteMessage, apiInitiateChat, apiMakeInvoice, apiSendMessage } from "services/ChatService";
-import { apiSendOneSignalNotification } from "services/OneSignalService";
-import { initialState } from "store/auth/userSlice";
 
 export const initiateChat = createAsyncThunk(
     "chat/data/initiateChat",
@@ -56,18 +53,6 @@ export const bookService = createAsyncThunk(
     async (data, { rejectWithValue }) => {
         try {
             const response = await apiBookService(data);
-            return response.data;
-        } catch (error) {
-            return rejectWithValue(error.response.data);
-        }
-    }
-);
-
-export const sendOneSignalNotification = createAsyncThunk(
-    "chat/data/sendOneSignalNotification",
-    async (data, { rejectWithValue }) => {
-        try {
-            const response = await apiSendOneSignalNotification(data);
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response.data);
