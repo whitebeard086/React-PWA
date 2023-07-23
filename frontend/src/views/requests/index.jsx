@@ -33,9 +33,18 @@ const Requests = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // useEffect(() => {
-        
-    // }, []);
+    window.OneSignal = window.OneSignal || [];
+    const OneSignal = window.OneSignal;
+
+    OneSignal.push(() => {
+        OneSignal.init(
+            {
+                appId: process.env.REACT_APP_ONESIGNAL_APP_ID,
+                allowLocalhostAsSecureOrigin: true,
+                autoResubscribe: true,
+            },
+        );
+    });
 
     useEffect(() => {
         if (serviceCompleted || serviceConfirmed) {

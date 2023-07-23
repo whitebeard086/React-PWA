@@ -10,6 +10,8 @@ use App\Traits\SmsTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Notifications\InvoicePaidNotification;
+use App\Notifications\ServiceCompletedNotification;
+use App\Notifications\ServiceConfirmedNotification;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class BookingController extends Controller
@@ -89,6 +91,16 @@ class BookingController extends Controller
             
             $booking->service_status = 'completed';
             $booking->save();
+
+            $provider = $booking->service->user;
+            $receiver = $booking->user;
+            $receiver->notify(new ServiceCompletedNotification($provider));
+
+            $receiverPhone = $receiver->phone;
+            $receiverUsername = $receiver->username;
+            $senderUsername = $provider->username;
+
+            // $this->serviceCompletedSmsNotification($receiverPhone, $senderUsername, $receiverUsername);
 
             return response()->json([
                 'status' => 'success',
@@ -175,6 +187,14 @@ class BookingController extends Controller
 
             $provider->increment('balance', $escrow->amount);
             $provider->save();
+
+            $sender = $booking->user;
+            $provider->notify(new ServiceConfirmedNotification($sender));
+
+            $receiverPhone = $provider->phone;
+            $receiverUsername = $provider->username;
+            $senderUsername = $sender->username;
+            // $this->serviceConfirmedSmsNotification($receiverPhone, $senderUsername, $receiverUsername);
 
             DB::commit();
 

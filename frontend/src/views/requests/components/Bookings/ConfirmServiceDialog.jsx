@@ -1,8 +1,10 @@
 import { ConfirmDialog } from "components/shared";
 import { Notification, toast } from "components/ui";
+import appConfig from "configs/app.config";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { getUser } from "store/auth/userSlice";
+import { sendPushNotification } from "utils/sendPushNotification";
 import { confirmService, getRequestsData, setServiceConfirmed } from "views/requests/store/dataSlice";
 import { setBookingID, setConfirmService, toggleConfirmServiceDialog } from "views/requests/store/stateSlice";
 
@@ -11,6 +13,7 @@ const ConfirmServiceDialog = ({ socket }) => {
 
     const { confirmingService, confirmStatus, booking } = useSelector((state) => state.requests.data)
     const { confirmServiceDialog, bookingID } = useSelector((state) => state.requests.state)
+    const { profile } = useSelector((state) => state.auth.user)
 
     const popNotification = (message, type, title, duration) => {
         toast.push(
@@ -42,6 +45,17 @@ const ConfirmServiceDialog = ({ socket }) => {
 
     useEffect(() => {
         if (confirmStatus === 'success') {
+            sendPushNotification({
+                app_id: process.env.REACT_APP_ONESIGNAL_APP_ID,
+                channel_for_external_user_ids: "push",
+                include_external_user_ids: [`${booking?.service?.user?.id}`],
+                url: `${appConfig.appURL}/chat/${profile?.username.toLowerCase()}`,
+                contents: {
+                    en: `Hello ${booking?.service?.user?.username}, ${profile?.username} has confirmed the completion of this service, we have released the payment to your Taskitly account.`,
+                },
+                content_available: true,
+            })
+
             popNotification(
                 "Service completed and closed successfully.",
                 "success",
