@@ -6,13 +6,14 @@ use App\Models\Chat;
 use App\Models\User;
 use App\Models\Invoice;
 use App\Models\Message;
-use App\Models\InvoiceItem;
-use App\Notifications\NewMessageNotification;
-use App\Notifications\ServiceEnquiryNotification;
 use App\Traits\SmsTrait;
+use App\Models\InvoiceItem;
 use Illuminate\Http\Request;
 use App\Traits\UploadImageTrait;
 use Illuminate\Support\Facades\Storage;
+use App\Notifications\NewInvoiceNotification;
+use App\Notifications\NewMessageNotification;
+use App\Notifications\ServiceEnquiryNotification;
 
 class ChatController extends Controller
 {
@@ -154,7 +155,7 @@ class ChatController extends Controller
             $senderUsername = $sender->username;
             $receiverUsername = $receiver->username;
             
-            $smsResponse = $this->sendNewEnquirySmsNotification($receiverPhone, $senderUsername, $receiverUsername);
+            // $smsResponse = $this->sendNewEnquirySmsNotification($receiverPhone, $senderUsername, $receiverUsername);
         }
 
         return response()->json([
@@ -245,6 +246,30 @@ class ChatController extends Controller
                 'status' => 'success',
             ], 200);
             
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    
+    public function send_invoice_notification(Request $request)
+    {
+        try {
+            $receiver = User::where('id', $request->receiver_id)->firstOrFail();
+            $sender = User::where('id', $request->sender_id)->firstOrFail();
+            $receiver->notify(new NewInvoiceNotification($sender));
+
+            $receiverPhone = $receiver->phone;
+            $senderUsername = $sender->username;
+            $receiverUsername = $receiver->username;
+
+            // $this->newInvoiceSmsNotification($receiverPhone, $senderUsername, $receiverUsername);
+            
+            return response()->json([
+                'status' => 'success',
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',

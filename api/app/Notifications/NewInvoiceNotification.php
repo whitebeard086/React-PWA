@@ -7,10 +7,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewMessageNotification extends Notification
+class NewInvoiceNotification extends Notification
 {
     use Queueable;
-
+    
     public $senderUsername;
 
     /**
@@ -38,9 +38,9 @@ class NewMessageNotification extends Notification
     {
         return (new MailMessage)
                     ->mailer('smtp')
-                    ->subject('New Message')
+                    ->subject('New Invoice')
                     ->greeting('Hello, ' . $notifiable->username)
-                    ->line("You have a new message from $this->senderUsername")
+                    ->line("You have received a new invoice from $this->senderUsername, please check your messages.")
                     ->action('Chat', url(env('APP_ENV') == 'local' ? env('APP_DEV_URL').'chat/'.strtolower($this->senderUsername) : env('APP_URL').'chat/'.strtolower($this->senderUsername)))
                     ->line('If you received this in error, simply ignore the email.');
     }

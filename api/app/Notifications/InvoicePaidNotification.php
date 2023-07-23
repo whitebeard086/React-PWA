@@ -7,18 +7,20 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewMessageNotification extends Notification
+class InvoicePaidNotification extends Notification
 {
     use Queueable;
 
     public $senderUsername;
+    public $invoice;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($sender)
+    public function __construct($user, $invoice)
     {
-        $this->senderUsername = $sender->username;
+        $this->senderUsername = $user->username;
+        $this->invoice = $invoice;
     }
 
     /**
@@ -38,10 +40,9 @@ class NewMessageNotification extends Notification
     {
         return (new MailMessage)
                     ->mailer('smtp')
-                    ->subject('New Message')
+                    ->subject('Service Booked')
                     ->greeting('Hello, ' . $notifiable->username)
-                    ->line("You have a new message from $this->senderUsername")
-                    ->action('Chat', url(env('APP_ENV') == 'local' ? env('APP_DEV_URL').'chat/'.strtolower($this->senderUsername) : env('APP_URL').'chat/'.strtolower($this->senderUsername)))
+                    ->line('This is to inform you that we have received full payment from '.$this->senderUsername.' for invoice #'.$this->invoice->invoice_number.' you may resume work on the service now.')
                     ->line('If you received this in error, simply ignore the email.');
     }
 

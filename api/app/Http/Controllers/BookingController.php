@@ -6,12 +6,16 @@ use App\Models\User;
 use App\Models\Escrow;
 use App\Models\Booking;
 use App\Models\Invoice;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Traits\SmsTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\InvoicePaidNotification;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class BookingController extends Controller
 {
+    use SmsTrait;
+    
     public function book_service(Request $request)
     {
         try {
@@ -22,6 +26,8 @@ class BookingController extends Controller
                 'invoice_id' => 'required',
             ]);
 
+            DB::beginTransaction();
+            
             $booking = Booking::create($bookingData);
 
             $escrow = new Escrow;
@@ -32,6 +38,7 @@ class BookingController extends Controller
             $escrow->save();
 
             $user = User::findOrFail($booking->user_id);
+            $provider = User::findOrFail($booking->provider_id);
             $escrowAccount = User::where('username', 'escrow')->firstOrFail();
 
             if (isset($user) && $user->balance < $request->amount) {
@@ -48,6 +55,17 @@ class BookingController extends Controller
             $invoice->status = 'paid';
             $invoice->save();
 
+            $provider->notify(new InvoicePaidNotification($user, $invoice));
+
+            $receiverPhone = $provider->phone;
+            $receiverUsername = $provider->username;
+            $senderUsername = $user->username;
+            $invoiceNumber = $invoice->invoice_number;
+
+            // $smsResponse = $this->serviceBookedSmsNotification($receiverPhone, $senderUsername, $receiverUsername, $invoiceNumber);
+
+            DB::commit();
+
             return response()->json([
                 'status' => 'success',
                 'booking' => Booking::with('Escrow', 'Service.User', 'User', 'Invoice')->where('id', $booking->id)->firstOrFail(),
@@ -55,6 +73,8 @@ class BookingController extends Controller
             ], 200);
             
         } catch (\Throwable $e) {
+            DB::rollBack();
+            
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage(),

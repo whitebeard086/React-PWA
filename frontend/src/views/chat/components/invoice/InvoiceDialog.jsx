@@ -12,9 +12,11 @@ import { AiTwotoneEdit } from "react-icons/ai";
 import { toPng } from "html-to-image";
 import { jsPDF } from "jspdf";
 import { useRef, useState } from "react";
-import { makeInvoice, setInvoiceStatus, setReceivedInvoice } from "views/chat/store/dataSlice";
+import { makeInvoice, sendNewInvoiceNotification, setInvoiceStatus, setReceivedInvoice } from "views/chat/store/dataSlice";
 import { BsFillSendFill } from "react-icons/bs";
 import { useEffect } from "react";
+import { sendPushNotification } from "utils/sendPushNotification";
+import appConfig from "configs/app.config";
 
 const InvoiceDialog = ({ receiver, socket }) => {
     const dispatch = useDispatch();
@@ -25,7 +27,7 @@ const InvoiceDialog = ({ receiver, socket }) => {
     
     const { invoiceDialog, invoiceComplete, invoiceData, addingItem, invoiceNumber } = useSelector((state) => state.chat.state)
     const { chat, invoiceStatus, makingInvoice, sendingMessage } = useSelector((state) => state.chat.data)
-    // const { profile } = useSelector((state) => state.auth.user)
+    const { profile } = useSelector((state) => state.auth.user)
 
     const { totalPrice } = useInvoiceData(invoiceData);
 
@@ -53,11 +55,21 @@ const InvoiceDialog = ({ receiver, socket }) => {
 
     useEffect(() => {
         if (invoiceStatus === "success") {
-            // dispatch(sendMessage({
-            //     chat_id: chat?.id,
-            //     sender_id: profile?.id,
-            //     invoice: invoice
-            // }))
+            dispatch(sendNewInvoiceNotification({
+                sender_id: profile?.id,
+                receiver_id: receiver?.id,
+            }))
+
+            sendPushNotification({
+                app_id: process.env.REACT_APP_ONESIGNAL_APP_ID,
+                channel_for_external_user_ids: "push",
+                include_external_user_ids: [`${receiver?.id}`],
+                url: `${appConfig.appURL}/chat/${profile?.username.toLowerCase()}`,
+                contents: {
+                    en: `Hello ${receiver?.username}, you have received a new invoice from ${profile?.username}, please check your messages.`,
+                },
+                content_available: true,
+            })
             popNotification("Invoice sent", "success", "Success")
         }
 

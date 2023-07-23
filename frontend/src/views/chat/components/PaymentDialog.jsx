@@ -8,6 +8,8 @@ import { BiCheckDouble } from "react-icons/bi";
 import { bookService, resetBookingStatus, setServiceBooked } from "../store/dataSlice";
 import { useEffect } from "react";
 import classNames from "classnames";
+import { sendPushNotification } from "utils/sendPushNotification";
+import appConfig from "configs/app.config";
 
 const PaymentDialog = ({ state, providerSlug, socket }) => {
     const dispatch = useDispatch();
@@ -59,6 +61,17 @@ const PaymentDialog = ({ state, providerSlug, socket }) => {
 
     useEffect(() => {
         if (bookingStatus === "success") {
+            sendPushNotification({
+                app_id: process.env.REACT_APP_ONESIGNAL_APP_ID,
+                channel_for_external_user_ids: "push",
+                include_external_user_ids: [`${receiver?.id}`],
+                url: `${appConfig.appURL}/chat/${profile?.username.toLowerCase()}`,
+                contents: {
+                    en: `Hello ${receiver?.username}, this is to inform you that ${profile?.username} has fully paid for invoice #${invoice?.invoice_number}, you may resume work.`,
+                },
+                content_available: true,
+            })
+
             popNotification(
                 'Service booked successfully',
                 'success',
