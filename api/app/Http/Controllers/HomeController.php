@@ -37,7 +37,10 @@ class HomeController extends Controller
             ]);
             
         } catch (\Exception $e) {
-            //throw $th;
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
         }
     }
 

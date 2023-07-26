@@ -354,5 +354,25 @@ class UserController extends Controller
             'provider' => $provider,
         ], 200);
     }
+
+    public function update_profile_view(Request $request)
+    {
+        try {
+            $provider = User::where('id', $request->provider_id)->firstOrFail();
+            $provider->profile_views = $provider->profile_views + 1;
+            $provider->save();
+            
+            return response()->json([
+                'status' => 'success',
+                'provider' => $provider,
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
     
 }

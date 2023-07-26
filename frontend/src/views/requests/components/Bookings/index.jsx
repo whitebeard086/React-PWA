@@ -1,30 +1,9 @@
 import classNames from "classnames"
 import { Loading } from "components/shared"
-import { Avatar, Button, Card, Skeleton } from "components/ui"
-import appConfig from "configs/app.config"
+import { Avatar, Button, Card } from "components/ui"
 import { HiOutlineUser } from "react-icons/hi"
-import { useDispatch, useSelector } from "react-redux"
-import { setBookingID, toggleCompleteServiceDialog, toggleConfirmServiceDialog } from "views/requests/store/stateSlice"
 
-const Bookings = () => {
-    const dispatch = useDispatch();
-    const { imagePath } = appConfig;
-
-    const { bookings, booking, completingService, confirmingService } = useSelector((state) => state.requests.data)
-    const { bookingID } = useSelector((state) => state.requests.state)
-    const { userType } = useSelector((state) => state.auth.user)
-    const isProvider = userType === "Service Provider" ? true : false
-    // const confirmingService = true
-
-    const onComplete = (booking) => {
-        dispatch(toggleCompleteServiceDialog(true))
-        dispatch(setBookingID(booking?.id))
-    }
-
-    const onConfirm = (booking) => {
-        dispatch(toggleConfirmServiceDialog(true))
-        dispatch(setBookingID(booking?.id))
-    }
+const Bookings = ({ imagePath, bookingID, bookings, booking, isProvider, completingService, confirmingService, onComplete, onConfirm }) => {
 
     return (
         <div>
@@ -40,7 +19,7 @@ const Bookings = () => {
                         isProvider ? (
                             item.id === bookingID ? (
                                 completingService ? (
-                                    <Card key={item.id} className={classNames(item.service_status === 'ongoing' && "min-w-[23rem] w-[23rem]")} bodyClass="flex w-full flex-col justify-center items-center">
+                                    <Card key={item?.id} className={classNames(item.service_status === 'ongoing' && "min-w-[23rem] w-[23rem]")} bodyClass="flex w-full flex-col justify-center items-center">
                                         <div className="w-full flex items-center h-24 justify-center gap-4 ">
                                             <Loading loading />
                                         </div>

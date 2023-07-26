@@ -30,10 +30,11 @@ const Chat = lazy(() => import("./views/chat"));
 const Requests = lazy(() => import("./views/requests"));
 const History = lazy(() => import("./views/requests/components/History"));
 const Category = lazy(() => import("./views/browse/components/category"));
+const ProviderDashboard = lazy(() => import("./views/providerDash"));
 
 function App() {
     
-  
+    const { userType } = useSelector((state) => state.auth.user);
 
     return (
         <PersistGate loading={null} persistor={persistor}>
@@ -54,7 +55,7 @@ function App() {
                                     <Route path="/service/edit" element={<EditService />} />
                                 </Route>
                                 <Route element={<CheckVerifications />} >
-                                    <Route path="/home" element={<Home />} />
+                                    <Route path="/home" element={userType === "Service Provider" ? <ProviderDashboard /> : <Home />} />
                                     <Route path="/chat/:providerSlug" element={<Chat />} />
                                     <Route path="/settings" element={<Settings />} />
                                     <Route path="/payments" element={<Payments />} />

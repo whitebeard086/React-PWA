@@ -27,6 +27,7 @@ class User extends Authenticatable
         'slug',
         'phone',
         'phone_verified_at',
+        'profile_views',
     ];
 
     /**
@@ -49,6 +50,7 @@ class User extends Authenticatable
         'password' => 'hashed',
         'profile_type_id' => 'float',
         'balance' => 'float',
+        'profile_views' => 'float',
     ];
 
     public function ProfileType()

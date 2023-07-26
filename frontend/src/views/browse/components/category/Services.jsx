@@ -35,8 +35,8 @@ const Services = () => {
             <div className="flex items-center">
                 <Radio.Group className="w-full flex items-center justify-between" value={value} onChange={onChange}>
                     <Radio customLabelClass="font-bold text-base" value={'All'}>All</Radio>
-                    <Radio customLabelClass="font-bold text-base" value={'Online Now'}>Online Now</Radio>
-                    <Radio customLabelClass="font-bold text-base" value={'Online 24hrs ago'}>Online 24hrs ago</Radio>
+                    <Radio customLabelClass="font-bold text-base" value={'Online'}>Online</Radio>
+                    <Radio customLabelClass="font-bold text-base" value={'24hrs ago'}>24hrs ago</Radio>
                 </Radio.Group>
             </div>
 
@@ -77,7 +77,7 @@ const Services = () => {
                                                     <AiFillStar className="text-amber-200 text-md" />
                                                     <AiFillStar className="text-amber-200 text-md" />
                                                 </div>
-                                                <p className="text-gray-500 font-semibold">5 stars</p>
+                                                {/* <p className="text-gray-500 font-semibold">5 stars</p> */}
                                             </div>
                                         </div>
                                     </div>

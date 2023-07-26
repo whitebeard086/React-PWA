@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('bookings', function (Blueprint $table) {
-            $table->dropColumn('service_id');
-            $table->foreignId('provider_id')->constrained('users')->after('id')->default(20)->onDelete('cascade');
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('profile_views')->default(0);
         });
     }
 
@@ -22,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('bookings', function (Blueprint $table) {
-            $table->dropColumn('provider_id');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('profile_views');
         });
     }
 };

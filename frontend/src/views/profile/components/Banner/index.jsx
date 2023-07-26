@@ -58,7 +58,7 @@ const Banner = () => {
                                     <AiFillStar className="text-amber-200 text-md" />
                                     <AiFillStar className="text-amber-200 text-md" />
                                 </div>
-                                <p className="text-gray-300 font-semibold">5 stars</p>
+                                {/* <p className="text-gray-300 font-semibold">5 stars</p> */}
                             </div>
 
                             <p className="text-gray-300 font-semibold">{millify(2300)} Orders</p>

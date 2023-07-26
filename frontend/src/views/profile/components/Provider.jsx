@@ -3,17 +3,34 @@ import { Button, Card, Image } from "components/ui"
 import { formatTime } from "components/ui/utils/formatTime"
 import appConfig from "configs/app.config"
 import millify from "millify"
+import { useEffect } from "react"
 import { AiFillStar, AiFillWechat } from "react-icons/ai"
 import { BsDashLg } from "react-icons/bs"
+import { useInView } from "react-intersection-observer"
 import ReactQuill from "react-quill"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
+import { updateProfileView } from "../store/dataSlice"
 
 const Provider = () => {
     const { imagePath } = appConfig;
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { ref, inView, entry } = useInView({
+        /* Optional options */
+        threshold: 0,
+    });
+    console.log(inView);
 
     const { provider, service, workdays } = useSelector((state) => state.profile.data)
+    const { profile } = useSelector((state) => state.auth.user)
+
+    useEffect(() => {
+        if (profile?.id !== provider?.id) {
+            dispatch(updateProfileView({ provider_id: provider?.id }))
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <div>
@@ -48,7 +65,7 @@ const Provider = () => {
                                     <AiFillStar className="text-amber-200 text-md" />
                                     <AiFillStar className="text-amber-200 text-md" />
                                 </div>
-                                <p className="text-gray-300 font-semibold">5 stars</p>
+                                {/* <p className="text-gray-300 font-semibold">5 stars</p> */}
                             </div>
 
                             <p className="text-gray-300 font-semibold">{millify(2300)} Orders</p>
@@ -189,7 +206,7 @@ const Provider = () => {
                                 </div>
                             </div>
 
-                            <div className="flex items-center justify-between">
+                            <div className="flex items-center justify-between" ref={ref}>
                                 <h4 className="text-blue-500 text-base font-semibold">Sunday</h4>
                                 <div className="flex items-center gap-2">
                                     <p className={classNames(workdays?.sunday_start === "Not Available" && "text-red-500", "text-base font-semibold")}>

@@ -9,10 +9,11 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\BrowseController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\GatewayController;
+use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\RequestsController;
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\WebhookController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,10 +49,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/profile/service/update', [UserController::class, 'update_service']);
     Route::post('/profile/banner/upload', [UserController::class, 'upload_banner']);
 
+    Route::post('/profile/view', [UserController::class, 'update_profile_view']);
+
     // Home routes
     Route::get('/home', [HomeController::class, 'index']);
     Route::post('/category', [HomeController::class, 'create_category']);
     Route::post('/category/update', [HomeController::class, 'update_category']);
+
+    // Dashboard routes
+    Route::get('/dashboard', [DashboardController::class, 'index']);
 
     // Browse routes
     Route::get('/browse', [BrowseController::class, 'index']);

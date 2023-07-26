@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { apiGetProvider, apiUploadBanner } from "services/AuthService";
+import { apiGetProvider, apiUpdateProfileView, apiUploadBanner } from "services/AuthService";
 
 export const uploadBanner = createAsyncThunk(
     "profile/data/uploadBanner",
@@ -18,6 +18,18 @@ export const getProvider = createAsyncThunk(
     async (data, { rejectWithValue }) => {
         try {
             const response = await apiGetProvider(data);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const updateProfileView = createAsyncThunk(
+    "profile/data/updateProfileView",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await apiUpdateProfileView(data);
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response.data);

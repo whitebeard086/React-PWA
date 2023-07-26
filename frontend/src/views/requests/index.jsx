@@ -13,18 +13,23 @@ import { useRef } from "react";
 import { io } from "socket.io-client";
 import Bookings from "./components/Bookings";
 import ConfirmServiceDialog from "./components/Bookings/ConfirmServiceDialog";
+import { setBookingID, toggleCompleteServiceDialog, toggleConfirmServiceDialog } from "./store/stateSlice";
 
 injectReducer("requests", reducer);
 
 const Requests = () => {
     const dispatch = useDispatch();
     const socket = useRef();
-    const { socketURL } = appConfig;
+    const { socketURL, imagePath } = appConfig;
+
+    const { bookings, booking, completingService, confirmingService } = useSelector((state) => state.requests.data)
+    const { bookingID } = useSelector((state) => state.requests.state)
+    const { userType, profile } = useSelector((state) => state.auth.user)
+    const isProvider = userType === "Service Provider" ? true : false
 
     const { loading, serviceCompleted, serviceConfirmed } = useSelector(
         (state) => state.requests?.data
     );
-    const { profile } = useSelector((state) => state.auth.user);
 
     useEffect(() => {
         dispatch(getRequestsData());
@@ -59,6 +64,16 @@ const Requests = () => {
 
     }, [dispatch, serviceCompleted, serviceConfirmed]);
 
+    const onComplete = (booking) => {
+        dispatch(toggleCompleteServiceDialog(true))
+        dispatch(setBookingID(booking?.id))
+    }
+
+    const onConfirm = (booking) => {
+        dispatch(toggleConfirmServiceDialog(true))
+        dispatch(setBookingID(booking?.id))
+    }
+
     return (
         <div className="mt-2 p-4">
             {loading ? (
@@ -68,7 +83,17 @@ const Requests = () => {
                     <h4>Active Bookings</h4>
 
                     <div className="mt-4 mb-4">
-                        <Bookings />
+                        <Bookings 
+                            imagePath={imagePath}
+                            bookings={bookings}
+                            booking={booking} 
+                            completingService={completingService}   
+                            confirmingService={confirmingService}
+                            bookingID={bookingID}
+                            isProvider={isProvider}
+                            onComplete={onComplete}
+                            onConfirm={onConfirm}
+                        />
                     </div>
 
                     <h4>Enquiries</h4>

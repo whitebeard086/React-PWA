@@ -175,3 +175,11 @@ export async function apiUploadImage (data) {
         data
     })
 }
+
+export async function apiUpdateProfileView (data) {
+    return ApiService.fetchData({
+        url: '/profile/view',
+        method: 'post',
+        data
+    })
+}

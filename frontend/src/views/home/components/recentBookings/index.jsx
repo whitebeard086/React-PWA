@@ -91,9 +91,9 @@ const RecentBookings = () => {
                                                     <AiFillStar className="text-amber-200 text-md" />
                                                     <AiFillStar className="text-amber-200 text-md" />
                                                 </div>
-                                                <p className="text-gray-200 font-semibold">
+                                                {/* <p className="text-gray-200 font-semibold">
                                                     5 stars
-                                                </p>
+                                                </p> */}
                                             </div>
                                         </div>
                                     </div>
