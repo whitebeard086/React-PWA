@@ -1,16 +1,16 @@
 import { ConfirmDialog } from "components/shared";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    setBookingID,
     toggleCompleteServiceDialog,
 } from "../../store/stateSlice";
-import { completeService, setServiceCompleted, setServiceStatus } from "../../store/dataSlice";
+import { completeService, setServiceStatus } from "../../store/dataSlice";
 import { useEffect } from "react";
 import { Notification, toast } from "components/ui";
 import { sendPushNotification } from "utils/sendPushNotification";
 import appConfig from "configs/app.config";
+import { socket } from "utils/socket";
 
-const CompleteServiceDialog = ({ socket }) => {
+const CompleteServiceDialog = () => {
     const dispatch = useDispatch();
 
     const { completingService, serviceStatus, booking } = useSelector(
@@ -72,15 +72,9 @@ const CompleteServiceDialog = ({ socket }) => {
 
         dispatch(toggleCompleteServiceDialog(false));
         dispatch(setServiceStatus('idle'));
-        socket?.emit("completedService", booking?.user?.id);
+        socket.emit("completedService", booking?.user?.id, console.log('Emit Service Completed, Bookings: ', true));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [serviceStatus]);
-
-    useEffect(() => {
-        socket?.on("serviceCompleted", () => {
-            dispatch(setServiceCompleted(true));
-        });
-    }, [dispatch, socket]);
 
     const onClose = () => {
         dispatch(toggleCompleteServiceDialog(false));

@@ -119,6 +119,9 @@ const dataSlice = createSlice({
         resetBookingStatus: (state) => {
             state.bookingStatus = 'idle'
             state.bookingMessage = ''
+            if (state.makingInvoice) {
+                state.makingInvoice = false
+            }
         },
         setBookedStatus: (state, action) => {
             state.booked = action.payload

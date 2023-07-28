@@ -1,8 +1,12 @@
-const io = require('socket.io')(8800, {
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+
+const httpServer = createServer();
+const io = new Server(httpServer, { 
     cors: {
         origin: "http://localhost:3000"
     }
-})
+});
 
 let activeUsers = []
 
@@ -83,4 +87,6 @@ io.on("connection", (socket) => {
         console.log("User disconnected", activeUsers);
         io.emit('getUsers', activeUsers)
     })
-})
+});
+  
+httpServer.listen(5000, () => console.log(`Server has started.`));

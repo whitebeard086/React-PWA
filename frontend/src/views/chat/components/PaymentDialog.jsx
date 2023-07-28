@@ -10,8 +10,9 @@ import { useEffect } from "react";
 import classNames from "classnames";
 import { sendPushNotification } from "utils/sendPushNotification";
 import appConfig from "configs/app.config";
+import { socket } from "utils/socket";
 
-const PaymentDialog = ({ state, providerSlug, socket }) => {
+const PaymentDialog = ({ state, providerSlug }) => {
     const dispatch = useDispatch();
 
     const { Tr, Th, Td, THead, TBody } = Table;
@@ -82,17 +83,17 @@ const PaymentDialog = ({ state, providerSlug, socket }) => {
 
         dispatch(resetBookingStatus())
         dispatch(togglePaymentDialog(false))
-        socket?.emit("bookedService", provider?.id)
+        socket.emit("bookedService", provider?.id, console.log('Emit Service Booked: ', true))
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [bookingStatus])
 
-    useEffect(() => {
-        socket?.on("serviceBooked", (data) => {
-            dispatch(setServiceBooked(true))
-        })
+    // useEffect(() => {
+    //     socket?.on("serviceBooked", (data) => {
+    //         dispatch(setServiceBooked(true))
+    //     })
 
-        // dispatch(setServiceBooked(false))
-    }, [dispatch, socket])
+    //     // dispatch(setServiceBooked(false))
+    // }, [dispatch, socket])
 
     const onReady = () => {
         dispatch(setViewingInvoice(false))

@@ -1,18 +1,22 @@
 import React, { Suspense, lazy, useEffect } from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import { Provider, useDispatch, useSelector } from "react-redux";
-import store, { persistor } from "./store";
+import { useDispatch, useSelector } from "react-redux";
+import { persistor } from "./store";
 import { PersistGate } from "redux-persist/integration/react";
-import { BrowserRouter, Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import history from "./history";
-import { getUser } from "store/auth/userSlice";
+import { getUser, setOnlineUsers } from "store/auth/userSlice";
 import NotFound from "views/notfound";
 import RequireAuth from "views/route/RequireAuth";
 import RequireServiceProvider from "views/route/RequireServiceProvider";
 import Unauthorized from "views/notfound/Unauthorized";
 import CheckVerifications from "views/route/CheckVerifications";
 import Layout from "views/layout";
+import { useSocket } from "utils/hooks/useSocket";
+import { socket } from "utils/socket";
+import { setMessages, setReceivedInvoice, setServiceBooked } from "views/chat/store/dataSlice";
+import { setServiceCompleted, setServiceConfirmed } from "views/requests/store/dataSlice";
+import { setServiceCompletedDash } from "views/providerDash/store/dataSlice";
 
 const Landing = lazy(() => import("./views/landing"));
 const Register = lazy(() => import("./views/auth/Register"));
@@ -33,8 +37,62 @@ const Category = lazy(() => import("./views/browse/components/category"));
 const ProviderDashboard = lazy(() => import("./views/providerDash"));
 
 function App() {
+    const dispatch = useDispatch();
     
-    const { userType } = useSelector((state) => state.auth.user);
+    const { userType, onlineUsers, profile } = useSelector((state) => state.auth.user);
+
+    const events = [
+        {
+            name: 'getUsers',
+            handler(users) {
+                dispatch(setOnlineUsers(users));
+                console.log('Online Users: ', onlineUsers);
+            }
+        }, 
+        {
+            name: 'receiveMessage',
+            handler(data) {
+                dispatch(setMessages(data));
+                console.log('Received Socket Message: ', true);
+            }
+        },
+        {
+            name: 'receiveInvoice',
+            handler() {
+                dispatch(setReceivedInvoice(true))
+                console.log('Received Invoice: ', true);
+            }
+        },
+        {
+            name: 'serviceCompleted',
+            handler() {
+                dispatch(setServiceCompleted(true));
+                dispatch(setServiceCompletedDash(true));
+                console.log('Received Service Completed: ', true);
+            }
+        },
+        {
+            name: 'serviceConfirmed',
+            handler() {
+                dispatch(getUser());
+                dispatch(setServiceConfirmed(true));
+                console.log('Received Service Confirmed: ', true);
+            }
+        },
+        {
+            name: 'serviceBooked',
+            handler() {
+                dispatch(setServiceBooked(true))
+                console.log('Received Service Booked: ', true);
+            }
+        },
+    ]
+
+    useEffect(() => {
+        socket.emit("addNewUser", profile?.id)
+    }, [profile?.id])
+
+    useSocket(events)
 
     return (
         <PersistGate loading={null} persistor={persistor}>

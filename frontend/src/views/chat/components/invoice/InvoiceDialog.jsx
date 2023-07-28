@@ -1,9 +1,9 @@
 import { Button, Dialog, Notification, toast } from "components/ui";
 import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux"
-import { removeInvoiceItem, setAddingItem, setInvoiceComplete, toggleInvoiceDialog } from "views/chat/store/stateSlice";
+import { removeInvoiceItem, resetInvoice, setAddingItem, setInvoiceComplete, toggleInvoiceDialog } from "views/chat/store/stateSlice";
 import { Table } from 'components/ui'
-import { BiAddToQueue } from "react-icons/bi";
+import { BiAddToQueue, BiReset } from "react-icons/bi";
 import InvoiceForm from "./InvoiceForm";
 import { motion, AnimatePresence } from "framer-motion";
 import { MdDelete, MdOutlineDownloadDone } from "react-icons/md";
@@ -17,8 +17,9 @@ import { BsFillSendFill } from "react-icons/bs";
 import { useEffect } from "react";
 import { sendPushNotification } from "utils/sendPushNotification";
 import appConfig from "configs/app.config";
+import { socket } from "utils/socket";
 
-const InvoiceDialog = ({ receiver, socket }) => {
+const InvoiceDialog = ({ receiver }) => {
     const dispatch = useDispatch();
     const invoiceRef = useRef(null);
     const [makingPDF, setMakingPDF] = useState(false);
@@ -75,15 +76,20 @@ const InvoiceDialog = ({ receiver, socket }) => {
 
         onDialogClose()
         dispatch(setInvoiceStatus('idle'))
-        socket?.emit("sendInvoice", receiver?.id)
+        socket?.emit("sendInvoice", receiver?.id, () => {
+            console.log('Emit New Invoice: ', true);
+        })
+        // socket.emit("sendInvoice", (answer) => {
+        //     // ...
+        // });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [invoiceStatus])
     
-    useEffect(() => {
-        socket?.on("receiveInvoice", (data) => {
-            dispatch(setReceivedInvoice(true))
-        })
-    }, [dispatch, socket])
+    // useEffect(() => {
+    //     socket?.on("receiveInvoice", (data) => {
+    //         dispatch(setReceivedInvoice(true))
+    //     })
+    // }, [dispatch, socket])
 
     // useEffect(() => {
     //     if (invoiceStatus === 'success' && messageStatus === 'sent') {
@@ -331,6 +337,16 @@ const InvoiceDialog = ({ receiver, socket }) => {
                         >
                             Modify
                         </Button>
+                        {/* <Button
+                            className="mt-4"
+                            variant="solid"
+                            size="sm"
+                            // disabled={makingPDF || makingInvoice || sendingMessage}
+                            icon={<BiReset />}
+                            onClick={() => dispatch(resetInvoice())}
+                        >
+                            Reset
+                        </Button> */}
                     </div>
                 )}
             </div>

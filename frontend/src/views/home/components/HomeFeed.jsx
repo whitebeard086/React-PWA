@@ -14,7 +14,7 @@ const HomeFeed = () => {
     return (
         <div className="grid grid-cols-4 gap-4">
             <div className="col-span-4 w-full">
-                <div className="grid grid-cols-4 gap-4">
+                <div className="grid grid-cols-5 gap-2">
                     {categories?.map((item) => (
                         <Link key={item.id} to={`/browse/${item.slug}`}>
                             <Card clickable bordered bodyClass="" className="bg-amber-50">
@@ -26,7 +26,7 @@ const HomeFeed = () => {
                                         className="bg-white border-2"
                                     />
 
-                                    <p className="text-base font-bold">
+                                    <p className="text-sm sm:text-base font-bold">
                                         {item.name.split(" ")[0]}
                                     </p>
                                 </div>
@@ -35,9 +35,9 @@ const HomeFeed = () => {
                     ))}
 
                 </div>
-                <div className="flex w-full justify-end">
+                {/* <div className="flex w-full justify-end">
                     <p className="font-bold text-emerald-500 hover:text-emerald-600 transition duration-300 cursor-pointer text-base text-end mr-1">more</p>
-                </div>
+                </div> */}
             </div>
 
             {bookings?.length > 0 ? (

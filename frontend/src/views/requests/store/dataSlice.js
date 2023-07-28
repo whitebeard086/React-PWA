@@ -131,6 +131,7 @@ const dataSlice = createSlice({
 export const { 
     setStatus,
     setBooking,
+    setConfirmStatus,
     setServiceStatus,
     setServiceCompleted,
     setServiceConfirmed, 

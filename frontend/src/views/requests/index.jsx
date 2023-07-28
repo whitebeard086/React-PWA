@@ -45,6 +45,7 @@ const Requests = () => {
         OneSignal.init(
             {
                 appId: process.env.REACT_APP_ONESIGNAL_APP_ID,
+                safari_web_id: process.env.REACT_APP_ONESIGNAL_SAFARI_WEB_ID,
                 allowLocalhostAsSecureOrigin: true,
                 autoResubscribe: true,
             },

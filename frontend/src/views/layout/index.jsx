@@ -13,15 +13,19 @@ import classNames from "classnames"
 import { io } from "socket.io-client"
 import { useRef } from "react"
 import appConfig from "configs/app.config"
+import { setMessages } from "views/chat/store/dataSlice"
+import { setMessage } from "views/chat/store/stateSlice"
+import { socket } from "utils/socket"
 
 const Layout = ({ noPad }) => {
     const dispatch = useDispatch();
     const location = useLocation();
-    const socket = useRef();
-    const { socketURL } = appConfig;
 
-    const { profile, userType } = useSelector((state) => state.auth.user)
+    const { profile, userType, onlineUsers } = useSelector((state) => state.auth.user)
     const { verifying } = useSelector((state) => state.payments.data)
+    const { chat, messageStatus, sentMessage } = useSelector((state) => state.chat.data)
+
+    const receiver = profile?.id === chat?.user?.id ? chat?.receiver : chat?.user;
 
     const onTopUp = () => {
         dispatch(toggleDepositDialog(true))
@@ -31,13 +35,14 @@ const Layout = ({ noPad }) => {
         dispatch(getUser());
     }, [dispatch, location]);
 
+    // Send message to the socket server
     useEffect(() => {
-        socket.current = io(socketURL);
-        socket.current.emit("addNewUser", profile?.id)
-        socket.current.on("getUsers", (users) => {
-            dispatch(setOnlineUsers(users));
-        })
-    }, [profile, socketURL])
+        if (messageStatus === 'sent') {
+            socket.emit("sendMessage", [sentMessage, receiver?.id], console.log('Emit send message: ', true));
+            dispatch(setMessages(sentMessage))
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [messageStatus, sentMessage])
 
     return (
         <Container className="max-w-2xl w-full">

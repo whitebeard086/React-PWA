@@ -24,6 +24,10 @@ const stateSlice = createSlice({
         setInvoice: (state, action) => {
             state.invoice = action.payload
         },
+        resetInvoice: (state) => {
+            state.invoiceComplete = false
+            state.invoiceData = []
+        },
         setInvoiceData: (state, action) => {
             state.invoiceData = [...state.invoiceData, action.payload]
         },
@@ -55,6 +59,7 @@ export const {
     setFile,
     setInvoice,
     setMessage,
+    resetInvoice,
     setAddingItem,
     setInvoiceData,
     setInvoiceNumber,

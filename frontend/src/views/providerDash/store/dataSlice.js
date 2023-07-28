@@ -62,16 +62,16 @@ const dataSlice = createSlice({
         setBooking: (state, action) => {
             state.booking = action.payload;
         },
-        setServiceStatus: (state, action) => {
+        setServiceStatusDash: (state, action) => {
             state.serviceStatus =  action.payload;
         },
-        setConfirmStatus: (state, action) => {
+        setConfirmStatusDash: (state, action) => {
             state.confirmStatus = action.payload;
         },
-        setServiceCompleted: (state, action) => {
+        setServiceCompletedDash: (state, action) => {
             state.serviceCompleted = action.payload;
         },
-        setServiceConfirmed: (state, action) => {
+        setServiceConfirmedDash: (state, action) => {
             state.serviceConfirmed = action.payload;
         },
     },
@@ -125,10 +125,10 @@ const dataSlice = createSlice({
 
 export const {
     setStatus,
-    setBooking,
-    setServiceStatus,
-    setServiceCompleted,
-    setServiceConfirmed, 
+    setBookingDash,
+    setServiceStatusDash,
+    setServiceCompletedDash,
+    setServiceConfirmedDash, 
 } = dataSlice.actions
 
 export default dataSlice.reducer

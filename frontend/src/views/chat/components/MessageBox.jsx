@@ -84,7 +84,7 @@ const MessageBox = ({ receiver, socket, onCreateInvoice }) => {
         );
 
         dispatch(setFile({}));
-        // setMessage("")
+        setMessage("")
         dispatch(setInvoice({}));
         resetCompressedFile();
     };
@@ -112,9 +112,6 @@ const MessageBox = ({ receiver, socket, onCreateInvoice }) => {
     // Send message to the socket server
     useEffect(() => {
         if (messageStatus === "sent") {
-            socket?.emit("sendMessage", [sentMessage, receiver?.id]);
-            dispatch(setMessages(sentMessage));
-            setMessage("");
 
             dispatch(sendNewMessageEmail({
                 sender_id: profile?.id,
@@ -136,11 +133,12 @@ const MessageBox = ({ receiver, socket, onCreateInvoice }) => {
     }, [dispatch, messageStatus, sentMessage]);
 
     // Receive message from socket server
-    useEffect(() => {
-        socket?.on("receiveMessage", (data) => {
-            dispatch(setMessages(data));
-        });
-    }, [dispatch, socket]);
+    // useEffect(() => {
+    //     socket?.on("receiveMessage", (data) => {
+    //         console.log('Emit Receive Message: ', true);
+    //         dispatch(setMessages(data));
+    //     });
+    // }, [dispatch, socket]);
 
     // Reset message status
     useEffect(() => {

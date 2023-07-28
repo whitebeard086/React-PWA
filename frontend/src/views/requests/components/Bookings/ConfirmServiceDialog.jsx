@@ -3,12 +3,12 @@ import { Notification, toast } from "components/ui";
 import appConfig from "configs/app.config";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
-import { getUser } from "store/auth/userSlice";
 import { sendPushNotification } from "utils/sendPushNotification";
-import { confirmService, getRequestsData, setServiceConfirmed } from "views/requests/store/dataSlice";
-import { setBookingID, setConfirmService, toggleConfirmServiceDialog } from "views/requests/store/stateSlice";
+import { socket } from "utils/socket";
+import { confirmService, getRequestsData, setConfirmStatus } from "views/requests/store/dataSlice";
+import { setBookingID, toggleConfirmServiceDialog } from "views/requests/store/stateSlice";
 
-const ConfirmServiceDialog = ({ socket }) => {
+const ConfirmServiceDialog = () => {
     const dispatch = useDispatch();
 
     const { confirmingService, confirmStatus, booking } = useSelector((state) => state.requests.data)
@@ -40,7 +40,7 @@ const ConfirmServiceDialog = ({ socket }) => {
             )
         }
 
-        dispatch(setConfirmService('idle'));
+        dispatch(setConfirmStatus('idle'));
     }, [confirmStatus, dispatch])
 
     useEffect(() => {
@@ -65,19 +65,12 @@ const ConfirmServiceDialog = ({ socket }) => {
         }
 
         dispatch(toggleConfirmServiceDialog(false));
-        dispatch(setConfirmService('idle'));
         dispatch(setBookingID(null))
-        socket?.emit("confirmedService", booking?.service?.user?.id);
+        socket.emit("confirmedService", booking?.service?.user?.id);
         dispatch(getRequestsData())
+        dispatch(setConfirmStatus('idle'));
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [confirmStatus])
-
-    useEffect(() => {
-        socket?.on("serviceConfirmed", () => {
-            dispatch(getUser());
-            dispatch(setServiceConfirmed(true));
-        })
-    }, [dispatch, socket])
 
     const onConfirm = () => {
         dispatch(confirmService({ booking_id: bookingID }));

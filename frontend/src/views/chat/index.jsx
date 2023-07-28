@@ -33,8 +33,7 @@ const Chat = () => {
 
     // Determine the sender and receiver based on the logged-in user
     const sender = profile?.id === chat?.user?.id ? chat?.user : chat?.receiver;
-    const receiver =
-        profile?.id === chat?.user?.id ? chat?.receiver : chat?.user;
+    const receiver = profile?.id === chat?.user?.id ? chat?.receiver : chat?.user;
 
     const isOwner = (message) => message?.sender_id === profile?.id;
 
@@ -59,6 +58,7 @@ const Chat = () => {
         OneSignal.init(
             {
                 appId: process.env.REACT_APP_ONESIGNAL_APP_ID,
+                safari_web_id: process.env.REACT_APP_ONESIGNAL_SAFARI_WEB_ID,
                 allowLocalhostAsSecureOrigin: true,
                 autoResubscribe: true,
             },
