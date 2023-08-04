@@ -12,7 +12,7 @@ const DashboardFeed = () => {
     const { enquiries, bookings, bookingsCount, booking, completingService, confirmingService } = useSelector((state) => state.dashboard.data)
     const { bookingID } = useSelector((state) => state.dashboard.state)
     const { profile, userType } = useSelector((state) => state.auth.user)
-    const isProvider = userType === "Service Provider" ? true : false
+    const isProvider = userType === "Provider" ? true : false
 
     const chatsData = enquiries?.filter((chat) => {
         return chat.messages.every((item) => item.sender_id !== profile?.id)

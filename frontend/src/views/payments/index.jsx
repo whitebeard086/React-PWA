@@ -16,7 +16,7 @@ const Payments = () => {
     })
     return (
         <div className="mt-2 p-4">
-            <BillsComponent />
+            {/* <BillsComponent /> */}
             <PaymentsHistory />
         </div>
     )

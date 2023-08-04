@@ -1,7 +1,13 @@
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import useTimeOutMessage from "../../../../utils/hooks/useTimeOutMessage";
-import { Alert, Button, FormContainer, FormItem, Input } from "../../../../components/ui";
+import {
+    Alert,
+    Button,
+    FormContainer,
+    FormItem,
+    Input,
+} from "../../../../components/ui";
 import { PasswordInput } from "../../../../components/shared";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../../../utils/hooks/useAuth";
@@ -12,32 +18,38 @@ const SignInForm = (props) => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { signedIn } = useSelector((state) => state.auth.session)
-    const { userType, verifiedPhone, hasService } = useSelector((state) => state.auth.user)
+    const { signedIn } = useSelector((state) => state.auth.session);
+    const { userType, verifiedPhone, hasService } = useSelector(
+        (state) => state.auth.user
+    );
 
-    const from = location.state?.from?.pathname || "/home"
+    const from = location.state?.from?.pathname || "/home";
 
     useEffect(() => {
-        let redirectUrl = from
+        let redirectUrl = from;
 
         if (signedIn) {
-            if (userType === "Normal User" && verifiedPhone) {
-                redirectUrl = from
-            } else if (userType === "Normal User" && !verifiedPhone) {
-                redirectUrl = '/verify'
-            } else if (userType === "Service Provider" && !hasService) {
-                redirectUrl = '/service-setup'
-            } else if (userType === "Service Provider" && !verifiedPhone) {
-                redirectUrl = '/verify'
-            } else if (userType === "Service Provider" && hasService && verifiedPhone) {
-                redirectUrl = '/home'
-            } 
+            if (userType === "Client" && verifiedPhone) {
+                redirectUrl = from;
+            } else if (userType === "Client" && !verifiedPhone) {
+                redirectUrl = "/verify";
+            } else if (userType === "Provider" && !hasService) {
+                redirectUrl = "/service-setup";
+            } else if (userType === "Provider" && !verifiedPhone) {
+                redirectUrl = "/verify";
+            } else if (
+                userType === "Provider" &&
+                hasService &&
+                verifiedPhone
+            ) {
+                redirectUrl = "/home";
+            }
 
-            navigate(redirectUrl, { replace: true })
+            navigate(redirectUrl, { replace: true });
         }
 
-        redirectUrl = ""
-    }, [from, hasService, navigate, signedIn, userType, verifiedPhone])
+        redirectUrl = "";
+    }, [from, hasService, navigate, signedIn, userType, verifiedPhone]);
     console.log(location);
 
     const {
@@ -64,7 +76,7 @@ const SignInForm = (props) => {
         const result = await signIn({ username, password });
 
         if (result.status === "failed") {
-          setMessage(result.message);
+            setMessage(result.message);
         }
 
         setSubmitting(false);
@@ -101,11 +113,11 @@ const SignInForm = (props) => {
                                 errorMessage={errors.username}
                             >
                                 <Field
-                                type="text"
-                                autoComplete="off"
-                                name="username"
-                                placeholder="Username"
-                                component={Input}
+                                    type="text"
+                                    autoComplete="off"
+                                    name="username"
+                                    placeholder="Username"
+                                    component={Input}
                                 />
                             </FormItem>
 
@@ -115,10 +127,10 @@ const SignInForm = (props) => {
                                 errorMessage={errors.password}
                             >
                                 <Field
-                                autoComplete="off"
-                                name="password"
-                                placeholder="Password"
-                                component={PasswordInput}
+                                    autoComplete="off"
+                                    name="password"
+                                    placeholder="Password"
+                                    component={PasswordInput}
                                 />
                             </FormItem>
 
@@ -133,13 +145,19 @@ const SignInForm = (props) => {
 
                             <div className="mt-2 text-center text-sm flex flex-col gap-2">
                                 <div>
-                                    <Link className="underline font-bold" to={forgotPasswordUrl}>
+                                    <Link
+                                        className="underline font-bold"
+                                        to={forgotPasswordUrl}
+                                    >
                                         Forgot Password?
                                     </Link>
                                 </div>
                                 <div>
-                                    <span>Don't have an account? {" "}</span>
-                                    <Link className="underline font-bold text-primary-500" to={signUpUrl}>
+                                    <span>Don't have an account? </span>
+                                    <Link
+                                        className="underline font-bold text-primary-500"
+                                        to={signUpUrl}
+                                    >
                                         Sign up
                                     </Link>
                                 </div>

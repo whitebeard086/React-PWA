@@ -1,0 +1,27 @@
+.tab-list {
+  @apply flex items-center justify-around;
+}
+
+.tab-list-underline {
+  @apply border-b border-gray-600;
+}
+
+.tab-nav {
+  @apply font-semibold flex items-center bg-gray-200 justify-center transition duration-200 ease-in-out cursor-pointer;
+
+  &.tab-nav-disabled {
+    @apply opacity-60 cursor-not-allowed;
+  }
+}
+
+.tab-nav-underline {
+  @apply py-3 px-5 border-b-2 border-transparent;
+}
+
+.tab-nav-pill {
+  @apply py-1 px-5 mr-1 rounded-full;
+}
+
+.tab-nav-icon {
+  @apply mr-1.5 text-lg;
+}

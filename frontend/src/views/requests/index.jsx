@@ -25,7 +25,7 @@ const Requests = () => {
     const { bookings, booking, completingService, confirmingService } = useSelector((state) => state.requests.data)
     const { bookingID } = useSelector((state) => state.requests.state)
     const { userType, profile } = useSelector((state) => state.auth.user)
-    const isProvider = userType === "Service Provider" ? true : false
+    const isProvider = userType === "Provider" ? true : false
 
     const { loading, serviceCompleted, serviceConfirmed } = useSelector(
         (state) => state.requests?.data

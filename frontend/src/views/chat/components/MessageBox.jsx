@@ -21,7 +21,7 @@ import useFocus from "./useFocus";
 import { sendPushNotification } from "utils/sendPushNotification";
 import appConfig from "configs/app.config";
 
-const MessageBox = ({ receiver, socket, onCreateInvoice }) => {
+const MessageBox = ({ receiver, onCreateInvoice }) => {
     const dispatch = useDispatch();
     const { compressFile, compressedFile, resetCompressedFile } =
         useCompressFile();
@@ -132,14 +132,6 @@ const MessageBox = ({ receiver, socket, onCreateInvoice }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, messageStatus, sentMessage]);
 
-    // Receive message from socket server
-    // useEffect(() => {
-    //     socket?.on("receiveMessage", (data) => {
-    //         console.log('Emit Receive Message: ', true);
-    //         dispatch(setMessages(data));
-    //     });
-    // }, [dispatch, socket]);
-
     // Reset message status
     useEffect(() => {
         if (messageStatus !== "idle") {
@@ -210,7 +202,7 @@ const MessageBox = ({ receiver, socket, onCreateInvoice }) => {
                             <span>File</span>
                         </Upload>
                     </Dropdown.Item>
-                    {userType === "Service Provider" && (
+                    {userType === "Provider" && (
                         <Dropdown.Item
                             eventKey="Invoice"
                             onClick={onCreateInvoice}

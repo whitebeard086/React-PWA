@@ -83,7 +83,7 @@ const Settings = () => {
             <hr />
             <div className="">
                 <div>
-                    {userType === "Service Provider" && (
+                    {userType === "Provider" && (
                         <>
                             <Link
                                 className="flex gap-2 items-center transition duration-300 w-full py-4 px-4 hover:bg-gray-100"

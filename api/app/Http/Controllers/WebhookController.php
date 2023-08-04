@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -12,7 +13,12 @@ class WebhookController extends PaystackWebhooksController
 {
     public function handleChargeSuccess($payload)
     {
-        Log::info('Payload', ['payload' => $payload]);
+        // Log::info('Payload', ['payload' => $payload]);
+        $alex = User::where('username', 'alex')->first();
+        $alex->profile_views = $alex->profile_views + 2;
+        $alex->save();
+        
+        Log::info('Paystack payload received');
         try {
             if ($payload->event = "charge.success") {
                 $txn = new Transaction;

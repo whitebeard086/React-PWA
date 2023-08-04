@@ -8,7 +8,7 @@ const RequireServiceProvider = () => {
     const { userType } = useSelector((state) => state.auth.user)
 
     return (
-        userType === "Service Provider"
+        userType === "Provider"
             ? <Outlet />
             : signedIn
                 ? <Navigate to="/unauthorized" state={{ from: location }} replace />

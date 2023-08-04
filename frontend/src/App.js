@@ -113,10 +113,10 @@ function App() {
                                     <Route path="/service/edit" element={<EditService />} />
                                 </Route>
                                 <Route element={<CheckVerifications />} >
-                                    <Route path="/home" element={userType === "Service Provider" ? <ProviderDashboard /> : <Home />} />
+                                    <Route path="/home" element={userType === "Provider" ? <ProviderDashboard /> : <Home />} />
                                     <Route path="/chat/:providerSlug" element={<Chat />} />
                                     <Route path="/settings" element={<Settings />} />
-                                    <Route path="/payments" element={<Payments />} />
+                                    <Route path="/transactions" element={<Payments />} />
                                     <Route path="/requests" element={<Requests />} />
                                     <Route path="/requests/history" element={<History />} />
                                     <Route path="/browse" element={<Browse />} />

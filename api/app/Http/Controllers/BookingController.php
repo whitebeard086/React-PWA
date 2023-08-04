@@ -7,6 +7,7 @@ use App\Models\Escrow;
 use App\Models\Booking;
 use App\Models\Invoice;
 use App\Traits\SmsTrait;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Notifications\InvoicePaidNotification;
@@ -57,6 +58,18 @@ class BookingController extends Controller
             $invoice->status = 'paid';
             $invoice->save();
 
+            $txn = new Transaction;
+            $txn->user_id = $user->id;
+            $txn->reference = $invoice->invoice_number;
+            $txn->amount = $invoice->price;
+            $txn->type = 'Service Payment';
+            $txn->final_amount = $invoice->price;
+            $txn->method = 'transfer';
+            $txn->status = 'Success';
+            $txn->save();
+
+            DB::commit();
+            
             $provider->notify(new InvoicePaidNotification($user, $invoice));
 
             $receiverPhone = $provider->phone;
@@ -66,7 +79,7 @@ class BookingController extends Controller
 
             // $smsResponse = $this->serviceBookedSmsNotification($receiverPhone, $senderUsername, $receiverUsername, $invoiceNumber);
 
-            DB::commit();
+            
 
             return response()->json([
                 'status' => 'success',
@@ -74,7 +87,7 @@ class BookingController extends Controller
                 'escrow' => $escrow,
             ], 200);
             
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             
             return response()->json([
@@ -154,7 +167,7 @@ class BookingController extends Controller
     public function confirm_service(Request $request)
     {
         try {
-            $booking = Booking::with('service.user', 'user')->findOrFail($request->booking_id);
+            $booking = Booking::with('service.user', 'user', 'invoice')->findOrFail($request->booking_id);
 
             DB::beginTransaction();
 
@@ -188,6 +201,18 @@ class BookingController extends Controller
             $provider->increment('balance', $escrow->amount);
             $provider->save();
 
+            $txn = new Transaction;
+            $txn->user_id = $provider->id;
+            $txn->reference = $booking->invoice->invoice_number;
+            $txn->amount = $booking->invoice->price;
+            $txn->type = 'Service Payment';
+            $txn->final_amount = $booking->invoice->price;
+            $txn->method = 'transfer';
+            $txn->status = 'Success';
+            $txn->save();
+
+            DB::commit();
+            
             $sender = $booking->user;
             $provider->notify(new ServiceConfirmedNotification($sender));
 
@@ -195,8 +220,6 @@ class BookingController extends Controller
             $receiverUsername = $provider->username;
             $senderUsername = $sender->username;
             // $this->serviceConfirmedSmsNotification($receiverPhone, $senderUsername, $receiverUsername);
-
-            DB::commit();
 
             return response()->json([
                 'status' => 'success',
