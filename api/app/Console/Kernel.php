@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
+use Spatie\WebhookClient\Models\WebhookCall;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
@@ -13,6 +14,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('sanctum:prune-expired --hours=24')->daily();
+        $schedule->command('otp:clean')->daily();
+        $schedule->command('model:prune', [
+            '--model' => [WebhookCall::class],
+        ])->daily();
     }
 
     /**

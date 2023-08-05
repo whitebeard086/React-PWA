@@ -32,6 +32,7 @@ Route::post('/register/check-user', [AuthController::class, 'check_user']);
 Route::post('/register/check-email', [AuthController::class, 'check_email']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [UserController::class, 'register']);
+Route::webhooks('paystack/webhook');
 
 // Protected Routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -72,7 +73,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Deposit Routes
     Route::post('/paystack/deposit', [GatewayController::class, 'paystackDeposit']);
     Route::post('/paystack/verify', [GatewayController::class, 'verifyPaystackPayment']);
-    Route::post('/paystack/webhook', [WebhookController::class, 'handleChargeSuccess']);
+    Route::post('/deposit/update', [GatewayController::class, 'updateTransaction']);
+    // Route::post('/paystack/webhook', [WebhookController::class, 'handleWebhook']);
 
     // Chat Routes
     Route::post('/chat', [ChatController::class, 'chat']);

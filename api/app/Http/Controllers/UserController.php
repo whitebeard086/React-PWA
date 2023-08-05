@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\Workdays;
 use App\Models\ProfileType;
 use App\Models\SubCategory;
+use App\Traits\GatewayTrait;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
+    use GatewayTrait;
     private $otp;
 
     public function __construct()
@@ -33,18 +35,33 @@ class UserController extends Controller
 
     public function get_user()
     {
-        $user = User::with('ProfileType', 'Service.Category', 'Service.Workdays', 'Service.SubCategory')->where('id', auth()->user()->id)->first();
+        try {
+            $user = User::with('ProfileType', 'Service.Category', 'Service.Workdays', 'Service.SubCategory')->where('id', auth()->user()->id)->first();
 
-        if (isset($user) && $user->phone_verified_at == null) {
+            if (isset($user->phone_verified_at) && !$user->bank) {
+                $result = $this->assignVirtualAccount($user);
+                $update = $this->updateDedicatedAccount($user);
+            }
+
+            if (isset($user) && $user->phone_verified_at == null) {
+                return response()->json([
+                    'user' => $user,
+                    'message' => 'Phone not verified',
+                ]);
+            }
+            
             return response()->json([
                 'user' => $user,
-                'message' => 'Phone not verified',
+                // 'update' => $update,
+                // 'users' => $users,
             ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
         }
         
-        return response()->json([
-            'user' => $user,
-        ]);
     }
 
     public function get_countries()

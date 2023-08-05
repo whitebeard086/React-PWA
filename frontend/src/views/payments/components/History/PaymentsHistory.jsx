@@ -7,7 +7,8 @@ const PaymentsHistory = () => {
     const { verifying } = useSelector((state) => state.payments.data)
     const { userType } = useSelector((state) => state.auth.user)
     const { transactions } = useSelector((state) => state.payments.data)
-    const topups = transactions?.filter((txn) => txn.type === 'Wallet Topup')
+    const clientTopups = transactions?.filter((txn) => txn.type === 'Wallet Topup')
+    const providerTopups = transactions?.filter((txn) => txn.type === 'Wallet Topup' || txn.type === 'Service Payment')
     const clientExpenses = transactions?.filter((txn) => txn.type === 'Service Payment')
     const { TabNav, TabList, TabContent } = Tabs
 
@@ -34,7 +35,12 @@ const PaymentsHistory = () => {
                                 <Data transactions={transactions} />
                             </TabContent>
                             <TabContent value="topups">
-                                <Data transactions={topups} />
+                                {userType === 'Client' && (
+                                    <Data transactions={clientTopups} />
+                                )}
+                                {userType === 'Provider' && (
+                                    <Data transactions={providerTopups} />
+                                )}
                             </TabContent>
                             <TabContent value="expenses">
                                 {userType === 'Client' && (

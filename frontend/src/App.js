@@ -17,6 +17,8 @@ import { socket } from "utils/socket";
 import { setMessages, setReceivedInvoice, setServiceBooked } from "views/chat/store/dataSlice";
 import { setServiceCompleted, setServiceConfirmed } from "views/requests/store/dataSlice";
 import { setServiceCompletedDash } from "views/providerDash/store/dataSlice";
+import { paymentsData, setReceivedDeposit, setUpdateStatus, updateTransaction } from "views/payments/store/dataSlice";
+import { toggleDepositDialog } from "views/payments/store/stateSlice";
 
 const Landing = lazy(() => import("./views/landing"));
 const Register = lazy(() => import("./views/auth/Register"));
@@ -86,11 +88,23 @@ function App() {
                 console.log('Received Service Booked: ', true);
             }
         },
+        // {
+        //     name: 'chargeSuccess',
+        //     handler({ data }) {
+        //         dispatch(updateTransaction({
+        //             email: data?.customer?.email,
+        //             reference: data?.reference,
+        //             amount: data?.amount,
+        //         }))
+        //         dispatch(setReceivedDeposit(true))
+        //         console.log('Deposit Updated: ', true);
+        //     }
+        // },
     ]
 
     useEffect(() => {
-        socket.emit("addNewUser", profile?.id)
-    }, [profile?.id])
+        socket.emit("addNewUser", profile)
+    }, [profile])
 
     useSocket(events)
 

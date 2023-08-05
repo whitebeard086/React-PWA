@@ -228,17 +228,19 @@ const Provider = () => {
                 </div>
             </Card>
 
-            <div className="mt-4">
-                <Link to={`/chat/${provider?.slug}`} state={{ provider_id: provider?.id }}>
-                    <Button
-                        variant="solid"
-                        block
-                        icon={<AiFillWechat />}
-                    >
-                        Chat Now
-                    </Button>
-                </Link>
-            </div>
+            {provider?.id !== profile?.id && (
+                <div className="mt-4">
+                    <Link to={`/chat/${provider?.slug}`} state={{ provider_id: provider?.id }}>
+                        <Button
+                            variant="solid"
+                            block
+                            icon={<AiFillWechat />}
+                        >
+                            Chat Now
+                        </Button>
+                    </Link>
+                </div>
+            )}
         </div>
     )
 }

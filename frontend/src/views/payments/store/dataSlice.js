@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { apiPaymentsData, apiPaystackDeposit, apiVerifyPaystackDeposit } from "services/PaymentService";
+import { apiPaymentsData, apiPaystackDeposit, apiUpdateTransaction, apiVerifyPaystackDeposit } from "services/PaymentService";
 
 export const paystackDeposit = createAsyncThunk(
     "payments/data/paystackDeposit",
@@ -37,15 +37,37 @@ export const paymentsData = createAsyncThunk(
     }
 );
 
+export const updateTransaction = createAsyncThunk(
+    "payments/data/updateTransaction",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await apiUpdateTransaction(data);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 const dataSlice = createSlice({
     name: 'payments/data',
     initialState: {
         depositing: false,
         verifying: false,
+        receivedDeposit: false,
         transactions: [],
         depositDetails: {},
         status: 'idle',
+        updateStatus: 'idle',
         depositStatus: 'idle',
+    },
+    reducers: {
+        setUpdateStatus: (state, action) => {
+            state.updateStatus = action.payload
+        },
+        setReceivedDeposit: (state, action) => {
+            state.receivedDeposit = action.payload
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -83,7 +105,19 @@ const dataSlice = createSlice({
                 state.verifying = false;
                 state.status = 'error';
             })
+
+            .addCase(updateTransaction.fulfilled, (state, action) => {
+                state.updateStatus = action.payload.status;
+            })
+            .addCase(updateTransaction.rejected, (state) => {
+                state.updateStatus = 'error';
+            })
     }
 })
+
+export const {
+    setUpdateStatus,
+    setReceivedDeposit,
+} = dataSlice.actions;
 
 export default dataSlice.reducer;

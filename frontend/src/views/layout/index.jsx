@@ -70,7 +70,8 @@ const Layout = ({ noPad }) => {
                             `₦${profile?.balance?.toLocaleString()}`
                         )}
                     </h2>
-                    {userType === "Client" && (
+
+                    <div className="flex items-center gap-2">
                         <Button
                             size="sm"
                             variant="solid"
@@ -80,17 +81,17 @@ const Layout = ({ noPad }) => {
                         >
                             Topup
                         </Button>
-                    )}
-                    {userType === "Provider" && (
-                        <Button
-                            size="sm"
-                            variant="solid"
-                            disabled={verifying}
-                            className="!bg-gray-900 hover:!bg-black"
-                        >
-                            Withdraw
-                        </Button>
-                    )}
+                        {userType === "Provider" && (
+                            <Button
+                                size="sm"
+                                variant="solid"
+                                disabled={verifying}
+                                className="!bg-gray-900 hover:!bg-black"
+                            >
+                                Withdraw
+                            </Button>
+                        )}
+                    </div>
                 </div>
             </div>
             <div className={classNames("bg-gray-100 min-h-[72vh]")}>

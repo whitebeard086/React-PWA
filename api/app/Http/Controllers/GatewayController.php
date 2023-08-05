@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class GatewayController extends Controller
@@ -88,6 +90,42 @@ class GatewayController extends Controller
         $txn->save();
 
         return response()->json($res);
+    }
+
+    public function updateTransaction(Request $request)
+    {
+        $user = User::where('email', $request->email)->firstOrFail();
+
+        try {
+            DB::beginTransaction();
+            
+            $txn = new Transaction;
+            $txn->user_id = $user->id;
+            $txn->reference = $request->reference;
+            $txn->amount = $request->amount / 100;
+            $txn->type = 'Wallet Topup';
+            $txn->final_amount = $request->amount / 100;
+            $txn->method = 'dedicated account';
+            $txn->status = 'Success';
+            $txn->save();
+
+            $user->increment('balance', $txn->final_amount);
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                // 'user' => $user,
+                // 'transaction' => $txn,
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 
 }

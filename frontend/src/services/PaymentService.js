@@ -16,6 +16,14 @@ export const apiPaystackDeposit = async (data) => {
 	});
 };
 
+export const apiUpdateTransaction = async (data) => {
+	return ApiService.fetchData({
+		url: `/deposit/update`,
+		method: 'post',
+		data,
+	});
+};
+
 export const apiPaymentsData = async (data) => {
 	return ApiService.fetchData({
 		url: `/payments`,

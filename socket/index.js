@@ -1,7 +1,13 @@
+require('dotenv').config();
+const express = require("express");
+const crypto = require('crypto');
 const { createServer } = require("http");
 const { Server } = require("socket.io");
+const { json } = require("body-parser");
+const secret = process.env.SECRET_KEY;
 
-const httpServer = createServer();
+const app = express();
+const httpServer = createServer(app);
 const io = new Server(httpServer, { 
     cors: {
         // origin: "https://app0101.taskitly.com"
@@ -9,15 +15,44 @@ const io = new Server(httpServer, {
     }
 });
 
+app.use(json());
+
 let activeUsers = []
 
 io.on("connection", (socket) => {
+    app.get('/', (req, res) => {
+        res.send({ response: "Server is up and running." }).status(200);
+    })
+
+    app.post("/paystack/webhook", function(req, res) {
+        //validate event
+        const hash = crypto.createHmac('sha512', secret).update(JSON.stringify(req.body)).digest('hex');
+      
+        if (hash == req.headers['x-paystack-signature']) {
+          // Retrieve the request's body
+          const event = req.body;
+          // Do something with event
+          if (event && event.event === 'charge.success') {
+            const user = activeUsers.find((user) => user.email === event?.data?.customer?.email);
+            if (user) {
+                io.to(user.socketId).emit("chargeSuccess", event)
+            } else {
+                io.emit("chargeSuccessGeneral", event)
+            }
+            return res.sendStatus(200).json({ message: 'Charge successful', data: event})
+          }  
+        } 
+        
+        res.sendStatus(200);
+    });
+
     // Add new users
-    socket.on('addNewUser', (newUserId) => {
+    socket.on('addNewUser', (profile) => {
         // Check that the user has not already been added
-        if (!activeUsers.some((user) => user.userId === newUserId)) {
+        if (!activeUsers.some((user) => user.userId === profile?.id)) {
             activeUsers.push({
-                userId: newUserId,
+                userId: profile?.id,
+                email: profile?.email,
                 socketId: socket.id
             })
         }
