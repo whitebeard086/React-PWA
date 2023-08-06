@@ -1,9 +1,10 @@
+/* eslint-disable react/display-name */
 import React from "react";
 import PropTypes from 'prop-types'
-import { useConfig } from "components/ui";
-import { useForm } from "components/ui/Form/context";
-import { useInputGroup } from "components/ui/InputGroup/context";
-import { CONTROL_SIZES, SIZES } from "components/ui/utils/constant";
+import { useForm } from "@/components/ui/Form/context";
+import { useInputGroup } from "@/components/ui/InputGroup/context";
+import { useConfig } from "@/components/ui";
+import { CONTROL_SIZES, SIZES } from "@/components/ui/utils/constant";
 
 
 const OtpInput = React.forwardRef((props, ref) => {

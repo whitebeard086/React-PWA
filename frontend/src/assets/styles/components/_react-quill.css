@@ -1,10 +1,10 @@
 .rich-text-editor {
     .ql-toolbar.ql-snow {
-        @apply border border-gray-300 rounded-tl-lg rounded-tr-lg bg-primary-500;
+        @apply border !border-gray-300 rounded-tl-lg rounded-tr-lg !bg-primary-500;
     }
 
     .ql-container.ql-snow {
-        @apply border border-gray-300 rounded-bl-lg rounded-br-lg bg-white;
+        @apply border !border-gray-300 rounded-bl-lg rounded-br-lg !bg-white;
     }
 
     .ql-editor {
@@ -16,24 +16,24 @@
     }
 
     .ql-snow .ql-stroke {
-        @apply stroke-emerald-50 text-emerald-50;
+        @apply !stroke-emerald-50 !text-emerald-50;
     }
 
     .ql-snow .ql-picker {
-        @apply text-emerald-500;
+        @apply !text-emerald-500;
     }
 
     .ql-picker-label {
-        @apply text-emerald-50;
+        @apply !text-emerald-50;
     }
 
     .ql-fill {
-        @apply stroke-emerald-200;
+        @apply !stroke-emerald-200;
     }
     
     .ql-snow.ql-toolbar button, 
     .ql-snow .ql-toolbar button {
-        @apply rounded;
+        @apply !rounded;
     }
 
     .ql-snow.ql-toolbar button:hover, 
@@ -50,7 +50,7 @@
     .ql-snow .ql-toolbar .ql-picker-item:hover, 
     .ql-snow.ql-toolbar .ql-picker-item.ql-selected, 
     .ql-snow .ql-toolbar .ql-picker-item.ql-selected {
-        @apply bg-primary-600;
+        @apply !bg-primary-600;
     }
 
     .ql-snow.ql-toolbar button:hover .ql-stroke, 
@@ -81,7 +81,7 @@
     .ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke-miter, 
     .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter, 
     .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter {
-        @apply stroke-emerald-100;
+        @apply !stroke-emerald-100;
     }
 
     .ql-snow .ql-picker-options .ql-picker-item {
@@ -89,11 +89,11 @@
     }
 
     .ql-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-options {
-        @apply border-gray-300
+        @apply !border-gray-300
     }
 
     .ql-snow .ql-picker-options {
-        @apply bg-emerald-50 rounded-lg;
+        @apply !bg-emerald-50 rounded-lg;
     }
 
     .ql-snow.ql-toolbar button:hover, 
@@ -110,7 +110,7 @@
     .ql-snow .ql-toolbar .ql-picker-item:hover, 
     .ql-snow.ql-toolbar .ql-picker-item.ql-selected, 
     .ql-snow .ql-toolbar .ql-picker-item.ql-selected {
-        @apply text-emerald-100;
+        @apply !text-emerald-100;
     }
 
     .quill_read_only .ql-editor{

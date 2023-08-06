@@ -1,14 +1,12 @@
-import { ConfirmDialog } from "components/shared";
+import { ConfirmDialog } from "@/components/shared";
 import { useDispatch, useSelector } from "react-redux";
-import {
-    toggleCompleteServiceDialog,
-} from "../../store/stateSlice";
+import { toggleCompleteServiceDialog } from "../../store/stateSlice";
 import { completeService, setServiceStatus } from "../../store/dataSlice";
 import { useEffect } from "react";
-import { Notification, toast } from "components/ui";
-import { sendPushNotification } from "utils/sendPushNotification";
-import appConfig from "configs/app.config";
-import { socket } from "utils/socket";
+import { Notification, toast } from "@/components/ui";
+import { sendPushNotification } from "@/utils/sendPushNotification";
+import appConfig from "@/configs/app.config";
+import { socket } from "@/utils/socket";
 
 const CompleteServiceDialog = () => {
     const dispatch = useDispatch();
@@ -19,7 +17,7 @@ const CompleteServiceDialog = () => {
     const { completeServiceDialog, bookingID } = useSelector(
         (state) => state.requests.state
     );
-    const { profile } = useSelector((state) => state.auth.user)
+    const { profile } = useSelector((state) => state.auth.user);
 
     const popNotification = (message, type, title, duration) => {
         toast.push(
@@ -43,24 +41,26 @@ const CompleteServiceDialog = () => {
                 "danger",
                 "Error",
                 4000
-            )
+            );
         }
 
-        dispatch(setServiceStatus('idle'));
-    }, [serviceStatus, dispatch])
+        dispatch(setServiceStatus("idle"));
+    }, [serviceStatus, dispatch]);
 
     useEffect(() => {
         if (serviceStatus === "success") {
             sendPushNotification({
-                app_id: process.env.REACT_APP_ONESIGNAL_APP_ID,
+                app_id: import.meta.env.VITE_ONESIGNAL_APP_ID,
                 channel_for_external_user_ids: "push",
                 include_external_user_ids: [`${booking?.user?.id}`],
-                url: `${appConfig.appURL}/chat/${profile?.username.toLowerCase()}`,
+                url: `${
+                    appConfig.appURL
+                }/chat/${profile?.username.toLowerCase()}`,
                 contents: {
                     en: `Hello ${booking?.user?.username}, ${profile?.username} has completed your service, please inspect the work and confirm if you are satisfied.`,
                 },
                 content_available: true,
-            })
+            });
 
             popNotification(
                 "We have notified the user that booked this service that it has been completed, please wait a moment for them to confirm.",
@@ -71,8 +71,12 @@ const CompleteServiceDialog = () => {
         }
 
         dispatch(toggleCompleteServiceDialog(false));
-        dispatch(setServiceStatus('idle'));
-        socket.emit("completedService", booking?.user?.id, console.log('Emit Service Completed, Bookings: ', true));
+        dispatch(setServiceStatus("idle"));
+        socket.emit(
+            "completedService",
+            booking?.user?.id,
+            console.log("Emit Service Completed, Bookings: ", true)
+        );
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [serviceStatus]);
 

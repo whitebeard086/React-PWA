@@ -1,10 +1,10 @@
-import { Container } from "components/shared"
 import { Suspense, lazy, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import reducer from "./store";
-import { injectReducer } from "store/index";
 import { getCountries, setMessage } from "./store/dataSlice";
+import { Container } from "@/components/shared";
+import { injectReducer } from "@/store";
 
 injectReducer("verify", reducer);
 

@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { apiGetBrowseData, apiGetCategory } from "services/BrowseService";
-import { deleteMessage } from "views/chat/store/dataSlice";
+import { apiGetBrowseData, apiGetCategory } from "@/services/BrowseService";
 
 export const getBrowseData = createAsyncThunk(
     "browse/data/getBrowseData",
@@ -27,20 +26,20 @@ export const getCategory = createAsyncThunk(
 );
 
 const dataSlice = createSlice({
-    name: 'browse/data',
+    name: "browse/data",
     initialState: {
         loading: false,
         gettingCategory: false,
         categories: [],
         services: [],
         category: {},
-        status: 'idle',
-        categoryStatus: 'idle',
+        status: "idle",
+        categoryStatus: "idle",
     },
     reducers: {
         setStatus: (state, action) => {
             state.status = action.payload;
-        }
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -54,7 +53,7 @@ const dataSlice = createSlice({
             })
             .addCase(getBrowseData.rejected, (state) => {
                 state.loading = false;
-                state.status = 'error';
+                state.status = "error";
             })
 
             .addCase(getCategory.pending, (state) => {
@@ -68,17 +67,15 @@ const dataSlice = createSlice({
             })
             .addCase(getCategory.rejected, (state) => {
                 state.gettingCategory = false;
-                state.categoryStatus = 'error';
-            })
+                state.categoryStatus = "error";
+            });
 
-            // .addCase(deleteMessage.fulfilled, (state) => {
-            //     // state
-            // })
-    }
-})
+        // .addCase(deleteMessage.fulfilled, (state) => {
+        //     // state
+        // })
+    },
+});
 
-export const {
-    setStatus,
-} = dataSlice.actions
+export const { setStatus } = dataSlice.actions;
 
-export default dataSlice.reducer
+export default dataSlice.reducer;

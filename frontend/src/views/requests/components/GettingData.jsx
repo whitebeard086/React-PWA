@@ -1,6 +1,6 @@
-import { Avatar, Card, Skeleton } from "components/ui"
-import { BsThreeDotsVertical } from "react-icons/bs"
-import { HiOutlineUser } from "react-icons/hi"
+import { Avatar, Card, Skeleton } from "@/components/ui";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { HiOutlineUser } from "react-icons/hi";
 
 const GettingData = () => {
     return (
@@ -8,12 +8,11 @@ const GettingData = () => {
             <h4>Active Bookings</h4>
 
             <div className="mt-4 mb-4 flex gap-4 overflow-auto pb-4">
-                <Card className="min-w-[10rem] w-40" bodyClass="flex w-full flex-col justify-center items-center">
-                    <Avatar 
-                        size="lg"
-                        shape="circle"
-                        icon={<HiOutlineUser />}
-                    />
+                <Card
+                    className="min-w-[10rem] w-40"
+                    bodyClass="flex w-full flex-col justify-center items-center"
+                >
+                    <Avatar size="lg" shape="circle" icon={<HiOutlineUser />} />
 
                     <div className="mt-2 flex flex-col gap-1 justify-center items-center w-full">
                         <Skeleton width="80%" />
@@ -21,12 +20,11 @@ const GettingData = () => {
                     </div>
                 </Card>
 
-                <Card className="min-w-[10rem] w-40" bodyClass="flex w-full flex-col justify-center items-center">
-                    <Avatar 
-                        size="lg"
-                        shape="circle"
-                        icon={<HiOutlineUser />}
-                    />
+                <Card
+                    className="min-w-[10rem] w-40"
+                    bodyClass="flex w-full flex-col justify-center items-center"
+                >
+                    <Avatar size="lg" shape="circle" icon={<HiOutlineUser />} />
 
                     <div className="mt-2 flex flex-col gap-1 justify-center items-center w-full">
                         <Skeleton width="80%" />
@@ -34,10 +32,13 @@ const GettingData = () => {
                     </div>
                 </Card>
 
-                <Card className="min-w-[18rem] w-80" bodyClass="flex w-full flex-col justify-center items-center">
+                <Card
+                    className="min-w-[18rem] w-80"
+                    bodyClass="flex w-full flex-col justify-center items-center"
+                >
                     <div className="w-full flex items-center gap-4">
                         <div className="w-1/2 flex flex-col items-center">
-                            <Avatar 
+                            <Avatar
                                 size="lg"
                                 shape="circle"
                                 icon={<HiOutlineUser />}
@@ -61,7 +62,7 @@ const GettingData = () => {
                     <div className="w-full flex items-center justify-between">
                         <div className="w-full flex gap-4 items-center">
                             <div>
-                                <Avatar 
+                                <Avatar
                                     size="lg"
                                     shape="circle"
                                     icon={<HiOutlineUser />}
@@ -81,7 +82,7 @@ const GettingData = () => {
                     <div className="w-full flex items-center justify-between">
                         <div className="w-full flex gap-4 items-center">
                             <div>
-                                <Avatar 
+                                <Avatar
                                     size="lg"
                                     shape="circle"
                                     icon={<HiOutlineUser />}
@@ -101,7 +102,7 @@ const GettingData = () => {
                     <div className="w-full flex items-center justify-between">
                         <div className="w-full flex gap-4 items-center">
                             <div>
-                                <Avatar 
+                                <Avatar
                                     size="lg"
                                     shape="circle"
                                     icon={<HiOutlineUser />}
@@ -121,7 +122,7 @@ const GettingData = () => {
                     <div className="w-full flex items-center justify-between">
                         <div className="w-full flex gap-4 items-center">
                             <div>
-                                <Avatar 
+                                <Avatar
                                     size="lg"
                                     shape="circle"
                                     icon={<HiOutlineUser />}
@@ -141,7 +142,7 @@ const GettingData = () => {
                     <div className="w-full flex items-center justify-between">
                         <div className="w-full flex gap-4 items-center">
                             <div>
-                                <Avatar 
+                                <Avatar
                                     size="lg"
                                     shape="circle"
                                     icon={<HiOutlineUser />}
@@ -159,6 +160,6 @@ const GettingData = () => {
                 </Card>
             </div>
         </div>
-    )
-}
-export default GettingData
+    );
+};
+export default GettingData;

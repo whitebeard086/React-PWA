@@ -1,15 +1,17 @@
-import { Button } from "components/ui";
-import { formatTime } from "components/ui/utils/formatTime";
+import { Button } from "@/components/ui";
+import { formatTime } from "@/components/ui/utils/formatTime";
 import { AiOutlineEdit } from "react-icons/ai";
 import { BsDashLg } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { setEditingSunday } from "views/service/store/stateSlice";
 import SundayDialog from "./SundayDialog";
+import { setEditingSunday } from "../../store/stateSlice";
 
 const Sunday = () => {
     const dispatch = useDispatch();
-    
-    const { sundayValue, sundayValue2 } = useSelector((state) => state.service.state);
+
+    const { sundayValue, sundayValue2 } = useSelector(
+        (state) => state.service.state
+    );
 
     return (
         <div className="mt-4 bg-white">

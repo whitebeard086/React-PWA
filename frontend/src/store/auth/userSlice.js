@@ -1,5 +1,5 @@
+import { apiGetUser } from "@/services/AuthService";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { apiGetUser } from "services/AuthService";
 
 export const getUser = createAsyncThunk(
     "auth/data/getUser",

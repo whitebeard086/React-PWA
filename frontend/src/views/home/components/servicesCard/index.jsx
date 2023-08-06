@@ -1,11 +1,11 @@
-import { Card, Image } from "components/ui";
-import appConfig from "configs/app.config";
+import { Card, Image } from "@/components/ui";
+import appConfig from "@/configs/app.config";
 import { AiFillStar } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay } from 'swiper/modules';
-import 'swiper/css';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
+import "swiper/css";
 
 const ServicesCard = () => {
     const { imagePath } = appConfig;
@@ -14,11 +14,9 @@ const ServicesCard = () => {
 
     return (
         <>
-            <h4 className="text-lg font-bold mb-2">
-                Popular Services
-            </h4>
+            <h4 className="text-lg font-bold mb-2">Popular Services</h4>
 
-            <Swiper 
+            <Swiper
                 spaceBetween={30}
                 loop={true}
                 slidesPerView="auto"
@@ -26,11 +24,11 @@ const ServicesCard = () => {
                 speed={6000}
                 disableOnInteraction={true}
                 autoplay={{
-                  delay: 1,
-                  disableOnInteraction: true,
+                    delay: 1,
+                    disableOnInteraction: true,
                 }}
                 pagination={{
-                  clickable: true,
+                    clickable: true,
                 }}
                 navigation={true}
                 modules={[Autoplay]}
@@ -91,6 +89,6 @@ const ServicesCard = () => {
                 ))}
             </Swiper>
         </>
-    )
-}
-export default ServicesCard
+    );
+};
+export default ServicesCard;

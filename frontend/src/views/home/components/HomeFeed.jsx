@@ -1,10 +1,10 @@
-import { Avatar, Card } from "components/ui"
-import appConfig from "configs/app.config"
+import { Avatar, Card } from "@/components/ui"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import RecentBookings from "./recentBookings"
 import ServicesCard from "./servicesCard"
-import BillsComponent from "views/payments/components/Bills/BillsComponent"
+import appConfig from "@/configs/app.config"
+import BillsComponent from "@/views/payments/components/Bills/BillsComponent"
 
 const HomeFeed = () => {
     const { imagePath } = appConfig

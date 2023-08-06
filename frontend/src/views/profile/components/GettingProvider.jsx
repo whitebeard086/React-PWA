@@ -1,4 +1,4 @@
-import { Card, Skeleton } from "components/ui"
+import { Card, Skeleton } from "@/components/ui";
 
 const GettingProvider = () => {
     return (
@@ -28,9 +28,7 @@ const GettingProvider = () => {
                         <Skeleton height="18px" width="100%" />
                     </Card>
                     <div>
-                        <h4 className="font-bold text-base mb-2">
-                            About
-                        </h4>
+                        <h4 className="font-bold text-base mb-2">About</h4>
 
                         <div className="flex flex-col gap-1">
                             <Skeleton height="12px" width="97%" />
@@ -51,14 +49,11 @@ const GettingProvider = () => {
                             <Skeleton height="12px" width="100%" />
                         </div>
                     </div>
-
                 </div>
             </Card>
 
-            <Card className="bg-primary-500 mt-4">
-
-            </Card>
+            <Card className="bg-primary-500 mt-4"></Card>
         </div>
-    )
-}
-export default GettingProvider
+    );
+};
+export default GettingProvider;

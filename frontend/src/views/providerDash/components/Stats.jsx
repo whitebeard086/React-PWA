@@ -1,4 +1,4 @@
-import { Card } from "components/ui"
+import { Card } from "@/components/ui";
 
 const Stats = ({ bookingsCount, profile }) => {
     return (
@@ -20,6 +20,6 @@ const Stats = ({ bookingsCount, profile }) => {
                 </div>
             </Card>
         </>
-    )
-}
-export default Stats
+    );
+};
+export default Stats;

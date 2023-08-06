@@ -1,4 +1,4 @@
-import { Card, Skeleton } from "components/ui"
+import { Card, Skeleton } from "@/components/ui";
 
 const GettingFeed = () => {
     return (
@@ -7,39 +7,39 @@ const GettingFeed = () => {
                 <div className="flex">
                     <div className="flex flex-col gap-6 w-full">
                         <Skeleton variant="circle" height="80px" width="80px" />
-                        <Skeleton  height="20px" width="60%" />
+                        <Skeleton height="20px" width="60%" />
                     </div>
-                    <Skeleton  height="20px" width="40%" />
+                    <Skeleton height="20px" width="40%" />
                 </div>
             </Card>
             <Card bodyClass="w-full">
                 <div className="flex">
                     <div className="flex flex-col gap-6 w-full">
                         <Skeleton variant="circle" height="80px" width="80px" />
-                        <Skeleton  height="20px" width="60%" />
+                        <Skeleton height="20px" width="60%" />
                     </div>
-                    <Skeleton  height="20px" width="40%" />
+                    <Skeleton height="20px" width="40%" />
                 </div>
             </Card>
             <Card bodyClass="w-full">
                 <div className="flex">
                     <div className="flex flex-col gap-6 w-full">
                         <Skeleton variant="circle" height="80px" width="80px" />
-                        <Skeleton  height="20px" width="60%" />
+                        <Skeleton height="20px" width="60%" />
                     </div>
-                    <Skeleton  height="20px" width="40%" />
+                    <Skeleton height="20px" width="40%" />
                 </div>
             </Card>
             <Card bodyClass="w-full">
                 <div className="flex">
                     <div className="flex flex-col gap-6 w-full">
                         <Skeleton variant="circle" height="80px" width="80px" />
-                        <Skeleton  height="20px" width="60%" />
+                        <Skeleton height="20px" width="60%" />
                     </div>
-                    <Skeleton  height="20px" width="40%" />
+                    <Skeleton height="20px" width="40%" />
                 </div>
             </Card>
         </div>
-    )
-}
-export default GettingFeed
+    );
+};
+export default GettingFeed;

@@ -2,26 +2,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useLocation } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
-import { Button, Spinner } from "components/ui";
-import { Container, Loading } from "components/shared";
+import { Button, Spinner } from "@/components/ui";
+import { Container } from "@/components/shared";
 import { FaSpinner } from "react-icons/fa";
-import { toggleDepositDialog } from "views/payments/store/stateSlice";
-import DepositDialog from "views/payments/components/Deposit/DepositDialog";
 import { useEffect } from "react";
-import { getUser, setOnlineUsers } from "store/auth/userSlice";
 import classNames from "classnames";
-import { io } from "socket.io-client";
-import { useRef } from "react";
-import appConfig from "configs/app.config";
-import { setMessages } from "views/chat/store/dataSlice";
-import { setMessage } from "views/chat/store/stateSlice";
-import { socket } from "utils/socket";
+import { toggleDepositDialog } from "../payments/store/stateSlice";
+import { getUser } from "@/store/auth/userSlice";
+import { socket } from "@/utils/socket";
+import { setMessages } from "../chat/store/dataSlice";
+import DepositDialog from "../payments/components/Deposit/DepositDialog";
 
-const Layout = ({ noPad }) => {
+const Layout = () => {
     const dispatch = useDispatch();
     const location = useLocation();
 
-    const { profile, userType, onlineUsers } = useSelector(
+    const { profile, userType } = useSelector(
         (state) => state.auth.user
     );
     const { verifying } = useSelector((state) => state.payments.data);

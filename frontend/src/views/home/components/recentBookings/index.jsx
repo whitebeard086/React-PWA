@@ -1,11 +1,11 @@
-import { Button, Card, Image } from "components/ui";
-import appConfig from "configs/app.config";
+import { Button, Card, Image } from "@/components/ui";
+import appConfig from "@/configs/app.config";
 import { AiFillStar } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay } from 'swiper/modules';
-import 'swiper/css';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
+import "swiper/css";
 
 const RecentBookings = () => {
     const { imagePath } = appConfig;
@@ -30,27 +30,29 @@ const RecentBookings = () => {
                     </Link>
                 </div>
             ) : (
-                <Swiper 
-                  spaceBetween={30}
-                  loop={true}
-                  slidesPerView="auto"
-                  centeredSlides={true}
-                  speed={6000}
-                  disableOnInteraction={true}
-                  autoplay={{
-                    delay: 1,
-                    disableOnInteraction: true,
-                  }}
-                  pagination={{
-                    clickable: true,
-                  }}
-                  navigation={true}
-                  modules={[Autoplay]}
-                  className="recentServicesSwiper flex overflow-auto gap-4 w-full pb-2"
+                <Swiper
+                    spaceBetween={30}
+                    loop={true}
+                    slidesPerView="auto"
+                    centeredSlides={true}
+                    speed={6000}
+                    disableOnInteraction={true}
+                    autoplay={{
+                        delay: 1,
+                        disableOnInteraction: true,
+                    }}
+                    pagination={{
+                        clickable: true,
+                    }}
+                    navigation={true}
+                    modules={[Autoplay]}
+                    className="recentServicesSwiper flex overflow-auto gap-4 w-full pb-2"
                 >
                     {bookings?.map((item) => (
                         <SwiperSlide key={item.id}>
-                            <Link to={`/browse/profile/${item.service?.user?.username}`}>
+                            <Link
+                                to={`/browse/profile/${item.service?.user?.username}`}
+                            >
                                 <Card
                                     bodyClass="w-full flex items-center gap-4"
                                     className="min-w-[20rem] bg-primary-500"

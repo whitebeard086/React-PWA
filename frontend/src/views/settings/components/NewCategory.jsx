@@ -1,4 +1,10 @@
-import { Button, FormContainer, FormItem, Input, Upload } from "components/ui";
+import {
+    Button,
+    FormContainer,
+    FormItem,
+    Input,
+    Upload,
+} from "@/components/ui";
 import { Field, Form, Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
@@ -8,8 +14,7 @@ import { createCategory } from "../store/dataSlice";
 const NewCategory = () => {
     const dispatch = useDispatch();
 
-
-    const { creatingCategory } = useSelector((state) => state.settings.data)
+    const { creatingCategory } = useSelector((state) => state.settings.data);
 
     const validationSchema = Yup.object().shape({
         name: Yup.string().required("Enter a name"),
@@ -22,14 +27,14 @@ const NewCategory = () => {
     };
 
     const onCreateCategory = (values) => {
-        const { name, iconFile } = values
+        const { name, iconFile } = values;
 
         const data = {
             name,
-            icon: iconFile
-        }
+            icon: iconFile,
+        };
 
-        dispatch(createCategory(data))
+        dispatch(createCategory(data));
     };
 
     const onSetFormFile = (form, field, file) => {

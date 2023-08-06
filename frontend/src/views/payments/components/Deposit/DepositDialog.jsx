@@ -1,16 +1,16 @@
-import { Button, Card, Dialog, Notification, toast } from "components/ui";
+import { Button, Card, Dialog, Notification, toast } from "@/components/ui";
 import { useDispatch, useSelector } from "react-redux"
-import { toggleDepositDialog } from "views/payments/store/stateSlice";
 import { HiOutlineDuplicate } from "react-icons/hi";
-import { paymentsData } from "views/payments/store/dataSlice";
-import { getUser } from "store/auth/userSlice";
 import { useLocation, useNavigate } from "react-router-dom";
+import { toggleDepositDialog } from "../../store/stateSlice";
+import { paymentsData } from "../../store/dataSlice";
+import { getUser } from "@/store/auth/userSlice";
 
 const DepositDialog = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
-
+    
     const { depositDialog } = useSelector((state) => state.payments.state)
     const { profile } = useSelector((state) => state.auth.user)
 

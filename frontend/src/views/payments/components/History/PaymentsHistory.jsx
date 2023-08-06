@@ -1,24 +1,32 @@
-import { useSelector } from "react-redux"
-import GettingData from "./GettingData"
-import Data from "./Data"
-import { Tabs } from "components/ui"
+import { useSelector } from "react-redux";
+import GettingData from "./GettingData";
+import Data from "./Data";
+import Tabs from "@/components/ui/Tabs";
 
 const PaymentsHistory = () => {
-    const { verifying } = useSelector((state) => state.payments.data)
-    const { userType } = useSelector((state) => state.auth.user)
-    const { transactions } = useSelector((state) => state.payments.data)
-    const clientTopups = transactions?.filter((txn) => txn.type === 'Wallet Topup')
-    const providerTopups = transactions?.filter((txn) => txn.type === 'Wallet Topup' || txn.type === 'Service Payment')
-    const clientExpenses = transactions?.filter((txn) => txn.type === 'Service Payment')
-    const { TabNav, TabList, TabContent } = Tabs
+    const { verifying } = useSelector((state) => state.payments.data);
+    const { userType } = useSelector((state) => state.auth.user);
+    const { transactions } = useSelector((state) => state.payments.data);
+    const clientTopups = transactions?.filter(
+        (txn) => txn.type === "Wallet Topup"
+    );
+    const providerTopups = transactions?.filter(
+        (txn) => txn.type === "Wallet Topup" || txn.type === "Service Payment"
+    );
+    const clientExpenses = transactions?.filter(
+        (txn) => txn.type === "Service Payment"
+    );
+    const { TabNav, TabList, TabContent } = Tabs;
 
     return (
         <div className="mt-2 mb-2">
-            <h4 className="text-lg font-bold text-gray-700 mb-4 text-center">Transactions</h4>
+            <h4 className="text-lg font-bold text-gray-700 mb-4 text-center">
+                Transactions
+            </h4>
 
             {verifying ? (
                 <GettingData />
-            ):(
+            ) : (
                 <>
                     {/* <Data /> */}
                     <Tabs defaultValue="all" variant="pill">
@@ -26,7 +34,7 @@ const PaymentsHistory = () => {
                             <TabNav value="all">All</TabNav>
                             <TabNav value="topups">Topups</TabNav>
                             <TabNav value="expenses">Expenses</TabNav>
-                            {userType === 'Provider' && (
+                            {userType === "Provider" && (
                                 <TabNav value="withdrawals">Withdrawals</TabNav>
                             )}
                         </TabList>
@@ -35,15 +43,15 @@ const PaymentsHistory = () => {
                                 <Data transactions={transactions} />
                             </TabContent>
                             <TabContent value="topups">
-                                {userType === 'Client' && (
+                                {userType === "Client" && (
                                     <Data transactions={clientTopups} />
                                 )}
-                                {userType === 'Provider' && (
+                                {userType === "Provider" && (
                                     <Data transactions={providerTopups} />
                                 )}
                             </TabContent>
                             <TabContent value="expenses">
-                                {userType === 'Client' && (
+                                {userType === "Client" && (
                                     <Data transactions={clientExpenses} />
                                 )}
                             </TabContent>
@@ -52,6 +60,6 @@ const PaymentsHistory = () => {
                 </>
             )}
         </div>
-    )
-}
-export default PaymentsHistory
+    );
+};
+export default PaymentsHistory;

@@ -1,29 +1,35 @@
-import { Button, FormContainer, FormItem } from "components/ui";
+import { Button, FormContainer, FormItem } from "@/components/ui";
 import { Field, Form, Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import { getUser } from "store/auth/userSlice";
-import { paystackDeposit, verifyPaystackDeposit } from "views/payments/store/dataSlice";
-import { setAmount, toggleDepositDialog } from "views/payments/store/stateSlice";
+import { getUser } from "@/store/auth/userSlice";
+import {
+    paystackDeposit,
+    verifyPaystackDeposit,
+} from "views/payments/store/dataSlice";
+import {
+    setAmount,
+    toggleDepositDialog,
+} from "views/payments/store/stateSlice";
 import * as Yup from "yup";
 import { motion } from "framer-motion";
-import { FormNumericInput } from "components/shared";
+import { FormNumericInput } from "@/components/shared";
 import { PaystackButton } from "react-paystack";
 
 const DepositForm = () => {
     const dispatch = useDispatch();
-    // console.log(process.env.REACT_APP_PAYSTACK_PUBLIC_KEY);
+    // console.log(import.meta.env.VITE_PAYSTACK_PUBLIC_KEY);
 
-    const publicKey = process.env.REACT_APP_PAYSTACK_PUBLIC_KEY;
+    const publicKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
 
-    const { profile } = useSelector((state) => state.auth.user)
+    const { profile } = useSelector((state) => state.auth.user);
 
     const validationSchema = Yup.object().shape({
         amount: Yup.string().required("How much do you want to deposit?"),
-    })
+    });
 
     const initialValues = {
         amount: "",
-    }
+    };
 
     const onDeposit = (values) => {
         const { amount } = values;
@@ -39,7 +45,6 @@ const DepositForm = () => {
             onSubmit={(values) => onDeposit(values)}
         >
             {({ errors, touched, values }) => {
-
                 const paystackProps = {
                     email: profile?.email,
                     amount: values.amount * 100,
@@ -50,18 +55,20 @@ const DepositForm = () => {
                     publicKey,
                     text: "Deposit",
                     onSuccess: ({ reference }) => {
-                        dispatch(paystackDeposit({ 
-                            amount: values.amount * 100,
-                            reference,
-                            charge: 0,
-                        }))
+                        dispatch(
+                            paystackDeposit({
+                                amount: values.amount * 100,
+                                reference,
+                                charge: 0,
+                            })
+                        );
                         dispatch(verifyPaystackDeposit());
                         dispatch(setAmount(""));
                         dispatch(toggleDepositDialog(false));
                         dispatch(getUser());
                     },
                     onClose: () => {},
-                }
+                };
 
                 return (
                     <Form>
@@ -81,7 +88,7 @@ const DepositForm = () => {
                                     errorMessage={errors.amount}
                                 >
                                     <Field name="amount">
-                                        {({ field,form, }) => {
+                                        {({ field, form }) => {
                                             return (
                                                 <FormNumericInput
                                                     thousandSeparator={true}
@@ -91,7 +98,10 @@ const DepositForm = () => {
                                                     // isAllowed={(field) => field.value}
                                                     decimalScale={2}
                                                     onValueChange={(e) => {
-                                                        form.setFieldValue(field.name, e.floatValue);
+                                                        form.setFieldValue(
+                                                            field.name,
+                                                            e.floatValue
+                                                        );
                                                     }}
                                                     value={field.value}
                                                     inputSuffix={
@@ -103,7 +113,6 @@ const DepositForm = () => {
                                             );
                                         }}
                                     </Field>
-
                                 </FormItem>
                             </motion.div>
 
@@ -115,9 +124,11 @@ const DepositForm = () => {
                                         size="sm"
                                         variant="solid"
                                     >
-                                        {values.amount > 5000000 ? "₦5 Million Max..." : "Deposit"}
+                                        {values.amount > 5000000
+                                            ? "₦5 Million Max..."
+                                            : "Deposit"}
                                     </Button>
-                                ):(
+                                ) : (
                                     <div className="flex gap-2 justify-center items-center h-9 font-semibold text-white text-sm rounded-md px-3 py-2 w-full cursor-pointer bg-primary-500 hover:bg-primary-600 transition duration-300">
                                         <PaystackButton
                                             className="paystack-button w-full px-3 py-2"
@@ -128,10 +139,9 @@ const DepositForm = () => {
                             </div>
                         </FormContainer>
                     </Form>
-                )
-
-            }}   
+                );
+            }}
         </Formik>
-    )
-}
-export default DepositForm
+    );
+};
+export default DepositForm;

@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { setHasVisited } from "../../store/auth/userSlice";
 
 const Landing = () => {
-    const Step1 = lazy(() => import("./components/Step1"))
+    // const Step1 = lazy(() => import("./components/Step1"))
     const Step2 = lazy(() => import("./components/Step2"))
     const Step3 = lazy(() => import("./components/Step3"))
     const Step4 = lazy(() => import("./components/Step4"))

@@ -1,6 +1,5 @@
-import { apiAssignVirtualAccount, apiGetCountries, apiUpdatePhone, apiVerifyPhone } from "services/AuthService";
-
-const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { apiAssignVirtualAccount, apiGetCountries, apiUpdatePhone, apiVerifyPhone } from "@/services/AuthService";
 
 export const getCountries = createAsyncThunk(
     "verify/data/getCountries",
@@ -77,7 +76,7 @@ const dataSlice = createSlice({
         setMessage: (state, action) => {
             state.message = action.payload
         },
-        resetStatus: (state, action) => {
+        resetStatus: (state) => {
             state.status = "idle";
         },
         setTimer: (state, action) => {

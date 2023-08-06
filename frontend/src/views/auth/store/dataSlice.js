@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { apiCheckEmail, apiCheckUser, apiGetProfileTypes } from "services/AuthService";
+import { apiCheckEmail, apiCheckUser, apiGetProfileTypes } from "@/services/AuthService";
 
 export const getProfileTypes = createAsyncThunk(
     "authentication/data/getProfileTypes",

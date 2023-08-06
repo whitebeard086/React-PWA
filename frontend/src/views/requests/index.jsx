@@ -1,55 +1,59 @@
-import { injectReducer } from "store";
 import reducer from "./store";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getRequestsData, setServiceCompleted, setServiceConfirmed } from "./store/dataSlice";
+import {
+    getRequestsData,
+    setServiceCompleted,
+    setServiceConfirmed,
+} from "./store/dataSlice";
 import GettingData from "./components/GettingData";
-import { Button } from "components/ui";
+import { Button } from "@/components/ui";
 import { Link } from "react-router-dom";
 import Enquiries from "./components/Enquiries";
-import appConfig from "configs/app.config";
 import CompleteServiceDialog from "./components/Bookings/CompleteServiceDialog";
-import { useRef } from "react";
-import { io } from "socket.io-client";
 import Bookings from "./components/Bookings";
 import ConfirmServiceDialog from "./components/Bookings/ConfirmServiceDialog";
-import { setBookingID, toggleCompleteServiceDialog, toggleConfirmServiceDialog } from "./store/stateSlice";
+import {
+    setBookingID,
+    toggleCompleteServiceDialog,
+    toggleConfirmServiceDialog,
+} from "./store/stateSlice";
+import { injectReducer } from "@/store";
+import { socket } from "@/utils/socket";
+import appConfig from "@/configs/app.config";
 
 injectReducer("requests", reducer);
 
 const Requests = () => {
     const dispatch = useDispatch();
-    const socket = useRef();
-    const { socketURL, imagePath } = appConfig;
+    const { imagePath } = appConfig
 
-    const { bookings, booking, completingService, confirmingService } = useSelector((state) => state.requests.data)
-    const { bookingID } = useSelector((state) => state.requests.state)
-    const { userType, profile } = useSelector((state) => state.auth.user)
-    const isProvider = userType === "Provider" ? true : false
+    const { bookings, booking, completingService, confirmingService } =
+        useSelector((state) => state.requests.data);
+    const { bookingID } = useSelector((state) => state.requests.state);
+    const { userType, profile } = useSelector((state) => state.auth.user);
+    const isProvider = userType === "Provider" ? true : false;
 
     const { loading, serviceCompleted, serviceConfirmed } = useSelector(
         (state) => state.requests?.data
     );
 
-    useEffect(() => {
-        dispatch(getRequestsData());
-        socket.current = io(socketURL);
-        socket.current.emit("addNewUser", profile?.id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    // useEffect(() => {
+    //     dispatch(getRequestsData());
+    //     socket.emit("addNewUser", profile?.id);
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, []);
 
     window.OneSignal = window.OneSignal || [];
     const OneSignal = window.OneSignal;
 
     OneSignal.push(() => {
-        OneSignal.init(
-            {
-                appId: process.env.REACT_APP_ONESIGNAL_APP_ID,
-                safari_web_id: process.env.REACT_APP_ONESIGNAL_SAFARI_WEB_ID,
-                allowLocalhostAsSecureOrigin: true,
-                autoResubscribe: true,
-            },
-        );
+        OneSignal.init({
+            appId: import.meta.env.VITE_ONESIGNAL_APP_ID,
+            safari_web_id: import.meta.env.VITE_ONESIGNAL_SAFARI_WEB_ID,
+            allowLocalhostAsSecureOrigin: true,
+            autoResubscribe: true,
+        });
     });
 
     useEffect(() => {
@@ -58,22 +62,21 @@ const Requests = () => {
         }
 
         if (serviceCompleted) {
-            dispatch(setServiceCompleted(false))
+            dispatch(setServiceCompleted(false));
         } else if (serviceConfirmed) {
-            dispatch(setServiceConfirmed(false))
-        } 
-
+            dispatch(setServiceConfirmed(false));
+        }
     }, [dispatch, serviceCompleted, serviceConfirmed]);
 
     const onComplete = (booking) => {
-        dispatch(toggleCompleteServiceDialog(true))
-        dispatch(setBookingID(booking?.id))
-    }
+        dispatch(toggleCompleteServiceDialog(true));
+        dispatch(setBookingID(booking?.id));
+    };
 
     const onConfirm = (booking) => {
-        dispatch(toggleConfirmServiceDialog(true))
-        dispatch(setBookingID(booking?.id))
-    }
+        dispatch(toggleConfirmServiceDialog(true));
+        dispatch(setBookingID(booking?.id));
+    };
 
     return (
         <div className="mt-2 p-4">
@@ -84,11 +87,11 @@ const Requests = () => {
                     <h4>Active Bookings</h4>
 
                     <div className="mt-4 mb-4">
-                        <Bookings 
+                        <Bookings
                             imagePath={imagePath}
                             bookings={bookings}
-                            booking={booking} 
-                            completingService={completingService}   
+                            booking={booking}
+                            completingService={completingService}
                             confirmingService={confirmingService}
                             bookingID={bookingID}
                             isProvider={isProvider}

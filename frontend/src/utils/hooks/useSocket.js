@@ -1,6 +1,6 @@
 // import { socket } from "index";
 import { useEffect } from "react";
-import { socket } from "utils/socket";
+import { socket } from "../socket";
 
 export function useSocket(events) {
     useEffect(() => {

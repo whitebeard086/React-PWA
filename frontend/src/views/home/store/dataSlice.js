@@ -1,6 +1,5 @@
-import { apiGetHomeData } from "services/HomeService";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-
+import { apiGetHomeData } from "@/services/HomeService";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const getHomeData = createAsyncThunk(
     "home/data/getHomeData",
@@ -15,18 +14,18 @@ export const getHomeData = createAsyncThunk(
 );
 
 const dataSlice = createSlice({
-    name: 'home/data',
+    name: "home/data",
     initialState: {
         loading: false,
         categories: [],
         services: [],
         bookings: [],
-        status: 'idle',
+        status: "idle",
     },
     reducers: {
         setStatus: (state, action) => {
             state.status = action.payload;
-        }
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -35,7 +34,8 @@ const dataSlice = createSlice({
             })
             .addCase(getHomeData.fulfilled, (state, action) => {
                 state.loading = false;
-                const { status, categories, services, bookings } = action.payload;
+                const { status, categories, services, bookings } =
+                    action.payload;
                 state.status = status;
                 state.categories = categories;
                 state.services = services;
@@ -43,13 +43,11 @@ const dataSlice = createSlice({
             })
             .addCase(getHomeData.rejected, (state) => {
                 state.loading = false;
-                state.status = 'error';
-            })
-    }
-})
+                state.status = "error";
+            });
+    },
+});
 
-export const {
-    setStatus,
-} = dataSlice.actions
+export const { setStatus } = dataSlice.actions;
 
-export default dataSlice.reducer
+export default dataSlice.reducer;

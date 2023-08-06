@@ -1,7 +1,9 @@
-import { apiGetDashboardData } from "services/DashboardService";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { apiCompleteService, apiConfirmService } from "services/BookingService";
-
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+    apiCompleteService,
+    apiConfirmService,
+} from "@/services/BookingService";
+import { apiGetDashboardData } from "@/services/DashboardService";
 
 export const getDashboardData = createAsyncThunk(
     "dashboard/data/getDashboardData",
@@ -40,7 +42,7 @@ export const confirmService = createAsyncThunk(
 );
 
 const dataSlice = createSlice({
-    name: 'dashboard/data',
+    name: "dashboard/data",
     initialState: {
         loading: false,
         enquiries: [],
@@ -51,9 +53,9 @@ const dataSlice = createSlice({
         confirmingStatus: false,
         serviceCompleted: false,
         serviceConfirmed: false,
-        status: 'idle',
-        serviceStatus: 'idle',
-        confirmStatus: 'idle',
+        status: "idle",
+        serviceStatus: "idle",
+        confirmStatus: "idle",
     },
     reducers: {
         setStatus: (state, action) => {
@@ -63,7 +65,7 @@ const dataSlice = createSlice({
             state.booking = action.payload;
         },
         setServiceStatusDash: (state, action) => {
-            state.serviceStatus =  action.payload;
+            state.serviceStatus = action.payload;
         },
         setConfirmStatusDash: (state, action) => {
             state.confirmStatus = action.payload;
@@ -82,7 +84,8 @@ const dataSlice = createSlice({
             })
             .addCase(getDashboardData.fulfilled, (state, action) => {
                 state.loading = false;
-                const { status, enquiries, bookingsCount, bookings } = action.payload;
+                const { status, enquiries, bookingsCount, bookings } =
+                    action.payload;
                 state.status = status;
                 state.enquiries = enquiries;
                 state.bookingsCount = bookingsCount;
@@ -90,45 +93,45 @@ const dataSlice = createSlice({
             })
             .addCase(getDashboardData.rejected, (state) => {
                 state.loading = false;
-                state.status = 'error';
+                state.status = "error";
             })
 
             .addCase(completeService.pending, (state) => {
-                state.completingService = true
+                state.completingService = true;
             })
             .addCase(completeService.fulfilled, (state, action) => {
-                state.completingService = false
+                state.completingService = false;
                 const { status, booking } = action.payload;
                 state.serviceStatus = status;
                 state.booking = booking;
             })
             .addCase(completeService.rejected, (state, action) => {
-                state.completingService = false
-                state.serviceStatus = action.payload.status
+                state.completingService = false;
+                state.serviceStatus = action.payload.status;
             })
 
             .addCase(confirmService.pending, (state) => {
-                state.confirmingService = true
+                state.confirmingService = true;
             })
             .addCase(confirmService.fulfilled, (state, action) => {
-                state.confirmingService = false
+                state.confirmingService = false;
                 const { status, booking } = action.payload;
                 state.confirmStatus = status;
                 state.booking = booking;
             })
             .addCase(confirmService.rejected, (state, action) => {
-                state.confirmingService = false
-                state.confirmStatus = action.payload.status
-            })
-    }
-})
+                state.confirmingService = false;
+                state.confirmStatus = action.payload.status;
+            });
+    },
+});
 
 export const {
     setStatus,
     setBookingDash,
     setServiceStatusDash,
     setServiceCompletedDash,
-    setServiceConfirmedDash, 
-} = dataSlice.actions
+    setServiceConfirmedDash,
+} = dataSlice.actions;
 
-export default dataSlice.reducer
+export default dataSlice.reducer;

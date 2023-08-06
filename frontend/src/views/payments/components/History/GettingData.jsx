@@ -1,4 +1,4 @@
-import { Card, Skeleton } from "components/ui"
+import { Card, Skeleton } from "@/components/ui";
 
 const GettingData = () => {
     return (
@@ -54,6 +54,6 @@ const GettingData = () => {
                 </div>
             </Card>
         </div>
-    )
-}
-export default GettingData
+    );
+};
+export default GettingData;

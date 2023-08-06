@@ -1,12 +1,11 @@
+import appConfig from "@/configs/app.config";
+import { REQUEST_HEADER_AUTH_KEY, TOKEN_TYPE } from "@/constants/api.constant";
+import { PERSIST_STORE_NAME } from "@/constants/app.constant";
+import store from "@/store";
+import { onSignOutSuccess } from "@/store/auth/sessionSlice";
+import { initialState, setUser } from "@/store/auth/userSlice";
+import deepParseJson from "@/utils/deepParseJson";
 import axios from "axios";
-import appConfig from "configs/app.config";
-import { TOKEN_TYPE, REQUEST_HEADER_AUTH_KEY } from "constants/api.constant";
-import { PERSIST_STORE_NAME } from "constants/app.constant";
-import deepParseJson from "utils/deepParseJson";
-import store from "../store";
-import { onSignOutSuccess } from "../store/auth/sessionSlice";
-import { get } from "idb-keyval";
-import { initialState, setUser } from "store/auth/userSlice";
 
 const unauthorizedCode = [401];
 
@@ -16,30 +15,9 @@ const BaseService = axios.create({
     headers: {
         // "Accept": "application/json",
         "Content-Type": "multipart/form-data",
-        // "Authorization": "Bearer 24|E8P8HEq3AP4ksxChyQZqtSXaNFUHnbKOOCJoylUk"
     },
 });
 
-// get(PERSIST_STORE_NAME).then((val) => {
-//     BaseService.interceptors.request.use(
-//         (config) => {
-//             const persistData = deepParseJson(val);
-
-//             const accessToken = persistData.auth.session.token;
-
-//             if (accessToken) {
-//                 config.headers[
-//                     REQUEST_HEADER_AUTH_KEY
-//                 ] = `${TOKEN_TYPE}${accessToken}`;
-//             }
-
-//             return config;
-//         },
-//         (error) => {
-//             return Promise.reject(error);
-//         }
-//     );
-// }).catch((error) => console.log(error));
 
 BaseService.interceptors.request.use(
     (config) => {

@@ -11,7 +11,7 @@
     @apply !top-2 !h-1 !rounded-full
 }
 .custom_slider_track-1 {
-    @apply !bg-gray-200 dark:!bg-gray-500
+    @apply !bg-gray-200
 }
 .custom_slider_thumb {
     @apply cursor-pointer w-6 h-6 p-1 rounded-full outline-none hover:!shadow-sm !text-xs !text-white flex items-center justify-center

@@ -1,4 +1,12 @@
-import { Button, FormContainer, FormItem, Input, Notification, Select, toast } from "components/ui";
+import {
+    Button,
+    FormContainer,
+    FormItem,
+    Input,
+    Notification,
+    Select,
+    toast,
+} from "@/components/ui";
 import { Field, Form, Formik } from "formik";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,16 +18,20 @@ import Thursday from "./thursday";
 import Friday from "./friday";
 import Saturday from "./saturday";
 import Sunday from "./sunday";
-import { FormNumericInput, Loading, RichTextEditor } from "components/shared";
-import { createService, getSubCategories, setServiceStatus } from "../store/dataSlice";
+import { FormNumericInput, Loading, RichTextEditor } from "@/components/shared";
+import {
+    createService,
+    getSubCategories,
+    setServiceStatus,
+} from "../store/dataSlice";
 import { useNavigate } from "react-router-dom";
-import { getUser } from "store/auth/userSlice";
+import { getUser } from "@/store/auth/userSlice";
 
 const ServiceForm = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { verifiedPhone } = useSelector((state) => state.auth.user)
+    const { verifiedPhone } = useSelector((state) => state.auth.user);
 
     const {
         loadingCategories,
@@ -28,9 +40,9 @@ const ServiceForm = () => {
         subCategories,
         creatingService,
         serviceStatus,
-    } = useSelector((state) => state.service.data)
+    } = useSelector((state) => state.service.data);
 
-    const { 
+    const {
         mondayValue,
         mondayValue2,
         tuesdayValue,
@@ -45,15 +57,21 @@ const ServiceForm = () => {
         fridayValue2,
         saturdayValue2,
         sundayValue2,
-    } = useSelector((state) => state.service.state)
+    } = useSelector((state) => state.service.state);
 
     const validationSchema = Yup.object().shape({
-        title: Yup.string().required("Please enter the title of your service or business"),
+        title: Yup.string().required(
+            "Please enter the title of your service or business"
+        ),
         category: Yup.string().required("Please select a category"),
         subcategory: Yup.string().required("Please select a sub category"),
-        description: Yup.string().required("Please write a brief description of your service"),
-        startingPrice: Yup.string().required("Please enter a minimum price for your service"),
-    })
+        description: Yup.string().required(
+            "Please write a brief description of your service"
+        ),
+        startingPrice: Yup.string().required(
+            "Please enter a minimum price for your service"
+        ),
+    });
 
     const initialValues = {
         title: "",
@@ -61,18 +79,19 @@ const ServiceForm = () => {
         subcategory: "",
         description: "",
         startingPrice: "",
-    }
+    };
 
     const categoryOptions = categories?.map((item) => {
-        return { label: item.name, value: item.id }
-    })
+        return { label: item.name, value: item.id };
+    });
 
     const subCategoryOptions = subCategories?.map((item) => {
-        return { label: item.name, value: item.id }
-    })
+        return { label: item.name, value: item.id };
+    });
 
     const onSubmit = (values) => {
-        const { title, category, subcategory, description, startingPrice } = values
+        const { title, category, subcategory, description, startingPrice } =
+            values;
 
         const data = {
             monday1: mondayValue,
@@ -93,21 +112,27 @@ const ServiceForm = () => {
             subcategory,
             title,
             description,
-            starting_price: startingPrice
-        }
+            starting_price: startingPrice,
+        };
 
-        dispatch(createService(data))
-    }
+        dispatch(createService(data));
+    };
 
     useEffect(() => {
-        const popNotification = (keyword) => {
+        const popNotification = () => {
             toast.push(
                 <Notification
-                    title={`${serviceStatus === "success" ? "Success" : "Error"}`}
-                    type={`${serviceStatus === "success" ? "success" : "danger"}`}
+                    title={`${
+                        serviceStatus === "success" ? "Success" : "Error"
+                    }`}
+                    type={`${
+                        serviceStatus === "success" ? "success" : "danger"
+                    }`}
                     duration={5000}
                 >
-                    {serviceStatus === "success" ? "Service added successfully!" : "Looks like something went wrong, please try again."}
+                    {serviceStatus === "success"
+                        ? "Service added successfully!"
+                        : "Looks like something went wrong, please try again."}
                 </Notification>,
                 {
                     placement: "top-center",
@@ -116,34 +141,34 @@ const ServiceForm = () => {
         };
 
         if (serviceStatus !== "idle") {
-            popNotification()
+            popNotification();
         }
 
         setTimeout(() => {
             if (serviceStatus === "success" && verifiedPhone) {
-                dispatch(getUser())
-                navigate('/home')
+                dispatch(getUser());
+                navigate("/home");
             } else if (serviceStatus === "success" && !verifiedPhone) {
-                dispatch(getUser())
-                navigate('/verify')
+                dispatch(getUser());
+                navigate("/verify");
             }
-        }, 2000)
+        }, 2000);
 
         if (serviceStatus === "success" || serviceStatus === "error") {
-            dispatch(setServiceStatus("idle"))
+            dispatch(setServiceStatus("idle"));
         }
-    }, [dispatch, navigate, serviceStatus, verifiedPhone])
+    }, [dispatch, navigate, serviceStatus, verifiedPhone]);
 
     return (
         <div className="mt-8">
             <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
-                onSubmit={(values, { resetForm, setSubmitting }) => {
+                onSubmit={(values, { setSubmitting }) => {
                     onSubmit(values, setSubmitting);
                 }}
             >
-                {({ isSubmitting, touched, errors, values, setFieldValue }) => {
+                {({ touched, errors, values }) => {
                     console.log(values);
                     return (
                         <Form>
@@ -163,7 +188,9 @@ const ServiceForm = () => {
                                 </FormItem>
 
                                 <div className="mt-8">
-                                    <p className="font-bold">Set Working Hours</p>
+                                    <p className="font-bold">
+                                        Set Working Hours
+                                    </p>
 
                                     <Monday />
                                     <Tuesday />
@@ -178,8 +205,7 @@ const ServiceForm = () => {
                                     <FormItem
                                         label=""
                                         invalid={
-                                            errors.category &&
-                                            touched.category
+                                            errors.category && touched.category
                                         }
                                         className="w-full"
                                         errorMessage={errors.category}
@@ -196,9 +222,13 @@ const ServiceForm = () => {
                                                     field={field}
                                                     form={form}
                                                     className="w-full"
-                                                    isLoading={loadingCategories}
-                                                    onInputChange={(inputValue) => {
-                                                        console.log(inputValue); 
+                                                    isLoading={
+                                                        loadingCategories
+                                                    }
+                                                    onInputChange={(
+                                                        inputValue
+                                                    ) => {
+                                                        console.log(inputValue);
                                                     }}
                                                     options={categoryOptions}
                                                     // defaultValue={categoryOptions[0]}
@@ -206,9 +236,20 @@ const ServiceForm = () => {
                                                         categoryOptions?.value
                                                     }
                                                     onChange={(category) => {
-                                                        form.setFieldValue(field.name, category.value)
-                                                        dispatch(getSubCategories({ category_id: category.value }))
-                                                        form.setFieldValue('subcategory', '')
+                                                        form.setFieldValue(
+                                                            field.name,
+                                                            category.value
+                                                        );
+                                                        dispatch(
+                                                            getSubCategories({
+                                                                category_id:
+                                                                    category.value,
+                                                            })
+                                                        );
+                                                        form.setFieldValue(
+                                                            "subcategory",
+                                                            ""
+                                                        );
                                                     }}
                                                 />
                                             )}
@@ -230,10 +271,13 @@ const ServiceForm = () => {
                                             className="w-full"
                                             autoComplete="off"
                                         >
-                                            {({ field, form }) => (
+                                            {({ field, form }) =>
                                                 loadingSubCategories ? (
                                                     <div className="border-2 h-11 rounded-md">
-                                                        <Loading size={30} loading={true} />
+                                                        <Loading
+                                                            size={30}
+                                                            loading={true}
+                                                        />
                                                     </div>
                                                 ) : (
                                                     <Select
@@ -241,90 +285,116 @@ const ServiceForm = () => {
                                                         field={field}
                                                         form={form}
                                                         className="w-full"
-                                                        isLoading={loadingSubCategories}
-                                                        onInputChange={(inputValue) => {
-                                                            console.log(inputValue);
+                                                        isLoading={
+                                                            loadingSubCategories
+                                                        }
+                                                        onInputChange={(
+                                                            inputValue
+                                                        ) => {
+                                                            console.log(
+                                                                inputValue
+                                                            );
                                                         }}
-                                                        options={subCategoryOptions}
+                                                        options={
+                                                            subCategoryOptions
+                                                        }
                                                         // defaultValue={subCategoryOptions[0]}
                                                         value={
                                                             subCategoryOptions?.value
                                                         }
-                                                        onChange={(category) => {
-                                                            form.setFieldValue(field.name, category.value)
+                                                        onChange={(
+                                                            category
+                                                        ) => {
+                                                            form.setFieldValue(
+                                                                field.name,
+                                                                category.value
+                                                            );
                                                         }}
                                                     />
                                                 )
-                                            )}
+                                            }
                                         </Field>
                                     </FormItem>
-
                                 </div>
-                                    <FormItem
-                                        label={
-                                            <p className="text-gray-400">
-                                                Describe the nature of your services
-                                            </p>
-                                        }
-                                        labelClass="!justify-start"
-                                        invalid={errors.description && touched.description}
-                                        errorMessage={errors.description}
-                                    >
-                                        <Field name="description">
+                                <FormItem
+                                    label={
+                                        <p className="text-gray-400">
+                                            Describe the nature of your services
+                                        </p>
+                                    }
+                                    labelClass="!justify-start"
+                                    invalid={
+                                        errors.description &&
+                                        touched.description
+                                    }
+                                    errorMessage={errors.description}
+                                >
+                                    <Field name="description">
                                         {({ field, form }) => (
                                             <RichTextEditor
                                                 value={field.value}
                                                 onChange={(val) =>
-                                                    form.setFieldValue(field.name, val)
+                                                    form.setFieldValue(
+                                                        field.name,
+                                                        val
+                                                    )
                                                 }
                                             />
                                         )}
-                                        </Field>
-                                    </FormItem>
+                                    </Field>
+                                </FormItem>
 
-                                    <FormItem
-                                        label=""
-                                        invalid={errors.startingPrice && touched.startingPrice}
-                                        errorMessage={errors.startingPrice}
+                                <FormItem
+                                    label=""
+                                    invalid={
+                                        errors.startingPrice &&
+                                        touched.startingPrice
+                                    }
+                                    errorMessage={errors.startingPrice}
+                                >
+                                    <Field name="startingPrice">
+                                        {({ field, form }) => {
+                                            return (
+                                                <FormNumericInput
+                                                    thousandSeparator={true}
+                                                    form={form}
+                                                    field={field}
+                                                    placeholder="Service Starting Price"
+                                                    decimalScale={2}
+                                                    onValueChange={(e) => {
+                                                        form.setFieldValue(
+                                                            field.name,
+                                                            e.floatValue
+                                                        );
+                                                    }}
+                                                    value={field.value}
+                                                    inputPrefix={
+                                                        <span className="font-semibold">
+                                                            ₦
+                                                        </span>
+                                                    }
+                                                />
+                                            );
+                                        }}
+                                    </Field>
+                                </FormItem>
+
+                                <div className="mt-8">
+                                    <Button
+                                        block
+                                        variant="solid"
+                                        type="submit"
+                                        loading={creatingService}
                                     >
-                                        <Field name="startingPrice">
-                                            {({ field, form }) => {
-                                                return (
-                                                    <FormNumericInput
-                                                        thousandSeparator={true}
-                                                        form={form}
-                                                        field={field}
-                                                        placeholder="Service Starting Price"
-                                                        decimalScale={2}
-                                                        onValueChange={(e) => {
-                                                            form.setFieldValue(field.name, e.floatValue);
-                                                        }}
-                                                        value={field.value}
-                                                        inputPrefix={
-                                                            <span className="font-semibold">₦</span>
-                                                        }
-                                                    />
-                                                );
-                                            }}
-                                        </Field>
-                                    </FormItem>
-
-                                    <div className="mt-8">
-                                        <Button
-                                            block
-                                            variant="solid"
-                                            type="submit"
-                                            loading={creatingService}
-                                        >
-                                            Finish
-                                        </Button>
-                                    </div>
+                                        Finish
+                                    </Button>
+                                </div>
                             </FormContainer>
                         </Form>
-                    )
+                    );
                 }}
             </Formik>
         </div>
-    )
-}
-export default ServiceForm
+    );
+};
+export default ServiceForm;

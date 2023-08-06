@@ -1,10 +1,10 @@
-import appConfig from "configs/app.config"
 import { useDispatch, useSelector } from "react-redux"
-import Bookings from "views/requests/components/Bookings"
 import { setBookingID, toggleCompleteServiceDialog } from "../store/stateSlice";
 import UnansweredChats from "./UnansweredChats";
 import Stats from "./Stats";
-import BillsComponent from "views/payments/components/Bills/BillsComponent";
+import appConfig from "@/configs/app.config";
+import Bookings from "@/views/requests/components/Bookings";
+import BillsComponent from "@/views/payments/components/Bills/BillsComponent";
 
 const DashboardFeed = () => {
     const dispatch = useDispatch();

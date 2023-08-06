@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import useTimeOutMessage from "../../../../utils/hooks/useTimeOutMessage";
@@ -11,7 +12,7 @@ import {
 import { PasswordInput } from "../../../../components/shared";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../../../utils/hooks/useAuth";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useEffect } from "react";
 
 const SignInForm = (props) => {

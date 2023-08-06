@@ -1,6 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { apiCompleteService, apiConfirmService } from "services/BookingService";
-import { apiGetRequestsData } from "services/RequestsService";
+import {
+    apiCompleteService,
+    apiConfirmService,
+} from "@/services/BookingService";
+import { apiGetRequestsData } from "@/services/RequestsService";
 
 export const getRequestsData = createAsyncThunk(
     "requests/data/getRequestsData",
@@ -52,8 +55,8 @@ const dataSlice = createSlice({
         bookings: [],
         enquiries: [],
         booking: {},
-        serviceStatus: 'idle',
-        confirmStatus: 'idle',
+        serviceStatus: "idle",
+        confirmStatus: "idle",
         status: "idle",
         completingService: false,
         confirmingStatus: false,
@@ -69,7 +72,7 @@ const dataSlice = createSlice({
             state.booking = action.payload;
         },
         setServiceStatus: (state, action) => {
-            state.serviceStatus =  action.payload;
+            state.serviceStatus = action.payload;
         },
         setConfirmStatus: (state, action) => {
             state.confirmStatus = action.payload;
@@ -99,41 +102,41 @@ const dataSlice = createSlice({
             })
 
             .addCase(completeService.pending, (state) => {
-                state.completingService = true
+                state.completingService = true;
             })
             .addCase(completeService.fulfilled, (state, action) => {
-                state.completingService = false
+                state.completingService = false;
                 const { status, booking } = action.payload;
                 state.serviceStatus = status;
                 state.booking = booking;
             })
             .addCase(completeService.rejected, (state, action) => {
-                state.completingService = false
-                state.serviceStatus = action.payload.status
+                state.completingService = false;
+                state.serviceStatus = action.payload.status;
             })
 
             .addCase(confirmService.pending, (state) => {
-                state.confirmingService = true
+                state.confirmingService = true;
             })
             .addCase(confirmService.fulfilled, (state, action) => {
-                state.confirmingService = false
+                state.confirmingService = false;
                 const { status, booking } = action.payload;
                 state.confirmStatus = status;
                 state.booking = booking;
             })
             .addCase(confirmService.rejected, (state, action) => {
-                state.confirmingService = false
-                state.confirmStatus = action.payload.status
-            })
+                state.confirmingService = false;
+                state.confirmStatus = action.payload.status;
+            });
     },
 });
 
-export const { 
+export const {
     setStatus,
     setBooking,
     setConfirmStatus,
     setServiceStatus,
     setServiceCompleted,
-    setServiceConfirmed, 
+    setServiceConfirmed,
 } = dataSlice.actions;
 export default dataSlice.reducer;

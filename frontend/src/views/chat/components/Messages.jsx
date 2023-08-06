@@ -16,17 +16,16 @@ import {
     Card,
     Dropdown,
     Image,
-} from "components/ui";
-import appConfig from "configs/app.config";
+} from "@/components/ui";
+import appConfig from "@/configs/app.config";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { BsReplyFill } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
-import { EllipsisButton } from "components/shared";
+import { EllipsisButton } from "@/components/shared";
 import { pdfjs } from "react-pdf";
-import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
-import 'react-pdf/dist/esm/Page/TextLayer.css';
+import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import "react-pdf/dist/esm/Page/TextLayer.css";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
-
 
 const Messages = ({ isOwner, sender, receiver }) => {
     const dispatch = useDispatch();
@@ -43,7 +42,6 @@ const Messages = ({ isOwner, sender, receiver }) => {
     // const provider = profile?.service ? true : false
     console.log(numPages);
     console.log(pageNumber);
-
 
     // const onDocumentLoadSuccess = ({ numPages }) => {
     //     setNumPages(numPages);

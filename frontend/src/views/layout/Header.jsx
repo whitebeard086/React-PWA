@@ -1,44 +1,15 @@
+/* eslint-disable react/prop-types */
 import classNames from "classnames"
-import { Avatar, Button, Dropdown, ScrollBar, Tooltip } from "components/ui"
-import { HiOutlineLogout, HiOutlineMailOpen, HiOutlineUser } from "react-icons/hi"
+import { Button, Dropdown, ScrollBar, Tooltip } from "@/components/ui"
+import { HiOutlineMailOpen } from "react-icons/hi"
 import { IoMdNotificationsOutline } from "react-icons/io"
 import { useSelector } from "react-redux"
-import { Link } from "react-router-dom"
-import useAuth from "utils/hooks/useAuth"
-import useResponsive from "utils/hooks/useResponsive"
 
 const notificationHeight = 'h-72'
 
-const Header = ({ className }) => {
-    const { handleSignOut } = useAuth();
-
-    const { larger } = useResponsive();
+const Header = () => {
 
     const { profile } = useSelector((state) => state.auth.user)
-
-    const loading = false
-
-    const dropdownItemList = [
-        {
-            label: "Profile",
-            icon: ""
-        }
-    ]
-
-    const UserAvatar = (
-		<div className={classNames(className, 'flex items-center flex-row gap-2 cursor-pointer')}>
-			{loading ? (
-				<Avatar size={35} shape="circle" icon={<HiOutlineUser />} />
-			) : (
-				<Avatar
-					size={35}
-					shape="circle"
-					icon={!profile?.image ? <HiOutlineUser /> : null}
-					// src={profile?.image ? `${image}/${profile.image}` : null}
-				/>
-			)}
-		</div>
-	);
 
     const NotificationToggle = () => {
         return (

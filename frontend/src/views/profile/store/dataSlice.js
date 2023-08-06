@@ -1,5 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { apiGetProvider, apiUpdateProfileView, apiUploadBanner } from "services/AuthService";
+import {
+    apiGetProvider,
+    apiUpdateProfileView,
+    apiUploadBanner,
+} from "@/services/AuthService";
 
 export const uploadBanner = createAsyncThunk(
     "profile/data/uploadBanner",
@@ -38,22 +42,22 @@ export const updateProfileView = createAsyncThunk(
 );
 
 const dataSlice = createSlice({
-    name: 'profile/data',
+    name: "profile/data",
     initialState: {
-        uploadStatus: 'idle',
+        uploadStatus: "idle",
         uploading: false,
         gettingProvider: false,
         provider: {},
         service: {},
         workdays: {},
-        providerStatus: 'idle',
+        providerStatus: "idle",
     },
     reducers: {
         setUploadStatus: (state, action) => {
-            state.uploadStatus = action.payload
+            state.uploadStatus = action.payload;
         },
         setProviderStatus: (state, action) => {
-            state.providerStatus = action.payload
+            state.providerStatus = action.payload;
         },
     },
     extraReducers: (builder) => {
@@ -63,11 +67,11 @@ const dataSlice = createSlice({
             })
             .addCase(uploadBanner.fulfilled, (state, action) => {
                 state.uploading = false;
-                state.uploadStatus = action.payload.status
+                state.uploadStatus = action.payload.status;
             })
             .addCase(uploadBanner.rejected, (state) => {
                 state.uploading = false;
-                state.uploadStatus = 'error'
+                state.uploadStatus = "error";
             })
 
             .addCase(getProvider.pending, (state) => {
@@ -82,14 +86,11 @@ const dataSlice = createSlice({
             })
             .addCase(getProvider.rejected, (state) => {
                 state.gettingProvider = false;
-                state.providerStatus = 'error';
-            })
-    }
-})
+                state.providerStatus = "error";
+            });
+    },
+});
 
-export const {
-    setUploadStatus,
-    setProviderStatus,
-} = dataSlice.actions
+export const { setUploadStatus, setProviderStatus } = dataSlice.actions;
 
-export default dataSlice.reducer
+export default dataSlice.reducer;

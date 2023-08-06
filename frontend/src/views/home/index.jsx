@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import reducer from "./store";
-import { injectReducer } from "store/index";
 import { getHomeData } from "./store/dataSlice";
 import GettingHomeFeed from "./components/GettingHomeFeed";
 import HomeFeed from "./components/HomeFeed";
+import { injectReducer } from "@/store";
 
 injectReducer("home", reducer);
 

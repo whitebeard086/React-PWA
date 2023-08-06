@@ -1,20 +1,19 @@
-import { Loading } from "components/shared";
-import { Button, FormContainer, FormItem, Input, Select } from "components/ui";
+/* eslint-disable react/prop-types */
+import { Button, FormContainer, FormItem, Input, Select } from "@/components/ui";
 import { Field, Form, Formik } from "formik";
-import { HiPhone } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
-import { setPhoneStatus, updatePhone } from "../store/dataSlice";
+import { updatePhone } from "../store/dataSlice";
 import { useEffect } from "react";
-import { getUser } from "store/auth/userSlice";
+import { Loading } from "@/components/shared";
+import { getUser } from "@/store/auth/userSlice";
 
 const PhoneForm = ({ onNext }) => {
     const dispatch = useDispatch()
 
-    const { country } = useSelector((state) => state.verify.state)
     const { countries, loading, phoneStatus, settingPhone, message } = useSelector((state) => state.verify.data) 
 
-    const handleNext = (values, setSubmitting) => {
+    const handleNext = (values) => {
         const {
             code,
             phone,
@@ -68,7 +67,7 @@ const PhoneForm = ({ onNext }) => {
                     handleNext(values, setSubmitting)
                 }}
             >
-                {({ errors, touched, values, isSubmitting }) => {
+                {({ errors, touched, values }) => {
                     const validPhone = isValidPhone(values.phone)
                     console.log(values.code + values.phone);
                     return (

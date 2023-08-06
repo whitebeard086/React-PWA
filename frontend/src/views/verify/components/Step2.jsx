@@ -2,14 +2,15 @@ import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom";
 import OtpInput from "./OtpInput";
 import { useEffect, useState } from "react";
-import { Alert, Button, Notification, toast } from "components/ui";
+import { Alert, Button, Notification, toast } from "@/components/ui";
 import Countdown from "react-countdown";
-import { assignVirtualAccount, resetStatus, setTimer, updatePhone, verifyPhone } from "../store/dataSlice";
-import useTimeOutMessage from "utils/hooks/useTimeOutMessage";
-import { getUser } from "store/auth/userSlice";
-import { Loading } from "components/shared";
+import { setTimer, updatePhone, verifyPhone } from "../store/dataSlice";
+import { Loading } from "@/components/shared";
 import { setResent } from "../store/stateSlice";
+import { getUser } from "@/store/auth/userSlice";
+import useTimeOutMessage from "@/utils/hooks/useTimeOutMessage";
 
+// eslint-disable-next-line react/prop-types
 const Step2 = ({ onBack }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -20,10 +21,9 @@ const Step2 = ({ onBack }) => {
     const { profile } = useSelector((state) => state.auth.user)
     const { resent } = useSelector((state) => state.verify.state)
     const { status, verifyMessage, verifying, resending, timer } = useSelector((state) => state.verify.data)
-    const { token } = useSelector((state) => state.auth.session)
 
     useEffect(() => {
-        const popNotification = (keyword) => {
+        const popNotification = () => {
             toast.push(
                 <Notification
                     title={`${status === "success" ? "Success" : "Error"}`}
@@ -37,26 +37,12 @@ const Step2 = ({ onBack }) => {
                 }
             );
         };
-
-        // if (status === 'error') {
-        //     setMessage(verifyMessage)
-        //     popNotification()
-        //     setOtp("")
-        // }
             
         if (status === 'success' || status === 'error') {
             setMessage(verifyMessage)
             setOtp("")
             popNotification()
             dispatch(getUser())
-
-            // setTimeout(() => {
-            //     dispatch(resetStatus())
-
-            //     if (status === 'success') {
-            //         navigate('/home')
-            //     }
-            // }, 1200)
         }
     }, [dispatch, navigate, setMessage, status, verifyMessage])
 
@@ -89,7 +75,7 @@ const Step2 = ({ onBack }) => {
         onBack()
     }
 
-    const renderer = ({ hours, minutes, seconds, completed }) => {
+    const renderer = ({ minutes, seconds, completed }) => {
         if (completed) {
             return (
                 <span onClick={() => onResendOtp()} className="font-bold text-gray-700 underline cursor-pointer">

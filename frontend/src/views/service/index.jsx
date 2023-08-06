@@ -1,6 +1,6 @@
-import { Container } from "components/shared";
+import { Container } from "@/components/shared";
 import reducer from "./store";
-import { injectReducer } from "store/index";
+import { injectReducer } from "@/store";
 import ServiceForm from "./components/ServiceForm";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";

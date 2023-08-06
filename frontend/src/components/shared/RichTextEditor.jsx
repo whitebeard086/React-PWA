@@ -1,4 +1,5 @@
-import React, { forwardRef } from 'react'
+/* eslint-disable react/display-name */
+import { forwardRef } from 'react'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 

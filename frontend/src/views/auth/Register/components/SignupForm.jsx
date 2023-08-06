@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
@@ -29,13 +30,9 @@ import {
 } from "../../../../components/ui";
 import { Field, Form, Formik } from "formik";
 import classNames from "classnames";
-import useAuth from "utils/hooks/useAuth";
-import { Loading, PasswordInput } from "components/shared";
-import {
-    checkEmail,
-    checkUser,
-    setSignupData,
-} from "views/auth/store/dataSlice";
+import useAuth from "@/utils/hooks/useAuth";
+import { Loading, PasswordInput } from "@/components/shared";
+import { checkEmail, checkUser, setSignupData } from "../../store/dataSlice";
 
 const SignupForm = (props) => {
     const { disableSubmit = false, className, signInUrl = "/login" } = props;
@@ -79,7 +76,6 @@ const SignupForm = (props) => {
         emailAvail,
         usernameAvail,
         profileTypes,
-        signupData,
         gettingProfileTypes,
     } = useSelector((state) => state.authentication.data);
     const {
@@ -199,7 +195,7 @@ const SignupForm = (props) => {
         setSubmitting(false);
     };
 
-    const onAgreeTerms = (value, e) => {
+    const onAgreeTerms = () => {
         dispatch(toggleTermsDialog(true));
     };
 

@@ -1,15 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
-import NewCategory from "./components/NewCategory";
 import User from "./components/User";
 import reducer from "./store";
-import { injectReducer } from "store/index";
+import { injectReducer } from "@/store";
 import { Link } from "react-router-dom";
 import { HiOutlineLogout, HiOutlineUser } from "react-icons/hi";
-import useAuth from "utils/hooks/useAuth";
-import UpdateCategory from "./components/UpdateCategory";
 import { useEffect } from "react";
 import { getBrowseData } from "./store/dataSlice";
-import { setEnabledNotifications } from "store/auth/userSlice";
+import useAuth from "@/utils/hooks/useAuth";
+import { setEnabledNotifications } from "@/store/auth/userSlice";
 
 injectReducer("settings", reducer);
 
@@ -22,59 +20,57 @@ const Settings = () => {
 
     useEffect(() => {
         dispatch(getBrowseData());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    
-    const { userType, enabledNotifications, profile } = useSelector((state) => state.auth.user);
+
+    const { userType, enabledNotifications, profile } = useSelector(
+        (state) => state.auth.user
+    );
 
     OneSignal.push(() => {
-        OneSignal.init(
-            {
-                appId: process.env.REACT_APP_ONESIGNAL_APP_ID,
-                safari_web_id: process.env.REACT_APP_ONESIGNAL_SAFARI_WEB_ID,
-                allowLocalhostAsSecureOrigin: true,
-                autoResubscribe: true,
-                promptOptions: {
-                    customlink: {
-                        enabled: true,
-                        style: "button",
-                        size: "small",
-                        color: {
-                            button: "",
-                            text: "#FFFFFF",
-                        },
-                        text: {
-                            subscribe:
-                                "Subscribe to push notifications",
-                            unsubscribe:
-                                "Unsubscribe from push notifications",
-                        },
-                        unsubscribeEnabled: true,
+        OneSignal.init({
+            appId: import.meta.env.VITE_ONESIGNAL_APP_ID,
+            safari_web_id: import.meta.env.VITE_ONESIGNAL_SAFARI_WEB_ID,
+            allowLocalhostAsSecureOrigin: true,
+            autoResubscribe: true,
+            promptOptions: {
+                customlink: {
+                    enabled: true,
+                    style: "button",
+                    size: "small",
+                    color: {
+                        button: "",
+                        text: "#FFFFFF",
                     },
+                    text: {
+                        subscribe: "Subscribe to push notifications",
+                        unsubscribe: "Unsubscribe from push notifications",
+                    },
+                    unsubscribeEnabled: true,
                 },
             },
-        );
+        });
     });
 
     const handleSubscriptionStatus = () => {
-        OneSignal.push(function() {
+        OneSignal.push(function () {
             // OneSignal.setExternalUserId(profile?.id);
-            OneSignal.isPushNotificationsEnabled(function(isEnabled) {
+            OneSignal.isPushNotificationsEnabled(function (isEnabled) {
                 if (isEnabled) {
-                  console.log("Push notifications are enabled!");
-                  OneSignal.setExternalUserId(profile?.id);
-                  if (!enabledNotifications) {
-                      dispatch(setEnabledNotifications(true));
-                  }
-                }else {
-                  console.log("Push notifications are not enabled yet."); 
-                  if(enabledNotifications){
-                      dispatch(setEnabledNotifications(false));
-                  }
+                    console.log("Push notifications are enabled!");
+                    OneSignal.setExternalUserId(profile?.id);
+                    if (!enabledNotifications) {
+                        dispatch(setEnabledNotifications(true));
+                    }
+                } else {
+                    console.log("Push notifications are not enabled yet.");
+                    if (enabledNotifications) {
+                        dispatch(setEnabledNotifications(false));
+                    }
                 }
             });
         });
-    }
+    };
 
     return (
         <div className="bg-white min-h-[80vh]">
@@ -100,7 +96,10 @@ const Settings = () => {
                     )}
                     <hr className="" />
 
-                    <div onClick={handleSubscriptionStatus} className="onesignal-customlink-container"></div>
+                    <div
+                        onClick={handleSubscriptionStatus}
+                        className="onesignal-customlink-container"
+                    ></div>
 
                     <div
                         onClick={handleSignOut}

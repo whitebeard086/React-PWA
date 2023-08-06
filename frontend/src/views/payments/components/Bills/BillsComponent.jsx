@@ -1,4 +1,4 @@
-import { Card } from "components/ui"
+import { Card } from "@/components/ui"
 import { BiCameraMovie, BiUserVoice } from "react-icons/bi"
 import { MdMobiledataOff, MdOutlineElectricalServices, MdOutlineFlightTakeoff, MdOutlineGames, MdOutlineHotel, MdOutlineSignalCellularConnectedNoInternet0Bar } from "react-icons/md"
 

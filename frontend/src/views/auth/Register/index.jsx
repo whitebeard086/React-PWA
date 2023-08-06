@@ -1,26 +1,26 @@
-import { useNavigate } from "react-router-dom";
-import { Container, Loading } from "../../../components/shared";
+// import { useNavigate } from "react-router-dom";
+import { Container } from "../../../components/shared";
 import { injectReducer } from "../../../store";
 import reducer from "../store";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import SignupForm from "./components/SignupForm";
 import TermsDialog from "./components/TermsDialog";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { getProfileTypes } from "../store/dataSlice";
 
 injectReducer('authentication', reducer);
 
 const Register = () => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(getProfileTypes())
     }, [dispatch])
 
-    const goBack = () => {
-        navigate(-1);
-    }
+    // const goBack = () => {
+    //     navigate(-1);
+    // }
     
     return (
         <Container className="max-w-xl bg-white p-6">

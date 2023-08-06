@@ -1,6 +1,10 @@
-import { apiCreateService, apiGetCategories, apiGetSubCategories, apiUpdateService } from "services/AuthService";
-
-const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+    apiCreateService,
+    apiGetCategories,
+    apiGetSubCategories,
+    apiUpdateService,
+} from "@/services/AuthService";
 
 export const getCategories = createAsyncThunk(
     "service/data/getCategories",
@@ -51,21 +55,21 @@ export const updateService = createAsyncThunk(
 );
 
 const dataSlice = createSlice({
-    name: 'service/data',
+    name: "service/data",
     initialState: {
         creatingService: false,
         loadingCategories: false,
         loadingSubCategories: false,
         categories: [],
         subCategories: [],
-        countryStatus: 'idle',
-        subCategoryStatus: 'idle',
-        serviceStatus: 'idle',
+        countryStatus: "idle",
+        subCategoryStatus: "idle",
+        serviceStatus: "idle",
     },
     reducers: {
         setServiceStatus: (state, action) => {
-            state.serviceStatus = action.payload
-        }
+            state.serviceStatus = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -92,33 +96,31 @@ const dataSlice = createSlice({
             })
 
             .addCase(createService.pending, (state) => {
-                state.creatingService = true
+                state.creatingService = true;
             })
             .addCase(createService.fulfilled, (state) => {
-                state.creatingService = false
-                state.serviceStatus = 'success'
+                state.creatingService = false;
+                state.serviceStatus = "success";
             })
             .addCase(createService.rejected, (state) => {
-                state.creatingService = false
-                state.serviceStatus = 'error'
+                state.creatingService = false;
+                state.serviceStatus = "error";
             })
 
             .addCase(updateService.pending, (state) => {
-                state.creatingService = true
+                state.creatingService = true;
             })
             .addCase(updateService.fulfilled, (state) => {
-                state.creatingService = false
-                state.serviceStatus = 'success'
+                state.creatingService = false;
+                state.serviceStatus = "success";
             })
             .addCase(updateService.rejected, (state) => {
-                state.creatingService = false
-                state.serviceStatus = 'error'
-            })
-    }
-})
+                state.creatingService = false;
+                state.serviceStatus = "error";
+            });
+    },
+});
 
-export const {
-    setServiceStatus,
-} = dataSlice.actions;
+export const { setServiceStatus } = dataSlice.actions;
 
-export default dataSlice.reducer
+export default dataSlice.reducer;

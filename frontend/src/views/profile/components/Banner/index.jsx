@@ -1,21 +1,19 @@
-import { Button, Card, Upload } from "components/ui"
-import millify from "millify"
-import { AiFillStar } from "react-icons/ai"
-import { HiOutlineCloudUpload } from "react-icons/hi"
-import { useSelector } from "react-redux"
-import { formatNumber } from "utils"
-import UploadBanner from "./UploadBanner"
-import appConfig from "configs/app.config"
-import { Loading } from "components/shared"
+import { Card } from "@/components/ui";
+import millify from "millify";
+import { AiFillStar } from "react-icons/ai";
+import { useSelector } from "react-redux";
+import UploadBanner from "./UploadBanner";
+import { Loading } from "@/components/shared";
+import appConfig from "@/configs/app.config";
 
 const Banner = () => {
-    const { profile, gettingUser } = useSelector((state) => state.auth.user)
-    const { uploading } = useSelector((state) => state.profile.data)
+    const { profile, gettingUser } = useSelector((state) => state.auth.user);
+    const { uploading } = useSelector((state) => state.profile.data);
 
-    const { imagePath } = appConfig
+    const { imagePath } = appConfig;
 
     // const startingPrice = formatNumber(profile.service?.starting_price, 2)
-    const startingPrice = profile.service?.starting_price?.toLocaleString()
+    const startingPrice = profile.service?.starting_price?.toLocaleString();
 
     return (
         <div>
@@ -34,7 +32,11 @@ const Banner = () => {
                             </div>
                         )}
                         <UploadBanner />
-                        <img className="w-full rounded-2xl h-56 object-cover" src={`${imagePath}/${profile.service?.banner}`} alt={`${profile.service?.title} Banner`} />
+                        <img
+                            className="w-full rounded-2xl h-56 object-cover"
+                            src={`${imagePath}/${profile.service?.banner}`}
+                            alt={`${profile.service?.title} Banner`}
+                        />
                     </div>
                 )}
 
@@ -61,12 +63,14 @@ const Banner = () => {
                                 {/* <p className="text-gray-300 font-semibold">5 stars</p> */}
                             </div>
 
-                            <p className="text-gray-300 font-semibold">{millify(2300)} Orders</p>
+                            <p className="text-gray-300 font-semibold">
+                                {millify(2300)} Orders
+                            </p>
                         </div>
                     </Card>
                 </div>
             </div>
         </div>
-    )
-}
-export default Banner
+    );
+};
+export default Banner;

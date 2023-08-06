@@ -1,5 +1,5 @@
+import { apiPaymentsData, apiPaystackDeposit, apiUpdateTransaction, apiVerifyPaystackDeposit } from "@/services/PaymentService";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { apiPaymentsData, apiPaystackDeposit, apiUpdateTransaction, apiVerifyPaystackDeposit } from "services/PaymentService";
 
 export const paystackDeposit = createAsyncThunk(
     "payments/data/paystackDeposit",

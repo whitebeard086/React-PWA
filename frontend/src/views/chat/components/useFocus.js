@@ -1,4 +1,4 @@
-const { useRef } = require("react")
+import { useRef } from "react"
 
 const useFocus = () => {
     const htmlElRef = useRef(null)

@@ -10,6 +10,7 @@ const rootReducer = (asyncReducers) => (state, action) => {
         chat,
         ...asyncReducers,
     })
+
     return combinedReducer(state, action)
 }
   

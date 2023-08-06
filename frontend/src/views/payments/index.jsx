@@ -1,12 +1,11 @@
-import { injectReducer } from "store"
+import { injectReducer } from "@/store"
 import reducer from "./store"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
 import { paymentsData, setReceivedDeposit, setUpdateStatus } from "./store/dataSlice"
 import PaymentsHistory from "./components/History/PaymentsHistory"
-import BillsComponent from "./components/Bills/BillsComponent"
 import { toggleDepositDialog } from "./store/stateSlice"
-import { getUser } from "store/auth/userSlice"
+import { getUser } from "@/store/auth/userSlice"
 
 injectReducer('payments', reducer)
 

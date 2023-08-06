@@ -2,7 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import rootReducer from "./rootReducer";
-import createIdbStorage from '@piotr-cz/redux-persist-idb-storage'
 import { PERSIST_STORE_NAME } from "../constants/app.constant";
 
 const middlewares = [];
@@ -10,7 +9,6 @@ const middlewares = [];
 const persistConfig = {
     key: PERSIST_STORE_NAME,
     keyPrefix: "",
-    // storage: createIdbStorage({name: 'keyval-store', storeName: 'keyval'}),
     storage,
     whitelist: ["auth", "payments", "chat"],
     // serialize: false,

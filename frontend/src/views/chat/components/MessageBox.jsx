@@ -1,30 +1,30 @@
-import { EllipsisButton } from "components/shared";
-import { Dropdown, Notification, Upload, toast } from "components/ui";
-import { useDropdownMenuContext } from "components/ui/Dropdown/context/dropdownMenuContext";
+/* eslint-disable react/prop-types */
+import { EllipsisButton } from "@/components/shared";
+import { Dropdown, Notification, Upload, toast } from "@/components/ui";
 import { useState } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
 import { FaFileImage, FaFileInvoiceDollar } from "react-icons/fa";
 import { IoIosAddCircleOutline, IoIosSend } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
-import useCompressFile from "utils/hooks/useCompressFile";
 import TextareaAutosize from "react-textarea-autosize";
 import { setFile, setInvoice } from "../store/stateSlice";
 import { useEffect } from "react";
 import {
     sendMessage,
     sendNewMessageEmail,
-    sendOneSignalNotification,
     setMessageStatus,
-    setMessages,
 } from "../store/dataSlice";
 import useFocus from "./useFocus";
-import { sendPushNotification } from "utils/sendPushNotification";
-import appConfig from "configs/app.config";
+import { sendPushNotification } from "@/utils/sendPushNotification";
+import appConfig from "@/configs/app.config";
+import { useDropdownMenuContext } from "@/components/ui/Dropdown/context/dropdownMenuContext";
+import useCompressFile from "@/utils/hooks/useCompressFile";
 
 const MessageBox = ({ receiver, onCreateInvoice }) => {
     const dispatch = useDispatch();
     const { compressFile, compressedFile, resetCompressedFile } =
         useCompressFile();
+    // eslint-disable-next-line no-unused-vars
     const [avatarImg, setAvatarImg] = useState(null);
     const [message, setMessage] = useState("");
     const [inputRef, setInputFocus] = useFocus();
@@ -37,9 +37,6 @@ const MessageBox = ({ receiver, onCreateInvoice }) => {
     const { userType, profile, onlineUsers } = useSelector(
         (state) => state.auth.user
     );
-
-    window.OneSignal = window.OneSignal || [];
-    const OneSignal = window.OneSignal;
 
     const onFileUpload = (file) => {
         setAvatarImg(URL.createObjectURL(file[0]));
@@ -84,7 +81,7 @@ const MessageBox = ({ receiver, onCreateInvoice }) => {
         );
 
         dispatch(setFile({}));
-        setMessage("")
+        setMessage("");
         dispatch(setInvoice({}));
         resetCompressedFile();
     };
@@ -99,7 +96,6 @@ const MessageBox = ({ receiver, onCreateInvoice }) => {
             // OneSignal.push(function () {
             //     OneSignal.isPushNotificationsEnabled(function (isEnabled) {
             //         if (isEnabled) {
-                        
             //         } else {
             //             console.log("Push notifications are not enabled yet.");
             //         }
@@ -112,13 +108,14 @@ const MessageBox = ({ receiver, onCreateInvoice }) => {
     // Send message to the socket server
     useEffect(() => {
         if (messageStatus === "sent") {
-
-            dispatch(sendNewMessageEmail({
-                sender_id: profile?.id,
-                receiver_id: receiver?.id,
-            }))
+            dispatch(
+                sendNewMessageEmail({
+                    sender_id: profile?.id,
+                    receiver_id: receiver?.id,
+                })
+            );
             sendPushNotification({
-                app_id: process.env.REACT_APP_ONESIGNAL_APP_ID,
+                app_id: import.meta.env.VITE_ONESIGNAL_APP_ID,
                 channel_for_external_user_ids: "push",
                 include_external_user_ids: [`${receiver?.id}`],
                 url: `${appConfig.appURL}/requests`,
@@ -126,7 +123,7 @@ const MessageBox = ({ receiver, onCreateInvoice }) => {
                     en: `Hello ${receiver?.username}, you have a new message. ${profile?.username} is waiting for your reply.`,
                 },
                 content_available: true,
-            })
+            });
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

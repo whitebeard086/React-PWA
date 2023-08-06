@@ -1,12 +1,12 @@
-import { Card, Checkbox, Radio, Skeleton } from "components/ui"
-import { useState } from "react"
+import { Card, Checkbox, Radio, Skeleton } from "@/components/ui";
+import { useState } from "react";
 
 const GettingCategory = () => {
-    const [value, setValue] = useState('All')
+    const [value, setValue] = useState("All");
 
     const onChange = (val) => {
-        setValue(val)
-    }
+        setValue(val);
+    };
     return (
         <div className="flex flex-col gap-4">
             <div className="flex items-center gap-4 justify-between">
@@ -21,10 +21,29 @@ const GettingCategory = () => {
 
                 <div className="mt-4">
                     <div className="flex items-center">
-                        <Radio.Group className="w-full flex items-center justify-between" value={value} onChange={onChange}>
-                            <Radio customLabelClass="font-bold text-base" value={'All'}>All</Radio>
-                            <Radio customLabelClass="font-bold text-base" value={'Online Now'}>Online Now</Radio>
-                            <Radio customLabelClass="font-bold text-base" value={'Online 24hrs ago'}>Online 24hrs ago</Radio>
+                        <Radio.Group
+                            className="w-full flex items-center justify-between"
+                            value={value}
+                            onChange={onChange}
+                        >
+                            <Radio
+                                customLabelClass="font-bold text-base"
+                                value={"All"}
+                            >
+                                All
+                            </Radio>
+                            <Radio
+                                customLabelClass="font-bold text-base"
+                                value={"Online Now"}
+                            >
+                                Online Now
+                            </Radio>
+                            <Radio
+                                customLabelClass="font-bold text-base"
+                                value={"Online 24hrs ago"}
+                            >
+                                Online 24hrs ago
+                            </Radio>
                         </Radio.Group>
                     </div>
                 </div>
@@ -38,8 +57,16 @@ const GettingCategory = () => {
                                 </div>
                                 <div className="w-full">
                                     <Skeleton height="25px" width="70%" />
-                                    <Skeleton className="mt-8" height="25px" width="60%" />
-                                    <Skeleton className="mt-2" height="15px" width="60%" />
+                                    <Skeleton
+                                        className="mt-8"
+                                        height="25px"
+                                        width="60%"
+                                    />
+                                    <Skeleton
+                                        className="mt-2"
+                                        height="15px"
+                                        width="60%"
+                                    />
                                 </div>
                             </div>
                             <Skeleton height="15px" width="10%" />
@@ -53,8 +80,16 @@ const GettingCategory = () => {
                                 </div>
                                 <div className="w-full">
                                     <Skeleton height="25px" width="70%" />
-                                    <Skeleton className="mt-8" height="25px" width="60%" />
-                                    <Skeleton className="mt-2" height="15px" width="60%" />
+                                    <Skeleton
+                                        className="mt-8"
+                                        height="25px"
+                                        width="60%"
+                                    />
+                                    <Skeleton
+                                        className="mt-2"
+                                        height="15px"
+                                        width="60%"
+                                    />
                                 </div>
                             </div>
                             <Skeleton height="15px" width="10%" />
@@ -68,8 +103,16 @@ const GettingCategory = () => {
                                 </div>
                                 <div className="w-full">
                                     <Skeleton height="25px" width="70%" />
-                                    <Skeleton className="mt-8" height="25px" width="60%" />
-                                    <Skeleton className="mt-2" height="15px" width="60%" />
+                                    <Skeleton
+                                        className="mt-8"
+                                        height="25px"
+                                        width="60%"
+                                    />
+                                    <Skeleton
+                                        className="mt-2"
+                                        height="15px"
+                                        width="60%"
+                                    />
                                 </div>
                             </div>
                             <Skeleton height="15px" width="10%" />
@@ -78,6 +121,6 @@ const GettingCategory = () => {
                 </div>
             </div>
         </div>
-    )
-}
-export default GettingCategory
+    );
+};
+export default GettingCategory;

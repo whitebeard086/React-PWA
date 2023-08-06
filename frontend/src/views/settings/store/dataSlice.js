@@ -1,7 +1,7 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { apiUploadImage } from "services/AuthService";
-import { apiGetBrowseData, apiGetCategory } from "services/BrowseService";
-import { apiCreateCategory, apiUpdateCategory } from "services/HomeService";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { apiUploadImage } from "@/services/AuthService";
+import { apiGetBrowseData, apiGetCategory } from "@/services/BrowseService";
+import { apiCreateCategory, apiUpdateCategory } from "@/services/HomeService";
 
 export const getBrowseData = createAsyncThunk(
     "browse/data/getBrowseData",
@@ -64,7 +64,7 @@ export const uploadImage = createAsyncThunk(
 );
 
 const dataSlice = createSlice({
-    name: 'settings/data',
+    name: "settings/data",
     initialState: {
         gettingCategories: false,
         gettingCategory: false,
@@ -72,33 +72,33 @@ const dataSlice = createSlice({
         updatingCategory: false,
         uploading: false,
         category: {},
-        uploadStatus: 'idle',
+        uploadStatus: "idle",
     },
     reducers: {
         setUploadStatus: (state, action) => {
-            state.uploadStatus = action.payload
+            state.uploadStatus = action.payload;
         },
     },
     extraReducers: (builder) => {
         builder
             .addCase(createCategory.pending, (state) => {
-                state.creatingCategory = true
+                state.creatingCategory = true;
             })
             .addCase(createCategory.fulfilled, (state) => {
-                state.creatingCategory = false
+                state.creatingCategory = false;
             })
             .addCase(createCategory.rejected, (state) => {
-                state.creatingCategory = false
+                state.creatingCategory = false;
             })
 
             .addCase(updateCategory.pending, (state) => {
-                state.updatingCategory = true
+                state.updatingCategory = true;
             })
             .addCase(updateCategory.fulfilled, (state) => {
-                state.updatingCategory = false
+                state.updatingCategory = false;
             })
             .addCase(updateCategory.rejected, (state) => {
-                state.updatingCategory = false
+                state.updatingCategory = false;
             })
 
             .addCase(getBrowseData.pending, (state) => {
@@ -128,17 +128,15 @@ const dataSlice = createSlice({
             })
             .addCase(uploadImage.fulfilled, (state, action) => {
                 state.uploading = false;
-                state.uploadStatus = action.payload.status
+                state.uploadStatus = action.payload.status;
             })
             .addCase(uploadImage.rejected, (state) => {
                 state.uploading = false;
-                state.uploadStatus = 'error'
-            })
-    }
-})
+                state.uploadStatus = "error";
+            });
+    },
+});
 
-export const {
-    setUploadStatus,
-} = dataSlice.actions
+export const { setUploadStatus } = dataSlice.actions;
 
-export default dataSlice.reducer
+export default dataSlice.reducer;

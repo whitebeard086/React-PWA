@@ -1,10 +1,10 @@
-import { Button } from "components/ui"
-import Banner from "./components/Banner"
-import ServiceCard from "./components/ServiceCard"
-import { BiEditAlt } from "react-icons/bi"
-import { useNavigate } from "react-router-dom"
+import { Button } from "@/components/ui";
+import Banner from "./components/Banner";
+import ServiceCard from "./components/ServiceCard";
+import { BiEditAlt } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
 import reducer from "./store";
-import { injectReducer } from "store/index";
+import { injectReducer } from "@/store";
 
 injectReducer("profile", reducer);
 
@@ -20,12 +20,12 @@ const Profile = () => {
                     variant="solid"
                     block
                     icon={<BiEditAlt />}
-                    onClick={() => navigate('/service/edit')}
+                    onClick={() => navigate("/service/edit")}
                 >
                     Edit Service Information
                 </Button>
             </div>
         </div>
-    )
-}
-export default Profile
+    );
+};
+export default Profile;

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { apiBookService } from "services/BookingService";
-import { apiDeleteMessage, apiInitiateChat, apiMakeInvoice, apiSendMessage, apiSendNewInvoiceNotification, apiSendNewMessageEmail } from "services/ChatService";
+import { apiBookService } from "@/services/BookingService";
+import { apiDeleteMessage, apiInitiateChat, apiMakeInvoice, apiSendMessage, apiSendNewInvoiceNotification, apiSendNewMessageEmail } from "@/services/ChatService";
 
 export const initiateChat = createAsyncThunk(
     "chat/data/initiateChat",

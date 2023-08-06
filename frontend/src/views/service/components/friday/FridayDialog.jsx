@@ -1,6 +1,4 @@
-import { Button, Dialog } from "components/ui";
-import Switcher from "components/ui/Switcher";
-import { formatTime } from "components/ui/utils/formatTime";
+import { Button, Dialog, Switcher } from "@/components/ui";
 import { useEffect, useState } from "react";
 import { BsDashLg } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,7 +7,7 @@ import {
     setEditingFriday,
     setFridayValue,
     setFridayValue2,
-} from "views/service/store/stateSlice";
+} from "../../store/stateSlice";
 
 const FridayDialog = () => {
     const [value, onChange] = useState("08:00");
@@ -32,7 +30,7 @@ const FridayDialog = () => {
         dispatch(setEditingFriday(false));
     };
 
-    const onSwitcherToggle = (val, e) => {
+    const onSwitcherToggle = (val) => {
         console.log(val);
         if (val) {
             dispatch(setFridayValue("Not Available"));

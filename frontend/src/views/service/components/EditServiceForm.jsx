@@ -1,4 +1,12 @@
-import { Button, FormContainer, FormItem, Input, Notification, Select, toast } from "components/ui";
+import {
+    Button,
+    FormContainer,
+    FormItem,
+    Input,
+    Notification,
+    Select,
+    toast,
+} from "@/components/ui";
 import { Field, Form, Formik } from "formik";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,16 +18,21 @@ import Thursday from "./thursday";
 import Friday from "./friday";
 import Saturday from "./saturday";
 import Sunday from "./sunday";
-import { FormNumericInput, Loading, RichTextEditor } from "components/shared";
-import { createService, getSubCategories, setServiceStatus, updateService } from "../store/dataSlice";
+import { FormNumericInput, Loading, RichTextEditor } from "@/components/shared";
+import {
+    createService,
+    getSubCategories,
+    setServiceStatus,
+    updateService,
+} from "../store/dataSlice";
 import { useNavigate } from "react-router-dom";
-import { getUser } from "store/auth/userSlice";
+import { getUser } from "@/store/auth/userSlice";
 
 const EditServiceForm = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { profile } = useSelector((state) => state.auth.user)
+    const { profile } = useSelector((state) => state.auth.user);
 
     const {
         loadingCategories,
@@ -28,9 +41,9 @@ const EditServiceForm = () => {
         subCategories,
         creatingService,
         serviceStatus,
-    } = useSelector((state) => state.service.data)
+    } = useSelector((state) => state.service.data);
 
-    const { 
+    const {
         mondayValue,
         mondayValue2,
         tuesdayValue,
@@ -45,15 +58,21 @@ const EditServiceForm = () => {
         fridayValue2,
         saturdayValue2,
         sundayValue2,
-    } = useSelector((state) => state.service.state)
+    } = useSelector((state) => state.service.state);
 
     const validationSchema = Yup.object().shape({
-        title: Yup.string().required("Please enter the title of your service or business"),
+        title: Yup.string().required(
+            "Please enter the title of your service or business"
+        ),
         category: Yup.string().required("Please select a category"),
         subcategory: Yup.string().required("Please select a sub category"),
-        description: Yup.string().required("Please write a brief description of your service"),
-        startingPrice: Yup.string().required("Please enter a minimum price for your service"),
-    })
+        description: Yup.string().required(
+            "Please write a brief description of your service"
+        ),
+        startingPrice: Yup.string().required(
+            "Please enter a minimum price for your service"
+        ),
+    });
 
     const initialValues = {
         title: profile.service?.title,
@@ -61,18 +80,19 @@ const EditServiceForm = () => {
         subcategory: profile.service?.sub_category_id,
         description: profile.service?.description,
         startingPrice: profile.service?.starting_price,
-    }
+    };
 
     const categoryOptions = categories?.map((item) => {
-        return { label: item.name, value: item.id }
-    })
+        return { label: item.name, value: item.id };
+    });
 
     const subCategoryOptions = subCategories?.map((item) => {
-        return { label: item.name, value: item.id }
-    })
+        return { label: item.name, value: item.id };
+    });
 
     const onSubmit = (values) => {
-        const { title, category, subcategory, description, startingPrice } = values
+        const { title, category, subcategory, description, startingPrice } =
+            values;
 
         const data = {
             service_id: profile.service?.id,
@@ -95,21 +115,27 @@ const EditServiceForm = () => {
             subcategory,
             title,
             description,
-            starting_price: startingPrice
-        }
+            starting_price: startingPrice,
+        };
 
-        dispatch(updateService(data))
-    }
+        dispatch(updateService(data));
+    };
 
     useEffect(() => {
         const popNotification = (keyword) => {
             toast.push(
                 <Notification
-                    title={`${serviceStatus === "success" ? "Success" : "Error"}`}
-                    type={`${serviceStatus === "success" ? "success" : "danger"}`}
+                    title={`${
+                        serviceStatus === "success" ? "Success" : "Error"
+                    }`}
+                    type={`${
+                        serviceStatus === "success" ? "success" : "danger"
+                    }`}
                     duration={5000}
                 >
-                    {serviceStatus === "success" ? "Service updated successfully!" : "Looks like something went wrong, please try again."}
+                    {serviceStatus === "success"
+                        ? "Service updated successfully!"
+                        : "Looks like something went wrong, please try again."}
                 </Notification>,
                 {
                     placement: "top-center",
@@ -118,20 +144,20 @@ const EditServiceForm = () => {
         };
 
         if (serviceStatus !== "idle") {
-            popNotification()
+            popNotification();
         }
 
         setTimeout(() => {
             if (serviceStatus === "success") {
-                dispatch(getUser())
-                navigate(-1)
-            } 
-        }, 2000)
+                dispatch(getUser());
+                navigate(-1);
+            }
+        }, 2000);
 
         if (serviceStatus === "success" || serviceStatus === "error") {
-            dispatch(setServiceStatus("idle"))
+            dispatch(setServiceStatus("idle"));
         }
-    }, [dispatch, navigate, serviceStatus])
+    }, [dispatch, navigate, serviceStatus]);
 
     return (
         <div className="mt-8">
@@ -163,7 +189,9 @@ const EditServiceForm = () => {
                                 </FormItem>
 
                                 <div className="mt-8">
-                                    <p className="font-bold">Set Working Hours</p>
+                                    <p className="font-bold">
+                                        Set Working Hours
+                                    </p>
 
                                     <Monday />
                                     <Tuesday />
@@ -178,8 +206,7 @@ const EditServiceForm = () => {
                                     <FormItem
                                         label=""
                                         invalid={
-                                            errors.category &&
-                                            touched.category
+                                            errors.category && touched.category
                                         }
                                         className="w-full"
                                         errorMessage={errors.category}
@@ -196,19 +223,39 @@ const EditServiceForm = () => {
                                                     field={field}
                                                     form={form}
                                                     className="w-full"
-                                                    isLoading={loadingCategories}
-                                                    onInputChange={(inputValue) => {
-                                                        console.log(inputValue); 
+                                                    isLoading={
+                                                        loadingCategories
+                                                    }
+                                                    onInputChange={(
+                                                        inputValue
+                                                    ) => {
+                                                        console.log(inputValue);
                                                     }}
                                                     options={categoryOptions}
-                                                    defaultValue={{ label: profile.service?.category?.name, value: profile.service?.category_id }}
+                                                    defaultValue={{
+                                                        label: profile.service
+                                                            ?.category?.name,
+                                                        value: profile.service
+                                                            ?.category_id,
+                                                    }}
                                                     value={
                                                         categoryOptions?.value
                                                     }
                                                     onChange={(category) => {
-                                                        form.setFieldValue(field.name, category.value)
-                                                        dispatch(getSubCategories({ category_id: category.value }))
-                                                        form.setFieldValue('subcategory', '')
+                                                        form.setFieldValue(
+                                                            field.name,
+                                                            category.value
+                                                        );
+                                                        dispatch(
+                                                            getSubCategories({
+                                                                category_id:
+                                                                    category.value,
+                                                            })
+                                                        );
+                                                        form.setFieldValue(
+                                                            "subcategory",
+                                                            ""
+                                                        );
                                                     }}
                                                 />
                                             )}
@@ -230,10 +277,14 @@ const EditServiceForm = () => {
                                             className="w-full"
                                             autoComplete="off"
                                         >
-                                            {({ field, form }) => (
-                                                loadingSubCategories || loadingCategories ? (
+                                            {({ field, form }) =>
+                                                loadingSubCategories ||
+                                                loadingCategories ? (
                                                     <div className="border-2 h-11 rounded-md">
-                                                        <Loading size={30} loading={true} />
+                                                        <Loading
+                                                            size={30}
+                                                            loading={true}
+                                                        />
                                                     </div>
                                                 ) : (
                                                     <Select
@@ -241,24 +292,45 @@ const EditServiceForm = () => {
                                                         field={field}
                                                         form={form}
                                                         className="w-full"
-                                                        isLoading={loadingSubCategories || loadingCategories}
-                                                        onInputChange={(inputValue) => {
-                                                            console.log(inputValue);
+                                                        isLoading={
+                                                            loadingSubCategories ||
+                                                            loadingCategories
+                                                        }
+                                                        onInputChange={(
+                                                            inputValue
+                                                        ) => {
+                                                            console.log(
+                                                                inputValue
+                                                            );
                                                         }}
-                                                        options={subCategoryOptions}
-                                                        defaultValue={{ label: profile.service?.sub_category?.name, value: profile.service?.category_id }}
+                                                        options={
+                                                            subCategoryOptions
+                                                        }
+                                                        defaultValue={{
+                                                            label: profile
+                                                                .service
+                                                                ?.sub_category
+                                                                ?.name,
+                                                            value: profile
+                                                                .service
+                                                                ?.category_id,
+                                                        }}
                                                         value={
                                                             subCategoryOptions?.value
                                                         }
-                                                        onChange={(category) => {
-                                                            form.setFieldValue(field.name, category.value)
+                                                        onChange={(
+                                                            category
+                                                        ) => {
+                                                            form.setFieldValue(
+                                                                field.name,
+                                                                category.value
+                                                            );
                                                         }}
                                                     />
                                                 )
-                                            )}
+                                            }
                                         </Field>
                                     </FormItem>
-
                                 </div>
 
                                 <FormItem
@@ -268,24 +340,33 @@ const EditServiceForm = () => {
                                         </p>
                                     }
                                     labelClass="!justify-start"
-                                    invalid={errors.description && touched.description}
+                                    invalid={
+                                        errors.description &&
+                                        touched.description
+                                    }
                                     errorMessage={errors.description}
                                 >
                                     <Field name="description">
-                                    {({ field, form }) => (
-                                        <RichTextEditor
-                                            value={field.value}
-                                            onChange={(val) =>
-                                                form.setFieldValue(field.name, val)
-                                            }
-                                        />
-                                    )}
+                                        {({ field, form }) => (
+                                            <RichTextEditor
+                                                value={field.value}
+                                                onChange={(val) =>
+                                                    form.setFieldValue(
+                                                        field.name,
+                                                        val
+                                                    )
+                                                }
+                                            />
+                                        )}
                                     </Field>
                                 </FormItem>
 
                                 <FormItem
                                     label=""
-                                    invalid={errors.startingPrice && touched.startingPrice}
+                                    invalid={
+                                        errors.startingPrice &&
+                                        touched.startingPrice
+                                    }
                                     errorMessage={errors.startingPrice}
                                 >
                                     <Field name="startingPrice">
@@ -298,11 +379,16 @@ const EditServiceForm = () => {
                                                     placeholder="Service Starting Price"
                                                     decimalScale={2}
                                                     onValueChange={(e) => {
-                                                        form.setFieldValue(field.name, e.floatValue);
+                                                        form.setFieldValue(
+                                                            field.name,
+                                                            e.floatValue
+                                                        );
                                                     }}
                                                     value={field.value}
                                                     inputPrefix={
-                                                        <span className="font-semibold">₦</span>
+                                                        <span className="font-semibold">
+                                                            ₦
+                                                        </span>
                                                     }
                                                 />
                                             );
@@ -322,10 +408,10 @@ const EditServiceForm = () => {
                                 </div>
                             </FormContainer>
                         </Form>
-                    )
+                    );
                 }}
             </Formik>
         </div>
-    )
-}
-export default EditServiceForm
+    );
+};
+export default EditServiceForm;
