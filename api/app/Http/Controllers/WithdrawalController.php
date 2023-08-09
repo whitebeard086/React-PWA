@@ -86,7 +86,7 @@ class WithdrawalController extends Controller
     {   
         try {
             $user = User::where('id', auth()->user()->id)->firstOrFail();
-            $duplicate_account = WithdrawalAccount::where('recipient_code', $request->recipientCode)->firstOrFail();
+            $duplicate_account = WithdrawalAccount::where('recipient_code', $request->recipientCode)->first();
             
             if (!Hash::check($request->password, $user->password)) {
                 return response()->json([
@@ -114,6 +114,37 @@ class WithdrawalController extends Controller
                 'status' => 'success',
                 'Account' => $account
             ], 201);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function remove_account(Request $request)
+    {
+        try {
+            $account = WithdrawalAccount::find($request->id);
+
+            if (isset($account)) {
+                $result = $this->deleteTransferRecipient($account);
+            }
+
+            if ($result['response']->status === true) {
+                $account->delete();
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Failed to delete transfer recipient',
+                ], 400);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'response' => $result['response'],
+            ], 200);
             
         } catch (\Exception $e) {
             return response()->json([

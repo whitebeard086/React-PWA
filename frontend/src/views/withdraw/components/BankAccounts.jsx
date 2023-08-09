@@ -1,13 +1,22 @@
 /* eslint-disable react/no-unescaped-entities */
 import { Card } from "@/components/ui"
 import { MdDelete } from "react-icons/md"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { motion, AnimatePresence } from "framer-motion";
+import { setSelectedAccount, toggleDeleteDialog } from "../store/stateSlice";
 
 const BankAccounts = () => {
+    const dispatch = useDispatch();
+
     const { profile } = useSelector((state) => state.auth.user)
     
     const accounts = profile?.withdrawal_accounts
+
+    const onRemoveAccount = (account) => {
+        dispatch(setSelectedAccount(account.id));
+        dispatch(toggleDeleteDialog(true));
+        console.log(account);
+    }
 
     return (
         <div>
@@ -46,10 +55,12 @@ const BankAccounts = () => {
                                         <div className="flex flex-col w-full">
                                             <h4 className="text-base">{account.bank_name}</h4>
                                             <p className="text-base">{account.account_number}</p>
-                                            <p className="text-base">{account.account_name}</p>
+                                            <div className="lowercase">
+                                                <p className="text-base capitalize">{account.account_name}</p>
+                                            </div>
                                         </div>
                 
-                                        <div className="bg-gray-100 hover:bg-gray-200 transition duration-300 w-10 h-10 grid place-content-center rounded-full cursor-pointer hover:shadow-md">
+                                        <div onClick={() => onRemoveAccount(account)} className="bg-gray-100 hover:bg-gray-200 transition duration-300 w-10 h-10 grid place-content-center rounded-full cursor-pointer hover:shadow-md">
                                             <MdDelete className="text-2xl text-red-500 hover:text-red-600 transition duration-300" />
                                         </div>
                                     </div>

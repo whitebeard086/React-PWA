@@ -4,6 +4,8 @@ const stateSlice = createSlice({
     name: 'withdraw/state',
     initialState: {
         formData: {},
+        selectedAccount: null,
+        deleteDialog: false,
         accountDialog: false,
         withdrawDialog: false,
         isValidAccountNumber: false
@@ -11,6 +13,12 @@ const stateSlice = createSlice({
     reducers: {
         setFormData: (state, action) => {
             state.formData = action.payload;
+        },
+        setSelectedAccount: (state, action) => {
+            state.selectedAccount = action.payload;
+        },
+        toggleDeleteDialog: (state, action) => {
+            state.deleteDialog = action.payload;
         },
         toggleAccountDialog: (state, action) => {
             state.accountDialog = action.payload;
@@ -26,6 +34,8 @@ const stateSlice = createSlice({
 
 export const {
     setFormData,
+    toggleDeleteDialog,
+    setSelectedAccount,
     toggleAccountDialog,
     toggleWithdrawDialog,
     setIsValidAccountNumber,

@@ -1,6 +1,6 @@
+/* eslint-disable react/prop-types */
 import { Avatar, Button, Dialog } from '@/components/ui'
 import PropTypes from 'prop-types'
-import React from 'react'
 import {
     HiCheckCircle,
     HiOutlineExclamation,
@@ -13,7 +13,7 @@ const StatusIcon = ({ status }) => {
         case 'info':
             return (
                 <Avatar
-                    className="bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-100"
+                    className="bg-blue-100 text-blue-600"
                     shape="circle"
                 >
                     <span className="text-2xl">
@@ -24,7 +24,7 @@ const StatusIcon = ({ status }) => {
         case 'success':
             return (
                 <Avatar
-                    className="bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-100"
+                    className="bg-emerald-100 text-emerald-600"
                     shape="circle"
                 >
                     <span className="text-2xl">
@@ -35,7 +35,7 @@ const StatusIcon = ({ status }) => {
         case 'warning':
             return (
                 <Avatar
-                    className="text-amber-600 bg-amber-100 dark:text-amber-100"
+                    className="text-amber-600 bg-amber-100"
                     shape="circle"
                 >
                     <span className="text-2xl">
@@ -46,7 +46,7 @@ const StatusIcon = ({ status }) => {
         case 'danger':
             return (
                 <Avatar
-                    className="text-red-600 bg-red-100 dark:text-red-100"
+                    className="text-red-600 bg-red-100"
                     shape="circle"
                 >
                     <span className="text-2xl">
@@ -64,11 +64,13 @@ const ConfirmDialog = (props) => {
     const {
         type,
         title,
+        loading,
         children,
         onCancel,
         onConfirm,
         cancelText,
         confirmText,
+        buttonColor,
         confirmButtonColor,
         ...rest
     } = props
@@ -93,15 +95,15 @@ const ConfirmDialog = (props) => {
                 <div>
                     <StatusIcon status={type} />
                 </div>
-                <div className="ml-4 rtl:mr-4">
+                <div className="ml-4">
                     <h5 className="mb-2">{title}</h5>
                     {children}
                 </div>
             </div>
-            <div className="text-right px-6 py-3 bg-gray-100 dark:bg-gray-700 rounded-bl-lg rounded-br-lg">
+            <div className="text-right px-6 py-3 bg-gray-100 rounded-bl-lg rounded-br-lg">
                 <Button
                     size="sm"
-                    className="ltr:mr-2 rtl:ml-2"
+                    className="mr-2"
                     onClick={handleCancel}
                 >
                     {cancelText}
@@ -110,7 +112,8 @@ const ConfirmDialog = (props) => {
                     size="sm"
                     variant="solid"
                     onClick={handleConfirm}
-                    color={confirmButtonColor}
+                    loading={loading}
+                    color={buttonColor || confirmButtonColor}
                 >
                     {confirmText}
                 </Button>

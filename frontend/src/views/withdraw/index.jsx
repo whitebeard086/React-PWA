@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { getWithdrawalData } from "./store/dataSlice";
 import { toggleAccountDialog } from "./store/stateSlice";
 import NewAccountDialog from "./components/newAccount/NewAccountDialog";
+import RemoveAccount from "./components/newAccount/RemoveAccount";
 
 injectReducer("withdraw", reducer);
 
@@ -49,6 +50,7 @@ const Withdraw = () => {
                 {loading ? <GettingData /> : <BankAccounts />}
             </div>
             <NewAccountDialog />
+            <RemoveAccount />
         </div>
     )
 }

@@ -1,6 +1,11 @@
-import { apiAddAccount, apiCreateTransferRecipient, apiGetWithdrawalData, apiResolveAccountNumber } from "@/services/WithdrawalService";
+import {
+    apiAddAccount,
+    apiCreateTransferRecipient,
+    apiGetWithdrawalData,
+    apiRemoveAccount,
+    apiResolveAccountNumber,
+} from "@/services/WithdrawalService";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-
 
 export const getWithdrawalData = createAsyncThunk(
     "payments/data/getWithdrawalData",
@@ -50,10 +55,23 @@ export const addAccount = createAsyncThunk(
     }
 );
 
+export const removeAccount = createAsyncThunk(
+    "payments/data/removeAccount",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await apiRemoveAccount(data);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 const dataSlice = createSlice({
-    name: 'withdraw/data',
+    name: "withdraw/data",
     initialState: {
         loading: false,
+        deleting: false,
         addingAccount: false,
         resolvingAccount: false,
         creatingRecipient: false,
@@ -62,14 +80,16 @@ const dataSlice = createSlice({
         recipient: {},
         resolvedAccount: {},
         banks: [],
-        status: 'idle',
-        accountStatus: 'idle',
-        resolveStatus: 'idle', 
-        recipientStatus: 'idle',
-        errorMessage: '',
-        accountError: '',
-        resolveError: '',
-        recipientError: '',
+        status: "idle",
+        deleteStatus: "idle",
+        accountStatus: "idle",
+        resolveStatus: "idle",
+        recipientStatus: "idle",
+        deleteError: "",
+        errorMessage: "",
+        accountError: "",
+        resolveError: "",
+        recipientError: "",
     },
     reducers: {
         setStatus: (state, action) => {
@@ -77,6 +97,9 @@ const dataSlice = createSlice({
         },
         setAccount: (state, action) => {
             state.account = action.payload;
+        },
+        setDeleteStatus: (state, action) => {
+            state.deleteStatus = action.payload;
         },
         setAccountStatus: (state, action) => {
             state.accountStatus = action.payload;
@@ -90,7 +113,7 @@ const dataSlice = createSlice({
         setRecipientStatus: (state, action) => {
             state.recipientStatus = action.payload;
         },
-    }, 
+    },
     extraReducers: (builder) => {
         builder
             .addCase(getWithdrawalData.pending, (state) => {
@@ -100,7 +123,7 @@ const dataSlice = createSlice({
                 state.loading = false;
                 const { banks, status } = action.payload;
                 state.status = status;
-                state.banks = banks?.response?.data
+                state.banks = banks?.response?.data;
                 console.log(banks);
             })
             .addCase(getWithdrawalData.rejected, (state, action) => {
@@ -129,7 +152,7 @@ const dataSlice = createSlice({
                 state.resolveError = message;
                 state.resolveStatus = status;
 
-                if  (state.resolvedAccount !== {}) {
+                if (state.resolvedAccount !== {}) {
                     state.resolvedAccount = {};
                 }
             })
@@ -143,7 +166,7 @@ const dataSlice = createSlice({
                 state.recipient = response.data;
                 state.recipientStatus = status;
 
-                if (state.recipientError !== ""){
+                if (state.recipientError !== "") {
                     state.recipientError = "";
                 }
             })
@@ -153,7 +176,7 @@ const dataSlice = createSlice({
                 state.recipientStatus = status;
                 state.recipientError = message;
 
-                if (state.recipient !== {}){
+                if (state.recipient !== {}) {
                     state.recipient = {};
                 }
             })
@@ -167,8 +190,13 @@ const dataSlice = createSlice({
                 state.account = account;
                 state.accountStatus = status;
 
-                if (state.accountError !== ""){
-                    state.accountError = ""
+                if (state.accountError !== "") {
+                    state.accountError = "";
+                }
+
+                if (state.resolvedAccount !== {}) {
+                    state.resolvedAccount = {};
+                    state.resolveStatus = "idle";
                 }
             })
             .addCase(addAccount.rejected, (state, action) => {
@@ -177,16 +205,36 @@ const dataSlice = createSlice({
                 state.accountStatus = status;
                 state.accountError = message;
 
-                if (state.account !== {}){
+                if (state.account !== {}) {
                     state.account = {};
                 }
             })
-    }
-})
+
+            .addCase(removeAccount.pending, (state) => {
+                state.deleting = true;
+            })
+            .addCase(removeAccount.fulfilled, (state, action) => {
+                state.deleting = false;
+                const { status, response } = action.payload;
+                state.deleteStatus = status;
+
+                if (state.deleteError !== "") {
+                    state.deleteError = "";
+                }
+            })
+            .addCase(removeAccount.rejected, (state, action) => {
+                state.deleting = false;
+                const { status, message } = action.payload;
+                state.deleteStatus = status;
+                state.deleteError = message;
+            });
+    },
+});
 
 export const {
     setStatus,
     setAccount,
+    setDeleteStatus,
     setAccountStatus,
     setResolveStatus,
     setRecipientError,

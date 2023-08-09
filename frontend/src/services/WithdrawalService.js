@@ -31,3 +31,11 @@ export async function apiCreateTransferRecipient (data) {
         data
     })
 }
+
+export async function apiRemoveAccount (data) {
+    return ApiService.fetchData({
+        url: '/withdraw/account/delete',
+        method: 'post',
+        data
+    })
+}

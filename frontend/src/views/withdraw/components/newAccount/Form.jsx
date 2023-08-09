@@ -13,11 +13,12 @@ import { Field, Form, Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { FormNumericInput, Loading, PasswordInput } from "@/components/shared";
 import { AiOutlineSave, AiTwotoneSave } from "react-icons/ai";
-import { addAccount, createTransferRecipient, resolveAccountNumber, setAccountStatus, setRecipientStatus, setResolveStatus } from "../../store/dataSlice";
+import { addAccount, createTransferRecipient, getWithdrawalData, resolveAccountNumber, setAccountStatus, setRecipientStatus, setResolveStatus } from "../../store/dataSlice";
 import { FaSpinner } from "react-icons/fa";
 import classNames from "classnames";
 import { useEffect } from "react";
-import { setFormData, setIsValidAccountNumber } from "../../store/stateSlice";
+import { setFormData, setIsValidAccountNumber, toggleAccountDialog } from "../../store/stateSlice";
+import { getUser } from "@/store/auth/userSlice";
 
 const NewAccountForm = () => {
     const dispatch = useDispatch();
@@ -95,6 +96,10 @@ const NewAccountForm = () => {
         }
 
         if (accountStatus === 'success') {
+            dispatch(toggleAccountDialog(false));
+            dispatch(getUser());
+            dispatch(getWithdrawalData());
+
             popNotification(
                 "Withdrawal account added successfully.",
                 "success",
@@ -242,7 +247,7 @@ const NewAccountForm = () => {
                                     <div className="p-2 mb-4 grid place-content-center">
                                         <Spinner indicator={FaSpinner} color="primary-500" size={24} />
                                     </div>
-                                ) : (values.bank && isValidAccountNumber && (resolvedAccount || resolveError)) ? (
+                                ) : (values.bank && isValidAccountNumber && (resolvedAccount?.account_name || resolveError)) ? (
                                     <div className={classNames("p-2 border-2 mb-4 rounded-lg", resolveError && 'border-red-500', resolveStatus === 'success' && 'border-primary-500')}>
                                         <p className="text-sm font-semibold text-gray-500">
                                             {resolveError && 'Invalid account details'}
