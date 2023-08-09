@@ -36,7 +36,7 @@ class UserController extends Controller
     public function get_user()
     {
         try {
-            $user = User::with('ProfileType', 'Service.Category', 'Service.Workdays', 'Service.SubCategory')->where('id', auth()->user()->id)->first();
+            $user = User::with('ProfileType', 'Service.Category', 'Service.Workdays', 'Service.SubCategory', 'WithdrawalAccounts')->where('id', auth()->user()->id)->first();
 
             if (isset($user->phone_verified_at) && !$user->bank) {
                 $result = $this->assignVirtualAccount($user);

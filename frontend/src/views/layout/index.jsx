@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
 import { Button, Spinner } from "@/components/ui";
@@ -16,6 +16,7 @@ import DepositDialog from "../payments/components/Deposit/DepositDialog";
 const Layout = () => {
     const dispatch = useDispatch();
     const location = useLocation();
+    const navigate = useNavigate();
 
     const { profile, userType } = useSelector(
         (state) => state.auth.user
@@ -28,9 +29,6 @@ const Layout = () => {
     const receiver =
         profile?.id === chat?.user?.id ? chat?.receiver : chat?.user;
 
-    const onTopUp = () => {
-        dispatch(toggleDepositDialog(true));
-    };
 
     useEffect(() => {
         dispatch(getUser());
@@ -48,6 +46,16 @@ const Layout = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [messageStatus, sentMessage]);
+
+    const onTopUp = () => {
+        dispatch(toggleDepositDialog(true));
+    };
+
+    const onWithdraw = () => {
+        if (location.pathname !== '/withdraw') {
+            navigate('/withdraw')
+        }
+    }
 
     return (
         <Container className="max-w-2xl w-full">
@@ -82,6 +90,7 @@ const Layout = () => {
                                 size="sm"
                                 variant="solid"
                                 disabled={verifying}
+                                onClick={onWithdraw}
                                 className="!bg-gray-900 hover:!bg-black"
                             >
                                 Withdraw

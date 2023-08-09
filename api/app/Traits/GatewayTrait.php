@@ -161,4 +161,133 @@ trait GatewayTrait
             ];
         }
     }
+
+    public function listBanks()
+    {
+        $curl = curl_init();
+
+        $paystackSecret = env('PAYSTACK_SECRET');
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.paystack.co/bank?currency=NGN",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "Authorization: Bearer $paystackSecret",
+                "Cache-Control: no-cache",
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            return [
+                'status' => 'error',
+                'message' => 'cURL Error: ' . $err
+            ];
+        }
+        
+        $res = json_decode($response);
+
+        return [
+            'status' => 'success',
+            'response' => $res
+        ];
+    }
+
+    public function resolveAccountNumber($request)
+    {
+        $curl = curl_init();
+
+        $paystackSecret = env('PAYSTACK_SECRET');
+        $accountNumber = $request->accountNumber;
+        $bankCode = $request->bankCode;
+  
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.paystack.co/bank/resolve?account_number=$accountNumber&bank_code=$bankCode",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "Authorization: Bearer $paystackSecret",
+                "Cache-Control: no-cache",
+            ),
+        ));
+        
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        
+        curl_close($curl);
+        
+        if ($err) {
+            return [
+                'status' => 'error',
+                'message' => 'cURL Error: ' . $err
+            ];
+        }
+
+        $res = json_decode($response);
+
+        return [
+            'status' => 'success',
+            'response' => $res
+        ];
+    }
+
+    public function createTransferRecipient($request)
+    {
+        $url = "https://api.paystack.co/transferrecipient";
+        $paystackSecret = env('PAYSTACK_SECRET');
+
+        $fields = [
+            'type' => "nuban",
+            'name' => $request->accountName,
+            'account_number' => $request->accountNumber,
+            'bank_code' => $request->bankCode,
+            'currency' => "NGN"
+        ];
+
+        $fields_string = http_build_query($fields);
+
+        //open connection
+        $ch = curl_init();
+        
+        //set the url, number of POST vars, POST data
+        curl_setopt($ch,CURLOPT_URL, $url);
+        curl_setopt($ch,CURLOPT_POST, true);
+        curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            "Authorization: Bearer $paystackSecret",
+            "Cache-Control: no-cache",
+        ));
+
+        //So that curl_exec returns the contents of the cURL; rather than echoing it
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER, true); 
+        
+        //execute post
+        $result = json_decode(curl_exec($ch));
+
+        if(curl_errno($ch)){
+            return [
+                'status' => 'error',
+                'message' => throw new \Exception(curl_error($ch))
+            ];
+        }
+
+        //close connection
+        curl_close($ch);
+
+        return $result;    
+    }
+
 }

@@ -14,6 +14,7 @@ use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\RequestsController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\WithdrawalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,7 +75,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/paystack/deposit', [GatewayController::class, 'paystackDeposit']);
     Route::post('/paystack/verify', [GatewayController::class, 'verifyPaystackPayment']);
     Route::post('/deposit/update', [GatewayController::class, 'updateTransaction']);
-    // Route::post('/paystack/webhook', [WebhookController::class, 'handleWebhook']);
+
+    // Withdrawal Routes 
+    Route::get('/withdraw', [WithdrawalController::class, 'index']);
+    Route::post('/withdraw/new-account', [WithdrawalController::class, 'add_account']);
+    Route::post('/withdraw/account/resolve', [WithdrawalController::class, 'resolve_account_number']);
+    Route::post('/withdraw/transfer-recipient', [WithdrawalController::class, 'create_transfer_recipient']);
 
     // Chat Routes
     Route::post('/chat', [ChatController::class, 'chat']);

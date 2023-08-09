@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable react/prop-types */
 import { useDispatch, useSelector } from "react-redux";
 import { setViewingInvoice, togglePaymentDialog } from "../store/stateSlice";
 import { Button, Dialog, Notification, Table, toast } from "@/components/ui";
@@ -8,7 +10,6 @@ import { BiCheckDouble } from "react-icons/bi";
 import {
     bookService,
     resetBookingStatus,
-    setServiceBooked,
 } from "../store/dataSlice";
 import { useEffect } from "react";
 import classNames from "classnames";
@@ -16,7 +17,7 @@ import { sendPushNotification } from "@/utils/sendPushNotification";
 import appConfig from "@/configs/app.config";
 import { socket } from "@/utils/socket";
 
-const PaymentDialog = ({ state, providerSlug }) => {
+const PaymentDialog = () => {
     const dispatch = useDispatch();
 
     const { Tr, Th, Td, THead, TBody } = Table;

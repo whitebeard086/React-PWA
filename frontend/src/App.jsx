@@ -36,6 +36,7 @@ const Requests = lazy(() => import("./views/requests"));
 const History = lazy(() => import("./views/requests/components/History"));
 const Category = lazy(() => import("./views/browse/components/category"));
 const ProviderDashboard = lazy(() => import("./views/providerDash"));
+const Withdraw = lazy(() => import("./views/withdraw"));
 
 
 function App() {
@@ -139,6 +140,10 @@ function App() {
                                     <Route
                                         path="/service/edit"
                                         element={<EditService />}
+                                    />
+                                    <Route
+                                        path="/withdraw"
+                                        element={<Withdraw />}
                                     />
                                 </Route>
                                 <Route element={<CheckVerifications />}>

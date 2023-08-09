@@ -5,6 +5,7 @@ import React from 'react'
 
 const DefaultLoading = (props) => {
     const {
+        size,
         loading,
         children,
         spinnerClass,
@@ -23,7 +24,7 @@ const DefaultLoading = (props) => {
             {customLoader ? (
                 <>{customLoader}</>
             ) : (
-                <Spinner className={spinnerClass} size={40} />
+                <Spinner className={spinnerClass} size={size || 40} />
             )}
         </Component>
     ) : (
@@ -33,6 +34,7 @@ const DefaultLoading = (props) => {
 
 const CoveredLoading = (props) => {
     const {
+        size,
         loading,
         children,
         spinnerClass,
@@ -52,7 +54,7 @@ const CoveredLoading = (props) => {
                     {customLoader ? (
                         <>{customLoader}</>
                     ) : (
-                        <Spinner className={spinnerClass} size={40} />
+                        <Spinner className={spinnerClass} size={size || 40} />
                     )}
                 </div>
             )}

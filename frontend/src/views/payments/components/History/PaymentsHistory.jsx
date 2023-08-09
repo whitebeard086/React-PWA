@@ -20,7 +20,7 @@ const PaymentsHistory = () => {
 
     return (
         <div className="mt-2 mb-2">
-            <h4 className="text-lg font-bold text-gray-700 mb-4 text-center">
+            <h4 className="text-lg font-bold text-gray-700 mb-4">
                 Transactions
             </h4>
 

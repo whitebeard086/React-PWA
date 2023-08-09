@@ -24,32 +24,17 @@ const Footer = () => {
                 <AiOutlineHome className="text-2xl" />
                 <p className="text-xs sm:text-sm">Home</p>
             </NavLink>
-            {userType === "Client" && (
-                <NavLink
-                    to="/browse"
-                    className={({ isActive }) =>
-                        isActive
-                            ? "bg-emerald-50 text-emerald-500 flex flex-col items-center p-2 rounded-md shadow-md font-bold"
-                            : "flex flex-col items-center p-2 rounded-md font-semibold"
-                    }
-                >
-                    <AiOutlineFileSearch className="text-2xl" />
-                    <p className="text-xs sm:text-sm">Browse</p>
-                </NavLink>
-            )}
-            {userType === "Provider" && (
-                <NavLink
-                    to="/history"
-                    className={({ isActive }) =>
-                        isActive
-                            ? "bg-emerald-50 text-emerald-500 flex flex-col items-center p-2 rounded-md shadow-md font-bold"
-                            : "flex flex-col items-center p-2 rounded-md font-semibold"
-                    }
-                >
-                    <AiOutlineFileSearch className="text-2xl" />
-                    <p className="text-xs sm:text-sm">History</p>
-                </NavLink>
-            )}
+            <NavLink
+                to="/browse"
+                className={({ isActive }) =>
+                    isActive
+                        ? "bg-emerald-50 text-emerald-500 flex flex-col items-center p-2 rounded-md shadow-md font-bold"
+                        : "flex flex-col items-center p-2 rounded-md font-semibold"
+                }
+            >
+                <AiOutlineFileSearch className="text-2xl" />
+                <p className="text-xs sm:text-sm">Browse</p>
+            </NavLink>
             <NavLink
                 to="/requests"
                 className={({ isActive }) =>
