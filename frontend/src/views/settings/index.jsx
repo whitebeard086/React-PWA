@@ -79,22 +79,106 @@ const Settings = () => {
             <hr />
             <div className="">
                 <div>
+                    <Link
+                        className="flex items-center gap-2 transition duration-300 w-full py-4 px-4 hover:bg-gray-100 border-b-gray-200 border-b-2"
+                        to="/info"
+                    >
+                        <div className="w-full flex flex-col">
+                            <span className="text-base font-semibold text-gray-600">
+                                Your Information
+                            </span>
+                            <p className="text xs">Account details</p>
+                        </div>
+                    </Link>
+
+                    <Link
+                        className="flex items-center gap-2 transition duration-300 w-full py-4 px-4 hover:bg-gray-100 border-b-gray-200 border-b-2"
+                        to="/transactions"
+                    >
+                        <div className="w-full flex flex-col">
+                            <span className="text-base font-semibold text-gray-600">
+                                Transactions
+                            </span>
+                            <p className="text xs">View your transaction history</p>
+                        </div>
+                    </Link>
+
                     {userType === "Provider" && (
                         <>
                             <Link
-                                className="flex gap-2 items-center transition duration-300 w-full py-4 px-4 hover:bg-gray-100"
+                                className="flex items-center gap-2 transition duration-300 w-full py-4 px-4 hover:bg-gray-100 border-b-gray-200 border-b-2"
                                 to="/profile"
                             >
-                                <span className="text-xl opacity-50">
-                                    <HiOutlineUser />
-                                </span>
-                                <span className="text-base font-semibold text-gray-600">
-                                    Profile
-                                </span>
+                                <div className="w-full flex flex-col">
+                                    <span className="text-base font-semibold text-gray-600">
+                                        Provider Profile
+                                    </span>
+                                    <p className="text xs">Edit your service provider profile</p>
+                                </div>
                             </Link>
                         </>
                     )}
-                    <hr className="" />
+
+                    {userType === "Provider" && (
+                        <>
+                            <Link
+                                className="flex items-center gap-2 transition duration-300 w-full py-4 px-4 hover:bg-gray-100 border-b-gray-200 border-b-2"
+                                to="/withdraw"
+                            >
+                                <div className="w-full flex flex-col">
+                                    <span className="text-base font-semibold text-gray-600">
+                                        Withdrawal Banks
+                                    </span>
+                                    <p className="text xs">Add or Remove Bank Accounts</p>
+                                </div>
+                            </Link>
+                        </>
+                    )}
+
+                    <Link
+                        className="flex items-center gap-2 transition duration-300 w-full py-4 px-4 hover:bg-gray-100 border-b-gray-200 border-b-2"
+                        to="/transaction-pin"
+                    >
+                        <div className="w-full flex flex-col">
+                            <span className="text-base font-semibold text-gray-600">
+                                Change PIN
+                            </span>
+                            <p className="text xs">Change your transaction pin</p>
+                        </div>
+                    </Link>
+
+                    <Link
+                        className="flex items-center gap-2 transition duration-300 w-full py-4 px-4 hover:bg-gray-100 border-b-gray-200 border-b-2"
+                        to="/help-&-support"
+                    >
+                        <div className="w-full flex flex-col">
+                            <span className="text-base font-semibold text-gray-600">
+                                Help & Support
+                            </span>
+                        </div>
+                    </Link>
+
+                    <Link
+                        className="flex items-center gap-2 transition duration-300 w-full py-4 px-4 hover:bg-gray-100 border-b-gray-200 border-b-2"
+                        to="/t-&-c"
+                    >
+                        <div className="w-full flex flex-col">
+                            <span className="text-base font-semibold text-gray-600">
+                                Terms & Conditions
+                            </span>
+                        </div>
+                    </Link>
+
+                    <Link
+                        className="flex items-center gap-2 transition duration-300 w-full py-4 px-4 hover:bg-gray-100 border-b-gray-200 border-b-2"
+                        to="/privacy-policy"
+                    >
+                        <div className="w-full flex flex-col">
+                            <span className="text-base font-semibold text-gray-600">
+                                Privacy Policy
+                            </span>
+                        </div>
+                    </Link>
 
                     <div
                         onClick={handleSubscriptionStatus}
@@ -109,7 +193,7 @@ const Settings = () => {
                             <HiOutlineLogout />
                         </span>
                         <span className="w-full text-base font-semibold text-red-500">
-                            Sign Out
+                            Logout
                         </span>
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-import { Dialog, Notification, toast } from "@/components/ui"
+import { Dialog } from "@/components/ui"
 import { useDispatch, useSelector } from "react-redux"
 import { toggleAccountDialog } from "../../store/stateSlice";
 import NewAccountForm from "./Form";
@@ -11,21 +11,6 @@ const NewAccountDialog = () => {
     const onDialogClose = () => {
         dispatch(toggleAccountDialog(false));
     }
-
-    const popNotification = (message, type, title, duration) => {
-        toast.push(
-            <Notification
-                title={title || `${"Error"}`}
-                type={type || `${"warning"}`}
-                duration={duration || 3000}
-            >
-                {message}
-            </Notification>,
-            {
-                placement: "top-center",
-            }
-        );
-    };
 
     return (
         <Dialog

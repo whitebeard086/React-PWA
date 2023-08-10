@@ -2,6 +2,7 @@ import {
     apiAddAccount,
     apiCreateTransferRecipient,
     apiGetWithdrawalData,
+    apiPayoutCustomer,
     apiRemoveAccount,
     apiResolveAccountNumber,
 } from "@/services/WithdrawalService";
@@ -67,6 +68,18 @@ export const removeAccount = createAsyncThunk(
     }
 );
 
+export const payoutCustomer = createAsyncThunk(
+    "payments/data/payoutCustomer",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await apiPayoutCustomer(data);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 const dataSlice = createSlice({
     name: "withdraw/data",
     initialState: {
@@ -124,7 +137,6 @@ const dataSlice = createSlice({
                 const { banks, status } = action.payload;
                 state.status = status;
                 state.banks = banks?.response?.data;
-                console.log(banks);
             })
             .addCase(getWithdrawalData.rejected, (state, action) => {
                 state.loading = false;
@@ -215,7 +227,7 @@ const dataSlice = createSlice({
             })
             .addCase(removeAccount.fulfilled, (state, action) => {
                 state.deleting = false;
-                const { status, response } = action.payload;
+                const { status } = action.payload;
                 state.deleteStatus = status;
 
                 if (state.deleteError !== "") {

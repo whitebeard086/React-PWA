@@ -1,0 +1,1 @@
+const o=n=>(n=(n==null?void 0:n.toString().match(/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/))||[n],n.length>1&&(n=n==null?void 0:n.slice(1),n[5]=+n[0]<12?"AM":"PM",n[0]=+n[0]%12||12),n.join(""));export{o as f};

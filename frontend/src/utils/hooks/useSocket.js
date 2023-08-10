@@ -13,5 +13,6 @@ export function useSocket(events) {
                 socket.off(event.name)
             }
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 }

@@ -3,7 +3,6 @@ import {
     Button,
     FormContainer,
     FormItem,
-    Input,
     Notification,
     Select,
     Spinner,
@@ -11,8 +10,8 @@ import {
 } from "@/components/ui";
 import { Field, Form, Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import { FormNumericInput, Loading, PasswordInput } from "@/components/shared";
-import { AiOutlineSave, AiTwotoneSave } from "react-icons/ai";
+import { FormNumericInput, PasswordInput } from "@/components/shared";
+import { AiOutlineSave } from "react-icons/ai";
 import { addAccount, createTransferRecipient, getWithdrawalData, resolveAccountNumber, setAccountStatus, setRecipientStatus, setResolveStatus } from "../../store/dataSlice";
 import { FaSpinner } from "react-icons/fa";
 import classNames from "classnames";

@@ -39,3 +39,11 @@ export async function apiRemoveAccount (data) {
         data
     })
 }
+
+export async function apiPayoutCustomer (data) {
+    return ApiService.fetchData({
+        url: '/withdraw/payout',
+        method: 'post',
+        data
+    })
+}

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
 import { Button, Spinner } from "@/components/ui";
@@ -12,11 +12,11 @@ import { getUser } from "@/store/auth/userSlice";
 import { socket } from "@/utils/socket";
 import { setMessages } from "../chat/store/dataSlice";
 import DepositDialog from "../payments/components/Deposit/DepositDialog";
+import { toggleWithdrawDialog } from "../withdraw/store/stateSlice";
 
 const Layout = () => {
     const dispatch = useDispatch();
     const location = useLocation();
-    const navigate = useNavigate();
 
     const { profile, userType } = useSelector(
         (state) => state.auth.user
@@ -52,9 +52,7 @@ const Layout = () => {
     };
 
     const onWithdraw = () => {
-        if (location.pathname !== '/withdraw') {
-            navigate('/withdraw')
-        }
+        dispatch(toggleWithdrawDialog(true))
     }
 
     return (
