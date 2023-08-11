@@ -48,7 +48,7 @@ function useAuth() {
                             {
                                 profile: resp.data.user,
                                 userType: resp.data.user.profile_type.name,
-                                hasVisited: true,
+                                hasVisited: false,
                                 hasService: resp.data.user.service
                                     ? true
                                     : false,

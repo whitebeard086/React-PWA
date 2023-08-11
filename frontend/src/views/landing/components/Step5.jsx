@@ -1,6 +1,7 @@
+/* eslint-disable react/prop-types */
 import { Button } from "../../../components/ui"
 
-const Step5 = ({ onNext, onSkip }) => {
+const Step5 = ({ onSkip }) => {
     return (
         <div className="bg-primary-500 w-full h-screen p-6">
             <p onClick={onSkip} className="text-end text-white cursor-pointer">Skip</p>

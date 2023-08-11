@@ -3,8 +3,7 @@ import { Card } from "@/components/ui"
 import { MdDelete } from "react-icons/md"
 import { useDispatch, useSelector } from "react-redux"
 import { motion, AnimatePresence } from "framer-motion";
-import { setSelectedAccount, toggleDeleteDialog, toggleWithdrawDialog } from "../store/stateSlice";
-import { setAccount } from "../store/dataSlice";
+import { setSelectedAccount, toggleDeleteDialog } from "../store/stateSlice";
 
 const BankAccounts = () => {
     const dispatch = useDispatch();
@@ -17,11 +16,6 @@ const BankAccounts = () => {
         dispatch(setSelectedAccount(account.id));
         dispatch(toggleDeleteDialog(true));
         console.log(account);
-    }
-
-    const onSelect = (account) => {
-        dispatch(setAccount(account));
-        dispatch(toggleWithdrawDialog(true));
     }
 
     return (
@@ -56,7 +50,7 @@ const BankAccounts = () => {
                                     visibility: "hidden",
                                 }}
                             >
-                                <Card onClick={() => onSelect(account)} clickable className="z-10" bodyClass="w-full">
+                                <Card clickable className="z-10" bodyClass="w-full">
                                     <div className="flex w-full items-center justify-between">
                                         <div className="flex flex-col w-full">
                                             <h4 className="text-base">{account.bank_name}</h4>

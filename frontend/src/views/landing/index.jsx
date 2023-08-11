@@ -1,8 +1,8 @@
 import { Suspense, lazy, useCallback, useEffect, useState } from "react"
 import { Container } from "../../components/shared";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setHasVisited } from "../../store/auth/userSlice";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setHasVisited } from "@/store/auth/userSlice";
 
 const Landing = () => {
     // const Step1 = lazy(() => import("./components/Step1"))
@@ -13,20 +13,32 @@ const Landing = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const location = useLocation();
+    console.log(location.pathname);
+
+    const { userType, hasVisited } = useSelector((state) => state.auth.user)
 
     const [step, setStep] = useState(1);
 
     useEffect(() => {
-        dispatch(setHasVisited(true))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+        if (userType !== "" && location.pathname === "/" && hasVisited) {
+            navigate('/home')
+        }
+    }, [dispatch, hasVisited, location.pathname, navigate, userType])
+
+
 
     const handleNext = useCallback(() => {
         setStep(step + 1)
     }, [step])
 
     const handleSkip = () => {
-        navigate("/register")
+        if (userType !== "") {
+            dispatch(setHasVisited(true))
+            navigate('/home')
+        } else {
+            navigate("/register")
+        }
     }
 
     // const onGetStarted = useCallback(() => {

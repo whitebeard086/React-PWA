@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { getBrowseData } from "./store/dataSlice";
 import useAuth from "@/utils/hooks/useAuth";
 import { setEnabledNotifications } from "@/store/auth/userSlice";
+import { toggleDepositDialog } from "../payments/store/stateSlice";
 
 injectReducer("settings", reducer);
 
@@ -79,17 +80,14 @@ const Settings = () => {
             <hr />
             <div className="">
                 <div>
-                    <Link
-                        className="flex items-center gap-2 transition duration-300 w-full py-4 px-4 hover:bg-gray-100 border-b-gray-200 border-b-2"
-                        to="/info"
-                    >
+                    <div onClick={() => dispatch(toggleDepositDialog(true))} className="flex items-center gap-2 transition duration-300 cursor-pointer w-full py-4 px-4 hover:bg-gray-100 border-b-gray-200 border-b-2">
                         <div className="w-full flex flex-col">
                             <span className="text-base font-semibold text-gray-600">
                                 Your Information
                             </span>
                             <p className="text xs">Account details</p>
                         </div>
-                    </Link>
+                    </div>
 
                     <Link
                         className="flex items-center gap-2 transition duration-300 w-full py-4 px-4 hover:bg-gray-100 border-b-gray-200 border-b-2"

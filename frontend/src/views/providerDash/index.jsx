@@ -22,14 +22,13 @@ const ProviderDashboard = () => {
     );
     const { serviceBooked } = useSelector((state) => state.chat.data);
     const { loading } = useSelector((state) => state.dashboard.data);
-    const { profile } = useSelector((state) => state.auth.user);
+    // const { profile } = useSelector((state) => state.auth.user);
     // const loading = true
 
-    // useEffect(() => {
-    //     dispatch(getDashboardData());
-    //     socket.emit("addNewUser", profile?.id);
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [dispatch]);
+    useEffect(() => {
+        dispatch(getDashboardData());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch]);
 
     useEffect(() => {
         if (serviceCompleted || serviceConfirmed || serviceBooked) {
