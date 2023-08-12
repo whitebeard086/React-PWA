@@ -153,4 +153,31 @@ class WithdrawalController extends Controller
             ], 500);
         }
     }
+
+    public function payout_customer(Request $request)
+    {
+        try {
+            $user = User::where('id', auth()->user()->id)->first();
+            
+            if (!Hash::check($request->password, $user->password)) {
+                return response()->json([
+                    'status' => 'password error',
+                    'message' => 'Incorrect password'
+                ], 400);
+            }
+
+            $response = $this->payoutCustomer($request);
+
+            return response()->json([
+                'status' => 'success',
+                'response' => $response,
+            ], 200);
+             
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }

@@ -2,6 +2,9 @@
 
 namespace App\Traits;
 
+use App\Models\Transaction;
+use Illuminate\Support\Str;
+
 trait GatewayTrait
 {
     public function assignVirtualAccount($user)
@@ -331,4 +334,57 @@ trait GatewayTrait
         ];
     }
 
+    public function payoutCustomer($request)
+    {
+        try {
+            $uuid = Str::uuid();
+            
+            $url = "https://api.paystack.co/transfer";
+            $paystackSecret = env('PAYSTACK_SECRET');
+
+            $requestData = [
+                'source' => 'balance',
+                'amount' => $request->amount,
+                'reference' => $uuid,
+                'recipient' => $request->recipientCode,
+                'reason' => "Taskitly Withdrawal"
+            ];
+
+            $headers = [
+                "Authorization: Bearer $paystackSecret",
+                "Cache-Control: no-cache",
+            ];
+
+            $ch = curl_init();
+
+            curl_setopt_array($ch, [
+                CURLOPT_URL => $url,
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => http_build_query($requestData),
+                CURLOPT_HTTPHEADER => $headers,
+                CURLOPT_RETURNTRANSFER => true,
+            ]);
+
+            $response = curl_exec($ch);
+            
+            if (curl_errno($ch)) {
+                throw new \Exception(curl_error($ch));
+            }
+
+            curl_close($ch);
+
+            $responseData = json_decode($response, true);
+
+            if (isset($responseData['status']) && $responseData['status'] === false) {
+                throw new \Exception($responseData['message'] ?? 'An error occurred during transfer.');
+            }
+
+            return $responseData;
+        } catch (\Exception $e) {
+            return [
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ];
+        }
+    }
 }

@@ -79,6 +79,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Withdrawal Routes 
     Route::get('/withdraw', [WithdrawalController::class, 'index']);
     Route::post('/withdraw/new-account', [WithdrawalController::class, 'add_account']);
+    Route::post('/withdraw/payout', [WithdrawalController::class, 'payout_customer']);
     Route::post('/withdraw/account/resolve', [WithdrawalController::class, 'resolve_account_number']);
     Route::post('/withdraw/transfer-recipient', [WithdrawalController::class, 'create_transfer_recipient']);
     Route::post('/withdraw/account/delete', [WithdrawalController::class, 'remove_account']);
