@@ -1,1 +1,0 @@
-import{j as t}from"./index-508e130b.js";const s=()=>t.jsx("div",{className:"mt-2 p-4",children:t.jsx("div",{className:"min-h-[60vh] flex justify-center items-center",children:t.jsxs("p",{className:"text-3xl font-bold text-gray-400",children:["You do not have any ",t.jsx("br",{})," booking history yet"]})})});export{s as default};

@@ -21,7 +21,7 @@ const CheckVerifications = () => {
     ) : userType === "Client" && !verifiedPhone ? (
         <Navigate to="/verify" state={{ from: location }} replace />
     ) : (
-        <Navigate to="/login" state={{ from: location }} replace />
+        <Navigate to="/" state={{ from: location }} replace />
     );
 };
 export default CheckVerifications;

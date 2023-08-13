@@ -15,8 +15,8 @@ const Header = () => {
         return (
             <div className="cursor-pointer transition duration-500 hover:bg-gray-200 h-9 w-9 rounded-full grid place-content-center">
                 <div className="relative w-full h-full">
-                    <div className="h-3 w-3 animate-ping rounded-full bg-primary-500 absolute left-4" />
-                    <div className="h-3 w-3 rounded-full bg-primary-500 absolute left-4" />
+                    {/* <div className="h-3 w-3 animate-ping rounded-full bg-primary-500 absolute left-4" />
+                    <div className="h-3 w-3 rounded-full bg-primary-500 absolute left-4" /> */}
                     <IoMdNotificationsOutline className="text-3xl" />
                 </div>
             </div>

@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import useTimeOutMessage from "../../../../utils/hooks/useTimeOutMessage";
 import useTimeOutStatus from "../hooks/UseTimeoutStatus";
 import useEmailMessage from "../hooks/UseEmailMessage";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
     setChar,
     setLoCase,
@@ -37,6 +37,8 @@ import { checkEmail, checkUser, setSignupData } from "../../store/dataSlice";
 const SignupForm = (props) => {
     const { disableSubmit = false, className, signInUrl = "/login" } = props;
 
+    const [type, setType] = useState(1)
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const location = useLocation();
@@ -47,7 +49,7 @@ const SignupForm = (props) => {
         username: Yup.string().required("Please enter your user name"),
         first_name: Yup.string().required("Please enter your first name"),
         last_name: Yup.string().required("Please enter your last name"),
-        userType: Yup.string().required("Please choose a profile type"),
+        userType: Yup.string("Please choose a profile type"),
         email: Yup.string()
             .email("Invalid email")
             .required("Please enter your email"),
@@ -65,6 +67,10 @@ const SignupForm = (props) => {
     let caps, small, num, password, specialSymbol;
 
     const { signUp } = useAuth();
+
+    const onChangeType = (val) => {
+        setType(val)
+    }
 
     const {
         status,
@@ -172,7 +178,8 @@ const SignupForm = (props) => {
             password,
             email,
             password_confirmation,
-            profile_type_id: userType,
+            // profile_type_id: userType,
+            profile_type_id: type,
         });
 
         const data = {
@@ -236,7 +243,7 @@ const SignupForm = (props) => {
                 }) => {
                     const passwordMatch =
                         values.password === values.password_confirmation;
-                    console.log(values);
+                    // console.log(values);
                     const onValidate = (e) => {
                         password = e.target.value;
                         caps = (password.match(/[A-Z]/g) || []).length;
@@ -326,7 +333,11 @@ const SignupForm = (props) => {
                                                 </Card>
                                             ) : (
                                                 <div className="flex justify-center">
-                                                    <Radio.Group
+                                                    <Radio.Group value={type} onChange={onChangeType} className="flex w-full items-center gap-4">
+                                                        <Radio value={1} className="border-2 w-full p-2 rounded-md border-gray-400 !mr-0">Client</Radio>
+                                                        <Radio value={2} className="border-2 w-full p-2 rounded-md border-gray-400 !mr-0">Provider</Radio>
+                                                    </Radio.Group>
+                                                    {/* <Radio.Group
                                                         className="flex w-full items-center gap-4"
                                                         value={[field.value]}
                                                         onChange={(val) =>
@@ -351,7 +362,7 @@ const SignupForm = (props) => {
                                                                 </Radio>
                                                             )
                                                         )}
-                                                    </Radio.Group>
+                                                    </Radio.Group> */}
                                                 </div>
                                             );
                                         }}
@@ -666,7 +677,6 @@ const SignupForm = (props) => {
                                         !emailAvail ||
                                         !passwordMatch ||
                                         !terms ||
-                                        !values.userType ||
                                         !values.first_name ||
                                         !values.last_name
                                     }

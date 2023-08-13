@@ -22,8 +22,6 @@ const ProviderDashboard = () => {
     );
     const { serviceBooked } = useSelector((state) => state.chat.data);
     const { loading } = useSelector((state) => state.dashboard.data);
-    // const { profile } = useSelector((state) => state.auth.user);
-    // const loading = true
 
     useEffect(() => {
         dispatch(getDashboardData());

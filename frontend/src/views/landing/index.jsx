@@ -37,7 +37,7 @@ const Landing = () => {
             dispatch(setHasVisited(true))
             navigate('/home')
         } else {
-            navigate("/register")
+            navigate("/login")
         }
     }
 

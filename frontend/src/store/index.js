@@ -10,7 +10,7 @@ const persistConfig = {
     key: PERSIST_STORE_NAME,
     keyPrefix: "",
     storage,
-    whitelist: ["auth", "payments", "withdraw", "chat"],
+    whitelist: ["auth", "payments", "withdraw", "chat", "requests"],
     // serialize: false,
     // deserialize: false,
 };

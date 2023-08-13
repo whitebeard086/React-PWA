@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Button } from "../../../components/ui"
 
 const Step4 = ({ onNext, onSkip }) => {

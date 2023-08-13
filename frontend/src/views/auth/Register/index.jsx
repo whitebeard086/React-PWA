@@ -14,9 +14,9 @@ const Register = () => {
     // const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(getProfileTypes())
-    }, [dispatch])
+    // useEffect(() => {
+    //     dispatch(getProfileTypes())
+    // }, [dispatch])
 
     // const goBack = () => {
     //     navigate(-1);

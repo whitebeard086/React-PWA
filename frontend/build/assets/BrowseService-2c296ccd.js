@@ -1,0 +1,1 @@
+import{az as a}from"./index-2aa62b4f.js";async function r(t){return a.fetchData({url:"/browse",method:"get",data:t})}async function o(t){return a.fetchData({url:"/browse/category",method:"post",data:t})}export{r as a,o as b};

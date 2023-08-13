@@ -1,1 +1,0 @@
-import{ap as a}from"./index-508e130b.js";async function r(t){return a.fetchData({url:"/browse",method:"get",data:t})}async function o(t){return a.fetchData({url:"/browse/category",method:"post",data:t})}export{r as a,o as b};

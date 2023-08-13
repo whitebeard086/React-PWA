@@ -13,6 +13,7 @@ import { socket } from "@/utils/socket";
 import { setMessages } from "../chat/store/dataSlice";
 import DepositDialog from "../payments/components/Deposit/DepositDialog";
 import { toggleWithdrawDialog } from "../withdraw/store/stateSlice";
+import WithdrawDialog from "../withdraw/components/withdraw";
 
 const Layout = () => {
     const dispatch = useDispatch();
@@ -103,6 +104,7 @@ const Layout = () => {
             <Footer />
 
             <DepositDialog />
+            <WithdrawDialog />
         </Container>
     );
 };

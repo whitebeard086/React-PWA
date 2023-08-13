@@ -1,7 +1,9 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import dayjs from "dayjs";
+import calendar from 'dayjs/plugin/calendar'
 import classNames from "classnames";
 
 import {
@@ -26,6 +28,7 @@ import { pdfjs } from "react-pdf";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+dayjs.extend(calendar)
 
 const Messages = ({ isOwner, sender, receiver }) => {
     const dispatch = useDispatch();
@@ -178,7 +181,7 @@ const Messages = ({ isOwner, sender, receiver }) => {
                                             )}
                                         </div>
                                     )} */}
-                                    <Dropdown
+                                    {/* <Dropdown
                                         placement={
                                             owner ? "top-end" : "top-start"
                                         }
@@ -223,12 +226,12 @@ const Messages = ({ isOwner, sender, receiver }) => {
                                             </span>
                                             <span>Delete</span>
                                         </Dropdown.Item>
-                                    </Dropdown>
+                                    </Dropdown> */}
                                 </div>
                             </Card>
                             <div>
                                 <p className="text-left">
-                                    {dayjs(message.created_at).format("h:mm A")}
+                                    {dayjs(message.created_at).format("DD MMM, YYYY - h:mm A")}
                                 </p>
                             </div>
                         </div>

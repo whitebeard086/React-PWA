@@ -10,7 +10,6 @@ import { getWithdrawalData } from "./store/dataSlice";
 import { toggleAccountDialog } from "./store/stateSlice";
 import NewAccountDialog from "./components/newAccount/NewAccountDialog";
 import RemoveAccount from "./components/newAccount/RemoveAccount";
-import WithdrawDialog from "./components/withdraw";
 
 injectReducer("withdraw", reducer);
 
@@ -53,7 +52,6 @@ const Withdraw = () => {
             
             <NewAccountDialog />
             <RemoveAccount />
-            <WithdrawDialog />
         </div>
     )
 }
