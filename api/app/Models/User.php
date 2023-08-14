@@ -28,6 +28,7 @@ class User extends Authenticatable
         'phone',
         'phone_verified_at',
         'profile_views',
+        'transaction_pin',
     ];
 
     /**
@@ -38,6 +39,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'transaction_pin',
     ];
 
     /**
@@ -48,6 +50,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'transaction_pin' => 'hashed',
         'profile_type_id' => 'float',
         'balance' => 'float',
         'profile_views' => 'float',

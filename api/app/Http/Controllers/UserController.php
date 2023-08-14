@@ -10,10 +10,11 @@ use App\Models\Category;
 use App\Models\Workdays;
 use App\Models\ProfileType;
 use App\Models\SubCategory;
-use App\Traits\GatewayTrait;
 use Illuminate\Support\Str;
+use App\Traits\GatewayTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
@@ -49,9 +50,16 @@ class UserController extends Controller
                     'message' => 'Phone not verified',
                 ]);
             }
+
+            if (isset($user->transaction_pin)) {
+                $has_pin = true;
+            } else {
+                $has_pin = false;
+            }
             
             return response()->json([
                 'user' => $user,
+                'hasPin' => $has_pin,
                 // 'update' => $update,
                 // 'users' => $users,
             ]);
@@ -383,6 +391,75 @@ class UserController extends Controller
                 'status' => 'success',
                 'provider' => $provider,
             ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function create_pin(Request $request)
+    {
+        $request->validate([
+            'pin' => 'required|integer',
+            'pin_confirmation' => 'same:pin',
+        ]);
+        
+        try {
+            $user = User::where('id', auth()->user()->id)->firstOrFail();
+
+            if (isset($user)) {
+                $user->transaction_pin = bcrypt($request->pin);
+                $user->save();
+            }
+
+            return response()->json([
+                'status' => 'success',
+            ], 200);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function update_pin(Request $request)
+    {
+        $request->validate([
+            'old_pin' => 'required|integer',
+            'pin' => 'required|integer',
+            'pin_confirmation' => 'same:pin',
+        ]);
+        
+        try {
+            $user = User::where('id', auth()->user()->id)->firstOrFail();
+            
+            if (isset($user)) {
+                if (!Hash::check($request->old_pin, $user->transaction_pin)) {
+                    return response()->json([
+                        'status' => 'pin error',
+                        'message' => 'Incorrect pin'
+                    ], 400);
+                }
+                
+                if (Hash::check($request->pin, $user->transaction_pin)) {
+                    return response()->json([
+                        'status' => 'duplicate error',
+                        'message' => 'Incorrect pin'
+                    ], 400);
+                }
+                
+                $user->transaction_pin = bcrypt($request->pin);
+                $user->save();
+            }
+
+            return response()->json([
+                'status' => 'success',
+            ], 200);
             
         } catch (\Exception $e) {
             return response()->json([

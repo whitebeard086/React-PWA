@@ -28,8 +28,6 @@ const CreatePin = () => {
 
     const [pin, setPin] = useState('')
     const [confirmPin, setConfirmPin] = useState('')
-    console.log('PIN: ', pin);
-    console.log('Confirm PIN: ', confirmPin);
 
     const { loading, status } = useSelector((state) => state.pin.data)
 
@@ -75,7 +73,7 @@ const CreatePin = () => {
             dispatch(getUser())
 
             popNotification(
-                "Transaction password created successfully.",
+                "Transaction PIN created successfully.",
                 "success",
                 "Success",
                 5000

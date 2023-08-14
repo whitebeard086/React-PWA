@@ -191,3 +191,11 @@ export async function apiCreatePin (data) {
         data
     })
 }
+
+export async function apiUpdatePin (data) {
+    return ApiService.fetchData({
+        url: '/profile/pin/update',
+        method: 'post',
+        data
+    })
+}

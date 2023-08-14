@@ -2,6 +2,7 @@ import { injectReducer } from "@/store";
 import reducer from "./store";
 import { useSelector } from "react-redux";
 import CreatePin from "./components/create";
+import UpdatePin from "./components/update";
 
 injectReducer("pin", reducer);
 
@@ -15,6 +16,10 @@ const Pin = () => {
                     <h4 className="text-lg font-bold text-gray-700 mb-4">
                         Update Your Transaction PIN
                     </h4>
+
+                    <div className="mt-4">
+                        <UpdatePin />
+                    </div>
                 </div>
             ) : (
                 <div>
