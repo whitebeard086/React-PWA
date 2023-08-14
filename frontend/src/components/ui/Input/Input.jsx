@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import React, { useState, useEffect, useMemo, useRef } from 'react'
 import classNames from 'classnames'
 import PropTypes from 'prop-types'
@@ -113,7 +114,7 @@ const Input = React.forwardRef((props, ref) => {
 		const rightGutter = `${remToPxConvertion(suffixGutter) + 1}rem`
 		let gutterStyle = {}
 
-		if(direction === 'ltr') {
+		// if(direction === 'ltr') {
 			if(prefix) {
 				gutterStyle.paddingLeft = leftGutter
 			}
@@ -121,17 +122,17 @@ const Input = React.forwardRef((props, ref) => {
 			if(suffix) {
 				gutterStyle.paddingRight = rightGutter
 			}
-		}
+		// }
 
-		if(direction === 'rtl') {
-			if(prefix) {
-				gutterStyle.paddingRight = leftGutter
-			}
+		// if(direction === 'rtl') {
+		// 	if(prefix) {
+		// 		gutterStyle.paddingRight = leftGutter
+		// 	}
 	
-			if(suffix) {
-				gutterStyle.paddingLeft = rightGutter
-			}
-		}
+		// 	if(suffix) {
+		// 		gutterStyle.paddingLeft = rightGutter
+		// 	}
+		// }
 			
 		return gutterStyle
 	}

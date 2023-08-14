@@ -37,6 +37,7 @@ const History = lazy(() => import("./views/requests/components/History"));
 const Category = lazy(() => import("./views/browse/components/category"));
 const ProviderDashboard = lazy(() => import("./views/providerDash"));
 const Withdraw = lazy(() => import("./views/withdraw"));
+const Pin = lazy(() => import("./views/pin"));
 
 
 function App() {
@@ -188,6 +189,10 @@ function App() {
                                     <Route
                                         path="/browse/profile/:providerSlug"
                                         element={<ProviderProfile />}
+                                    />
+                                    <Route
+                                        path="/transaction-pin"
+                                        element={<Pin />}
                                     />
                                     <Route
                                         path="/unauthorized"

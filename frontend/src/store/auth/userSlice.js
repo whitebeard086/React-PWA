@@ -17,6 +17,7 @@ export const initialState = {
     profile: {},
     onlineUsers: [],
     userType: "",
+    hasPin: false,
     hasVisited: false,
     hasService: null,
     userSet: null,
@@ -55,18 +56,20 @@ export const userSlice = createSlice({
             })
             .addCase(getUser.fulfilled, (state, action) => {
                 state.gettingUser = false;
-                state.profile = action.payload.user;
-                state.userType = action.payload.user.profile_type.name
+                const { user, hasPin } = action.payload;
+                state.profile = user;
+                state.hasPin = hasPin;
+                state.userType = user.profile_type.name
 
-                if (action.payload.user.phone_verified_at === null) {
+                if (user.phone_verified_at === null) {
                     state.verifiedPhone = false
-                } else if (action.payload.user.phone_verified_at !== null) {
+                } else if (user.phone_verified_at !== null) {
                     state.verifiedPhone = true
                 }
 
-                if (action.payload.user.service === null) {
+                if (user.service === null) {
                     state.hasService = false
-                } else if (action.payload.user.service) {
+                } else if (user.service) {
                     state.hasService = true
                 }
             })
