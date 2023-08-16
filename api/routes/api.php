@@ -13,6 +13,7 @@ use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\RequestsController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\BillsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WithdrawalController;
 
@@ -98,4 +99,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/book-service', [BookingController::class, 'book_service']);
     Route::post('/service/complete', [BookingController::class, 'complete_service']);
     Route::post('/service/confirm', [BookingController::class, 'confirm_service']);
+
+    // Bills Routes
+    Route::get('/bills/operators', [BillsController::class, 'get_operators']);
 });

@@ -38,6 +38,7 @@ const Category = lazy(() => import("./views/browse/components/category"));
 const ProviderDashboard = lazy(() => import("./views/providerDash"));
 const Withdraw = lazy(() => import("./views/withdraw"));
 const Pin = lazy(() => import("./views/pin"));
+const Airtime = lazy(() => import("./views/bills/airtime"));
 
 
 function App() {
@@ -193,6 +194,10 @@ function App() {
                                     <Route
                                         path="/transaction-pin"
                                         element={<Pin />}
+                                    />
+                                    <Route
+                                        path="/bills/airtime"
+                                        element={<Airtime />}
                                     />
                                     <Route
                                         path="/unauthorized"
