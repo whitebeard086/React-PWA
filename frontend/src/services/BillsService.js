@@ -7,3 +7,19 @@ export async function apiGetOperators (data) {
         data
     })
 }
+
+export async function apiGetProducts (data) {
+    return ApiService.fetchData({
+        url: '/bills/operator/products',
+        method: 'post',
+        data
+    })
+}
+
+export async function apiBuyAirtime (data) {
+    return ApiService.fetchData({
+        url: '/bills/airtime',
+        method: 'post',
+        data
+    })
+}

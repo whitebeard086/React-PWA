@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import reducer from "./store";
 import { getCountries, setMessage } from "./store/dataSlice";
-import { Container } from "@/components/shared";
+import { Container, Loading } from "@/components/shared";
 import { injectReducer } from "@/store";
 
 injectReducer("verify", reducer);
@@ -42,7 +42,11 @@ const Verify = () => {
 
     return (
         <Container className="max-w-xl h-screen bg-white">
-            <Suspense fallback={<></>}>
+            <Suspense fallback={
+                <div className="flex flex-auto flex-col h-[100vh]">
+                    <Loading loading={true} />
+                </div>
+            }>
                 {step === 1 && <Step1 onNext={handleNext} />}
                 {step === 2 && <Step2 onNext={handleNext} onBack={handleBack} />}
             </Suspense>
