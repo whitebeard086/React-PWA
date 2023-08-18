@@ -25,9 +25,10 @@ const Provider = () => {
         (state) => state.profile.data
     );
     const { profile } = useSelector((state) => state.auth.user);
+    const { signedIn } = useSelector((state) => state.auth.session)
 
     useEffect(() => {
-        if (profile?.id !== provider?.id) {
+        if (profile?.id !== provider?.id && signedIn) {
             dispatch(updateProfileView({ provider_id: provider?.id }));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -313,14 +314,27 @@ const Provider = () => {
                 </div>
             </Card>
 
-            {provider?.id !== profile?.id && (
+            {signedIn ? (
+                provider?.id !== profile?.id && (
+                    <div className="mt-4">
+                        <Link
+                            to={`/chat/${provider?.slug}`}
+                            state={{ provider_id: provider?.id }}
+                        >
+                            <Button variant="solid" block icon={<AiFillWechat />}>
+                                Chat Now
+                            </Button>
+                        </Link>
+                    </div>
+                )
+            ):(
                 <div className="mt-4">
                     <Link
-                        to={`/chat/${provider?.slug}`}
+                        to="/login"
                         state={{ provider_id: provider?.id }}
                     >
                         <Button variant="solid" block icon={<AiFillWechat />}>
-                            Chat Now
+                            Login to Chat
                         </Button>
                     </Link>
                 </div>

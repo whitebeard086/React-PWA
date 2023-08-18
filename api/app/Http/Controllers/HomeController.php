@@ -44,6 +44,26 @@ class HomeController extends Controller
         }
     }
 
+    public function guest()
+    {
+        try {
+            $categories = Category::all();
+            $services = Service::with('Category', 'SubCategory', 'Workdays', 'User')->get();
+
+            return response()->json([
+                'status' => 'success',
+                'categories' => $categories,
+                'services' => $services,
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
     public function create_category(Request $request)
     {
         $category = new Category;

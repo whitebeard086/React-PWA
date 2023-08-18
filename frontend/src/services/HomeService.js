@@ -8,6 +8,14 @@ export async function apiGetHomeData (data) {
     })
 }
 
+export async function apiGetHomeGuestData (data) {
+    return ApiService.fetchData({
+        url: '/home/guest',
+        method: 'get',
+        data
+    })
+}
+
 export async function apiCreateCategory (data) {
     return ApiService.fetchData({
         url: '/category',

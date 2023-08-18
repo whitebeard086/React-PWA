@@ -36,11 +36,19 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [UserController::class, 'register']);
 Route::webhooks('paystack/webhook');
 
+// Home Routes
+Route::get('/home/guest', [HomeController::class, 'guest']);
+
+// Browse routes
+Route::get('/browse', [BrowseController::class, 'index']);
+Route::post('/browse/category', [BrowseController::class, 'get_category']);
+Route::post('/profile/provider', [UserController::class, 'get_provider']);
+
+
 // Protected Routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
     // Authentication routes
     Route::get('/profile/user', [UserController::class, 'get_user']);
-    Route::post('/profile/provider', [UserController::class, 'get_provider']);
     Route::get('/countries', [UserController::class, 'get_countries']);
     Route::get('/categories', [UserController::class, 'get_categories']);
     Route::post('/category/subcategories', [UserController::class, 'get_subcategories']);
@@ -65,10 +73,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // Dashboard routes
     Route::get('/dashboard', [DashboardController::class, 'index']);
-
-    // Browse routes
-    Route::get('/browse', [BrowseController::class, 'index']);
-    Route::post('/browse/category', [BrowseController::class, 'get_category']);
 
     // Request routes
     Route::get('/requests', [RequestsController::class, 'index']);

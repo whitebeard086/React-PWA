@@ -161,6 +161,7 @@ const SignInForm = (props) => {
                                     >
                                         Sign up
                                     </Link>
+                                    <span> or <Link to="/home" className="underline font-bold text-primary-500">Continue as Guest</Link></span>
                                 </div>
                             </div>
                         </FormContainer>

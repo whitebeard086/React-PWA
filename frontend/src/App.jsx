@@ -125,6 +125,31 @@ function App() {
                         <Route path="/" element={<Landing />} />
                         <Route path="/register" element={<Register />} />
                         <Route path="/login" element={<Login />} />
+
+                        <Route path="/" element={<Layout />}>
+                            <Route
+                                path="/home"
+                                element={
+                                    userType === "Provider" ? (
+                                        <ProviderDashboard />
+                                    ) : (
+                                        <Home />
+                                    )
+                                }
+                            />
+                            <Route
+                                path="/browse"
+                                element={<Browse />}
+                            />
+                            <Route
+                                path="/browse/:categorySlug"
+                                element={<Category />}
+                            />
+                            <Route
+                                path="/browse/profile/:providerSlug"
+                                element={<ProviderProfile />}
+                            />
+                        </Route>
                         <Route element={<RequireAuth />}>
                             <Route path="/verify" element={<Verify />} />
                             <Route element={<RequireServiceProvider />}>
@@ -149,16 +174,7 @@ function App() {
                                     />
                                 </Route>
                                 <Route element={<CheckVerifications />}>
-                                    <Route
-                                        path="/home"
-                                        element={
-                                            userType === "Provider" ? (
-                                                <ProviderDashboard />
-                                            ) : (
-                                                <Home />
-                                            )
-                                        }
-                                    />
+                                    
                                     <Route
                                         path="/chat/:providerSlug"
                                         element={<Chat />}
@@ -178,18 +194,6 @@ function App() {
                                     <Route
                                         path="/requests/history"
                                         element={<History />}
-                                    />
-                                    <Route
-                                        path="/browse"
-                                        element={<Browse />}
-                                    />
-                                    <Route
-                                        path="/browse/:categorySlug"
-                                        element={<Category />}
-                                    />
-                                    <Route
-                                        path="/browse/profile/:providerSlug"
-                                        element={<ProviderProfile />}
                                     />
                                     <Route
                                         path="/transaction-pin"
