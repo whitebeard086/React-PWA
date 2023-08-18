@@ -199,3 +199,19 @@ export async function apiUpdatePin (data) {
         data
     })
 }
+
+export async function apiDeleteAccount (data) {
+    return ApiService.fetchData({
+        url: '/profile/delete',
+        method: 'post',
+        data
+    })
+}
+
+export async function apiCancelDeleteAccount (data) {
+    return ApiService.fetchData({
+        url: '/profile/delete/cancel',
+        method: 'post',
+        data
+    })
+}

@@ -3,12 +3,17 @@ import User from "./components/User";
 import reducer from "./store";
 import { injectReducer } from "@/store";
 import { Link } from "react-router-dom";
-import { HiOutlineLogout, HiOutlineUser } from "react-icons/hi";
+import { HiOutlineLogout } from "react-icons/hi";
 import { useEffect } from "react";
 import { getBrowseData } from "./store/dataSlice";
 import useAuth from "@/utils/hooks/useAuth";
 import { setEnabledNotifications } from "@/store/auth/userSlice";
 import { toggleDepositDialog } from "../payments/store/stateSlice";
+import { Button } from "@/components/ui";
+import { toggleCancelDeleteDialog, toggleDeleteDialog } from "./store/stateSlice";
+import DeleteAccount from "./components/DeleteAccount";
+import Countdown from "react-countdown";
+import CancelDialog from "./components/DeleteAccount/CancelDialog";
 
 injectReducer("settings", reducer);
 
@@ -72,6 +77,14 @@ const Settings = () => {
             });
         });
     };
+
+    const handleDeleteAccount = () => {
+        dispatch(toggleDeleteDialog(true));
+    }
+
+    const handleCancelDelete = () => {
+        dispatch(toggleCancelDeleteDialog(true));
+    }
 
     return (
         <div className="bg-white min-h-[80vh]">
@@ -185,7 +198,7 @@ const Settings = () => {
 
                     <div
                         onClick={handleSignOut}
-                        className="flex items-center gap-2 cursor-pointer transition duration-300 w-full py-4 px-4 hover:bg-gray-100"
+                        className="flex items-center gap-2 cursor-pointer transition duration-300 w-full py-4 px-4 hover:bg-gray-100 border-b-gray-200 border-b-2"
                     >
                         <span className="text-xl text-red-500 opacity-50">
                             <HiOutlineLogout />
@@ -194,9 +207,39 @@ const Settings = () => {
                             Logout
                         </span>
                     </div>
+
+                    <div className="p-4">
+                        {profile?.deactivate_at === null ? (
+                            <Button
+                                variant="solid"
+                                size="sm"
+                                className="bg-red-100 !text-red-500 hover:!text-white hover:bg-red-500"
+                                onClick={handleDeleteAccount}
+                            >
+                                Delete your account
+                            </Button>
+                        ) : (
+                            <div className="">
+                                <span className="text-base font-semibold text-red-500">
+                                    Your account will be deleted in <Countdown daysInHours={true} date={profile?.deactivate_at} />
+                                </span>
+
+                                <Button
+                                    variant="solid"
+                                    size="sm"
+                                    className="!bg-gray-900 hover:!bg-black block mt-4"
+                                    onClick={handleCancelDelete}
+                                >
+                                    Cancel
+                                </Button>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 
+            <DeleteAccount />
+            <CancelDialog />
             {/* <UpdateCategory /> */}
         </div>
     );

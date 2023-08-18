@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import classNames from 'classnames';
 import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';

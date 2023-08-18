@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -128,5 +129,61 @@ class AuthController extends Controller
         return [
             'message' => 'Logged out'
         ];
+    }
+
+    public function delete_account(Request $request)
+    {
+        try {
+            $user = User::where('id', auth()->user()->id)->first();
+
+            if (!Hash::check($request->password, $user->password)) {
+                return response()->json([
+                    'status' => 'password error',
+                    'message' => 'Incorrect password'
+                ], 400);
+            }
+
+            $user->deactivate_at = Carbon::now()->addHours(72);
+            $user->save();
+            
+            return response()->json([
+                'status' => 'success',
+                'user' => $user
+            ], 200);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function cancel_delete_account(Request $request)
+    {
+        try {
+            $user = User::where('id', auth()->user()->id)->first();
+
+            if (!Hash::check($request->password, $user->password)) {
+                return response()->json([
+                    'status' => 'password error',
+                    'message' => 'Incorrect password'
+                ], 400);
+            }
+
+            $user->deactivate_at = null;
+            $user->save();
+            
+            return response()->json([
+                'status' => 'success',
+                'user' => $user
+            ], 200);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

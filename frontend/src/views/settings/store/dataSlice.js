@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { apiUploadImage } from "@/services/AuthService";
+import { apiCancelDeleteAccount, apiDeleteAccount, apiUploadImage } from "@/services/AuthService";
 import { apiGetBrowseData, apiGetCategory } from "@/services/BrowseService";
 import { apiCreateCategory, apiUpdateCategory } from "@/services/HomeService";
 
@@ -63,6 +63,30 @@ export const uploadImage = createAsyncThunk(
     }
 );
 
+export const deleteAccount = createAsyncThunk(
+    "settings/data/deleteAccount",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await apiDeleteAccount(data);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const cancelDeleteAccount = createAsyncThunk(
+    "settings/data/cancelDeleteAccount",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await apiCancelDeleteAccount(data);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 const dataSlice = createSlice({
     name: "settings/data",
     initialState: {
@@ -71,12 +95,17 @@ const dataSlice = createSlice({
         creatingCategory: false,
         updatingCategory: false,
         uploading: false,
+        deletingAccount: false,
         category: {},
         uploadStatus: "idle",
+        deleteStatus: "idle",
     },
     reducers: {
         setUploadStatus: (state, action) => {
             state.uploadStatus = action.payload;
+        },
+        setDeleteStatus: (state, action) => {
+            state.deleteStatus = action.payload;
         },
     },
     extraReducers: (builder) => {
@@ -133,10 +162,41 @@ const dataSlice = createSlice({
             .addCase(uploadImage.rejected, (state) => {
                 state.uploading = false;
                 state.uploadStatus = "error";
-            });
+            })
+
+            .addCase(deleteAccount.pending, (state) => {
+                state.deletingAccount = true;
+            })
+            .addCase(deleteAccount.fulfilled, (state, action) => {
+                state.deletingAccount = false;
+                const { status } = action.payload;
+                state.deleteStatus = status;
+            })
+            .addCase(deleteAccount.rejected, (state, action) => {
+                state.deletingAccount = false;
+                const { status } = action.payload;
+                state.deleteStatus = status;
+            })
+
+            .addCase(cancelDeleteAccount.pending, (state) => {
+                state.deletingAccount = true;
+            })
+            .addCase(cancelDeleteAccount.fulfilled, (state, action) => {
+                state.deletingAccount = false;
+                const { status } = action.payload;
+                state.deleteStatus = status;
+            })
+            .addCase(cancelDeleteAccount.rejected, (state, action) => {
+                state.deletingAccount = false;
+                const { status } = action.payload;
+                state.deleteStatus = status;
+            })
     },
 });
 
-export const { setUploadStatus } = dataSlice.actions;
+export const { 
+    setUploadStatus, 
+    setDeleteStatus, 
+} = dataSlice.actions;
 
 export default dataSlice.reducer;

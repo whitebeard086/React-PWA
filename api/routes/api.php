@@ -53,6 +53,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/profile/banner/upload', [UserController::class, 'upload_banner']);
     Route::post('/profile/pin', [UserController::class, 'create_pin']);
     Route::post('/profile/pin/update', [UserController::class, 'update_pin']);
+    Route::post('/profile/delete', [AuthController::class, 'delete_account']);
+    Route::post('/profile/delete/cancel', [AuthController::class, 'cancel_delete_account']);
 
     Route::post('/profile/view', [UserController::class, 'update_profile_view']);
 
