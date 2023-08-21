@@ -172,6 +172,15 @@ class BookingController extends Controller
             DB::beginTransaction();
 
             // Update booking status
+            if ($request->rating) {
+                $booking->rating = $request->rating;
+            } else {
+                return response()->json([
+                    'status' => 'rating error',
+                    'message' => 'Please kindly rate this service',
+                ], 400);
+            }
+            $booking->comment = $request->comment;
             $booking->user_status = 'completed';
             $booking->status = 'completed';
             $booking->save();

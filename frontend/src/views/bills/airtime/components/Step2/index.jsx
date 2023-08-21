@@ -3,14 +3,20 @@ import { Button, Notification, toast } from "@/components/ui"
 import { AiOutlineRollback } from "react-icons/ai"
 import { BsBagCheckFill } from "react-icons/bs"
 import { useDispatch, useSelector } from "react-redux"
-import { buyAirtime, setBuyStatus } from "../../store/dataSlice"
+import { setBuyStatus } from "../../store/dataSlice"
 import { useEffect } from "react"
+import { togglePinDialog } from "../../store/stateSlice"
+import RequirePin from "./RequirePin"
+import { useNavigate } from "react-router-dom"
+import { getUser } from "@/store/auth/userSlice"
 
 const Step2 = ({ onBack }) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const { formData } = useSelector((state) => state.airtime.state)
     const { buyStatus, buyingAirtime } = useSelector((state) => state.airtime.data)
+    const { hasPin } = useSelector((state) => state.auth.user)
 
     const popNotification = (message, type, title, duration) => {
         toast.push(
@@ -49,20 +55,21 @@ const Step2 = ({ onBack }) => {
             );
 
             dispatch(setBuyStatus('idle'));
+            dispatch(getUser());
             onBack();
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [buyStatus])
 
     const onConfirm = () => {
-        dispatch(buyAirtime({
-            phone: formData?.phone,
-            amount: formData?.amount,
-            product: formData?.product,
-            operator: formData?.oid,
-            // network: formData?.operator,
-        }))
+        if (!hasPin) {
+            navigate('/transaction-pin');
+        } else {
+            dispatch(togglePinDialog(true));
+        }
     } 
+
+    
 
     return (
         <div>
@@ -122,6 +129,7 @@ const Step2 = ({ onBack }) => {
                     </Button>
                 </div>
             </div>
+            <RequirePin />
         </div>
     )
 }

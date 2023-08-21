@@ -22,7 +22,7 @@ const AirtimeForm = ({ onNext }) => {
     const { airtime, gettingProducts, productStatus } = useSelector(
         (state) => state.airtime.data
     );
-    const { operator, selectedOperator } = useSelector(
+    const { operator, selectedOperator, formData } = useSelector(
         (state) => state.airtime.state
     );
     const { profile } = useSelector((state) => state.auth.user)
@@ -38,8 +38,8 @@ const AirtimeForm = ({ onNext }) => {
     });
 
     const initialValues = {
-        phone: "",
-        amount: "",
+        phone: formData?.phone || "",
+        amount: formData?.amount || "",
     };
 
     const popNotification = (message, type, title, duration) => {

@@ -3,7 +3,7 @@ import { Button, Card, Image } from "@/components/ui";
 import appConfig from "@/configs/app.config";
 import millify from "millify";
 import { useEffect } from "react";
-import { AiFillStar, AiFillWechat } from "react-icons/ai";
+import { AiFillWechat } from "react-icons/ai";
 import { BsDashLg } from "react-icons/bs";
 import ReactQuill from "react-quill";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,21 +11,29 @@ import { Link } from "react-router-dom";
 import { updateProfileView } from "../store/dataSlice";
 import { formatTime } from "@/components/ui/utils/formatTime";
 import { useInView } from "react-intersection-observer";
+import { useAverageRating } from "@/utils/hooks/useTaskitly";
+import { Rating, Star } from "@smastrom/react-rating";
 
 const Provider = () => {
     const { imagePath } = appConfig;
     const dispatch = useDispatch();
-    const { ref, inView } = useInView({
+    const { ref } = useInView({
         /* Optional options */
         threshold: 0,
     });
-    console.log(inView);
+    const ratingStyles = {
+        itemShapes: Star,
+        activeFillColor: '#ffb700',
+        inactiveFillColor: '#36454F'
+    }
 
     const { provider, service, workdays } = useSelector(
         (state) => state.profile.data
     );
     const { profile } = useSelector((state) => state.auth.user);
     const { signedIn } = useSelector((state) => state.auth.session)
+
+    const { averageRating } = useAverageRating(service)
 
     useEffect(() => {
         if (profile?.id !== provider?.id && signedIn) {
@@ -57,19 +65,14 @@ const Provider = () => {
                         </div>
 
                         <div className="flex items-center gap-4 justify-between mt-2">
-                            <div className="flex items-center gap-2">
-                                <div className="flex items center">
-                                    <AiFillStar className="text-amber-200 text-md" />
-                                    <AiFillStar className="text-amber-200 text-md" />
-                                    <AiFillStar className="text-amber-200 text-md" />
-                                    <AiFillStar className="text-amber-200 text-md" />
-                                    <AiFillStar className="text-amber-200 text-md" />
-                                </div>
-                                {/* <p className="text-gray-300 font-semibold">5 stars</p> */}
+                            <div className="flex items-center gap-1">
+                                <p className="font-bold">{averageRating === 0 ? null : averageRating}</p>
+                                <Rating readOnly style={{ maxWidth: 80 }} itemStyles={ratingStyles} value={averageRating} />
+                                <p className="text-gray-500">({service?.bookings?.length?.toLocaleString()})</p>
                             </div>
 
                             <p className="text-gray-300 font-semibold">
-                                {millify(2300)} Orders
+                                {millify(service?.bookings?.length)} {service?.bookings?.length === 1 ? "Order" : "Orders"}
                             </p>
                         </div>
                     </Card>

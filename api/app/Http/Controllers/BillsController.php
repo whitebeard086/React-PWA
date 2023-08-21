@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Traits\BillsTrait;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class BillsController extends Controller
 {
@@ -65,6 +66,13 @@ class BillsController extends Controller
     {
         try {
             $user = User::where('id', auth()->user()->id)->first();
+
+            if (!Hash::check($request->pin, $user->transaction_pin)) {
+                return response()->json([
+                    'status' => 'pin error',
+                    'message' => 'Incorrect pin'
+                ], 400);
+            }
             
             $response = $this->buyAirtime($request);
 

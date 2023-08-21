@@ -123,7 +123,7 @@ const Messages = ({ isOwner, sender, receiver }) => {
                         <div className="mb-4 max-w-[80%] w-fit">
                             <Card
                                 className={classNames(
-                                    "max-w-[100%] w-fit",
+                                    "max-w-[100%] w-full",
                                     owner ? "bg-primary-500 text-white" : ""
                                 )}
                             >

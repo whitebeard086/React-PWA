@@ -14,6 +14,7 @@ import { setMessages } from "../chat/store/dataSlice";
 import DepositDialog from "../payments/components/Deposit/DepositDialog";
 import { toggleWithdrawDialog } from "../withdraw/store/stateSlice";
 import WithdrawDialog from "../withdraw/components/withdraw";
+import RequirePin from "../payments/components/RequirePin";
 
 const Layout = () => {
     const dispatch = useDispatch();

@@ -372,7 +372,7 @@ class UserController extends Controller
 
     public function get_provider(Request $request)
     {
-        $provider = User::with('Service.Workdays', 'Service.Category')->where('slug', $request->slug)->first(); 
+        $provider = User::with('Service.Workdays', 'Service.Category', 'Service.Bookings')->where('slug', $request->slug)->first(); 
 
         return response()->json([
             'status' => 'success',
