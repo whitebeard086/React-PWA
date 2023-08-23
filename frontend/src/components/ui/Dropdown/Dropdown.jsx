@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/display-name */
 import React, { useRef, useCallback } from 'react'
 import DropdownMenu from './DropdownMenu'
 import DropdownToggle from './DropdownToggle'

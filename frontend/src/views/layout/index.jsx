@@ -14,7 +14,7 @@ import { setMessages } from "../chat/store/dataSlice";
 import DepositDialog from "../payments/components/Deposit/DepositDialog";
 import { toggleWithdrawDialog } from "../withdraw/store/stateSlice";
 import WithdrawDialog from "../withdraw/components/withdraw";
-import RequirePin from "../payments/components/RequirePin";
+import { createNotification, getNotifications, setCreateStatus, setNotifications } from "../notifications/store/dataSlice";
 
 const Layout = () => {
     const dispatch = useDispatch();
@@ -25,16 +25,25 @@ const Layout = () => {
     );
     const { signedIn } = useSelector((state) => state.auth.session)
     const { verifying } = useSelector((state) => state.payments.data);
-    const { chat, messageStatus, sentMessage } = useSelector(
-        (state) => state.chat.data
-    );
+    const { chat, messageStatus, sentMessage } = useSelector((state) => state.chat.data);
+    const { createStatus, notification } = useSelector((state) => state.notifications.data);
 
     const receiver =
         profile?.id === chat?.user?.id ? chat?.receiver : chat?.user;
 
+    const notificationData = {
+        receiver_id: receiver?.id,
+        type: 'message',
+        data: JSON.stringify(sentMessage),
+        // data: sentMessage?.message,
+        url: `/chat/${profile?.username?.toLowerCase()}`
+    }
 
     useEffect(() => {
-        signedIn && dispatch(getUser());
+        if (signedIn) {
+            dispatch(getUser());
+            dispatch(getNotifications());
+        }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location]);
 
@@ -47,9 +56,20 @@ const Layout = () => {
                 console.log("Emit send message: ", true)
             );
             dispatch(setMessages(sentMessage));
+            
+            dispatch(createNotification(notificationData))
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [messageStatus, sentMessage]);
+
+    useEffect(() => {
+        if (createStatus === "success") {
+            socket.emit("sendNotification",[notification, receiver?.id, console.log("Emit send notification: ", true)])
+
+            dispatch(setCreateStatus('idle'));
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [createStatus])
 
     const onTopUp = () => {
         dispatch(toggleDepositDialog(true));

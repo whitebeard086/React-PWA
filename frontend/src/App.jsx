@@ -18,6 +18,7 @@ import { setServiceCompleted, setServiceConfirmed } from "./views/requests/store
 import { setServiceCompletedDash } from "./views/providerDash/store/dataSlice";
 import { useSocket } from "./utils/hooks/useSocket";
 import { Loading } from "./components/shared";
+import { setNotifications } from "./views/notifications/store/dataSlice";
 
 const Landing = lazy(() => import("./views/landing"));
 const Register = lazy(() => import("./views/auth/Register"));
@@ -39,6 +40,7 @@ const ProviderDashboard = lazy(() => import("./views/providerDash"));
 const Withdraw = lazy(() => import("./views/withdraw"));
 const Pin = lazy(() => import("./views/pin"));
 const Airtime = lazy(() => import("./views/bills/airtime"));
+const Notifications = lazy(() => import("./views/notifications"));
 
 
 function App() {
@@ -54,6 +56,13 @@ function App() {
             handler(users) {
                 dispatch(setOnlineUsers(users));
                 console.log("Online Users: ", onlineUsers);
+            },
+        },
+        {
+            name: "receiveNotification",
+            handler(data) {
+                dispatch(setNotifications(data));
+                console.log("Received Socket Notification: ", true);
             },
         },
         {
@@ -206,6 +215,10 @@ function App() {
                                     <Route
                                         path="/unauthorized"
                                         element={<Unauthorized />}
+                                    />
+                                    <Route
+                                        path="/profile/notifications"
+                                        element={<Notifications />}
                                     />
                                     <Route path="*" element={<NotFound />} />
                                 </Route>

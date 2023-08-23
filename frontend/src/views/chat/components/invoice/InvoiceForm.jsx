@@ -54,11 +54,9 @@ const InvoiceForm = () => {
                     }}
                 >
                     {({
-                        isSubmitting,
                         touched,
                         errors,
                         values,
-                        setFieldValue,
                     }) => {
                         console.log(values);
                         return (

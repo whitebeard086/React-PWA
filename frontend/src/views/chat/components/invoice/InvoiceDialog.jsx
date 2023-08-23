@@ -24,6 +24,7 @@ import { sendPushNotification } from "@/utils/sendPushNotification";
 import appConfig from "@/configs/app.config";
 import { socket } from "@/utils/socket";
 import { makeInvoice, sendNewInvoiceNotification, setInvoiceStatus } from "../../store/dataSlice";
+import { createNotification, setCreateStatus } from "@/views/notifications/store/dataSlice";
 
 const InvoiceDialog = ({ receiver }) => {
     const dispatch = useDispatch();
@@ -44,6 +45,7 @@ const InvoiceDialog = ({ receiver }) => {
         (state) => state.chat.data
     );
     const { profile } = useSelector((state) => state.auth.user);
+    const { createStatus, notification } = useSelector((state) => state.notifications.data);
 
     const { totalPrice } = useInvoiceData(invoiceData);
 
@@ -53,6 +55,17 @@ const InvoiceDialog = ({ receiver }) => {
             dispatch(setAddingItem(false));
         }
     };
+
+    const notificationData = {
+        receiver_id: receiver?.id,
+        type: 'invoice',
+        data: JSON.stringify({
+            message: 'New Invoice',
+            chat_id: chat?.id,
+            invoice_number: invoiceNumber
+        }),
+        url: `/chat/${profile?.username?.toLowerCase()}`
+    }
 
     const popNotification = (message, type, title) => {
         toast.push(
@@ -71,6 +84,7 @@ const InvoiceDialog = ({ receiver }) => {
 
     useEffect(() => {
         if (invoiceStatus === "success") {
+            dispatch(createNotification(notificationData))
             dispatch(
                 sendNewInvoiceNotification({
                     sender_id: profile?.id,
@@ -98,28 +112,17 @@ const InvoiceDialog = ({ receiver }) => {
         socket?.emit("sendInvoice", receiver?.id, () => {
             console.log("Emit New Invoice: ", true);
         });
-        // socket.emit("sendInvoice", (answer) => {
-        //     // ...
-        // });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [invoiceStatus]);
 
-    // useEffect(() => {
-    //     socket?.on("receiveInvoice", (data) => {
-    //         dispatch(setReceivedInvoice(true))
-    //     })
-    // }, [dispatch, socket])
+    useEffect(() => {
+        if (createStatus === "success") {
+            socket.emit("sendNotification",[notification, receiver?.id])
 
-    // useEffect(() => {
-    //     if (invoiceStatus === 'success' && messageStatus === 'sent') {
-    //         popNotification("Invoice sent", "success", "Success")
-    //     }
-
-    //     onDialogClose()
-    //     dispatch(setInvoiceStatus('idle'))
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [messageStatus, invoiceStatus])
-    // console.log(JSON.stringify(invoiceData));
+            dispatch(setCreateStatus('idle'));
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [createStatus])
 
     const handleSend = () => {
         setMakingPDF(true);

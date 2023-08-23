@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BillsController;
 use App\Http\Controllers\BrowseController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\GatewayController;
@@ -13,9 +14,9 @@ use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\RequestsController;
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\BillsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WithdrawalController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -110,4 +111,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/bills/operators', [BillsController::class, 'get_operators']);
     Route::post('/bills/operator/products', [BillsController::class, 'get_products']);
     Route::post('/bills/airtime', [BillsController::class, 'buy_airtime']);
+
+    // Notification Routes
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::post('/notifications/new', [NotificationController::class, 'create_notification']);
+    Route::post('/notifications/read', [NotificationController::class, 'mark_as_read']);
+    Route::post('/notifications/read-all', [NotificationController::class, 'mark_all_as_read']);
+    Route::post('/notifications/clear', [NotificationController::class, 'clear']);
 });

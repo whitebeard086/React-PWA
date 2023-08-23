@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useCallback, useRef, useEffect }  from 'react'
 import classNames from 'classnames'
 import { Popper, Reference, Manager } from 'react-popper'
@@ -28,7 +29,7 @@ const Tooltip = props => {
 
 	const tooltipBackground = 'gray-800'
 
-	const defaultTooltipClass = `tooltip bg-${tooltipBackground}`
+	const defaultTooltipClass = `tooltip !bg-${tooltipBackground}`
 
 	const toggleTooltip = useCallback((bool) => {
 		if(!isOpen) {

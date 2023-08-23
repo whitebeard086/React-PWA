@@ -1,4 +1,4 @@
-import React from 'react'
+/* eslint-disable react/prop-types */
 import PropTypes from 'prop-types'
 
 const TextEllipsis = (props) => {

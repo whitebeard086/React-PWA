@@ -191,7 +191,7 @@ const dataSlice = createSlice({
                 state.invoice = invoice
                 state.invoiceStatus = status
             })
-            .addCase(makeInvoice.rejected, (state, action) => {
+            .addCase(makeInvoice.rejected, (state) => {
                 state.makingInvoice = false
                 state.invoiceStatus = 'error'
             })
