@@ -1,0 +1,11 @@
+.react-time-picker__inputGroup__input {
+    @apply !w-16 p-2 border-2 border-emerald-600 rounded-md bg-gray-200
+}
+
+.react-time-picker__inputGroup__input:focus-visible {
+    @apply !border-emerald-500
+}
+
+.react-time-picker__inputGroup__leadingZero {
+    @apply hidden
+}

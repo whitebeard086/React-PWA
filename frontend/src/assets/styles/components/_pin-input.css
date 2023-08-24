@@ -1,0 +1,12 @@
+.pincode-input-container {
+    @apply flex items-center justify-between gap-2
+}
+
+.pincode-input-text {
+    @apply border border-gray-300 rounded-md w-full py-2 px-3 
+    focus:outline-none focus:ring-1 focus-within:ring-1 appearance-none
+    focus:ring-primary-500 focus-within:ring-primary-500
+    focus-within:border-primary-500 focus:border-primary-500
+    input-lg h-11
+    transition duration-150 ease-in-out text-center
+}
