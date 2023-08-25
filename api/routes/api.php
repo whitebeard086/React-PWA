@@ -17,6 +17,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WithdrawalController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -118,4 +119,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/notifications/read', [NotificationController::class, 'mark_as_read']);
     Route::post('/notifications/read-all', [NotificationController::class, 'mark_all_as_read']);
     Route::post('/notifications/clear', [NotificationController::class, 'clear']);
+});
+
+// Admin Routes
+Route::group(['prefix' => 'admin'], function(){
+    // Public Routes
+    Route::post('/login', [AdminAuthController::class, 'login']);
+
+    // Protected Routes
+    Route::group(['middleware' => ['auth:sanctum']], function () {
+        Route::post('/logout', [AdminAuthController::class, 'logout']);
+    });
 });

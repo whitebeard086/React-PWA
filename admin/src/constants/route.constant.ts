@@ -1,0 +1,6 @@
+export const ROOT = '/'
+export const USERS_PREFIX_PATH = '/users'
+export const HANDY_MAN_PREFIX_PATH = '/handy-man'
+export const FINANCE_PREFIX_PATH = '/finance'
+export const KYC_PREFIX_PATH = '/kyc'
+export const SYSTEM_PREFIX_PATH = '/configurations'

@@ -1,0 +1,37 @@
+{
+    "nav": {
+        "home": "Home",
+        "users": {
+            "users": "Users",
+            "allProviders": "All Providers",
+            "allClients": "All Clients"
+        },
+        "handyMan": {
+            "handyMan": "HandyMan",
+            "messages": "Messages/Enquiries",
+            "activeBookings": "Active Bookings",
+            "completedBookings": "completed Bookings",
+            "inDispute": "Bookings in Dispute"
+        },
+        "finance": {
+            "finance": "Finance",
+            "deposits": "Deposits",
+            "billPayments": "Bill Payments",
+            "servicePayments": "Service Payments",
+            "referralRewards": "Referral Rewards",
+            "withdrawals": "withdrawals",
+            "systemCommissions": "System Commissions"
+        },
+        "kyc": {
+            "kyc": "KYC Verifications",
+            "pending": "Pending",
+            "rejections": "Rejections"
+        },
+        "system": {
+            "system": "System Configurations",
+            "serviceCategories": "Service Categories",
+            "referralSettings": "Referral Settings",
+            "commissionSettings": "Commission Settings"
+        }
+    }
+}
