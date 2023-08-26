@@ -18,6 +18,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WithdrawalController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
+use App\Http\Controllers\Admin\HomeAdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -129,5 +130,6 @@ Route::group(['prefix' => 'admin'], function(){
     // Protected Routes
     Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/logout', [AdminAuthController::class, 'logout']);
+        Route::get('/home', [HomeAdminController::class, 'index']);
     });
 });
