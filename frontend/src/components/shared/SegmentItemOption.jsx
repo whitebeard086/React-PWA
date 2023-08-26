@@ -13,19 +13,20 @@ const SegmentItemOption = forwardRef((props, ref) => {
 		disabled,
 		hoverable,
 		onSegmentItemClick,
+		variant,
 	} = props;
 
 	return (
 		<div
 			ref={ref}
 			className={classNames(
-				'flex',
-				!customCheck && 'justify-between',
+				'flex justify-center',
+				variant !== 'plain' && !customCheck && 'justify-between',
 				'items-center',
 				'border',
 				'rounded-md ',
 				'border-gray-200 dark:border-gray-600',
-				defaultGutter && 'py-5 px-4',
+				defaultGutter && 'p-3',
 				'cursor-pointer',
 				'select-none',
 				'w-100',
@@ -38,10 +39,10 @@ const SegmentItemOption = forwardRef((props, ref) => {
 			onClick={onSegmentItemClick}
 		>
 			{children}
-			{active && !customCheck && (
+			{variant !== 'plain' && active && !customCheck && (
 				<HiCheckCircle className="text-2xl text-emerald-500" />
 			)}
-			{active && customCheck}
+			{variant !== 'plain' && active && customCheck}
 		</div>
 	);
 });
@@ -52,10 +53,12 @@ SegmentItemOption.propTypes = {
 	hoverable: PropTypes.bool,
 	defaultGutter: PropTypes.bool,
 	customCheck: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+	variant: PropTypes.string,
 };
 
 SegmentItemOption.defaultProps = {
 	defaultGutter: true,
+	variant: 'default',
 };
 
 export default SegmentItemOption;

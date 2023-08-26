@@ -51,6 +51,7 @@ const ProviderDashboard = lazy(() => import('./views/providerDash'));
 const Withdraw = lazy(() => import('./views/withdraw'));
 const Pin = lazy(() => import('./views/pin'));
 const Airtime = lazy(() => import('./views/bills/airtime'));
+const Data = lazy(() => import('./views/bills/data'));
 
 function App() {
 	const dispatch = useDispatch();
@@ -174,6 +175,7 @@ function App() {
 									<Route path="/requests/history" element={<History />} />
 									<Route path="/transaction-pin" element={<Pin />} />
 									<Route path="/bills/airtime" element={<Airtime />} />
+									<Route path="/bills/data" element={<Data />} />
 									<Route path="/unauthorized" element={<Unauthorized />} />
 									<Route path="*" element={<NotFound />} />
 								</Route>

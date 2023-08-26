@@ -5,6 +5,7 @@ export const useAppDispatch = () => useDispatch();
 export const useAppSelector = useSelector;
 
 export const meta = {
+	// isFetching: false,
 	status: 'idle',
 	data: {},
 	message: '',
@@ -46,7 +47,7 @@ export const createAsyncReducers = (
 		.addCase(asyncAction.rejected, (state, action) => {
 			state[stateName] = {
 				...current(state[stateName]),
-				status: 'failed',
+				status: action.payload.status ?? 'failed',
 				message: action.payload.message,
 			};
 		});

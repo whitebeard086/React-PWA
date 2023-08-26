@@ -111,6 +111,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/bills/operators', [BillsController::class, 'get_operators']);
     Route::post('/bills/operator/products', [BillsController::class, 'get_products']);
     Route::post('/bills/airtime', [BillsController::class, 'buy_airtime']);
+    Route::post('/bills/data', [BillsController::class, 'buy_bundle']);
 
     // Referral routes
     Route::get('/referrals', [ReferralController::class, 'getReferrals']);

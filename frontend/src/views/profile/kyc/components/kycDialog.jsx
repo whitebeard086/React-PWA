@@ -29,11 +29,11 @@ const KycDialog = () => {
 		}
 	};
 
-	console.log('profile: ', profile);
-	console.log(
-		'!profile?.pending_account_level: ',
-		!profile?.pending_account_level
-	);
+	// console.log('profile: ', profile);
+	// console.log(
+	// 	'!profile?.pending_account_level: ',
+	// 	!profile?.pending_account_level
+	// );
 
 	return (
 		<Dialog
