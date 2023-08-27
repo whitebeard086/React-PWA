@@ -2,15 +2,24 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Referral;
 use Illuminate\Support\Str;
+use App\Services\SMSService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    protected $smsService;
+
+    public function __construct(SMSService $smsService)
+    {
+        $this->smsService = $smsService;
+    }
+    
     public function check_email(Request $request)
     {
         $form = $request->validate([
@@ -43,12 +52,16 @@ class AuthController extends Controller
         if ($user_exists) {
             return response()->json([
                 'status' => 'error',
-                'message' => $form['username'] . ' is already taken!'
+                'message' => $form['username'] . ' is already taken!',
+                'a_referrer' => true,
+                'referrer' => 'Referred by: ' . $user_exists->first_name . ' ' . $user_exists->last_name,
             ], 409);
         } else {
             return response()->json([
                 'status' => 'success',
                 'message' => $form['username'] . ' is available.',
+                'a_referrer' => false,
+                'referrer' => $form['username'] . ' cannot be your referrer at this time, sorry.'
             ], 200);
         }
     }
@@ -84,6 +97,25 @@ class AuthController extends Controller
             // 'password_confirmation' => bcrypt($fields['password_confirmation']),
         ]);
         
+        // check if the user was referred
+        if ($request->has('referrer')) {
+            $referrer = User::where('username', $request->input('referrer'))->first();
+            if ($referrer) {
+                // Record the referral relationship in the "referrals" table
+                Referral::create([
+                    'referrer_id' => $referrer->id,
+                    'referred_id' => $new_user->id,
+                ]);
+                // Add reward to the referrer's balance
+                $referrer->balance += 200;
+                $referrer->save();
+                
+                //Send sms to the referrer
+                // $message = "Congratulations $referrer->username, you've earned ₦200 referral bonus from the new account by $new_user->username";
+                $message = "Congratulations $referrer->username, you've earned NGN200 from referral.";
+                $this->smsService->sendSMS($referrer->phone, $referrer->username, $message);
+            }
+        }
         $user = User::with('ProfileType', 'Service.Category', 'Service.Workdays', 'Service.SubCategory')->where('id', $new_user->id)->first();
 
         $token = $user->createToken('register')->plainTextToken;
@@ -119,7 +151,7 @@ class AuthController extends Controller
             'token' => $token
         ];
 
-        return response($response, 200);
+        return response($response, 201);
     }
 
     public function logout(Request $request)

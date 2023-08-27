@@ -14,6 +14,7 @@ use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\RequestsController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\ReferralController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WithdrawalController;
 use App\Http\Controllers\NotificationController;
@@ -114,6 +115,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/bills/operators', [BillsController::class, 'get_operators']);
     Route::post('/bills/operator/products', [BillsController::class, 'get_products']);
     Route::post('/bills/airtime', [BillsController::class, 'buy_airtime']);
+    Route::post('/bills/data', [BillsController::class, 'buy_bundle']);
+
+    // Referral routes
+    Route::get('/referrals', [ReferralController::class, 'getReferrals']);
+
+    // Kyc routes
+    Route::post('/kyc', [UserController::class, 'initiate_kyc']);
 
     // Notification Routes
     Route::get('/notifications', [NotificationController::class, 'index']);

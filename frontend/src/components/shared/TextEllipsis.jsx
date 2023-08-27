@@ -1,25 +1,25 @@
 /* eslint-disable react/prop-types */
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
 const TextEllipsis = (props) => {
-    const { text, maxTextCount } = props
+	const { text, maxTextCount } = props;
 
-    return (
-        <>
-            {(text && text.length) > maxTextCount
-                ? text.substring(0, maxTextCount - 3) + '...'
-                : text}
-        </>
-    )
-}
+	return (
+		<>
+			{(text && text.length) > maxTextCount
+				? text.substring(0, maxTextCount - 3) + '...'
+				: text}
+		</>
+	);
+};
 
 TextEllipsis.propTypes = {
-    text: PropTypes.string,
-}
+	text: PropTypes.string,
+};
 
 TextEllipsis.defaultProps = {
-    text: '',
-    maxTextCount: 0,
-}
+	text: '',
+	maxTextCount: 0,
+};
 
-export default TextEllipsis
+export default TextEllipsis;

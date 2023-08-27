@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Country;
 use App\Models\Service;
 use App\Models\Category;
+use App\Models\KYCSubmission;
 use App\Models\Workdays;
 use App\Models\ProfileType;
 use App\Models\SubCategory;
@@ -37,7 +38,7 @@ class UserController extends Controller
     public function get_user()
     {
         try {
-            $user = User::with('ProfileType', 'Service.Category', 'Service.Workdays', 'Service.SubCategory', 'WithdrawalAccounts')->where('id', auth()->user()->id)->first();
+            $user = User::with(['accountLevel', 'ProfileType', 'Service.Category', 'Service.Workdays', 'Service.SubCategory', 'WithdrawalAccounts', 'kycSubmissions'])->where('id', auth()->user()->id)->first();
 
             if (isset($user->phone_verified_at) && !$user->bank) {
                 $result = $this->assignVirtualAccount($user);
@@ -467,6 +468,70 @@ class UserController extends Controller
                 'message' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function initiate_kyc(Request $request)
+    {
+        if (auth()->user()->id != $request->user_id) {
+            return response()->json([
+                'status' => 'error',
+                'kyc' => null,
+                'message' => 'You do not have permission to perform this function!'
+            ], 403);
+        }
+
+        $user = User::where('id', $request->user_id)->first();
+        // $formFields = $request->validate([
+        //     'user_id' => 'required|exists:users,id',
+        //     'document_type' => 'required',
+        //     'doc_front' => 'nullable|mimes:jpg,jpeg,png,xls,xlsx,doc,docx',
+        //     'doc_back' => 'nullable|mimes:jpg,jpeg,png,xls,xlsx,doc,docx',
+        //     'nin' => 'nullable',
+        //     'admin_notes' => 'nullable',
+        // ]);
+        // $formFields = $request->validate([
+        //     'user_id' => 'required|exists:users,id',
+        //     'document_type' => 'required',
+        //     'doc_front' => 'required_if:document_type,passport,voterId,driversLicense|nullable_if:document_type,!=,passport,voterId,driversLicense|mimes:jpg,jpeg,png,xls,xlsx,doc,docx',
+        //     'doc_back' => 'required_if:document_type,passport,voterId,driversLicense|nullable_if:document_type,!=,passport,voterId,driversLicense|mimes:jpg,jpeg,png,xls,xlsx,doc,docx',
+        //     'nin' => 'required_if:document_type,!=,passport,voterId,driversLicense|nullable_if:document_type,passport,voterId,driversLicense',
+        //     'admin_notes' => 'nullable',
+        // ]);
+        $formFields = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'document_type' => 'required',
+            'doc_front' => 'required_if:document_type,passport,voterId,driversLicense|nullable|mimes:jpg,jpeg,png,xls,xlsx,doc,docx',
+            'doc_back' => 'required_if:document_type,passport,voterId,driversLicense|nullable|mimes:jpg,jpeg,png,xls,xlsx,doc,docx',
+            'nin' => 'required_if:document_type,nin|nullable',
+            'admin_notes' => 'nullable',
+        ]);
+
+        if ($request->hasFile('doc_front')) {
+            $formFields['doc_front'] = $request->file('doc_front')->storePublicly('Accounts/kyc', 'wasabi');
+        }
+
+        if ($request->hasFile('doc_back')) {
+            $formFields['doc_back'] = $request->file('doc_back')->storePublicly('Accounts/kyc', 'wasabi');
+        }
+
+        $kyc = KYCSubmission::create($formFields);
+
+        // Update user's pending_account_level based on account_level_id
+        if ($user->account_level_id == 1) {
+            $user->pending_account_level = 'Two';
+        } elseif ($user->account_level_id == 2) {
+            $user->pending_account_level = 'Three';
+        } elseif ($user->account_level_id == 3) {
+            $user->pending_account_level = 'Four';
+        }
+        
+        $user->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'KYC initiated successfully',
+            'kyc' => $kyc,
+        ], 200);
     }
     
 }
