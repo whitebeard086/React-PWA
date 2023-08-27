@@ -27,7 +27,7 @@ const RecentDisputes = () => {
                         <Td>Plumbing</Td>
                         <Td>#Bnuy9o</Td>
                         <Td>₦{45000?.toLocaleString()}</Td>
-                        <Td>{dayjs().format('DD/MM/YYYY HH:mm') }</Td>
+                        <Td>{dayjs().format('DD/MM/YYYY HH:mm')}</Td>
                         <Td className="flex items-center gap-2">
                             <Button
                                 variant="solid"

@@ -11,7 +11,7 @@ const RecentProviders = () => {
     const { imagePath } = appConfig
     const color = useTwColorByName()
     const { recentProviders } = useAppSelector((state) => state.home.data)
-    
+
     return (
         <Card>
             <div className="flex items-center gap-4 justify-between">
@@ -46,7 +46,7 @@ const RecentProviders = () => {
                                     {item.service.title && item.service.title}
                                     {!item.service.title && `${item.last_name} ${item.first_name}`}
                                 </p>
-                                <p className="text-sm flex items-center gap-2">
+                                <p className="text-xs font-semibold flex items-center gap-2">
                                     {averageRating}
                                     <Rating readOnly style={{ maxWidth: 60 }} value={averageRating} />
                                     <span>({item.service?.bookings?.length?.toLocaleString()})</span>
