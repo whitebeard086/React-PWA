@@ -81,3 +81,14 @@ export interface Service {
     created_at: Date
     updated_at: Date
 }
+
+export interface Category {
+    id: number
+    name: string
+    banner: string | null
+    icon: string
+    slug: string
+    description: string | null
+    created_at: Date
+    updated_at: Date
+}

@@ -1,6 +1,3 @@
-const Providers = () => {
-    return (
-        <div>Providers</div>
-    )
-}
+import Providers from "./Providers";
+
 export default Providers

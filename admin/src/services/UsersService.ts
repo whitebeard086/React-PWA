@@ -1,8 +1,8 @@
 import ApiService from './ApiService'
 
-export async function apiHomeIndex<T>() {
+export async function apiUsersIndex<T>() {
     return ApiService.fetchData<T>({
-        url: '/home',
+        url: '/users',
         method: 'get',
     })
 }

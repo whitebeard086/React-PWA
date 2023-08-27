@@ -10,7 +10,7 @@ injectReducer('home', reducer)
 const Home = () => {
     const dispatch = useAppDispatch();
 
-    const { status, loading } = useAppSelector((state) => state.home.data)
+    const { loading } = useAppSelector((state) => state.home.data)
 
     useEffect(() => {
         dispatch(homeIndex())
