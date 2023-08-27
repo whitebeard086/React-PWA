@@ -1,143 +1,122 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { motion, AnimatePresence } from "framer-motion";
-import dayjs from "dayjs";
-import calendar from 'dayjs/plugin/calendar'
-import classNames from "classnames";
+import classNames from 'classnames';
+import dayjs from 'dayjs';
+import calendar from 'dayjs/plugin/calendar';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { Avatar, Card, Image, Notification, toast } from '@/components/ui';
+import appConfig from '@/configs/app.config';
+import { pdfjs } from 'react-pdf';
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+import 'react-pdf/dist/esm/Page/TextLayer.css';
 import {
-    deleteMessage,
-    // removeMessage,
-    setDeleteMessageStatus,
-} from "../store/dataSlice";
-import {
-    Notification,
-    toast,
-    Avatar,
-    Card,
-    Dropdown,
-    Image,
-} from "@/components/ui";
-import appConfig from "@/configs/app.config";
-import { BiDotsVerticalRounded } from "react-icons/bi";
-import { BsReplyFill } from "react-icons/bs";
-import { MdDelete } from "react-icons/md";
-import { EllipsisButton } from "@/components/shared";
-import { pdfjs } from "react-pdf";
-import "react-pdf/dist/esm/Page/AnnotationLayer.css";
-import "react-pdf/dist/esm/Page/TextLayer.css";
+	deleteMessage,
+	// removeMessage,
+	setDeleteMessageStatus,
+} from '../store/dataSlice';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
-dayjs.extend(calendar)
+dayjs.extend(calendar);
 
 const Messages = ({ isOwner, sender, receiver }) => {
-    const dispatch = useDispatch();
-    const scroll = useRef();
-    const { imagePath } = appConfig;
-    const [numPages, setNumPages] = useState(null);
-    const [pageNumber, setPageNumber] = useState(1);
+	const dispatch = useDispatch();
+	const scroll = useRef();
+	const { imagePath } = appConfig;
+	const [numPages, setNumPages] = useState(null);
+	const [pageNumber, setPageNumber] = useState(1);
 
-    // Select data from the Redux store
-    const { messages, deleteMessageStatus } = useSelector(
-        (state) => state.chat.data
-    );
-    const { profile } = useSelector((state) => state.auth.user);
-    // const provider = profile?.service ? true : false
-    console.log(numPages);
-    console.log(pageNumber);
+	// Select data from the Redux store
+	const { messages, deleteMessageStatus } = useSelector(
+		(state) => state.chat.data
+	);
+	const { profile } = useSelector((state) => state.auth.user);
+	// const provider = profile?.service ? true : false
+	console.log(numPages);
+	console.log(pageNumber);
 
-    // const onDocumentLoadSuccess = ({ numPages }) => {
-    //     setNumPages(numPages);
-    // }
+	// const onDocumentLoadSuccess = ({ numPages }) => {
+	//     setNumPages(numPages);
+	// }
 
-    const onRemoveMessage = (message) => {
-        dispatch(deleteMessage({ message_id: message.id }));
-    };
+	const onRemoveMessage = (message) => {
+		dispatch(deleteMessage({ message_id: message.id }));
+	};
 
-    useEffect(() => {
-        // Show notification when deleteMessageStatus changes
-        const popNotification = () => {
-            toast.push(
-                <Notification
-                    title={`${
-                        deleteMessageStatus === "success" ? "Success" : "Error"
-                    }`}
-                    type={`${
-                        deleteMessageStatus === "success" ? "success" : "danger"
-                    }`}
-                    duration={3000}
-                >
-                    {deleteMessageStatus === "success"
-                        ? "Message deleted successfully!"
-                        : "Looks like something went wrong, please try again."}
-                </Notification>,
-                {
-                    placement: "top-center",
-                }
-            );
-        };
+	useEffect(() => {
+		// Show notification when deleteMessageStatus changes
+		const popNotification = () => {
+			toast.push(
+				<Notification
+					title={`${deleteMessageStatus === 'success' ? 'Success' : 'Error'}`}
+					type={`${deleteMessageStatus === 'success' ? 'success' : 'danger'}`}
+					duration={3000}
+				>
+					{deleteMessageStatus === 'success'
+						? 'Message deleted successfully!'
+						: 'Looks like something went wrong, please try again.'}
+				</Notification>,
+				{
+					placement: 'top-center',
+				}
+			);
+		};
 
-        if (deleteMessageStatus !== "idle") {
-            popNotification();
-        }
+		if (deleteMessageStatus !== 'idle') {
+			popNotification();
+		}
 
-        dispatch(setDeleteMessageStatus("idle"));
-    }, [deleteMessageStatus, dispatch]);
+		dispatch(setDeleteMessageStatus('idle'));
+	}, [deleteMessageStatus, dispatch]);
 
-    useEffect(() => {
-        // Scroll to the last message
-        scroll.current?.scrollIntoView({ behavior: "smooth" });
-    }, [messages]);
+	useEffect(() => {
+		// Scroll to the last message
+		scroll.current?.scrollIntoView({ behavior: 'smooth' });
+	}, [messages]);
 
-    return (
-        <AnimatePresence className="">
-            {messages?.map((message) => {
-                const owner = isOwner(message);
+	return (
+		<AnimatePresence className="">
+			{messages?.map((message) => {
+				const owner = isOwner(message);
 
-                return (
-                    <motion.div
-                        key={message.id}
-                        ref={scroll}
-                        initial={{ opacity: 0, visibility: "hidden" }}
-                        animate={{ opacity: 1, visibility: "visible" }}
-                        transition={{ duration: 0.3, type: "tween" }}
-                        exit={{ opacity: 0, visibility: "hidden" }}
-                        layoutId={message.id}
-                        className={classNames(
-                            "flex gap-2 items-start",
-                            owner ? "justify-end" : "justify-start"
-                        )}
-                    >
-                        {!owner && (
-                            <div>
-                                <Avatar
-                                    src={`${imagePath}/${
-                                        receiver?.service?.banner ||
-                                        receiver?.image
-                                    }`}
-                                    size="sm"
-                                    shape="circle"
-                                />
-                            </div>
-                        )}
-                        <div className="mb-4 max-w-[80%] w-fit">
-                            <Card
-                                className={classNames(
-                                    "max-w-[100%] w-fit",
-                                    owner ? "bg-primary-500 text-white" : ""
-                                )}
-                            >
-                                <div className="flex gap-2">
-                                    {message.message && (
-                                        <p>{message.message}</p>
-                                    )}
-                                    {message.file && (
-                                        <Image
-                                            src={`${imagePath}/${message.file}`}
-                                            alt=""
-                                        />
-                                    )}
-                                    {/* {message.invoice && (
+				return (
+					<motion.div
+						key={message.id}
+						ref={scroll}
+						initial={{ opacity: 0, visibility: 'hidden' }}
+						animate={{ opacity: 1, visibility: 'visible' }}
+						transition={{ duration: 0.3, type: 'tween' }}
+						exit={{ opacity: 0, visibility: 'hidden' }}
+						layoutId={message.id}
+						className={classNames(
+							'flex gap-2 items-start',
+							owner ? 'justify-end' : 'justify-start'
+						)}
+					>
+						{!owner && (
+							<div>
+								<Avatar
+									src={`${imagePath}/${
+										receiver?.service?.banner || receiver?.image
+									}`}
+									size="sm"
+									shape="circle"
+								/>
+							</div>
+						)}
+						<div className="mb-4 max-w-[80%] w-fit">
+							<Card
+								className={classNames(
+									'max-w-[100%] w-full',
+									owner ? 'bg-primary-500 text-white' : ''
+								)}
+							>
+								<div className="flex gap-2">
+									{message.message && <p>{message.message}</p>}
+									{message.file && (
+										<Image src={`${imagePath}/${message.file}`} alt="" />
+									)}
+									{/* {message.invoice && (
                                         <div>
                                             <Document file={`${filePath}/${message.invoice}`} onLoadSuccess={onDocumentLoadSuccess}>
                                                 <Page pageNumber={pageNumber}  />
@@ -181,7 +160,7 @@ const Messages = ({ isOwner, sender, receiver }) => {
                                             )}
                                         </div>
                                     )} */}
-                                    {/* <Dropdown
+									{/* <Dropdown
                                         placement={
                                             owner ? "top-end" : "top-start"
                                         }
@@ -227,31 +206,30 @@ const Messages = ({ isOwner, sender, receiver }) => {
                                             <span>Delete</span>
                                         </Dropdown.Item>
                                     </Dropdown> */}
-                                </div>
-                            </Card>
-                            <div>
-                                <p className="text-left">
-                                    {dayjs(message.created_at).format("DD MMM, YYYY - h:mm A")}
-                                </p>
-                            </div>
-                        </div>
-                        {owner && (
-                            <div>
-                                <Avatar
-                                    src={`${imagePath}/${
-                                        profile?.service?.banner ||
-                                        profile?.image
-                                    }`}
-                                    size="sm"
-                                    shape="circle"
-                                />
-                            </div>
-                        )}
-                    </motion.div>
-                );
-            })}
+								</div>
+							</Card>
+							<div>
+								<p className="text-left">
+									{dayjs(message.created_at).format('DD MMM, YYYY - h:mm A')}
+								</p>
+							</div>
+						</div>
+						{owner && (
+							<div>
+								<Avatar
+									src={`${imagePath}/${
+										profile?.service?.banner || profile?.image
+									}`}
+									size="sm"
+									shape="circle"
+								/>
+							</div>
+						)}
+					</motion.div>
+				);
+			})}
 
-            {/* {chat.invoice && (
+			{/* {chat.invoice && (
                 <motion.div
                     ref={scroll}
                     initial={{ opacity: 0, visibility: "hidden" }}
@@ -394,7 +372,7 @@ const Messages = ({ isOwner, sender, receiver }) => {
                     )}
                 </motion.div>
             )} */}
-        </AnimatePresence>
-    );
+		</AnimatePresence>
+	);
 };
 export default Messages;

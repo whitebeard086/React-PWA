@@ -5,7 +5,7 @@ const NotFound = () => {
 	const navigate = useNavigate();
 	return (
 		<div className="w-full h-full flex justify-center flex-col gap-2 items-center min-h-[50vh]">
-			Looks like you&apos;re lost
+			Looks like you're lost
 			<div className="mt-4 flex gap-4">
 				<Button variant="solid" onClick={() => navigate(-1)}>
 					Go Back

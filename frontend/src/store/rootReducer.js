@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import chat from '../../src/views/chat/store';
+import notifications from '../../src/views/notifications/store';
 import payments from '../../src/views/payments/store';
 import kyc from '../../src/views/profile/kyc/store';
 import requests from '../../src/views/requests/store';
@@ -12,6 +13,7 @@ const rootReducer = (asyncReducers) => (state, action) => {
 		payments,
 		withdraw,
 		requests,
+		notifications,
 		chat,
 		kyc,
 		...asyncReducers,

@@ -9,7 +9,7 @@ class BrowseController extends Controller
 {
     public function index(Request $request)
     {
-        $categories = Category::with('Services')->get();
+        $categories = Category::with('Services', 'Services.Bookings')->get();
 
         return response()->json([
             'status' => 'success',
@@ -19,7 +19,7 @@ class BrowseController extends Controller
 
     public function get_category(Request $request)
     {
-        $category = Category::where('slug', $request->slug)->with('Services.User', 'SubCategories')->first();
+        $category = Category::where('slug', $request->slug)->with('Services.User', 'Services.Bookings', 'SubCategories')->first();
 
         return response()->json([
             'status' => 'success',

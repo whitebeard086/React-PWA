@@ -18,7 +18,7 @@ class HomeController extends Controller
             $userId = auth()->user()->id;
             $user = User::findOrFail($userId);
 
-            $bookingQuery = Booking::orderBy('id', 'desc')->with('Service.User', 'User', 'Service.Category')->where('status', 'completed');
+            $bookingQuery = Booking::orderBy('id', 'desc')->with('Service.User', 'User', 'Service.Category', 'Service.Bookings')->where('status', 'completed');
             
             if ($user->profile_type_id == 1) {
                 $bookings = $bookingQuery->where('user_id', $userId)->paginate(5);
@@ -27,7 +27,7 @@ class HomeController extends Controller
             }
 
             $categories = Category::all();
-            $services = Service::with('Category', 'SubCategory', 'Workdays', 'User')->get();
+            $services = Service::with('Category', 'SubCategory', 'Workdays', 'User', 'Bookings')->get();
 
             return response()->json([
                 'status' => 'success',

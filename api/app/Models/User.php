@@ -88,6 +88,11 @@ class User extends Authenticatable
         return $this->hasMany(Booking::class);
     }
 
+    public function Notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+
     public function WithdrawalAccounts()
     {
         return $this->hasMany(WithdrawalAccount::class);

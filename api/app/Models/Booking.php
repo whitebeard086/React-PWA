@@ -17,6 +17,8 @@ class Booking extends Model
         'service_status',
         'user_status',
         'status',
+        'rating',
+        'comment',
     ]; 
 
     protected $casts = [
@@ -24,6 +26,7 @@ class Booking extends Model
         'provider_id' => 'float',
         'user_id' => 'float',
         'invoice_id' => 'float',
+        'rating' => 'float',
     ];
 
     public function Service()

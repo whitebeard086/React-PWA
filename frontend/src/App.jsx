@@ -16,6 +16,7 @@ import {
 import Layout from './views/layout';
 import NotFound from './views/notfound';
 import Unauthorized from './views/notfound/Unauthorized';
+import { setNotifications } from './views/notifications/store/dataSlice';
 import { setServiceCompletedDash } from './views/providerDash/store/dataSlice';
 import {
 	setServiceCompleted,
@@ -52,6 +53,7 @@ const Withdraw = lazy(() => import('./views/withdraw'));
 const Pin = lazy(() => import('./views/pin'));
 const Airtime = lazy(() => import('./views/bills/airtime'));
 const Data = lazy(() => import('./views/bills/data'));
+const Notifications = lazy(() => import('./views/notifications'));
 
 function App() {
 	const dispatch = useDispatch();
@@ -66,6 +68,13 @@ function App() {
 			handler(users) {
 				dispatch(setOnlineUsers(users));
 				console.log('Online Users: ', onlineUsers);
+			},
+		},
+		{
+			name: 'receiveNotification',
+			handler(data) {
+				dispatch(setNotifications(data));
+				console.log('Received Socket Notification: ', true);
 			},
 		},
 		{
@@ -177,6 +186,10 @@ function App() {
 									<Route path="/bills/airtime" element={<Airtime />} />
 									<Route path="/bills/data" element={<Data />} />
 									<Route path="/unauthorized" element={<Unauthorized />} />
+									<Route
+										path="/profile/notifications"
+										element={<Notifications />}
+									/>
 									<Route path="*" element={<NotFound />} />
 								</Route>
 							</Route>

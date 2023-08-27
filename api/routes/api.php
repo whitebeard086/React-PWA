@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BillsController;
 use App\Http\Controllers\BrowseController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\GatewayController;
@@ -13,10 +14,12 @@ use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\RequestsController;
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\BillsController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReferralController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WithdrawalController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\Admin\AuthController as AdminAuthController;
+use App\Http\Controllers\Admin\HomeAdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -118,4 +121,23 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // Kyc routes
     Route::post('/kyc', [UserController::class, 'initiate_kyc']);
+
+    // Notification Routes
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::post('/notifications/new', [NotificationController::class, 'create_notification']);
+    Route::post('/notifications/read', [NotificationController::class, 'mark_as_read']);
+    Route::post('/notifications/read-all', [NotificationController::class, 'mark_all_as_read']);
+    Route::post('/notifications/clear', [NotificationController::class, 'clear']);
+});
+
+// Admin Routes
+Route::group(['prefix' => 'admin'], function(){
+    // Public Routes
+    Route::post('/login', [AdminAuthController::class, 'login']);
+
+    // Protected Routes
+    Route::group(['middleware' => ['auth:sanctum']], function () {
+        Route::post('/logout', [AdminAuthController::class, 'logout']);
+        Route::get('/home', [HomeAdminController::class, 'index']);
+    });
 });
