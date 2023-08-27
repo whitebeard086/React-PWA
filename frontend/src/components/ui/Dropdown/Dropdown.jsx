@@ -1,23 +1,24 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/display-name */
-import React, { useRef, useCallback } from 'react'
-import DropdownMenu from './DropdownMenu'
-import DropdownToggle from './DropdownToggle'
-import PropTypes from 'prop-types'
-import useUniqueId from '../hooks/useUniqueId'
-import DropdownContext from './context/dropdownContext'
-import DropdownMenuContext, { useDropdownMenuContext } from './context/dropdownMenuContext'
-import chainedFunction from '../utils/chainedFunction'
-import useRootClose from '../hooks/useRootClose'
-import arrayIndexOf from '../utils/arrayIndexOf'
-import { PLACEMENT } from '../utils/constant'
+import PropTypes from 'prop-types';
+import React, { useCallback, useRef } from 'react';
+import useRootClose from '../hooks/useRootClose';
+import useUniqueId from '../hooks/useUniqueId';
+import arrayIndexOf from '../utils/arrayIndexOf';
+import chainedFunction from '../utils/chainedFunction';
+import { PLACEMENT } from '../utils/constant';
+import DropdownMenu from './DropdownMenu';
+import DropdownToggle from './DropdownToggle';
+import DropdownContext from './context/dropdownContext';
+import DropdownMenuContext, {
+	useDropdownMenuContext,
+} from './context/dropdownMenuContext';
 
-const CLICK = 'click'
-const HOVER = 'hover'
-const CONTEXT = 'context'
+const CLICK = 'click';
+const HOVER = 'hover';
+const CONTEXT = 'context';
 
 const Dropdown = React.forwardRef((props, ref) => {
-
 	const {
 		title,
 		children,
@@ -40,84 +41,101 @@ const Dropdown = React.forwardRef((props, ref) => {
 		onClose,
 		onToggle,
 		...rest
-	} = props
+	} = props;
 
-	const overlayTarget = useRef()
-  	const triggerTarget = useRef()
-	const menuControl = useDropdownMenuContext(overlayTarget)
-	const open = menuControl.open
+	const overlayTarget = useRef();
+	const triggerTarget = useRef();
+	const menuControl = useDropdownMenuContext(overlayTarget);
+	const open = menuControl.open;
 	// console.log(open);
 
-	const buttonId = useUniqueId('dropdown-toggle-')
-  	const menuId = useUniqueId('base-menu-')
+	const buttonId = useUniqueId('dropdown-toggle-');
+	const menuId = useUniqueId('base-menu-');
 
-	const handleToggle = useCallback((isOpen) => {
+	const handleToggle = useCallback(
+		(isOpen) => {
+			const nextOpen = typeof isOpen === 'undefined' ? !open : isOpen;
+			const fn = nextOpen ? onOpen : onClose;
 
-		const nextOpen = typeof isOpen === 'undefined' ? !open : isOpen
-		const fn = nextOpen ? onOpen : onClose
-	
-		fn?.()
-		onToggle?.(nextOpen)
-		if (nextOpen) {
-			menuControl.openMenu()
-		} else {
-			menuControl.closeMenu()
-		}
-	}, [onClose, onOpen, onToggle, open, menuControl])
+			fn?.();
+			onToggle?.(nextOpen);
+			if (nextOpen) {
+				menuControl.openMenu();
+			} else {
+				menuControl.closeMenu();
+			}
+		},
+		[onClose, onOpen, onToggle, open, menuControl]
+	);
 
-	const handleClick = useCallback(e => {
-		e.preventDefault()
-		if (disabled) {
-			return
-		}
-		handleToggle()
-	}, [disabled, handleToggle])
+	const handleClick = useCallback(
+		(e) => {
+			e.preventDefault();
+			if (disabled) {
+				return;
+			}
+			handleToggle();
+		},
+		[disabled, handleToggle]
+	);
 
 	const handleMouseEnter = useCallback(() => {
 		if (!disabled) {
-			handleToggle(true)
+			handleToggle(true);
 		}
-	}, [disabled, handleToggle])
+	}, [disabled, handleToggle]);
 
 	const handleMouseLeave = useCallback(() => {
 		if (!disabled) {
-			handleToggle(false)
+			handleToggle(false);
 		}
-	}, [disabled, handleToggle])
-	
+	}, [disabled, handleToggle]);
+
 	const handleSelect = (eventKey, e) => {
-		onSelect?.(eventKey, e)
-		handleToggle(false)
-	}
+		onSelect?.(eventKey, e);
+		handleToggle(false);
+	};
 
 	useRootClose(() => handleToggle(), {
 		triggerTarget,
 		overlayTarget,
 		disabled: !open,
-		listenEscape: false
-	})
+		listenEscape: false,
+	});
 
 	const dropdownProps = {
 		onMouseEnter,
-		onMouseLeave
-	}
+		onMouseLeave,
+	};
 
 	const toggleEventHandlers = {
 		onClick: onClick,
 		onContextMenu,
-	}
+	};
 
 	if (arrayIndexOf(CLICK, trigger)) {
-		toggleEventHandlers.onClick = chainedFunction(handleClick, toggleEventHandlers.onClick)
+		toggleEventHandlers.onClick = chainedFunction(
+			handleClick,
+			toggleEventHandlers.onClick
+		);
 	}
-	
+
 	if (arrayIndexOf(CONTEXT, trigger)) {
-		toggleEventHandlers.onContextMenu = chainedFunction(handleClick, onContextMenu)
+		toggleEventHandlers.onContextMenu = chainedFunction(
+			handleClick,
+			onContextMenu
+		);
 	}
-	
+
 	if (arrayIndexOf(HOVER, trigger)) {
-		dropdownProps.onMouseEnter = chainedFunction(handleMouseEnter, onMouseEnter)
-		dropdownProps.onMouseLeave = chainedFunction(handleMouseLeave, onMouseLeave)
+		dropdownProps.onMouseEnter = chainedFunction(
+			handleMouseEnter,
+			onMouseEnter
+		);
+		dropdownProps.onMouseLeave = chainedFunction(
+			handleMouseLeave,
+			onMouseLeave
+		);
 	}
 
 	const toggleElement = (
@@ -133,7 +151,7 @@ const Dropdown = React.forwardRef((props, ref) => {
 		>
 			{title}
 		</DropdownToggle>
-	)
+	);
 
 	const menuElement = (
 		<DropdownMenu
@@ -148,49 +166,46 @@ const Dropdown = React.forwardRef((props, ref) => {
 		>
 			{children}
 		</DropdownMenu>
-	)
+	);
 
 	return (
 		<DropdownContext.Provider value={{ activeKey }}>
-			<div
-				{...dropdownProps}
-				ref={ref}
-				style={style}
-				className="dropdown"
-			>
+			<div {...dropdownProps} ref={ref} style={style} className="dropdown">
 				{toggleElement}
 				<DropdownMenuContext.Provider value={menuControl}>
 					{menuElement}
 				</DropdownMenuContext.Provider>
 			</div>
 		</DropdownContext.Provider>
-	)
-})
+	);
+});
 
-const { 
-	TOP_START, 
-	TOP_CENTER, 
-	TOP_END, BOTTOM_START, 
-	BOTTOM_CENTER, 
+const {
+	TOP_START,
+	TOP_CENTER,
+	TOP_END,
+	BOTTOM_START,
+	BOTTOM_CENTER,
 	BOTTOM_END,
 	MIDDLE_START_TOP,
 	MIDDLE_START_BOTTOM,
 	MIDDLE_END_TOP,
-	MIDDLE_END_BOTTOM
-} = PLACEMENT
+	MIDDLE_END_BOTTOM,
+} = PLACEMENT;
 
 Dropdown.propTypes = {
 	trigger: PropTypes.oneOf([CLICK, HOVER, CONTEXT]),
 	placement: PropTypes.oneOf([
-		TOP_START, 
-		TOP_CENTER, 
-		TOP_END, BOTTOM_START, 
-		BOTTOM_CENTER, 
+		TOP_START,
+		TOP_CENTER,
+		TOP_END,
+		BOTTOM_START,
+		BOTTOM_CENTER,
 		BOTTOM_END,
 		MIDDLE_START_TOP,
 		MIDDLE_START_BOTTOM,
 		MIDDLE_END_TOP,
-		MIDDLE_END_BOTTOM
+		MIDDLE_END_BOTTOM,
 	]),
 	menuClass: PropTypes.string,
 	menuStyle: PropTypes.object,
@@ -207,12 +222,11 @@ Dropdown.propTypes = {
 	onOpen: PropTypes.func,
 	onClose: PropTypes.func,
 	onToggle: PropTypes.func,
-}
-
+};
 
 Dropdown.defaultProps = {
 	placement: BOTTOM_START,
 	trigger: 'click',
-}
+};
 
-export default Dropdown
+export default Dropdown;

@@ -29,6 +29,8 @@ class User extends Authenticatable
         'phone_verified_at',
         'profile_views',
         'transaction_pin',
+        'account_level_id',
+        'pending_account_level',
     ];
 
     /**
@@ -94,5 +96,15 @@ class User extends Authenticatable
     public function WithdrawalAccounts()
     {
         return $this->hasMany(WithdrawalAccount::class);
+    }
+
+    public function kycSubmissions()
+    {
+        return $this->hasMany(KYCSubmission::class);
+    }
+
+    public function accountLevel()
+    {
+        return $this->belongsTo(AccountLevel::class);
     }
 }
