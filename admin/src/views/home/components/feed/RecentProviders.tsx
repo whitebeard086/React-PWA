@@ -23,7 +23,7 @@ const RecentProviders = () => {
 
             <div className="mt-4 flex flex-col gap-2">
                 {recentProviders?.map((item) => {
-                    const name = `${item.last_name} ${item.first_name}`
+                    const name = `${item.first_name} ${item.last_name}`
                     const averageRating = calculateAverageRating(item.service?.bookings);
                     return (
                         <div key={item.id} className="w-full flex items-center gap-4">

@@ -29,6 +29,7 @@ interface RecentProviderWithBookings extends User {
 
 interface RecentBookingWithInvoice extends Booking {
     invoice: Invoice
+    user: User
 }
 
 export type KnownError = {
