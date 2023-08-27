@@ -15,9 +15,9 @@ class HomeAdminController extends Controller
             $all_bookings = Booking::count();
             $all_clients = User::where('profile_type_id', 1)->where('username', '!=', 'escrow')->count();
             $all_providers = User::where('profile_type_id', 2)->count();
-            $recent_providers = User::with('Bookings')->where('profile_type_id', 2)->orderBy('id', 'desc')->take(10)->get();
-            $recent_customers = User::where('profile_type_id', 1)->where('username', '!=', 'escrow')->orderBy('id', 'desc')->take(10)->get();
-            $recent_bookings = Booking::with('Invoice')->orderBy('id', 'desc')->take(10)->get();
+            $recent_providers = User::with('Bookings', 'Service.Bookings')->where('profile_type_id', 2)->orderBy('id', 'desc')->take(5)->get();
+            $recent_customers = User::where('profile_type_id', 1)->where('username', '!=', 'escrow')->orderBy('id', 'desc')->take(5)->get();
+            $recent_bookings = Booking::with('Invoice')->orderBy('id', 'desc')->take(5)->get();
 
             return response()->json([
                 'status' => 'success',

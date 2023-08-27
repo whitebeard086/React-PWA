@@ -1,4 +1,4 @@
-import { Booking, Invoice, User } from '@/@types/common';
+import { Booking, Invoice, Service, User } from '@/@types/common';
 import { apiHomeIndex } from '@/services/HomeService';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { AxiosError } from 'axios';
@@ -12,6 +12,15 @@ interface RejectedWithValueAction<ThunkArg, RejectedValue> {
       arg: ThunkArg
       aborted: boolean
     }
+}
+
+export interface ServiceWithBookings extends Service {
+    bookings: Booking[]
+}
+
+interface RecentProviderWithServiceAndBookings extends RecentProviderWithBookings {
+    bookings: Booking[] | []
+    service: ServiceWithBookings
 }
 
 interface RecentProviderWithBookings extends User {
@@ -33,7 +42,7 @@ type Home = {
     allBookings: string
     allClients: string
     allProviders: string
-    recentProviders: RecentProviderWithBookings[]
+    recentProviders: RecentProviderWithServiceAndBookings[]
     recentCustomers: User[]
     recentBookings: RecentBookingWithInvoice[]
 }
@@ -46,7 +55,7 @@ export type HomeIndexState = {
     allClients: string
     allProviders: string
     status: string
-    recentProviders: RecentProviderWithBookings[]
+    recentProviders: RecentProviderWithServiceAndBookings[]
     recentCustomers: User[]
     recentBookings: RecentBookingWithInvoice[]
 }

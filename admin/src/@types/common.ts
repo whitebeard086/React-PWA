@@ -51,7 +51,8 @@ export interface Booking {
     created_at: Date
     updated_at: Date
     provider_id: number
-    comments: string
+    rating: number
+    comment: string
 }
 
 export interface Invoice {
@@ -62,6 +63,21 @@ export interface Invoice {
     price: number
     file: string
     status: string
+    created_at: Date
+    updated_at: Date
+}
+
+export interface Service {
+    id: number
+    user_id: number
+    category_id: number
+    sub_category_id: number
+    workdays_id: number
+    title: string
+    banner: string
+    slug: string
+    description: string
+    starting_price: number
     created_at: Date
     updated_at: Date
 }
