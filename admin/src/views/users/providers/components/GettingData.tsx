@@ -59,7 +59,7 @@ const GettingData = () => {
 
             <div className="mt-4">
                 <Card>
-                    <h4 className="text-base mb-4">All Clients</h4>
+                    <h4 className="text-base mb-4">All Providers</h4>
                     <Table>
                         <THead>
                             <Tr>

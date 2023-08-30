@@ -1,67 +1,70 @@
-import { Button, Card, Paginate, Table } from "@/components/ui"
+import { Button, Card, Paginate, Select, Table } from "@/components/ui"
 import { useAppSelector } from "../../store"
-import React, { useState } from "react";
+import { useMemo, useState } from "react";
+import ReactPaginate from "react-paginate";
+import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 
-
-const AllClients = () => {
+const AllProviders = () => {
     const [pageNumber, setPageNumber] = useState(0);
     const [itemsPerPage, setItemsPerPage] = useState(10);
 
     const { Tr, Th, Td, THead, TBody } = Table
-
-    const { allClients } = useAppSelector((state) => state.users.data)
-
-    const TH = React.memo(Th)
-    const TD = React.memo(Td)
+    const {  allProviders } = useAppSelector((state) => state.users.data)
 
     const pagesVisited = pageNumber * itemsPerPage;
-    const paginationData = allClients?.slice(
+    const paginationData = allProviders?.slice(
         pagesVisited,
         pagesVisited + itemsPerPage
     );
 
     return (
         <Card>
-            <h4 className="text-base mb-4">All Clients</h4>
+            <h4 className="text-base mb-4">All Providers</h4>
 
             <Table>
                 <THead>
                     <Tr>
-                        <TH className="!text-gray-800">Full Name</TH>
-                        <TH className="!text-gray-800">Email</TH>
-                        <TH className="!text-gray-800">Account Balance</TH>
-                        <TH className="!text-gray-800">Account Verification</TH>
-                        <TH className="!text-gray-800">Actions</TH>
+                        <Th className="!text-gray-800">Display Name</Th>
+                        <Th className="!text-gray-800">Category</Th>
+                        <Th className="!text-gray-800">Phone</Th>
+                        <Th className="!text-gray-800">Account Balance</Th>
+                        <Th className="!text-gray-800">Account Verification</Th>
+                        <Th className="!text-gray-800">Actions</Th>
                     </Tr>
                 </THead>
-                {allClients.length < 1 && (
+                {allProviders.length < 1 && (
                     <TBody>
                         <Tr>
-                            <TH colSpan={5} rowSpan={5} className="min-h-[20vh]">
+                            <Th colSpan={5} rowSpan={5} className="min-h-[20vh]">
                                 <div className="min-h-[20vh] grid place-content-center">
                                     <p className="text-lg text-gray-400">
-                                        No Clients
+                                        No Providers
                                     </p>
                                 </div>
-                            </TH>
+                            </Th>
                         </Tr>
                     </TBody>
                 )}
-                {allClients.length > 0 && paginationData?.map((item) => {
+                {allProviders.length > 0 && paginationData?.map((item) => {
                     return (
                         <TBody key={item.id}>
                             <Tr>
-                                <TD>{`${item.first_name} ${item.last_name}` }</TD>
-                                {item.phone && (
-                                    <TD>
+                                <Td>{item.service?.title}</Td>
+                                <Td>{item.service?.category.name}</Td>
+                                {item.phone ? (
+                                    <Td>
                                         +{item.phone}
-                                    </TD>
+                                    </Td>
+                                ) : (
+                                    <Td>
+                                        -
+                                    </Td>
                                 )}
-                                <TD>₦{item.balance?.toLocaleString()}</TD>
-                                <TD className="text-red-500">
+                                <Td>₦{item.balance?.toLocaleString()}</Td>
+                                <Td className="text-red-500">
                                     Unverified
-                                </TD>
-                                <TD className="flex items-center gap-2">
+                                </Td>
+                                <Td className="flex items-center gap-2">
                                     <Button
                                         variant="solid"
                                         size="xs"
@@ -74,7 +77,7 @@ const AllClients = () => {
                                         size="xs"
                                         color="red-600"
                                     >
-                                        Bookings({item.bookings?.length})
+                                        Requests({item.service.bookings.length})
                                     </Button>
                                     <Button
                                         variant="solid"
@@ -82,20 +85,19 @@ const AllClients = () => {
                                     >
                                         Transactions
                                     </Button>
-                                </TD>
+                                </Td>
                             </Tr>
                         </TBody>
                     )
                 })}
             </Table>
             <Paginate
-                data={allClients}
+                data={allProviders}
                 itemsPerPage={itemsPerPage}
                 setPageNumber={setPageNumber}
                 setItemsPerPage={setItemsPerPage}
-                // customPageSizes={[20, 30, 40, 50]}
             />
         </Card>
     )
 }
-export default AllClients
+export default AllProviders

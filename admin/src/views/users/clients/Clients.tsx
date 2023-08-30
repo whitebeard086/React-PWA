@@ -9,10 +9,12 @@ injectReducer('users', reducer)
 
 const Clients = () => {
     const dispatch = useAppDispatch()
-    const { loading } = useAppSelector((state) => state.users.data)
+    const { loading, status,  } = useAppSelector((state) => state.users.data)
 
     useEffect(() => {
-        dispatch(usersIndex())
+        if (status !== 'success') {
+            dispatch(usersIndex())
+        }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 

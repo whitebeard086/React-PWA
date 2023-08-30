@@ -77,7 +77,7 @@ class BookingController extends Controller
             $senderUsername = $user->username;
             $invoiceNumber = $invoice->invoice_number;
 
-            // $smsResponse = $this->serviceBookedSmsNotification($receiverPhone, $senderUsername, $receiverUsername, $invoiceNumber);
+            $smsResponse = $this->serviceBookedSmsNotification($receiverPhone, $senderUsername, $receiverUsername, $invoiceNumber);
 
             
 
@@ -113,7 +113,7 @@ class BookingController extends Controller
             $receiverUsername = $receiver->username;
             $senderUsername = $provider->username;
 
-            // $this->serviceCompletedSmsNotification($receiverPhone, $senderUsername, $receiverUsername);
+            $this->serviceCompletedSmsNotification($receiverPhone, $senderUsername, $receiverUsername);
 
             return response()->json([
                 'status' => 'success',
@@ -228,7 +228,7 @@ class BookingController extends Controller
             $receiverPhone = $provider->phone;
             $receiverUsername = $provider->username;
             $senderUsername = $sender->username;
-            // $this->serviceConfirmedSmsNotification($receiverPhone, $senderUsername, $receiverUsername);
+            $this->serviceConfirmedSmsNotification($receiverPhone, $senderUsername, $receiverUsername);
 
             return response()->json([
                 'status' => 'success',
