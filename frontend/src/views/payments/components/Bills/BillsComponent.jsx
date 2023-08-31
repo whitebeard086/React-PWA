@@ -36,18 +36,24 @@ const BillsComponent = () => {
 							</Card>
 							<p className="text-base font-bold text-gray-200">Data</p>
 						</Link>
-						<div className="flex cursor-pointer flex-col justify-center items-center">
+						<Link
+							to="/bills/disco"
+							className="flex cursor-pointer flex-col justify-center items-center"
+						>
 							<Card className="flex justify-center items-center w-full">
 								<MdOutlineElectricalServices className="text-3xl" />
 							</Card>
 							<p className="text-base font-bold text-gray-200">Electricity</p>
-						</div>
-						<div className="flex cursor-pointer flex-col justify-center items-center">
+						</Link>
+						<Link
+							to="/bills/cable"
+							className="flex cursor-pointer flex-col justify-center items-center"
+						>
 							<Card className="flex justify-center items-center w-full">
 								<BiCameraMovie className="text-3xl" />
 							</Card>
 							<p className="text-base font-bold text-gray-200">Television</p>
-						</div>
+						</Link>
 						<div className="flex cursor-pointer flex-col justify-center items-center">
 							<Card className="flex justify-center items-center w-full">
 								<MdOutlineGames className="text-3xl" />

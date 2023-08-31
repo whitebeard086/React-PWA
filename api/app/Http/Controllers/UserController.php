@@ -7,13 +7,14 @@ use App\Models\User;
 use App\Models\Country;
 use App\Models\Service;
 use App\Models\Category;
-use App\Models\KYCSubmission;
 use App\Models\Workdays;
 use App\Models\ProfileType;
 use App\Models\SubCategory;
 use Illuminate\Support\Str;
 use App\Traits\GatewayTrait;
 use Illuminate\Http\Request;
+use App\Models\KYCSubmission;
+use App\Traits\CustomersTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -21,6 +22,7 @@ use Illuminate\Support\Facades\Storage;
 class UserController extends Controller
 {
     use GatewayTrait;
+    use CustomersTrait;
     private $otp;
 
     public function __construct()
@@ -38,7 +40,7 @@ class UserController extends Controller
     public function get_user()
     {
         try {
-            $user = User::with(['accountLevel', 'ProfileType', 'Service.Category', 'Service.Workdays', 'Service.SubCategory', 'WithdrawalAccounts', 'kycSubmissions'])->where('id', auth()->user()->id)->first();
+            $user = User::with(['address', 'accountLevel', 'ProfileType', 'Service.Category', 'Service.Workdays', 'Service.SubCategory', 'WithdrawalAccounts', 'kycSubmissions'])->where('id', auth()->user()->id)->first();
 
             if (isset($user->phone_verified_at) && !$user->bank) {
                 $result = $this->assignVirtualAccount($user);
@@ -58,6 +60,50 @@ class UserController extends Controller
                 $has_pin = false;
             }
             
+            if (!$user->customer_id) {
+                $customerResponse = $this->createCustomerIfConditionsMet($user);
+    
+                if ($customerResponse) {
+                    $user->customer_id = $customerResponse['data']['id'];
+                    $user->kyc_tier = $customerResponse['data']['kyc_tier'];
+
+                    // if ($this->checkKYCT1Requirements($user)) {
+                    //     $upgradeResponse = $this->upgradeCustomerToKYCT1($user->customer_id, $user);
+
+                    //     if ($upgradeResponse) {
+                    //         // KYC Tier 1 upgrade successful
+                    //         $user->kyc_tier = $upgradeResponse['data']['kyc_tier'];
+                    //     } else {
+                    //         // KYC Tier 1 upgrade failed
+                    //     }
+                    // }
+                    $upgradeResponse = $this->upgradeCustomerToKYCT1($user);
+                    if ($upgradeResponse) {
+                        // KYC Tier 1 upgrade successful
+                        $user->kyc_tier = $upgradeResponse['data']['kyc_tier'];
+                    }
+
+                    $virtualResponce = $this->createAccount($user->customer_id);
+                    if ($virtualResponce) {
+                        $user->preferred_bank = $virtualResponce['data']['preferred_bank'];
+                        $user->account_id = $virtualResponce['data']['id'];
+                        $user->account_balance = $virtualResponce['data']['balance'];
+                        $user->account_number = $virtualResponce['data']['account_number'];
+                    }
+
+                    $walletResponce = $this->createWallet($user->customer_id);
+                    if ($walletResponce) {
+                        $user->wallet_id = $walletResponce['data']['id'];
+                        $user->wallet_balance = $walletResponce['data']['balance'];
+                        $user->wallet_number = $walletResponce['data']['account_number'];
+                    }
+
+                    $user->save();
+                } else {
+                    // Customer creation conditions not met
+                }
+            }
+
             return response()->json([
                 'user' => $user,
                 'hasPin' => $has_pin,
@@ -532,6 +578,23 @@ class UserController extends Controller
             'message' => 'KYC initiated successfully',
             'kyc' => $kyc,
         ], 200);
+    }
+
+    public function update_bvn(Request $request, $userID)
+    {
+        $user = User::findOrFail($userID);
+        // $formFields = $request->validate([
+        //     'bvn' => 'required|string',
+        //     'first_name' => 'required|string',
+        //     'last_name' => 'required|string',
+        // ]);
+        // $user->update($formFields);
+        $user->update($request->all());
+
+        return response()->json([
+            'message' => 'User details updated successfully!',
+            'user' => $user,
+        ]);
     }
     
 }

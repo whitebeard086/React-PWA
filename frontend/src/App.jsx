@@ -53,6 +53,8 @@ const Withdraw = lazy(() => import('./views/withdraw'));
 const Pin = lazy(() => import('./views/pin'));
 const Airtime = lazy(() => import('./views/bills/airtime'));
 const Data = lazy(() => import('./views/bills/data'));
+const Disco = lazy(() => import('./views/bills/disco'));
+const Cable = lazy(() => import('./views/bills/cable'));
 const Notifications = lazy(() => import('./views/notifications'));
 
 function App() {
@@ -185,6 +187,8 @@ function App() {
 									<Route path="/transaction-pin" element={<Pin />} />
 									<Route path="/bills/airtime" element={<Airtime />} />
 									<Route path="/bills/data" element={<Data />} />
+									<Route path="/bills/disco" element={<Disco />} />
+									<Route path="/bills/cable" element={<Cable />} />
 									<Route path="/unauthorized" element={<Unauthorized />} />
 									<Route
 										path="/profile/notifications"

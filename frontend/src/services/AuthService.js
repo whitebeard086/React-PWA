@@ -223,3 +223,11 @@ export async function apiCreateKyc(data) {
 		data,
 	});
 }
+
+export async function apiUpdateBvn(data, userID) {
+	return ApiService.fetchData({
+		url: `/profile/bvn/${userID}`,
+		method: 'post',
+		data,
+	});
+}

@@ -15,7 +15,7 @@ class BillsController extends Controller
     public function get_operators()
     {
         try {
-            $operators = $this->getOperators();
+            $operators = $this->getOperators('telco');
 
             if ($operators === null) {
                 return response()->json([
@@ -48,6 +48,73 @@ class BillsController extends Controller
     {
         try {
             $products = $this->getProducts($request);
+
+            if ($products === null) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Failed to fetch products',
+                ], 500);
+            }
+
+            // Get all data products
+            $fixedProducts = array_filter($products['data'], function ($product) {
+                return $product['fee_type'] === 'FIXED';
+            });
+
+            return response()->json([
+                'status' => 'success',
+                'products' => $products,
+                'data' => array_values($fixedProducts),
+                'message' =>$products['message'],
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function get_bill_operators($bill)
+    {
+        try {
+            $operators = $this->getOperators($bill);
+
+            if ($operators === null) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Failed to fetch operators',
+                ], 500);
+            }
+
+            // Filter out Smile and Visaphone
+            $filteredOperators = array_filter($operators['data'], function ($item) {
+                return $item['name'] !== 'Smile' && $item['name'] !== 'Visafone';
+            });
+
+            return response()->json([
+                'status' => 'success',
+                'operators' => $operators,
+                'data' => array_values($filteredOperators),
+                'message' =>$operators['message'],
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function get_operator_products(Request $request)
+    {
+        $operatorID = $request->operatorID;
+        $bill = $request->bill;
+
+        try {
+            $products = $this->getOperatorProducts($operatorID, $bill);
 
             if ($products === null) {
                 return response()->json([

@@ -14,7 +14,11 @@ import {
 	setCreateStatus,
 } from '../notifications/store/dataSlice';
 import DepositDialog from '../payments/components/Deposit/DepositDialog';
-import { toggleDepositDialog } from '../payments/store/stateSlice';
+import BvnDialog from '../payments/components/bvn/bvnDialog';
+import {
+	toggleBvnDialog,
+	toggleDepositDialog,
+} from '../payments/store/stateSlice';
 import KycDialog from '../profile/kyc/components/kycDialog';
 import WithdrawDialog from '../withdraw/components/withdraw';
 import { toggleWithdrawDialog } from '../withdraw/store/stateSlice';
@@ -82,7 +86,8 @@ const Layout = () => {
 	}, [createStatus]);
 
 	const onTopUp = () => {
-		dispatch(toggleDepositDialog(true));
+		if (profile?.bvn) dispatch(toggleDepositDialog(true));
+		if (!profile?.bvn) dispatch(toggleBvnDialog(true));
 	};
 
 	const onWithdraw = () => {
@@ -166,6 +171,7 @@ const Layout = () => {
 
 			<KycDialog />
 			<DepositDialog />
+			<BvnDialog />
 			<WithdrawDialog />
 		</Container>
 	);

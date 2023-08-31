@@ -7,15 +7,16 @@ use Illuminate\Support\Facades\Http;
 
 trait BillsTrait
 {
-    public function getOperators()
+    public function getOperators($operator)
     {
         $blocSecret = env('BLOC_SECRET_KEY');
 
+        // supports "electricity", "television", "telco"
         try {
             $response = Http::withHeaders([
                 'accept' => 'application/json',
                 'authorization' => "Bearer $blocSecret",
-            ])->get('https://api.blochq.io/v1/bills/operators?bill=telco');
+            ])->get("https://api.blochq.io/v1/bills/operators?bill=$operator");
 
             if ($response->successful()) {
                 $data = $response->json();
@@ -40,6 +41,30 @@ trait BillsTrait
                 'accept' => 'application/json',
                 'authorization' => "Bearer $blocSecret",
             ])->get("https://api.blochq.io/v1/bills/operators/$category/products?bill=telco");
+
+            if ($response->successful()) {
+                $data = $response->json();
+                return $data;
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function getOperatorProducts($operatorID, $bill)
+    {
+        $blocSecret = env('BLOC_SECRET_KEY');
+        
+        // supports electricity, television, telco
+
+        try {
+            $response = Http::withHeaders([
+                'accept' => 'application/json',
+                'authorization' => "Bearer $blocSecret",
+            ])->get("https://api.blochq.io/v1/bills/operators/$operatorID/products?bill=$bill");
 
             if ($response->successful()) {
                 $data = $response->json();

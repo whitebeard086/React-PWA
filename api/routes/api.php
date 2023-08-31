@@ -60,6 +60,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/profile/virtual-account', [UserController::class, 'assign_virtual_account']);
     Route::post('/profile/image', [UserController::class, 'user_image']);
     Route::post('/profile/phone', [UserController::class, 'update_phone']);
+    Route::post('/profile/bvn/{userID}', [UserController::class, 'update_bvn']);
     Route::post('/profile/phone/verify', [UserController::class, 'verify_phone']);
     Route::post('/profile/service/new', [UserController::class, 'new_service']);
     Route::post('/profile/service/update', [UserController::class, 'update_service']);
@@ -113,6 +114,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // Bills Routes
     Route::get('/bills/operators', [BillsController::class, 'get_operators']);
+    Route::get('/bills/operators/{bill}', [BillsController::class, 'get_bill_operators']);
+    Route::get('/bills/operator_products', [BillsController::class, 'get_operator_products']);
     Route::post('/bills/operator/products', [BillsController::class, 'get_products']);
     Route::post('/bills/airtime', [BillsController::class, 'buy_airtime']);
     Route::post('/bills/data', [BillsController::class, 'buy_bundle']);
