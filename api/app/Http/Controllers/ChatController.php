@@ -265,7 +265,7 @@ class ChatController extends Controller
             $senderUsername = $sender->username;
             $receiverUsername = $receiver->username;
 
-            // $this->newInvoiceSmsNotification($receiverPhone, $senderUsername, $receiverUsername);
+            $this->newInvoiceSmsNotification($receiverPhone, $senderUsername, $receiverUsername);
             
             return response()->json([
                 'status' => 'success',

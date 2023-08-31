@@ -17,6 +17,7 @@ class Booking extends Model
         'service_status',
         'user_status',
         'status',
+        'cancel_reason',
         'rating',
         'comment',
     ]; 

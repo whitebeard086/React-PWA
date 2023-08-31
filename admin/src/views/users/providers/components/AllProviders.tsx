@@ -1,8 +1,6 @@
-import { Button, Card, Paginate, Select, Table } from "@/components/ui"
+import { Button, Card, Paginate, Table } from "@/components/ui"
 import { useAppSelector } from "../../store"
-import { useMemo, useState } from "react";
-import ReactPaginate from "react-paginate";
-import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
+import { useState } from "react";
 
 const AllProviders = () => {
     const [pageNumber, setPageNumber] = useState(0);

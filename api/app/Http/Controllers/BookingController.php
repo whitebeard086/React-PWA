@@ -121,7 +121,7 @@ class BookingController extends Controller
                 'booking' => Booking::with('Service.User', 'User')->where('id', $booking->id)->firstOrFail(),
             ], 200);
             
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage(),
@@ -250,5 +250,106 @@ class BookingController extends Controller
                 'message' => $e->getMessage(),
             ], 500);
         }   
+    }
+
+    public function start_service(Request $request)
+    {
+        try {
+            $booking = Booking::findOrFail($request->booking_id);
+
+            $booking->service_status = 'ongoing';
+            $booking->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Service resumed',
+                'booking' => Booking::with('Service.User', 'User')->where('id', $booking->id)->firstOrFail(),
+            ], 200);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function cancel_service(Request $request)
+    {
+        try {
+            $booking = Booking::findOrFail($request->booking_id);
+
+            DB::beginTransaction();
+
+            if(!$request->reason) {
+                return response()->json([
+                    'status' => 'reason error',
+                    'message' => 'Please kindly tell us why you want to cancel this service.',
+                ], 400);
+            } 
+
+            $booking->service_status = 'cancelled';
+            $booking->user_status = 'cancelled';
+            $booking->status = 'cancelled';
+            $booking->cancel_reason = $request->reason;
+            $booking->save();
+
+            // Update escrow status
+            $escrow = $booking->escrow;
+
+            if (!$escrow) {
+                throw new ModelNotFoundException('Escrow not found');
+            }
+
+            $escrow->status = 'canceled';
+            $escrow->save();
+
+            // Update escrow account balance
+            $escrowAccount = User::where('username', 'escrow')->firstOrFail();
+            $escrowAccount->decrement('balance', $escrow->amount);
+            $escrowAccount->save();
+
+            // Update client's balance
+            $client = $booking->user;
+
+            if (!$client) {
+                throw new ModelNotFoundException('Client not found');
+            }
+
+            $client->increment('balance', $escrow->amount);
+            $client->save();
+
+            $txn = new Transaction;
+            $txn->user_id = $client->id;
+            $txn->reference = $booking->invoice->invoice_number;
+            $txn->amount = $booking->invoice->price;
+            $txn->type = 'Service Payment Refund';
+            $txn->final_amount = $booking->invoice->price;
+            $txn->method = 'transfer';
+            $txn->status = 'Success';
+            $txn->save();
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Service cancelled',
+                'booking' => Booking::with('Service.User', 'User', 'Invoice')->where('id', $booking->id)->firstOrFail(),
+            ], 200);
+            
+        } catch (ModelNotFoundException $e) {
+            DB::rollback();
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 404);
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        } 
     }
 }

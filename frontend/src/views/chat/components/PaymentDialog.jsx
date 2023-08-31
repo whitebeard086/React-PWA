@@ -16,6 +16,7 @@ import classNames from "classnames";
 import { sendPushNotification } from "@/utils/sendPushNotification";
 import appConfig from "@/configs/app.config";
 import { socket } from "@/utils/socket";
+import { createNotification, setCreateStatus } from "@/views/notifications/store/dataSlice";
 
 const PaymentDialog = () => {
     const dispatch = useDispatch();
@@ -28,6 +29,9 @@ const PaymentDialog = () => {
     const { invoice, chat, bookingService, bookingMessage, bookingStatus } =
         useSelector((state) => state.chat.data);
     const { profile } = useSelector((state) => state.auth.user);
+    const { createStatus, notification } = useSelector(
+		(state) => state.notifications.data
+	);
 
     const provider = chat?.user?.service ? chat?.user : chat?.receiver;
     const receiver = chat?.user?.service ? chat.receiver : chat.user;
@@ -39,6 +43,17 @@ const PaymentDialog = () => {
     const onDialogClose = () => {
         dispatch(togglePaymentDialog(false));
     };
+
+    const notificationData = {
+		receiver_id: provider?.id,
+		type: 'invoice paid',
+		data: JSON.stringify({
+			message: 'Invoice Paid',
+			chat_id: chat?.id,
+			invoice_number: invoice?.invoice_number,
+		}),
+		url: `/chat/${profile?.username?.toLowerCase()}`,
+	};
 
     const popNotification = (message, type, title, duration) => {
         toast.push(
@@ -70,6 +85,8 @@ const PaymentDialog = () => {
 
     useEffect(() => {
         if (bookingStatus === "success") {
+            dispatch(createNotification(notificationData));
+
             sendPushNotification({
                 app_id: import.meta.env.VITE_ONESIGNAL_APP_ID,
                 channel_for_external_user_ids: "push",
@@ -101,13 +118,14 @@ const PaymentDialog = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [bookingStatus]);
 
-    // useEffect(() => {
-    //     socket?.on("serviceBooked", (data) => {
-    //         dispatch(setServiceBooked(true))
-    //     })
+    useEffect(() => {
+		if (createStatus === 'success') {
+			socket.emit('sendNotification', [notification, provider?.id]);
 
-    //     // dispatch(setServiceBooked(false))
-    // }, [dispatch, socket])
+			dispatch(setCreateStatus('idle'));
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [createStatus]);
 
     const onReady = () => {
         dispatch(setViewingInvoice(false));

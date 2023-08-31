@@ -66,6 +66,49 @@ const NotificationTypeContent = ({ item }) => {
                     </div>
                 )
             }
+        case 'invoice paid':
+            return (
+                <div className="leading-tight">
+                    <span className="font-bold">
+                        {`${sender.first_name} ${sender.last_name}`}{' '}
+                    </span>
+                    <span>
+                        has paid for invoice{' '}
+                        <span className="font-bold heading-text">
+                            #{messageData.invoice_number}
+                        </span>
+                    </span>
+                    <Link to={url} state={{ chat: messageData?.chat_id }} className="absolute w-full h-full top-0 left-0"/>
+                </div>
+            )
+        case 'booking start':
+            return (
+                <div className="leading-tight">
+                    <span className="font-bold">
+                        {`${sender.service?.title}`}{' '}
+                    </span>
+                    <span>
+                        has started working on your service
+                    </span>
+                    <Link to={url} state={{ chat: messageData?.chat_id }} className="absolute w-full h-full top-0 left-0"/>
+                </div>
+            )
+        case 'booking cancelled':
+            return (
+                <div className="leading-tight">
+                    <span className="font-bold">
+                        {`${sender.service?.title}`}{' '}
+                    </span>
+                    <span>
+                        has cancelled the service request{' '}
+                        <span className="font-bold heading-text">
+                            #{messageData.invoice_number},
+                        </span>{' '}
+                        your refund will be processed shortly.
+                    </span>
+                    <Link to={url} state={{ chat: messageData?.chat_id }} className="absolute w-full h-full top-0 left-0"/>
+                </div>
+            )
     }
 }
 export default NotificationTypeContent

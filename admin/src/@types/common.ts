@@ -37,6 +37,8 @@ export interface User {
     updated_at: Date
     profile_views: number
     deactivate_at: Date | null
+    pending_account_level: string | null
+    account_level_id: number
 
 }
 
@@ -45,9 +47,9 @@ export interface Booking {
     service_id: number
     user_id: number
     invoice_id: number
-    service_status: string
-    user_status: string
-    status: string
+    service_status: 'ongoing' | 'completed' | 'disputed' | 'refunded'
+    user_status: 'ongoing' | 'completed' | 'disputed' | 'refunded'
+    status: 'ongoing' | 'completed' | 'disputed' | 'refunded'
     created_at: Date
     updated_at: Date
     provider_id: number
@@ -62,7 +64,16 @@ export interface Invoice {
     invoice_number: string
     price: number
     file: string
-    status: string
+    status: 'pending' | 'paid' | 'cancelled'
+    created_at: Date
+    updated_at: Date
+}
+
+export interface InvoiceItem {
+    id: number
+    invoice_id: number
+    item: string
+    price: number
     created_at: Date
     updated_at: Date
 }
@@ -89,6 +100,25 @@ export interface Category {
     icon: string
     slug: string
     description: string | null
+    created_at: Date
+    updated_at: Date
+}
+
+export interface Chat {
+    id: number
+    user_id: number
+    receiver_id: number
+    created_at: Date
+    updated_at: Date
+}
+
+export interface Message {
+    id: number
+    chat_id: number
+    sender_id: number
+    message: string | null
+    file: string | null
+    invoice: string | null
     created_at: Date
     updated_at: Date
 }

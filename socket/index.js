@@ -11,7 +11,7 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
 	cors: {
 		// origin: "https://app0101.taskitly.com"
-		origin: 'http://localhost:5173',
+		origin: ['http://localhost:5174', 'http://localhost:5173']
 	},
 });
 
@@ -113,6 +113,28 @@ io.on('connection', (socket) => {
 		if (user) {
 			io.to(user.socketId).emit('serviceBooked', data);
 			console.log('Service provider', providerId);
+		}
+	});
+
+	// Start Service
+	socket.on('startedService', (data) => {
+		const receiverId = data;
+		const user = activeUsers.find((user) => user.userId === receiverId);
+
+		if (user) {
+			io.to(user.socketId).emit('serviceStarted', data);
+			console.log('Service Started: ', receiverId);
+		}
+	});
+
+	// Cancel Service
+	socket.on('cancelledService', (data) => {
+		const receiverId = data;
+		const user = activeUsers.find((user) => user.userId === receiverId);
+
+		if (user) {
+			io.to(user.socketId).emit('serviceCancelled', data);
+			console.log('Service Cancelled: ', receiverId);
 		}
 	});
 
