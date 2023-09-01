@@ -16,7 +16,8 @@ const Bookings = ({
     onComplete,
     onConfirm,
     onStart,
-    onCancel
+    onCancel,
+    onReport,
 }) => {
     return (
         <div>
@@ -143,12 +144,12 @@ const Bookings = ({
                                                         </Button>
                                                     </div>
                                                 )}
-                                                {booking?.service_status ===
-                                                    "completed" && (
+                                                {booking?.service_status === "completed" && (
                                                     <Button
                                                         variant="solid"
                                                         size="sm"
                                                         color="red-500"
+                                                        onClick={() => onReport(booking)}
                                                     >
                                                         Report
                                                     </Button>
@@ -180,8 +181,7 @@ const Bookings = ({
                                             </div>
 
                                             <div>
-                                                {item?.service_status ===
-                                                    "ongoing" && (
+                                                {item?.service_status === "ongoing" && (
                                                     <p
                                                         className={classNames(
                                                             "text-sm font-semibold text-primary-500 flex flex-col items-center justify-center w-fit leading-tight"
@@ -256,12 +256,12 @@ const Bookings = ({
                                                         </Button>
                                                     </div>
                                                 )}
-                                                {item?.service_status ===
-                                                    "completed" && (
+                                                {item?.service_status === "completed" && (
                                                     <Button
                                                         variant="solid"
                                                         size="sm"
                                                         color="red-500"
+                                                        onClick={() => onReport(item)}
                                                     >
                                                         Report
                                                     </Button>
@@ -367,12 +367,12 @@ const Bookings = ({
                                                     </Button>
                                                 </div>
                                             )}
-                                            {item?.service_status ===
-                                                "completed" && (
+                                            {item?.service_status === "completed" && (
                                                 <Button
                                                     variant="solid"
                                                     size="sm"
                                                     color="red-500"
+                                                    onClick={() => onReport(item)}
                                                 >
                                                     Report
                                                 </Button>
@@ -452,8 +452,7 @@ const Bookings = ({
                                         </div>
 
                                         <div>
-                                            {booking?.service_status ===
-                                                "completed" && (
+                                            {booking?.service_status === "completed" && (
                                                 <div className="flex items-center gap-2">
                                                     <Button
                                                         variant="solid"
@@ -469,18 +468,30 @@ const Bookings = ({
                                                         variant="solid"
                                                         size="sm"
                                                         color="red-500"
+                                                        onClick={() => onReport(booking)}
                                                     >
                                                         Report
                                                     </Button>
                                                 </div>
                                             )}
-                                            {booking?.service_status ===
-                                                "pending" && (
+                                            {booking?.service_status === "pending" && (
                                                 <div className="flex items-center gap-2">
                                                     <Button
                                                         variant="solid"
                                                         size="sm"
                                                         color="red-500"
+                                                    >
+                                                        Report
+                                                    </Button>
+                                                </div>
+                                            )}
+                                            {booking?.service_status === "ongoing" && (
+                                                <div className="flex items-center gap-2">
+                                                    <Button
+                                                        variant="solid"
+                                                        size="sm"
+                                                        color="red-500"
+                                                        onClick={() => onReport(booking)}
                                                     >
                                                         Report
                                                     </Button>
@@ -546,8 +557,7 @@ const Bookings = ({
                                         </div>
 
                                         <div>
-                                            {item?.service_status ===
-                                                "completed" && (
+                                            {item?.service_status === "completed" && (
                                                 <div className="flex items-center gap-2">
                                                     <Button
                                                         variant="solid"
@@ -563,6 +573,31 @@ const Bookings = ({
                                                         variant="solid"
                                                         size="sm"
                                                         color="red-500"
+                                                        onClick={() => onReport(item)}
+                                                    >
+                                                        Report
+                                                    </Button>
+                                                </div>
+                                            )}
+                                            {item?.service_status === "pending" && (
+                                                <div className="flex items-center gap-2">
+                                                    <Button
+                                                        variant="solid"
+                                                        size="sm"
+                                                        color="red-500"
+                                                        onClick={() => onReport(item)}
+                                                    >
+                                                        Report
+                                                    </Button>
+                                                </div>
+                                            )}
+                                            {item?.service_status === "ongoing" && (
+                                                <div className="flex items-center gap-2">
+                                                    <Button
+                                                        variant="solid"
+                                                        size="sm"
+                                                        color="red-500"
+                                                        onClick={() => onReport(item)}
                                                     >
                                                         Report
                                                     </Button>
@@ -628,8 +663,7 @@ const Bookings = ({
                                     </div>
 
                                     <div>
-                                        {item?.service_status ===
-                                            "completed" && (
+                                        {item?.service_status === "completed" && (
                                             <div className="flex items-center gap-2">
                                                 <Button
                                                     variant="solid"
@@ -645,18 +679,31 @@ const Bookings = ({
                                                     variant="solid"
                                                     size="sm"
                                                     color="red-500"
+                                                    onClick={() => onReport(item)}
                                                 >
                                                     Report
                                                 </Button>
                                             </div>
                                         )}
-                                        {item?.service_status ===
-                                            "pending" && (
+                                        {item?.service_status === "pending" && (
                                             <div className="flex items-center gap-2">
                                                 <Button
                                                     variant="solid"
                                                     size="sm"
                                                     color="red-500"
+                                                    onClick={() => onReport(item)}
+                                                >
+                                                    Report
+                                                </Button>
+                                            </div>
+                                        )}
+                                        {item?.service_status === "ongoing" && (
+                                            <div className="flex items-center gap-2">
+                                                <Button
+                                                    variant="solid"
+                                                    size="sm"
+                                                    color="red-500"
+                                                    onClick={() => onReport(item)}
                                                 >
                                                     Report
                                                 </Button>

@@ -39,3 +39,11 @@ export async function apiCancelService (data) {
         data
     })
 }
+
+export async function apiOpenDispute (data) {
+    return ApiService.fetchData({
+        url: '/service/dispute/new',
+        method: 'post',
+        data
+    })
+}

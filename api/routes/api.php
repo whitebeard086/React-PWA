@@ -113,6 +113,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/service/cancel', [BookingController::class, 'cancel_service']);
     Route::post('/service/complete', [BookingController::class, 'complete_service']);
     Route::post('/service/confirm', [BookingController::class, 'confirm_service']);
+    Route::post('/service/dispute/new', [BookingController::class, 'open_dispute']);
 
     // Bills Routes
     Route::get('/bills/operators', [BillsController::class, 'get_operators']);

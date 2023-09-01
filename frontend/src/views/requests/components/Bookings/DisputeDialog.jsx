@@ -2,35 +2,43 @@ import { Button, Dialog, Notification, toast } from "@/components/ui";
 import useFocus from "@/views/chat/components/useFocus";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { cancelService, getRequestsData, setCancelStatus } from "../../store/dataSlice";
+import { getRequestsData, openDispute, setDisputeStatus } from "../../store/dataSlice";
+import { createNotification, setCreateStatus } from "@/views/notifications/store/dataSlice";
 import { sendPushNotification } from "@/utils/sendPushNotification";
 import appConfig from "@/configs/app.config";
-import { setBookingID, toggleCancelServiceDialog } from "../../store/stateSlice";
+import { setBookingID, toggleOpenDisputeDialog } from "../../store/stateSlice";
 import { socket } from "@/utils/socket";
 import TextareaAutosize from 'react-textarea-autosize';
 import { motion } from 'framer-motion';
-import { createNotification, setCreateStatus } from "@/views/notifications/store/dataSlice";
 
-const CancelService = () => {
+const DisputeDialog = () => {
     const dispatch = useDispatch();
     const [reason, setReason] = useState('');
     const [reasonError, setReasonError] = useState(false);
     const [inputRef, setInputFocus] = useFocus();
 
-    const { cancellingService, cancelStatus, booking } = useSelector((state) => state.requests.data)
-    const { cancelServiceDialog, bookingID } = useSelector((state) => state.requests.state)
+    const { openingDispute, disputeStatus, booking, dispute } = useSelector((state) => state.requests.data)
+    const { openDisputeDialog, bookingID } = useSelector((state) => state.requests.state)
     const { profile } = useSelector((state) => state.auth.user);
     const { createStatus, notification } = useSelector((state) => state.notifications.data);
 
+    let receiver;
+
+    if (booking?.user?.id === profile?.id) {
+        receiver = booking?.service?.user
+    } else if (booking?.service?.user?.id === profile?.id) {
+        receiver = booking?.user
+    }
+
     const notificationData = {
-		receiver_id: booking?.user_id,
-		type: 'booking cancelled',
+		receiver_id: receiver?.id,
+		type: 'booking disputed',
 		data: JSON.stringify({
-			message: `${profile?.service?.title} has cancelled this service request, your refund will be processed shortly.`,
+			message: `${profile?.service?.title ? profile?.service?.title : `${profile?.first_name} ${profile?.last_name}`} has opened dispute on the service request #${booking?.invoice?.invoice_number}, you have 24hrs to respond.`,
             invoice_number: booking?.invoice?.invoice_number,
 			booking_id: booking?.id,
 		}),
-		url: `/requests`,
+		url: `/requests/disputes/${dispute?.id}`,
 	};
 
     const popNotification = (message, type, title, duration) => {
@@ -55,7 +63,7 @@ const CancelService = () => {
 	}, [reason, reasonError]);
 
     useEffect(() => {
-        if (cancelStatus === 'error') {
+        if (disputeStatus === 'error') {
             popNotification(
 				'Oops! Something went wrong, please try again.',
 				'danger',
@@ -63,55 +71,54 @@ const CancelService = () => {
 				4000
 			);
 
-            dispatch(setCancelStatus('idle'))
+            dispatch(setDisputeStatus('idle'))
         }
 
-        if (cancelStatus === 'reason error') {
+        if (disputeStatus === 'reason error') {
             popNotification(
-				'Please let us know why you are cancelling this request.',
+				'Please let us know why you want to lodge a complaint.',
 				'danger',
 				'Error',
 				4000
 			);
 
-            dispatch(setCancelStatus('idle'))
+            dispatch(setDisputeStatus('idle'))
         }
-
-    }, [cancelStatus, dispatch])
+    }, [dispatch, disputeStatus])
 
     useEffect(() => {
-        if (cancelStatus === 'success') {
+        if (disputeStatus === 'success') {
             dispatch(createNotification(notificationData));
             sendPushNotification({
 				app_id: import.meta.env.VITE_ONESIGNAL_APP_ID,
 				channel_for_external_user_ids: 'push',
-				include_external_user_ids: [`${booking?.user?.id}`],
-				url: `${appConfig.appURL}/requests`,
+				include_external_user_ids: [`${receiver?.id}`],
+				url: `${appConfig.appURL}/requests/disputes/${dispute?.id}`,
 				contents: {
-					en: `Hello ${booking?.user?.username}, ${profile?.username} has cancelled the service #${booking?.invoice?.invoice_number}, your refund will be processed shortly.`,
+					en: `${profile?.service?.title ? profile?.service?.title : `${profile?.first_name} ${profile?.last_name}`} has opened dispute on the service request #${booking?.invoice?.invoice_number}, you have 24hrs to respond.`,
 				},
 				content_available: true,
 			});
 
             popNotification(
-				'Service cancelled.',
+				'Service in dispute.',
 				'success',
 				'Success',
 				8000
 			);
         }
 
-        dispatch(toggleCancelServiceDialog(false));
+        dispatch(toggleOpenDisputeDialog(false));
         dispatch(setBookingID(null));
-        socket.emit('cancelledService', booking?.user?.id);
+        socket.emit('openedDispute', receiver?.id);
         dispatch(getRequestsData());
-        dispatch(setCancelStatus('idle'));
+        dispatch(setDisputeStatus('idle'));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [cancelStatus])
+    }, [disputeStatus])
 
     useEffect(() => {
 		if (createStatus === 'success') {
-			socket.emit('sendNotification', [notification, booking?.user_id]);
+			socket.emit('sendNotification', [notification, receiver?.id]);
 
 			dispatch(setCreateStatus('idle'));
 		}
@@ -122,37 +129,37 @@ const CancelService = () => {
 		setReason(e.target?.value);
 	};
 
-    const onCancelService = () => {
+    const onOpenDispute = () => {
         if (reason.length < 1) {
             setReasonError(true);
             setInputFocus();
             return;
         }
 
-        dispatch(cancelService({
+        dispatch(openDispute({
             booking_id: bookingID,
             reason
         }))
     }
 
     const onClose = () => {
-		dispatch(toggleCancelServiceDialog(false));
+		dispatch(toggleOpenDisputeDialog(false));
 		dispatch(setBookingID(null));
 	};
 
     return (
         <Dialog
-            isOpen={cancelServiceDialog}
+            isOpen={openDisputeDialog}
             onClose={onClose}
             onRequestClose={onClose}
             type="info"
-            title="Are You Sure You Want to Cancel This Service?"
+            title="Are You Sure You Want to Report This Service Request?"
             onCancel={onClose}
-            onConfirm={onCancelService}
-            loading={cancellingService}
+            onConfirm={onOpenDispute}
+            loading={openingDispute}
         >
             <h4 className="text-lg font-bold text-gray-700">
-				You are about to cancel this request
+				You are about to report this service request
 			</h4>
 
             <div className="mt-4">
@@ -160,7 +167,7 @@ const CancelService = () => {
 					className="w-full block text-sm outline-none p-3 bg-gray-200 overflow-auto resize-none rounded-md border-0 active:border-0"
 					onChange={handleChange}
 					value={reason}
-					placeholder="Kindly tell us why you want to cancel this service request."
+					placeholder="Kindly tell us what you are dissatisfied about."
 					maxRows={10}
 					minRows={5}
                     ref={inputRef}
@@ -174,7 +181,7 @@ const CancelService = () => {
                         exit={{ opacity: 0, visibility: 'hidden' }}
                         className="text-xs text-red-500 mt-2"
                     >
-                        Please kindly tell us why you are cancelling this service request
+                        Please kindly tell us what you are dissatisfied about
                     </motion.p>
                 )}
 
@@ -185,8 +192,8 @@ const CancelService = () => {
 					<Button
 						variant="solid"
                         color="red-500"
-						onClick={onCancelService}
-						loading={cancellingService}
+						onClick={onOpenDispute}
+						loading={openingDispute}
 					>
 						Confirm
 					</Button>
@@ -195,4 +202,4 @@ const CancelService = () => {
         </Dialog>
     )
 }
-export default CancelService
+export default DisputeDialog

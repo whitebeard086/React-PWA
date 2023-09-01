@@ -3,6 +3,7 @@ import {
     apiCancelService,
     apiCompleteService,
     apiConfirmService,
+    apiOpenDispute,
     apiStartService,
 } from "@/services/BookingService";
 import { apiGetRequestsData } from "@/services/RequestsService";
@@ -75,6 +76,18 @@ export const cancelService = createAsyncThunk(
     }
 );
 
+export const openDispute = createAsyncThunk(
+    "requests/data/openDispute",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await apiOpenDispute(data);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 const dataSlice = createSlice({
     name: "requests/data",
     initialState: {
@@ -82,19 +95,23 @@ const dataSlice = createSlice({
         enquiries: [],
         history: [],
         booking: {},
+        dispute: {},
         serviceStatus: "idle",
         confirmStatus: "idle",
         startStatus: "idle",
         cancelStatus: "idle",
+        disputeStatus: "idle",
         status: "idle",
         completingService: false,
         confirmingStatus: false,
+        startingService: false,
+        cancellingService: false,
+        openingDispute: false,
         serviceStarted: false,
         serviceCancelled: false,
         serviceCompleted: false,
         serviceConfirmed: false,
-        startingService: false,
-        cancellingService: false,
+        disputeOpened: false,
         loading: false,
     },
     reducers: {
@@ -115,6 +132,12 @@ const dataSlice = createSlice({
         },
         setCancelStatus: (state, action) => {
             state.cancelStatus = action.payload;
+        },
+        setDisputeStatus: (state, action) => {
+            state.disputeStatus = action.payload;
+        },
+        setDisputeOpened: (state, action) => {
+            state.disputeOpened = action.payload;
         },
         setServiceStarted: (state, action) => {
             state.serviceStarted = action.payload;
@@ -202,6 +225,21 @@ const dataSlice = createSlice({
                 state.cancellingService = false;
                 state.cancelStatus = action.payload.status;
             })
+
+            .addCase(openDispute.pending, (state) => {
+                state.openingDispute = true;
+            })
+            .addCase(openDispute.fulfilled, (state, action) => {
+                state.openingDispute = false;
+                const { status, booking, dispute } = action.payload;
+                state.disputeStatus = status;
+                state.booking = booking;
+                state.dispute = dispute;
+            })
+            .addCase(openDispute.rejected, (state, action) => {
+                state.openingDispute = false;
+                state.disputeStatus = action.payload.status || 'error';
+            })
     },
 });
 
@@ -212,6 +250,8 @@ export const {
     setCancelStatus,
     setConfirmStatus,
     setServiceStatus,
+    setDisputeStatus,
+    setDisputeOpened,
     setServiceStarted,
     setServiceCancelled,
     setServiceCompleted,

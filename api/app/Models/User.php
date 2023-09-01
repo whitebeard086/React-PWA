@@ -103,6 +103,11 @@ class User extends Authenticatable
         return $this->hasMany(KYCSubmission::class);
     }
 
+    public function Disputes()
+    {
+        return $this->hasMany(Dispute::class);
+    }
+
     public function accountLevel()
     {
         return $this->belongsTo(AccountLevel::class);

@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Media;
 use App\Models\Escrow;
 use App\Models\Booking;
+use App\Models\Dispute;
+use App\Models\DisputeMessage;
 use App\Models\Invoice;
 use App\Traits\SmsTrait;
 use App\Models\Transaction;
@@ -351,5 +355,86 @@ class BookingController extends Controller
                 'message' => $e->getMessage(),
             ], 500);
         } 
+    }
+
+    public function open_dispute(Request $request)
+    {
+        $formFields = $request->validate([
+            'booking_id' => 'required',
+            'reason' => 'required',
+            'file' => 'nullable',
+        ]);
+        
+        try {
+            $booking = Booking::findOrFail($request->booking_id);
+            $client = $booking->user;
+            $provider = $booking->service->user;
+            $invoice = $booking->invoice;
+
+            DB::beginTransaction();
+
+            if(!$request->reason) {
+                return response()->json([
+                    'status' => 'reason error',
+                    'message' => 'Please kindly tell us why you want to lodge a complaint.',
+                ], 400);
+            } 
+
+            if (!$client) {
+                throw new ModelNotFoundException('Client not found');
+            }
+
+            if (!$provider) {
+                throw new ModelNotFoundException('Provider not found');
+            }
+
+            if (!$invoice) {
+                throw new ModelNotFoundException('Invoice not found');
+            }
+
+            $booking->service_status = 'disputed';
+            $booking->user_status = 'disputed';
+            $booking->status = 'disputed';
+            $booking->save();
+
+            $dispute = new Dispute;
+            $dispute->booking_id = $booking->id;
+            $dispute->disputer_id = auth()->user()->id;
+            $dispute->client_id = $client->id;
+            $dispute->provider_id = $provider->id;
+            $dispute->invoice_id = $invoice->id;
+            $dispute->description = $request->reason;
+            $dispute->respond_before = Carbon::now()->addHours(24);
+            $dispute->save();
+
+            if($request->hasFile('file')) {
+                $formFields['file'] = $request->file('file')->storePublicly("bookings/disputes", 'wasabi');
+
+                $dm = new DisputeMessage;
+                $dm->dispute_id = $dispute->id;
+                $dm->sender_id = auth()->user()->id;
+                $dm->save();
+                
+                $media = new Media;
+                $media->file = $formFields['file'];
+                $dm->medias()->save($media);
+            }
+
+            DB::commit();
+    
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Dispute Opened',
+                'booking' => Booking::with('Service.User', 'User', 'Invoice')->where('id', $booking->id)->firstOrFail(),
+                'dispute' => Dispute::with('Booking', 'Messages.Medias'),
+            ], 201);
+
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

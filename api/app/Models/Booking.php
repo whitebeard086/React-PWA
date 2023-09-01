@@ -49,4 +49,9 @@ class Booking extends Model
     {
         return $this->hasOne(Escrow::class);
     }
+
+    public function Dispute()
+    {
+        return $this->hasOne(Dispute::class);
+    }
 }

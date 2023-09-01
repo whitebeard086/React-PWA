@@ -20,6 +20,7 @@ import {
     toggleCancelServiceDialog,
     toggleCompleteServiceDialog,
     toggleConfirmServiceDialog,
+    toggleOpenDisputeDialog,
     toggleStartServiceDialog,
 } from "./store/stateSlice";
 import { injectReducer } from "@/store";
@@ -27,6 +28,7 @@ import { socket } from "@/utils/socket";
 import appConfig from "@/configs/app.config";
 import StartService from "./components/Bookings/StartService";
 import CancelService from "./components/Bookings/CancelService";
+import DisputeDialog from "./components/Bookings/DisputeDialog";
 
 injectReducer("requests", reducer);
 
@@ -73,6 +75,11 @@ const Requests = () => {
         }
     }, [dispatch, serviceCancelled, serviceCompleted, serviceConfirmed, serviceStarted]);
 
+    const onReport = (booking) => {
+        dispatch(toggleOpenDisputeDialog(true));
+        dispatch(setBookingID(booking?.id));
+    }
+
     const onStart = (booking) => {
         dispatch(toggleStartServiceDialog(true));
         dispatch(setBookingID(booking?.id));
@@ -114,6 +121,7 @@ const Requests = () => {
                             onConfirm={onConfirm}
                             onStart={onStart}
                             onCancel={onCancel}
+                            onReport={onReport}
                         />
                     </div>
 
@@ -135,6 +143,7 @@ const Requests = () => {
             <ConfirmServiceDialog socket={socket.current} />
             <StartService />
             <CancelService />
+            <DisputeDialog />
         </div>
     );
 };
