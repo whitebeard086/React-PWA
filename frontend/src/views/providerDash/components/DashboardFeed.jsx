@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux"
-import { setBookingID, toggleCompleteServiceDialog } from "../store/stateSlice";
+import { setBookingID, toggleCancelServiceDialog, toggleCompleteServiceDialog, toggleStartServiceDialog } from "../store/stateSlice";
 import UnansweredChats from "./UnansweredChats";
 import Stats from "./Stats";
 import appConfig from "@/configs/app.config";
@@ -23,6 +23,16 @@ const DashboardFeed = () => {
         dispatch(toggleCompleteServiceDialog(true))
         dispatch(setBookingID(booking?.id))
     }
+
+    const onStart = (booking) => {
+        dispatch(toggleStartServiceDialog(true));
+        dispatch(setBookingID(booking?.id));
+    }
+
+    const onCancel = (booking) => {
+        dispatch(toggleCancelServiceDialog(true));
+        dispatch(setBookingID(booking?.id));
+    }
     
     return (
         <div>
@@ -38,6 +48,8 @@ const DashboardFeed = () => {
                     confirmingService={confirmingService}
                     bookingID={bookingID}
                     onComplete={onComplete}
+                    onStart={onStart}
+                    onCancel={onCancel}
                 />
             </div>
 

@@ -2,14 +2,14 @@ import { Button, Dialog, Notification, toast } from "@/components/ui";
 import useFocus from "@/views/chat/components/useFocus";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { cancelService, getRequestsData, setCancelStatus } from "../../store/dataSlice";
+import { cancelService, getDashboardData, setCancelStatusDash } from "../store/dataSlice";
+import { createNotification, setCreateStatus } from "@/views/notifications/store/dataSlice";
 import { sendPushNotification } from "@/utils/sendPushNotification";
 import appConfig from "@/configs/app.config";
-import { setBookingID, toggleCancelServiceDialog } from "../../store/stateSlice";
+import { setBookingID, toggleCancelServiceDialog } from "../store/stateSlice";
 import { socket } from "@/utils/socket";
 import TextareaAutosize from 'react-textarea-autosize';
 import { motion } from 'framer-motion';
-import { createNotification, setCreateStatus } from "@/views/notifications/store/dataSlice";
 
 const CancelService = () => {
     const dispatch = useDispatch();
@@ -17,8 +17,8 @@ const CancelService = () => {
     const [reasonError, setReasonError] = useState(false);
     const [inputRef, setInputFocus] = useFocus();
 
-    const { cancellingService, cancelStatus, booking } = useSelector((state) => state.requests.data)
-    const { cancelServiceDialog, bookingID } = useSelector((state) => state.requests.state)
+    const { cancellingService, cancelStatus, booking } = useSelector((state) => state.dashboard.data)
+    const { cancelServiceDialog, bookingID } = useSelector((state) => state.dashboard.state)
     const { profile } = useSelector((state) => state.auth.user);
     const { createStatus, notification } = useSelector((state) => state.notifications.data);
 
@@ -63,7 +63,7 @@ const CancelService = () => {
 				4000
 			);
 
-            dispatch(setCancelStatus('idle'))
+            dispatch(setCancelStatusDash('idle'))
         }
 
         if (cancelStatus === 'reason error') {
@@ -102,8 +102,8 @@ const CancelService = () => {
         dispatch(toggleCancelServiceDialog(false));
         dispatch(setBookingID(null));
         socket.emit('cancelledService', booking?.user?.id);
-        dispatch(getRequestsData());
-        dispatch(setCancelStatus('idle'));
+        dispatch(getDashboardData());
+        dispatch(setCancelStatusDash('idle'));
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cancelStatus])
 

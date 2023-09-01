@@ -41,12 +41,12 @@ const History = () => {
                                         </h4>
                                     </div>
             
-                                    {userType === 'Provider' && item.status === 'completed' && (
+                                    {userType === 'Provider' && (
                                         <p className="text-lg font-semibold text-green-500">
                                             +₦{item.invoice?.price?.toLocaleString()}
                                         </p>
                                     )}
-                                    {userType === 'Client' && (item.status === 'completed' || item.status === 'ongoing') && (
+                                    {userType === 'Client' && (item.status === 'completed' || item.status === 'ongoing' || item.status === 'pending') && (
                                         <p className="text-lg font-semibold text-red-500">
                                             -₦{item.invoice?.price?.toLocaleString()}
                                         </p>
