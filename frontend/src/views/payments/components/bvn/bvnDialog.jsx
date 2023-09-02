@@ -26,7 +26,7 @@ const BvnDialog = () => {
 		}
 	};
 
-	console.log('Profile in topup: ', profile);
+	// console.log('Profile in topup: ', profile);
 
 	return (
 		<>

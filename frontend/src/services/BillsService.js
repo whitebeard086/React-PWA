@@ -42,7 +42,31 @@ export async function apiGetBillOperators(bill) {
 export async function apiGetOperatorProducts(data) {
 	return ApiQueryService.fetchData({
 		url: '/bills/operator_products',
-		method: 'get',
+		method: 'post',
+		data,
+	});
+}
+
+export async function apiVerifyCustomer(data) {
+	return ApiService.fetchData({
+		url: '/bills/verify_customer',
+		method: 'post',
+		data,
+	});
+}
+
+export async function apiUseVerifyCustomer(data) {
+	return ApiQueryService.fetchData({
+		url: '/bills/verify_customer',
+		method: 'post',
+		data,
+	});
+}
+
+export async function apiSimulateCredit(data) {
+	return ApiQueryService.fetchData({
+		url: `/simulae-credit`,
+		method: 'post',
 		data,
 	});
 }

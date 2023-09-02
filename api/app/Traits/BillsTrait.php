@@ -54,6 +54,22 @@ trait BillsTrait
         }
     }
 
+    public function verifyCustomer($operatorID, $meter_type, $bill, $device_number)
+    {
+        $blocSecret = env('BLOC_SECRET_KEY');
+        $accessToken = "Bearer $blocSecret";
+
+        // If meter_type is not null, include it in the endpoint URL
+        $meter_type_parameter = $meter_type !== null ? "meter_type=$meter_type&" : "";
+        
+        $response = Http::withHeaders([
+            'accept' => 'application/json',
+            'authorization' => $accessToken,
+        ])->get("https://api.blochq.io/v1/bills/customer/validate/$operatorID?$meter_type_parameter" . "bill=$bill&device_number=$device_number");
+
+        return $response->json();
+    }
+
     public function getOperatorProducts($operatorID, $bill)
     {
         $blocSecret = env('BLOC_SECRET_KEY');

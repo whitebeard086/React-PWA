@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { FaSpinner } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Outlet, useLocation } from 'react-router-dom';
+import { useGetOperators } from '../bills/store/hooks';
 import { setMessages } from '../chat/store/dataSlice';
 import {
 	createNotification,
@@ -94,6 +95,9 @@ const Layout = () => {
 		dispatch(toggleWithdrawDialog(true));
 	};
 
+	useGetOperators('electricity');
+	useGetOperators('television');
+
 	return (
 		<Container className="max-w-2xl w-full">
 			<Header />
@@ -109,7 +113,7 @@ const Layout = () => {
 									size="25px"
 								/>
 							) : (
-								`₦${profile?.balance?.toLocaleString()}`
+								`₦${profile?.account_balance?.toLocaleString()}`
 							)}
 						</h2>
 					) : (

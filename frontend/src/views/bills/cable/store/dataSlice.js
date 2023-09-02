@@ -1,19 +1,11 @@
-import {
-	apiBuyBundle,
-	apiGetOperators,
-	apiGetProducts,
-} from '@/services/BillsService';
+import { apiBuyBundle, apiVerifyCustomer } from '@/services/BillsService';
 import { createApiThunk, createAsyncReducers, meta } from '@/store';
 import { createSlice } from '@reduxjs/toolkit';
 import { SLICE_NAME, stateAdapter } from './constants';
 
-export const getOperators = createApiThunk(
-	apiGetOperators,
-	`${SLICE_NAME}/data/getOperators`
-);
-export const getProducts = createApiThunk(
-	apiGetProducts,
-	`${SLICE_NAME}/data/getProducts`
+export const verifyCustomer = createApiThunk(
+	apiVerifyCustomer,
+	`${SLICE_NAME}/data/verifyCustomer`
 );
 export const buyData = createApiThunk(
 	apiBuyBundle,
@@ -21,12 +13,10 @@ export const buyData = createApiThunk(
 );
 
 const initialState = stateAdapter.getInitialState({
-	operators: { ...meta },
-	products: { ...meta },
+	customer: { ...meta },
+	store: null,
+	product: null,
 	bundle: { ...meta },
-	store: {},
-	pin: '',
-	operator: null,
 });
 
 const dataSlice = createSlice({
@@ -34,13 +24,10 @@ const dataSlice = createSlice({
 	initialState,
 	reducers: {
 		setStore: (state, action) => {
-			state.store = action.payload === 0 ? {} : action.payload;
+			state.store = action.payload === 0 ? null : action.payload;
 		},
-		setPin: (state, { payload }) => {
-			state.pin = payload;
-		},
-		setOperator: (state, action) => {
-			state.operator = action.payload === 0 ? null : action.payload;
+		setProduct: (state, action) => {
+			state.product = action.payload === 0 ? null : action.payload;
 		},
 		resetState: (state, action) => {
 			const resetActions = {
@@ -56,12 +43,11 @@ const dataSlice = createSlice({
 		},
 	},
 	extraReducers: (builder) => {
-		createAsyncReducers(builder, getOperators, 'operators', 'data');
-		createAsyncReducers(builder, getProducts, 'products', 'data');
+		createAsyncReducers(builder, verifyCustomer, 'customer', 'customer');
 		createAsyncReducers(builder, buyData, 'bundle', 'data');
 	},
 });
 
-export const { setStore, resetState, setOperator, setPin } = dataSlice.actions;
+export const { setStore, resetState, setProduct } = dataSlice.actions;
 
 export default dataSlice.reducer;

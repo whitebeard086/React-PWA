@@ -18,15 +18,17 @@ trait CustomersTrait
          'content-type' => 'application/json',
       ])->post('https://api.blochq.io/v1/customers', $data);
 
-      if ($response->successful()) {
-         return $response->json();
-      } else {
-         return [
-            'status' => 'error',
-            'message' => 'Failed to create customer.',
-            'response' => $response->json(),
-         ];
-      }
+      return $response->json();
+
+      // if ($response->successful()) {
+      //    return $response->json();
+      // } else {
+      //    return [
+      //       'status' => 'error',
+      //       'message' => 'Failed to create customer.',
+      //       'response' => $response->json(),
+      //    ];
+      // }
    }
 
    public function upgradeCustomerToKYCT1($user)
@@ -34,39 +36,38 @@ trait CustomersTrait
       if ($this->checkKYCT1Requirements($user)) {
          $customerId = $user->customer_id;
 
-      $blocSecret = env('BLOC_SECRET_KEY');
-      $accessToken = "Bearer $blocSecret";
+         $blocSecret = env('BLOC_SECRET_KEY');
+         $accessToken = "Bearer $blocSecret";
          
-      $data = [
-         'address' => [
-            'street' => $user->address->street,
-            'city' => $user->address->city,
-            'state' => $user->address->state,
+         $data = [
+            'address' => [
+               'street' => $user->address->street,
+               'city' => $user->address->city,
+               'state' => $user->address->state,
+               'country' => $user->address->country,
+               'postal_code' => $user->address->postal_code,
+            ],
+            'place_of_birth' => $user->place_of_birth,
+            'dob' => $user->dob,
+            'gender' => $user->gender,
             'country' => $user->address->country,
-            'postal_code' => $user->address->postal_code,
-         ],
-         'place_of_birth' => $user->place_of_birth,
-         'dob' => $user->dob,
-         'gender' => $user->gender,
-         'country' => $user->address->country,
-         'image' => $user->image,
-      ];
-
-      $response = Http::withHeaders([
-         'accept' => 'application/json',
-         'authorization' => $accessToken,
-         'content-type' => 'application/json',
-      ])->put("https://api.blochq.io/v1/customers/upgrade/t1/{$customerId}", $data);
-
-      if ($response->successful()) {
-         return $response->json();
-      } else {
-         return [
-            'status' => 'error',
-            'message' => 'Upgrade to KYC T1 failed.',
-            'response' => $response->json(),
+            'image' => $user->image,
          ];
-      }
+
+         $response = Http::withHeaders([
+            'accept' => 'application/json',
+            'authorization' => $accessToken,
+            'content-type' => 'application/json',
+         ])->put("https://api.blochq.io/v1/customers/upgrade/t1/{$customerId}", $data);
+
+         if ($response->successful()) {
+            return $response->json();
+         } else {
+            return [
+               'status' => 'error',
+               'response' => $response->json(),
+            ];
+         }
       }
    }
 
@@ -141,6 +142,62 @@ trait CustomersTrait
             'response' => $response->json(),
          ];
       }
+   }
+
+   public function getWallet($walletID)
+   {
+      $blocSecret = env('BLOC_SECRET_KEY');
+      $accessToken = "Bearer $blocSecret";
+
+      $response = Http::withHeaders([
+         'accept' => 'application/json',
+         'authorization' => $accessToken,
+      ])->get("https://api.blochq.io/v1/wallets/$walletID");
+
+      return $response->json();
+      // if ($response->successful()) {
+      //    return $response->json();
+      // } else {
+      //    return [
+      //       'status' => 'error',
+      //       'response' => $response->json(),
+      //    ];
+      // }
+   }
+
+   public function getAccount($accountID)
+   {
+      $blocSecret = env('BLOC_SECRET_KEY');
+      $accessToken = "Bearer $blocSecret";
+
+      $response = Http::withHeaders([
+         'accept' => 'application/json',
+         'authorization' => $accessToken,
+      ])->get("https://api.blochq.io/v1/accounts/$accountID");
+
+      return $response->json();
+      // if ($response->successful()) {
+      //    return $response->json();
+      // } else {
+      //    return [
+      //       'status' => 'error',
+      //       'response' => $response->json(),
+      //    ];
+      // }
+   }
+
+   public function simulateCredit($data)
+   {
+      $blocSecret = env('BLOC_SECRET_KEY');
+      $accessToken = "Bearer $blocSecret";
+
+      $response = Http::withHeaders([
+         'accept' => 'application/json',
+         'authorization' => $accessToken,
+         'content-type' => 'application/json',
+      ])->post('https://api.blochq.io/v1/accounts/credit/manual', $data);
+
+      return $response->json();
    }
 
    protected function checkKYCT1Requirements($user)

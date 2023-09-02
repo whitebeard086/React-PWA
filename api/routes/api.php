@@ -115,7 +115,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Bills Routes
     Route::get('/bills/operators', [BillsController::class, 'get_operators']);
     Route::get('/bills/operators/{bill}', [BillsController::class, 'get_bill_operators']);
-    Route::get('/bills/operator_products', [BillsController::class, 'get_operator_products']);
+    Route::post('/bills/operator_products', [BillsController::class, 'get_operator_products']);
+    Route::post('/bills/verify_customer', [BillsController::class, 'verify_customer']);
     Route::post('/bills/operator/products', [BillsController::class, 'get_products']);
     Route::post('/bills/airtime', [BillsController::class, 'buy_airtime']);
     Route::post('/bills/data', [BillsController::class, 'buy_bundle']);
@@ -125,6 +126,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // Kyc routes
     Route::post('/kyc', [UserController::class, 'initiate_kyc']);
+
+    // blockhq
+    Route::post('/simulae-credit', [UserController::class, 'simulate_credit']);
 
     // Notification Routes
     Route::get('/notifications', [NotificationController::class, 'index']);
