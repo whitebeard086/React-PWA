@@ -52,4 +52,9 @@ class Dispute extends Model
     {
         return $this->belongsTo(Invoice::class);
     }
+
+    public function Messages()
+    {
+        return $this->hasMany(DisputeMessage::class);
+    }
 }

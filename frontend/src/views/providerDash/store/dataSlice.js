@@ -3,6 +3,7 @@ import {
     apiCancelService,
     apiCompleteService,
     apiConfirmService,
+    apiOpenDispute,
     apiStartService,
 } from "@/services/BookingService";
 import { apiGetDashboardData } from "@/services/DashboardService";
@@ -67,6 +68,18 @@ export const cancelService = createAsyncThunk(
     }
 );
 
+export const openDispute = createAsyncThunk(
+    "requests/data/openDispute",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await apiOpenDispute(data);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 const dataSlice = createSlice({
     name: "dashboard/data",
     initialState: {
@@ -74,11 +87,14 @@ const dataSlice = createSlice({
         enquiries: [],
         bookings: [],
         booking: {},
+        dispute: {},
         bookingsCount: null,
+        openingDispute: false,
         startingService: false,
         cancellingService: false,
         completingService: false,
         confirmingStatus: false,
+        disputeOpened: false,
         serviceStarted: false,
         serviceCancelled: false,
         serviceCompleted: false,
@@ -86,6 +102,7 @@ const dataSlice = createSlice({
         status: "idle",
         serviceStatus: "idle",
         confirmStatus: "idle",
+        disputeStatus: "idle",
         startStatus: "idle",
         cancelStatus: "idle",
     },
@@ -95,6 +112,12 @@ const dataSlice = createSlice({
         },
         setBooking: (state, action) => {
             state.booking = action.payload;
+        },
+        setDisputeStatusDash: (state, action) => {
+            state.disputeStatus = action.payload;
+        },
+        setDisputeOpenedDash: (state, action) => {
+            state.disputeOpened = action.payload;
         },
         setStartStatusDash: (state, action) => {
             state.startStatus = action.payload;
@@ -195,12 +218,29 @@ const dataSlice = createSlice({
                 state.cancellingService = false;
                 state.cancelStatus = action.payload.status;
             })
+
+            .addCase(openDispute.pending, (state) => {
+                state.openingDispute = true;
+            })
+            .addCase(openDispute.fulfilled, (state, action) => {
+                state.openingDispute = false;
+                const { status, booking, dispute } = action.payload;
+                state.disputeStatus = status;
+                state.booking = booking;
+                state.dispute = dispute;
+            })
+            .addCase(openDispute.rejected, (state, action) => {
+                state.openingDispute = false;
+                state.disputeStatus = action.payload.status || 'error';
+            })
     },
 });
 
 export const {
     setStatus,
     setBookingDash,
+    setDisputeStatusDash,
+    setDisputeOpenedDash,
     setStartStatusDash,
     setCancelStatusDash,
     setServiceStatusDash,

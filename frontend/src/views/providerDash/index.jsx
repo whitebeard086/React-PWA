@@ -13,6 +13,7 @@ import {
 import { socket } from "@/utils/socket";
 import StartService from "./components/StartService";
 import CancelService from "./components/CancelService";
+import DisputeDialog from "./components/DisputeDialog";
 
 injectReducer("dashboard", reducer);
 
@@ -48,6 +49,7 @@ const ProviderDashboard = () => {
             <CompleteServiceDialog socket={socket.current} />
             <StartService />
             <CancelService />
+            <DisputeDialog />
         </div>
     );
 };

@@ -109,6 +109,37 @@ const NotificationTypeContent = ({ item }) => {
                     <Link to={url} state={{ chat: messageData?.chat_id }} className="absolute w-full h-full top-0 left-0"/>
                 </div>
             )
+        case 'booking disputed':
+            if (sender.service) {
+                return (
+                    <div className="leading-tight">
+                        <span className="font-bold">
+                            {`${sender.service?.title}`}
+                        </span>{' '}
+                            has opened a dispute on the service request #
+                        <span className="font-bold heading-text">
+                            {messageData.invoice_number}, {' '}
+                        </span>
+                        <span> you have 24hrs to respond.</span>
+                        <Link to={url} className="absolute w-full h-full top-0 left-0"/>
+                    </div>
+                )
+            } else {
+                return (
+                    <div className="leading-tight">
+                        <span className="font-bold">
+                            {`${sender.first_name} ${sender.last_name}`} has opened a dispute on the service request #
+                        </span>
+                        <span className="heading-text font-bold">
+                            {messageData.invoice_number},{' '}
+                        </span>
+                        <span>
+                            you have 24hrs to respond.
+                        </span>
+                        <Link to={url} className="absolute w-full h-full top-0 left-0"/>
+                    </div>
+                )
+            }
     }
 }
 export default NotificationTypeContent
