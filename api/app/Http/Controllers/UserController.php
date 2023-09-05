@@ -7,13 +7,15 @@ use App\Models\User;
 use App\Models\Country;
 use App\Models\Service;
 use App\Models\Category;
-use App\Models\KYCSubmission;
 use App\Models\Workdays;
 use App\Models\ProfileType;
 use App\Models\SubCategory;
+use App\Models\Transaction;
 use Illuminate\Support\Str;
 use App\Traits\GatewayTrait;
 use Illuminate\Http\Request;
+use App\Models\KYCSubmission;
+use App\Traits\CustomersTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -21,6 +23,7 @@ use Illuminate\Support\Facades\Storage;
 class UserController extends Controller
 {
     use GatewayTrait;
+    use CustomersTrait;
     private $otp;
 
     public function __construct()
@@ -38,7 +41,7 @@ class UserController extends Controller
     public function get_user()
     {
         try {
-            $user = User::with(['accountLevel', 'ProfileType', 'Service.Category', 'Service.Workdays', 'Service.SubCategory', 'WithdrawalAccounts', 'kycSubmissions'])->where('id', auth()->user()->id)->first();
+            $user = User::with(['address', 'accountLevel', 'ProfileType', 'Service.Category', 'Service.Workdays', 'Service.SubCategory', 'WithdrawalAccounts', 'kycSubmissions'])->where('id', auth()->user()->id)->first();
 
             if (isset($user->phone_verified_at) && !$user->bank) {
                 $result = $this->assignVirtualAccount($user);
@@ -58,6 +61,60 @@ class UserController extends Controller
                 $has_pin = false;
             }
             
+            $user->save();
+
+            if ($user->account_id) {
+                $virtualResponse = $this->getAccount($user->account_id);
+                if ($virtualResponse['success'] == true) {
+                    $prepped = $virtualResponse['data']['balance'] / 100;
+                    $user->account_balance = $prepped;
+                    $user->save();
+                }
+            }
+
+            if ($user->wallet_id) {
+                $walletResponse = $this->getWallet($user->wallet_id);
+                if ($walletResponse['success'] == true) {
+                    $prepped = $walletResponse['data']['balance'] / 100;
+                    $user->wallet_balance = $prepped;
+                    $user->save();
+                }
+            }
+
+            // if (!$user->customer_id && $user->bvn) {
+            //     $customerResponse = $this->createCustomerIfConditionsMet($user);
+    
+            //     if ($customerResponse) {
+            //         $user->customer_id = $customerResponse['data']['id'];
+            //         $user->kyc_tier = $customerResponse['data']['kyc_tier'];
+
+            //         $virtualResponce = $this->createAccount($user->customer_id);
+            //         if ($virtualResponce) {
+            //             $user->preferred_bank = $virtualResponce['data']['preferred_bank'];
+            //             $user->account_id = $virtualResponce['data']['id'];
+            //             $user->account_balance = $virtualResponce['data']['balance'];
+            //             $user->account_number = $virtualResponce['data']['account_number'];
+            //         }
+
+            //         $walletResponce = $this->createWallet($user->customer_id);
+            //         if ($walletResponce) {
+            //             $user->wallet_id = $walletResponce['data']['id'];
+            //             $user->wallet_balance = $walletResponce['data']['balance'];
+            //             $user->wallet_number = $walletResponce['data']['account_number'];
+            //         }
+                    
+            //         $upgradeResponse = $this->upgradeCustomerToKYCT1($user);
+            //         if ($upgradeResponse) {
+            //             // KYC Tier 1 upgrade successful
+            //             $user->kyc_tier = $upgradeResponse['data']['kyc_tier'];
+            //         }
+
+            //         $user->save();
+            //     } else {
+            //         // Customer creation conditions not met
+            //     }
+            // }
+
             return response()->json([
                 'user' => $user,
                 'hasPin' => $has_pin,
@@ -532,6 +589,111 @@ class UserController extends Controller
             'message' => 'KYC initiated successfully',
             'kyc' => $kyc,
         ], 200);
+    }
+
+    public function update_bvn(Request $request, $userID)
+    {
+        $user = User::findOrFail($userID);
+        $formFields = $request->validate([
+            'bvn' => 'required|string',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+        ]);
+
+        $message = '';
+        $statusCode = 200;
+
+        $user->update($formFields);
+        // $user->update($request->all());
+        $message .= 'User details updated successfully!';
+
+        if (!$user->customer_id && $user->bvn) {
+            $customerResponse = $this->createCustomerIfConditionsMet($user);
+
+            if ($customerResponse['success'] == false) {
+                $customMessage = $customerResponse['message'];
+                $message = "$customMessage\nYour details were updated; however, you will not get an account yet.";
+                $statusCode = 200;
+            } else {
+                $user->customer_id = $customerResponse['data']['id'];
+                $user->kyc_tier = $customerResponse['data']['kyc_tier'];
+
+                $virtualResponce = $this->createAccount($user->customer_id);
+                if ($virtualResponce) {
+                    $user->preferred_bank = $virtualResponce['data']['preferred_bank'];
+                    $user->account_id = $virtualResponce['data']['id'];
+                    $user->account_balance = $virtualResponce['data']['balance'];
+                    $user->account_number = $virtualResponce['data']['account_number'];
+                }
+
+                $walletResponce = $this->createWallet($user->customer_id);
+                if ($walletResponce) {
+                    $user->wallet_id = $walletResponce['data']['id'];
+                    $user->wallet_balance = $walletResponce['data']['balance'];
+                    $user->wallet_number = $walletResponce['data']['account_number'];
+                }
+                
+                $upgradeResponse = $this->upgradeCustomerToKYCT1($user);
+                if ($upgradeResponse) {
+                    // KYC Tier 1 upgrade successful
+                    $user->kyc_tier = $upgradeResponse['data']['kyc_tier'];
+                }
+
+                $user->save();
+            }
+        }
+
+        return response()->json([
+            'message' => $message,
+            'user' => $user,
+        ], $statusCode);
+    }
+
+    public function simulate_credit(Request $request,)
+    {
+        $user = User::where('id', auth()->user()->id)->firstOrFail();
+        $formFields = $request->validate([
+            'amount' => 'required|string',
+        ]);
+
+        $data = [
+            'amount' => $formFields['amount'] * 100,
+            'account_id' => $user->account_id,
+            'alias' => 'Business',
+        ];
+
+        $message = '';
+        $statusCode = 200;
+
+        $creditResponse = $this->simulateCredit($data);
+        
+        if ($creditResponse['success'] == false) {
+            $statusCode = 400;
+        } else {
+            $prepped = $creditResponse['data']['balance'] / 100;
+            $newBalance = $user->account_balance + $prepped;
+            $user->account_balance = $newBalance;
+            $statusCode = 200;
+        }
+        
+        $message = $creditResponse['message'];
+
+        $user->save();
+
+        $txn = new Transaction;
+        $txn->user_id = $user->id;
+        $txn->reference = $user->account_id;
+        $txn->amount = $formFields['amount'];
+        $txn->type = "Wallet Topup";
+        $txn->final_amount = $formFields['amount'];
+        $txn->method = 'topup';
+        $txn->status = 'Success';
+        $txn->save();
+
+        return response()->json([
+            'message' => $message,
+            'user' => $user,
+        ], $statusCode);
     }
     
 }

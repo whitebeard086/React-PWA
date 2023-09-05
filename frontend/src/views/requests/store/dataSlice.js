@@ -94,6 +94,7 @@ const dataSlice = createSlice({
         bookings: [],
         enquiries: [],
         history: [],
+        disputes: [],
         booking: {},
         dispute: {},
         serviceStatus: "idle",
@@ -159,11 +160,12 @@ const dataSlice = createSlice({
             })
             .addCase(getRequestsData.fulfilled, (state, action) => {
                 state.loading = false;
-                const { status, enquiries, bookings, history } = action.payload;
+                const { status, enquiries, bookings, history, disputes } = action.payload;
                 state.status = status;
                 state.enquiries = enquiries;
                 state.bookings = bookings;
                 state.history = history;
+                state.disputes = disputes;
             })
             .addCase(getRequestsData.rejected, (state) => {
                 state.loading = false;

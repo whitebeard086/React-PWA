@@ -7,15 +7,16 @@ use Illuminate\Support\Facades\Http;
 
 trait BillsTrait
 {
-    public function getOperators()
+    public function getOperators($operator)
     {
         $blocSecret = env('BLOC_SECRET_KEY');
 
+        // supports "electricity", "television", "telco"
         try {
             $response = Http::withHeaders([
                 'accept' => 'application/json',
                 'authorization' => "Bearer $blocSecret",
-            ])->get('https://api.blochq.io/v1/bills/operators?bill=telco');
+            ])->get("https://api.blochq.io/v1/bills/operators?bill=$operator");
 
             if ($response->successful()) {
                 $data = $response->json();
@@ -40,6 +41,46 @@ trait BillsTrait
                 'accept' => 'application/json',
                 'authorization' => "Bearer $blocSecret",
             ])->get("https://api.blochq.io/v1/bills/operators/$category/products?bill=telco");
+
+            if ($response->successful()) {
+                $data = $response->json();
+                return $data;
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function verifyCustomer($operatorID, $meter_type, $bill, $device_number)
+    {
+        $blocSecret = env('BLOC_SECRET_KEY');
+        $accessToken = "Bearer $blocSecret";
+
+        // If meter_type is not null, include it in the endpoint URL
+        $meter_type_parameter = $meter_type !== null ? "meter_type=$meter_type&" : "";
+        
+        $response = Http::withHeaders([
+            'accept' => 'application/json',
+            'authorization' => $accessToken,
+        ])->get("https://api.blochq.io/v1/bills/customer/validate/$operatorID?$meter_type_parameter" . "bill=$bill&device_number=$device_number");
+
+        return $response->json();
+    }
+
+    public function getOperatorProducts($operatorID, $bill)
+    {
+        $blocSecret = env('BLOC_SECRET_KEY');
+        
+        // supports electricity, television, telco
+
+        try {
+            $response = Http::withHeaders([
+                'accept' => 'application/json',
+                'authorization' => "Bearer $blocSecret",
+            ])->get("https://api.blochq.io/v1/bills/operators/$operatorID/products?bill=$bill");
 
             if ($response->successful()) {
                 $data = $response->json();

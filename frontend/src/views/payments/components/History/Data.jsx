@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
-import { Card } from "@/components/ui";
-import dayjs from "dayjs";
-import { useSelector } from "react-redux";
+import { Card } from '@/components/ui';
+import dayjs from 'dayjs';
+import { useSelector } from 'react-redux';
 
 const Data = ({ transactions }) => {
-    const { userType } = useSelector((state) => state.auth.user);
+	const { userType } = useSelector((state) => state.auth.user);
 
     return (
         <div className="flex flex-col">
@@ -43,21 +43,17 @@ const Data = ({ transactions }) => {
                             )}
                     </div>
 
-                    <div className="mt-2 flex items-center gap-4 justify-between">
-                        {txn.status === "Success" && (
-                            <p className="font-semibold text-green-500">
-                                Completed
-                            </p>
-                        )}
-                        <p className="font-semibold">
-                            {dayjs(txn.created_at).format(
-                                "DD MMM YYYY hh:mm a"
-                            )}
-                        </p>
-                    </div>
-                </Card>
-            ))}
-        </div>
-    );
+					<div className="mt-2 flex items-center gap-4 justify-between">
+						{txn.status === 'Success' && (
+							<p className="font-semibold text-green-500">Completed</p>
+						)}
+						<p className="font-semibold">
+							{dayjs(txn.created_at).format('DD MMM YYYY hh:mm a')}
+						</p>
+					</div>
+				</Card>
+			))}
+		</div>
+	);
 };
 export default Data;

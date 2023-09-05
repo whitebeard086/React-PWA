@@ -31,6 +31,7 @@ class User extends Authenticatable
         'transaction_pin',
         'account_level_id',
         'pending_account_level',
+        'customer_id', 'bvn', 'preferred_bank', 'alias', 'wallet_id', 'account_id', 'account_number', 'account_balance', 'wallet_number', 'wallet_balance', 'place_of_birth', 'dob', 'gender', 'address_id', 'kyc_tier'
     ];
 
     /**
@@ -111,5 +112,10 @@ class User extends Authenticatable
     public function accountLevel()
     {
         return $this->belongsTo(AccountLevel::class);
+    }
+
+    public function address()
+    {
+        return $this->hasOne(Address::class);
     }
 }

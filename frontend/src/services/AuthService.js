@@ -1,4 +1,4 @@
-import ApiService from './ApiService';
+import ApiService, { ApiQueryService } from './ApiService';
 
 export async function apiGetProfileTypes(data) {
 	return ApiService.fetchData({
@@ -219,6 +219,14 @@ export async function apiCancelDeleteAccount(data) {
 export async function apiCreateKyc(data) {
 	return ApiService.fetchData({
 		url: '/kyc',
+		method: 'post',
+		data,
+	});
+}
+
+export async function apiUpdateBvn(data, userID) {
+	return ApiQueryService.fetchData({
+		url: `/profile/bvn/${userID}`,
 		method: 'post',
 		data,
 	});

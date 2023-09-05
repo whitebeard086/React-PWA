@@ -52,12 +52,12 @@ const Enquiries = () => {
                                                 />
                                             </div>
 
-                                            <div className="mt-2 flex flex-col gap-1 justify-center w-full">
+                                            <div className="mt-2 flex flex-col justify-center w-full">
                                                 <h4 className="text-base">
                                                     {receiver.service?.title ||
                                                         receiver.username}
                                                 </h4>
-                                                <p className="text-gray-4b00 font-semibold">
+                                                <p className="text-gray-500 font-semibold">
                                                     <TextEllipsis
                                                         text={enquiry.messages[
                                                             enquiry.messages

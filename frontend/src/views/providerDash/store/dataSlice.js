@@ -86,6 +86,7 @@ const dataSlice = createSlice({
         loading: false,
         enquiries: [],
         bookings: [],
+        disputes: [],
         booking: {},
         dispute: {},
         bookingsCount: null,
@@ -151,12 +152,12 @@ const dataSlice = createSlice({
             })
             .addCase(getDashboardData.fulfilled, (state, action) => {
                 state.loading = false;
-                const { status, enquiries, bookingsCount, bookings } =
-                    action.payload;
+                const { status, enquiries, bookingsCount, bookings, disputes } = action.payload;
                 state.status = status;
                 state.enquiries = enquiries;
                 state.bookingsCount = bookingsCount;
                 state.bookings = bookings;
+                state.disputes = disputes;
             })
             .addCase(getDashboardData.rejected, (state) => {
                 state.loading = false;

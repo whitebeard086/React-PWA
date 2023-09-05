@@ -51,6 +51,7 @@ module.exports = {
 			],
 		},
 		screens: {
+			xx: '425px',
 			xs: '576',
 			sm: '640px',
 			md: '768px',
@@ -66,6 +67,7 @@ module.exports = {
 			},
 			gridTemplateColumns: {
 				card: 'repeat(auto-fill, minmax(85px, 1fr))',
+				pow: 'repeat(auto-fill, minmax(150px, 1fr))',
 			},
 			typography: (theme) => ({
 				DEFAULT: {

@@ -29,6 +29,8 @@ import appConfig from "@/configs/app.config";
 import StartService from "./components/Bookings/StartService";
 import CancelService from "./components/Bookings/CancelService";
 import DisputeDialog from "./components/Bookings/DisputeDialog";
+import Tabs from "@/components/ui/Tabs";
+import Disputes from "./components/Disputes";
 
 injectReducer("requests", reducer);
 
@@ -36,7 +38,7 @@ const Requests = () => {
     const dispatch = useDispatch();
     const { imagePath } = appConfig
 
-    const { bookings, booking, completingService, confirmingService } =
+    const { bookings, booking, disputes, completingService, confirmingService } =
         useSelector((state) => state.requests.data);
     const { bookingID } = useSelector((state) => state.requests.state);
     const { userType } = useSelector((state) => state.auth.user);
@@ -46,6 +48,7 @@ const Requests = () => {
         (state) => state.requests?.data
     );
 
+    const { TabNav, TabList, TabContent } = Tabs;
 
     window.OneSignal = window.OneSignal || [];
     const OneSignal = window.OneSignal;
@@ -125,11 +128,38 @@ const Requests = () => {
                         />
                     </div>
 
-                    <h4>Enquiries</h4>
+                    {disputes?.length > 0 && (
+                        <div className="mt-10">
+                            <Tabs defaultValue="enquiries" variant="pill">
+                                <TabList className="justify-start gap-4 text-base">
+                                    <TabNav value="enquiries">Enquiries</TabNav>
+                                    <TabNav value="disputes">Disputes</TabNav>
+                                </TabList>
+                                <div className="mt-4">
+                                    <TabContent value="enquiries">
+                                        <div className="min-h-[50vh]">
+                                            <Enquiries />
+                                        </div>
+                                    </TabContent>
+                                    <TabContent value="disputes">
+                                        <div className="min-h-[50vh]">
+                                            <Disputes />
+                                        </div>
+                                    </TabContent>
+                                </div>
+                            </Tabs>
+                        </div>
+                    )}
+                    
+                    {disputes?.length < 1 && (
+                        <>
+                            <h4>Enquiries</h4>
 
-                    <div className="min-h-[50vh]">
-                        <Enquiries />
-                    </div>
+                            <div className="min-h-[50vh]">
+                                <Enquiries />
+                            </div>
+                        </>
+                    )}
                 </div>
             )}
 

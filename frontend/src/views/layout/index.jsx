@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { FaSpinner } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Outlet, useLocation } from 'react-router-dom';
+import { useGetOperators } from '../bills/store/hooks';
 import { setMessages } from '../chat/store/dataSlice';
 import {
 	createNotification,
@@ -14,7 +15,11 @@ import {
 	setCreateStatus,
 } from '../notifications/store/dataSlice';
 import DepositDialog from '../payments/components/Deposit/DepositDialog';
-import { toggleDepositDialog } from '../payments/store/stateSlice';
+import BvnDialog from '../payments/components/bvn/bvnDialog';
+import {
+	toggleBvnDialog,
+	toggleDepositDialog,
+} from '../payments/store/stateSlice';
 import KycDialog from '../profile/kyc/components/kycDialog';
 import WithdrawDialog from '../withdraw/components/withdraw';
 import { toggleWithdrawDialog } from '../withdraw/store/stateSlice';
@@ -82,12 +87,16 @@ const Layout = () => {
 	}, [createStatus]);
 
 	const onTopUp = () => {
-		dispatch(toggleDepositDialog(true));
+		if (profile?.bvn) dispatch(toggleDepositDialog(true));
+		if (!profile?.bvn) dispatch(toggleBvnDialog(true));
 	};
 
 	const onWithdraw = () => {
 		dispatch(toggleWithdrawDialog(true));
 	};
+
+	useGetOperators('electricity');
+	useGetOperators('television');
 
 	return (
 		<Container className="max-w-2xl w-full">
@@ -104,7 +113,7 @@ const Layout = () => {
 									size="25px"
 								/>
 							) : (
-								`₦${profile?.balance?.toLocaleString()}`
+								`₦${profile?.account_balance?.toLocaleString()}`
 							)}
 						</h2>
 					) : (
@@ -166,6 +175,7 @@ const Layout = () => {
 
 			<KycDialog />
 			<DepositDialog />
+			<BvnDialog />
 			<WithdrawDialog />
 		</Container>
 	);
