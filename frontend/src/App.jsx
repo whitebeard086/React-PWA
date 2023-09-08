@@ -58,6 +58,7 @@ const Data = lazy(() => import('./views/bills/data'));
 const Disco = lazy(() => import('./views/bills/disco'));
 const Cable = lazy(() => import('./views/bills/cable'));
 const Notifications = lazy(() => import('./views/notifications'));
+const DisputeChat = lazy(() => import('./views/requests/components/Disputes/DisputeChat'));
 
 function App() {
 	const dispatch = useDispatch();
@@ -202,6 +203,7 @@ function App() {
 									<Route path="/transactions" element={<Payments />} />
 									<Route path="/requests" element={<Requests />} />
 									<Route path="/requests/history" element={<History />} />
+									<Route path="/requests/disputes/:uid" element={<DisputeChat />} />
 									<Route path="/transaction-pin" element={<Pin />} />
 									<Route path="/bills/airtime" element={<Airtime />} />
 									<Route path="/bills/data" element={<Data />} />

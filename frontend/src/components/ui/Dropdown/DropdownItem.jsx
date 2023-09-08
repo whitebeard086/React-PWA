@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/display-name */
 import React, { useContext, useCallback, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import isNil from 'lodash/isNil'

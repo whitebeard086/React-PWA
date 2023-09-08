@@ -155,7 +155,7 @@ class ChatController extends Controller
             $senderUsername = $sender->username;
             $receiverUsername = $receiver->username;
             
-            // $smsResponse = $this->sendNewEnquirySmsNotification($receiverPhone, $senderUsername, $receiverUsername);
+            $smsResponse = $this->sendNewEnquirySmsNotification($receiverPhone, $senderUsername, $receiverUsername);
         }
 
         return response()->json([

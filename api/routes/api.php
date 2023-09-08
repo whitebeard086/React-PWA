@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\HomeAdminController;
 use App\Http\Controllers\Admin\UsersAdminController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\HandymanController;
+use App\Http\Controllers\DisputesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -83,6 +84,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // Request routes
     Route::get('/requests', [RequestsController::class, 'index']);
+    Route::post('/requests/disputes/dispute', [DisputesController::class, 'get_dispute']);
+    Route::post('/requests/disputes/dispute/send-message', [DisputesController::class, 'send_message']);
 
     // Payment Routes
     Route::get('/payments', [PaymentsController::class, 'index']);

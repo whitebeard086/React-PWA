@@ -38,7 +38,7 @@ const DisputeDialog = () => {
             invoice_number: booking?.invoice?.invoice_number,
 			booking_id: booking?.id,
 		}),
-		url: `/requests/disputes/${dispute?.id}`,
+		url: `/requests/disputes/${dispute?.uid}`,
 	};
 
     const popNotification = (message, type, title, duration) => {

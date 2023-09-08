@@ -14,8 +14,12 @@ const stateSlice = createSlice({
         openDisputeDialog: false,
         openDispute: false,
         bookingID: null,
+        file: {},
     },
     reducers: {
+        setFile: (state, action) => {
+            state.file = action.payload
+        },
         setBookingID: (state, action) => {
             state.bookingID = action.payload
         },
@@ -53,6 +57,7 @@ const stateSlice = createSlice({
 })
 
 export const {
+    setFile,
     setBookingID,
     setOpenDispute,
     setStartService,

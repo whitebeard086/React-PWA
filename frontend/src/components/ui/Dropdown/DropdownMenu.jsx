@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/display-name */
 import React, { useCallback, useContext } from 'react'
 import Menu from './Menu'
 import MenuContext from './context/menuContext'

@@ -8,13 +8,13 @@ import { Link } from "react-router-dom";
 
 const Disputes = () => {
     const { disputes } = useSelector((state) => state.requests.data)
-    const { profile, userType } = useSelector((state) => state.auth.user);
+    const { userType } = useSelector((state) => state.auth.user);
 
     return (
         <div className="mt-4 mb-4">
             {disputes?.map((item) => {
                 return (
-                    <Link key={item.id} to={`requests/disputes/${item.id}`}>
+                    <Link key={item.id} to={`disputes/${item.uid}`}>
                         <Card className='rounded-none'>
                             <div className="w-full flex items-center justify-between">
                                 <div className="w-full flex gap-4 items-center">
@@ -50,13 +50,24 @@ const Disputes = () => {
                                                 )}
                                             </h4>
                                             <p className="text-gray-500 font-semibold">
-                                                <TextEllipsis
-                                                    text={item.description}
-                                                    maxTextCount={60}
-                                                />
+                                                {item.messages?.length > 0 ? (
+                                                    <TextEllipsis
+                                                        text={item.messages[item.messages.length - 1].message}
+                                                        maxTextCount={60}
+                                                    />
+                                                ):(
+                                                    <TextEllipsis
+                                                        text={item.description}
+                                                        maxTextCount={60}
+                                                    />
+                                                )}
                                             </p>
                                             <p className="text-xs heading-text font-bold">
-                                                {dayjs(item.created_at).format('DD MMM, YYYY - h:mm A')}
+                                                {item.messages?.length > 0 ? (
+                                                    dayjs(item.messages[item.messages.length - 1].created_at).format('DD MMM, YYYY - h:mm A')
+                                                ):(
+                                                    dayjs(item.created_at).format('DD MMM, YYYY - h:mm A')
+                                                )}
                                             </p>
                                         </div>
 

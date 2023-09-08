@@ -8,12 +8,13 @@ use App\Models\Media;
 use App\Models\Escrow;
 use App\Models\Booking;
 use App\Models\Dispute;
-use App\Models\DisputeMessage;
 use App\Models\Invoice;
 use App\Traits\SmsTrait;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use App\Models\DisputeMessage;
 use Illuminate\Support\Facades\DB;
+use Vinkla\Hashids\Facades\Hashids;
 use App\Notifications\InvoicePaidNotification;
 use App\Notifications\ServiceCompletedNotification;
 use App\Notifications\ServiceConfirmedNotification;
@@ -398,6 +399,7 @@ class BookingController extends Controller
             $booking->save();
 
             $dispute = new Dispute;
+            $dispute->uid = Hashids::encode($dispute->id);
             $dispute->booking_id = $booking->id;
             $dispute->disputer_id = auth()->user()->id;
             $dispute->client_id = $client->id;
@@ -426,7 +428,7 @@ class BookingController extends Controller
                 'status' => 'success',
                 'message' => 'Dispute Opened',
                 'booking' => Booking::with('Service.User', 'User', 'Invoice')->where('id', $booking->id)->firstOrFail(),
-                'dispute' => Dispute::with('Booking', 'Messages.Medias'),
+                'dispute' => Dispute::with('Booking', 'Messages.Medias')->where('id', $dispute->id)->get(),
             ], 201);
 
             

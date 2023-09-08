@@ -6,7 +6,7 @@ import {
     apiOpenDispute,
     apiStartService,
 } from "@/services/BookingService";
-import { apiGetRequestsData } from "@/services/RequestsService";
+import { apiGetDispute, apiGetRequestsData, apiSendMessage } from "@/services/RequestsService";
 
 export const getRequestsData = createAsyncThunk(
     "requests/data/getRequestsData",
@@ -88,6 +88,30 @@ export const openDispute = createAsyncThunk(
     }
 );
 
+export const getDispute = createAsyncThunk(
+    "requests/data/getDispute",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await apiGetDispute(data);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const sendMessage = createAsyncThunk(
+    "requests/data/sendMessage",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await apiSendMessage(data);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 const dataSlice = createSlice({
     name: "requests/data",
     initialState: {
@@ -95,6 +119,9 @@ const dataSlice = createSlice({
         enquiries: [],
         history: [],
         disputes: [],
+        disMessages: [],
+        disMessage: {},
+        sentMessage: {},
         booking: {},
         dispute: {},
         serviceStatus: "idle",
@@ -102,12 +129,15 @@ const dataSlice = createSlice({
         startStatus: "idle",
         cancelStatus: "idle",
         disputeStatus: "idle",
+        messageStatus: "idle",
         status: "idle",
+        sendingMessage: false,
         completingService: false,
         confirmingStatus: false,
         startingService: false,
         cancellingService: false,
         openingDispute: false,
+        gettingDispute: false,
         serviceStarted: false,
         serviceCancelled: false,
         serviceCompleted: false,
@@ -131,6 +161,9 @@ const dataSlice = createSlice({
         setStartStatus: (state, action) => {
             state.startStatus = action.payload;
         },
+        setDisMessages: (state, action) => {
+			state.disMessages = [...state.disMessages, action.payload];
+		},
         setCancelStatus: (state, action) => {
             state.cancelStatus = action.payload;
         },
@@ -143,6 +176,9 @@ const dataSlice = createSlice({
         setServiceStarted: (state, action) => {
             state.serviceStarted = action.payload;
         },
+        setMessageStatus: (state, action) => {
+			state.messageStatus = action.payload;
+		},
         setServiceCancelled: (state, action) => {
             state.serviceCancelled = action.payload;
         },
@@ -242,6 +278,36 @@ const dataSlice = createSlice({
                 state.openingDispute = false;
                 state.disputeStatus = action.payload.status || 'error';
             })
+
+            .addCase(getDispute.pending, (state) => {
+                state.gettingDispute = true;
+            })
+            .addCase(getDispute.fulfilled, (state, action) => {
+                state.gettingDispute = false;
+                const { status, dispute } = action.payload;
+                state.disputeStatus = status;
+                state.disMessages = dispute.messages
+                state.dispute = dispute;
+            })
+            .addCase(getDispute.rejected, (state, action) => {
+                state.gettingDispute = false;
+                state.disputeStatus = action.payload.status || 'error';
+            })
+
+            .addCase(sendMessage.pending, (state) => {
+                state.sendingMessage = true;
+            })
+            .addCase(sendMessage.fulfilled, (state, action) => {
+                state.sendingMessage = false;
+                const { status, dispute, message } = action.payload;
+                state.messageStatus = status;
+                state.sentMessage = message;
+                state.dispute = dispute;
+            })
+            .addCase(sendMessage.rejected, (state, action) => {
+                state.sendingMessage = false;
+                state.messageStatus = action.payload.status || 'error';
+            })
     },
 });
 
@@ -249,7 +315,9 @@ export const {
     setStatus,
     setBooking,
     setStartStatus,
+    setDisMessages,
     setCancelStatus,
+    setMessageStatus,
     setConfirmStatus,
     setServiceStatus,
     setDisputeStatus,

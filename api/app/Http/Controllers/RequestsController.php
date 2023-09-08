@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Booking;
 use App\Models\Dispute;
 use Illuminate\Http\Request;
+use Vinkla\Hashids\Facades\Hashids;
 
 class RequestsController extends Controller
 {
@@ -29,6 +30,13 @@ class RequestsController extends Controller
                 $disputes = $disputeQuery->where('provider_id', $userId)->get();
                 $history = $historyQuery->where('provider_id', $userId)->get();
             }
+
+            // if($disputes) {
+            //     foreach ($disputes as $dispute) {
+            //         $dispute->uid = Hashids::encode($dispute->id);
+            //         $dispute->save();
+            //     }
+            // }
 
             $enquiries = Chat::with('Messages', 'User.Service', 'Receiver.Service')->where('user_id', $userId)
                 ->orWhere('receiver_id', $userId)->orderBy('id', 'desc')->get();
