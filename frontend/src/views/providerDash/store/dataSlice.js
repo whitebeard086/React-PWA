@@ -1,7 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
+    apiCancelService,
     apiCompleteService,
     apiConfirmService,
+    apiOpenDispute,
+    apiStartService,
 } from "@/services/BookingService";
 import { apiGetDashboardData } from "@/services/DashboardService";
 
@@ -41,6 +44,42 @@ export const confirmService = createAsyncThunk(
     }
 );
 
+export const startService = createAsyncThunk(
+    "dashboard/data/startService",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await apiStartService(data);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const cancelService = createAsyncThunk(
+    "dashboard/data/cancelService",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await apiCancelService(data);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const openDispute = createAsyncThunk(
+    "requests/data/openDispute",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await apiOpenDispute(data);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 const dataSlice = createSlice({
     name: "dashboard/data",
     initialState: {
@@ -48,14 +87,24 @@ const dataSlice = createSlice({
         enquiries: [],
         bookings: [],
         booking: {},
+        dispute: {},
         bookingsCount: null,
+        openingDispute: false,
+        startingService: false,
+        cancellingService: false,
         completingService: false,
         confirmingStatus: false,
+        disputeOpened: false,
+        serviceStarted: false,
+        serviceCancelled: false,
         serviceCompleted: false,
         serviceConfirmed: false,
         status: "idle",
         serviceStatus: "idle",
         confirmStatus: "idle",
+        disputeStatus: "idle",
+        startStatus: "idle",
+        cancelStatus: "idle",
     },
     reducers: {
         setStatus: (state, action) => {
@@ -64,11 +113,29 @@ const dataSlice = createSlice({
         setBooking: (state, action) => {
             state.booking = action.payload;
         },
+        setDisputeStatusDash: (state, action) => {
+            state.disputeStatus = action.payload;
+        },
+        setDisputeOpenedDash: (state, action) => {
+            state.disputeOpened = action.payload;
+        },
+        setStartStatusDash: (state, action) => {
+            state.startStatus = action.payload;
+        },
+        setCancelStatusDash: (state, action) => {
+            state.cancelStatus = action.payload;
+        },
         setServiceStatusDash: (state, action) => {
             state.serviceStatus = action.payload;
         },
         setConfirmStatusDash: (state, action) => {
             state.confirmStatus = action.payload;
+        },
+        setServiceStartedDash: (state, action) => {
+            state.serviceStarted = action.payload;
+        },
+        setServiceCancelledDash: (state, action) => {
+            state.serviceCancelled = action.payload;
         },
         setServiceCompletedDash: (state, action) => {
             state.serviceCompleted = action.payload;
@@ -122,14 +189,63 @@ const dataSlice = createSlice({
             .addCase(confirmService.rejected, (state, action) => {
                 state.confirmingService = false;
                 state.confirmStatus = action.payload.status;
-            });
+            })
+
+            .addCase(startService.pending, (state) => {
+                state.startingService = true;
+            })
+            .addCase(startService.fulfilled, (state, action) => {
+                state.startingService = false;
+                const { status, booking } = action.payload;
+                state.startStatus = status;
+                state.booking = booking;
+            })
+            .addCase(startService.rejected, (state, action) => {
+                state.startingService = false;
+                state.startStatus = action.payload.status;
+            })
+
+            .addCase(cancelService.pending, (state) => {
+                state.cancellingService = true;
+            })
+            .addCase(cancelService.fulfilled, (state, action) => {
+                state.cancellingService = false;
+                const { status, booking } = action.payload;
+                state.cancelStatus = status;
+                state.booking = booking;
+            })
+            .addCase(cancelService.rejected, (state, action) => {
+                state.cancellingService = false;
+                state.cancelStatus = action.payload.status;
+            })
+
+            .addCase(openDispute.pending, (state) => {
+                state.openingDispute = true;
+            })
+            .addCase(openDispute.fulfilled, (state, action) => {
+                state.openingDispute = false;
+                const { status, booking, dispute } = action.payload;
+                state.disputeStatus = status;
+                state.booking = booking;
+                state.dispute = dispute;
+            })
+            .addCase(openDispute.rejected, (state, action) => {
+                state.openingDispute = false;
+                state.disputeStatus = action.payload.status || 'error';
+            })
     },
 });
 
 export const {
     setStatus,
     setBookingDash,
+    setDisputeStatusDash,
+    setDisputeOpenedDash,
+    setStartStatusDash,
+    setCancelStatusDash,
     setServiceStatusDash,
+    setServiceStartedDash,
+    setServiceCancelledDash,
     setServiceCompletedDash,
     setServiceConfirmedDash,
 } = dataSlice.actions;

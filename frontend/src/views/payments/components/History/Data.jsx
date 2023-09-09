@@ -7,12 +7,17 @@ const Data = ({ transactions }) => {
 	const { userType } = useSelector((state) => state.auth.user);
 
 	return (
-		<div className="flex flex-col gap-4">
+		<div className="flex flex-col">
 			{transactions?.map((txn) => (
 				<Card key={txn.id}>
 					<div className="flex items-center gap-4 justify-between">
 						<h4 className="text-lg font-bold text-gray-700">{txn.type}</h4>
 						{txn.type === 'Wallet Topup' && (
+							<p className="text-lg font-semibold text-green-500">
+								+₦{txn.amount?.toLocaleString()}
+							</p>
+						)}
+						{txn.type === 'Service Payment Refund' && (
 							<p className="text-lg font-semibold text-green-500">
 								+₦{txn.amount?.toLocaleString()}
 							</p>

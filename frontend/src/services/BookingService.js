@@ -23,3 +23,27 @@ export async function apiConfirmService (data) {
         data
     })
 }
+
+export async function apiStartService (data) {
+    return ApiService.fetchData({
+        url: '/service/start',
+        method: 'post',
+        data
+    })
+}
+
+export async function apiCancelService (data) {
+    return ApiService.fetchData({
+        url: '/service/cancel',
+        method: 'post',
+        data
+    })
+}
+
+export async function apiOpenDispute (data) {
+    return ApiService.fetchData({
+        url: '/service/dispute/new',
+        method: 'post',
+        data
+    })
+}

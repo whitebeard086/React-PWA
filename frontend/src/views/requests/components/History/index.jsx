@@ -46,17 +46,39 @@ const History = () => {
                                             +₦{item.invoice?.price?.toLocaleString()}
                                         </p>
                                     )}
-                                    {userType === 'Client' && (
+                                    {userType === 'Client' && (item.status === 'completed' || item.status === 'ongoing' || item.status === 'pending') && (
                                         <p className="text-lg font-semibold text-red-500">
                                             -₦{item.invoice?.price?.toLocaleString()}
+                                        </p>
+                                    )}
+                                    {userType === 'Client' && item.status === 'cancelled' && (
+                                        <p className="text-lg font-semibold text-green-500">
+                                            +₦{item.invoice?.price?.toLocaleString()}
                                         </p>
                                     )}
                                 </div>
             
                                 <div className="mt-2 flex items-center gap-4 justify-between">
-                                    <p className="font-semibold text-green-500">
-                                        {item.status}
-                                    </p>
+                                    {item.status === 'completed' && (
+                                        <p className="font-semibold text-green-500">
+                                            {item.status}
+                                        </p>
+                                    )}
+                                    {item.status === 'cancelled' && (
+                                        <p className="font-semibold text-red-500">
+                                            {item.status}
+                                        </p>
+                                    )}
+                                    {item.status === 'ongoing' && (
+                                        <p className="font-semibold text-blue-500">
+                                            {item.status}
+                                        </p>
+                                    )}
+                                    {item.status === 'refunded' && (
+                                        <p className="font-semibold text-orange-500">
+                                            {item.status}
+                                        </p>
+                                    )}
                                     <p className="font-semibold">
                                         {dayjs(item.created_at).format(
                                             "DD MMM YYYY hh:mm a"

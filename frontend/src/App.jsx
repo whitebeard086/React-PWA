@@ -17,10 +17,12 @@ import Layout from './views/layout';
 import NotFound from './views/notfound';
 import Unauthorized from './views/notfound/Unauthorized';
 import { setNotifications } from './views/notifications/store/dataSlice';
-import { setServiceCompletedDash } from './views/providerDash/store/dataSlice';
+import { setServiceCancelledDash, setServiceCompletedDash, setServiceStartedDash } from './views/providerDash/store/dataSlice';
 import {
+	setServiceCancelled,
 	setServiceCompleted,
 	setServiceConfirmed,
+	setServiceStarted,
 } from './views/requests/store/dataSlice';
 import CheckVerifications from './views/route/CheckVerifications';
 import RequireAuth from './views/route/RequireAuth';
@@ -92,6 +94,22 @@ function App() {
 			handler() {
 				dispatch(setReceivedInvoice(true));
 				console.log('Received Invoice: ', true);
+			},
+		},
+		{
+			name: 'serviceStarted',
+			handler() {
+				dispatch(setServiceStarted(true));
+				dispatch(setServiceStartedDash(true));
+				console.log('Received Service Started: ', true);
+			},
+		},
+		{
+			name: 'serviceCancelled',
+			handler() {
+				dispatch(setServiceCancelled(true));
+				dispatch(setServiceCancelledDash(true));
+				console.log('Received Service Cancelled: ', true);
 			},
 		},
 		{

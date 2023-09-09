@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { injectReducer } from "@/store"
 import reducer, { homeIndex, useAppSelector, useAppDispatch } from "./store"
-import { Loading } from '@/components/shared'
 import GettingData from './components/GettingData'
 import HomeFeed from './components/feed'
 

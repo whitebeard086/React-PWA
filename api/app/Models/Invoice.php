@@ -38,6 +38,11 @@ class Invoice extends Model
         return $this->hasOne(Booking:: class);
     }
 
+    public function Dispute()
+    {
+        return $this->hasOne(Dispute:: class);
+    }
+
     public function Items()
     {
         return $this->hasMany(InvoiceItem::class);

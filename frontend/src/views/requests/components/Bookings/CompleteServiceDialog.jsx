@@ -7,6 +7,7 @@ import { Notification, toast } from "@/components/ui";
 import { sendPushNotification } from "@/utils/sendPushNotification";
 import appConfig from "@/configs/app.config";
 import { socket } from "@/utils/socket";
+import { createNotification, setCreateStatus } from "@/views/notifications/store/dataSlice";
 
 const CompleteServiceDialog = () => {
     const dispatch = useDispatch();
@@ -18,6 +19,17 @@ const CompleteServiceDialog = () => {
         (state) => state.requests.state
     );
     const { profile } = useSelector((state) => state.auth.user);
+    const { createStatus, notification } = useSelector((state) => state.notifications.data);
+
+    const notificationData = {
+		receiver_id: booking?.user_id,
+		type: 'booking complete',
+		data: JSON.stringify({
+			message: `${profile?.service?.title} has completed your service, please inspect the work and confirm if you are satisfied.`,
+			booking_id: booking?.id,
+		}),
+		url: `/requests`,
+	};
 
     const popNotification = (message, type, title, duration) => {
         toast.push(
@@ -49,6 +61,7 @@ const CompleteServiceDialog = () => {
 
     useEffect(() => {
         if (serviceStatus === "success") {
+            dispatch(createNotification(notificationData));
             sendPushNotification({
                 app_id: import.meta.env.VITE_ONESIGNAL_APP_ID,
                 channel_for_external_user_ids: "push",
@@ -79,6 +92,15 @@ const CompleteServiceDialog = () => {
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [serviceStatus]);
+
+    useEffect(() => {
+		if (createStatus === 'success') {
+			socket.emit('sendNotification', [notification, booking?.user_id]);
+
+			dispatch(setCreateStatus('idle'));
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [createStatus]);
 
     const onClose = () => {
         dispatch(toggleCompleteServiceDialog(false));

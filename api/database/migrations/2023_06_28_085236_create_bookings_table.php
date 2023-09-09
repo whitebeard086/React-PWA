@@ -16,9 +16,9 @@ return new class extends Migration
             $table->foreignId('service_id')->constrained('services')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('invoice_id')->constrained('invoices')->onDelete('cascade');
-            $table->enum('service_status', ['ongoing', 'completed', 'disputed', 'refunded'])->default('ongoing');
+            $table->enum('service_status', ['ongoing', 'completed', 'disputed', 'refunded', 'pending', 'cancelled'])->default('pending');
             $table->enum('user_status', ['ongoing', 'completed', 'disputed', 'refunded'])->default('ongoing');
-            $table->enum('status', ['ongoing', 'completed', 'disputed', 'refunded'])->default('ongoing');
+            $table->enum('status', ['ongoing', 'completed', 'disputed', 'refunded', 'cancelled'])->default('ongoing');
             $table->timestamps();
         });
     }

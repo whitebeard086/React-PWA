@@ -3,8 +3,10 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     getRequestsData,
+    setServiceCancelled,
     setServiceCompleted,
     setServiceConfirmed,
+    setServiceStarted,
 } from "./store/dataSlice";
 import GettingData from "./components/GettingData";
 import { Button } from "@/components/ui";
@@ -15,12 +17,18 @@ import Bookings from "./components/Bookings";
 import ConfirmServiceDialog from "./components/Bookings/ConfirmServiceDialog";
 import {
     setBookingID,
+    toggleCancelServiceDialog,
     toggleCompleteServiceDialog,
     toggleConfirmServiceDialog,
+    toggleOpenDisputeDialog,
+    toggleStartServiceDialog,
 } from "./store/stateSlice";
 import { injectReducer } from "@/store";
 import { socket } from "@/utils/socket";
 import appConfig from "@/configs/app.config";
+import StartService from "./components/Bookings/StartService";
+import CancelService from "./components/Bookings/CancelService";
+import DisputeDialog from "./components/Bookings/DisputeDialog";
 
 injectReducer("requests", reducer);
 
@@ -31,18 +39,13 @@ const Requests = () => {
     const { bookings, booking, completingService, confirmingService } =
         useSelector((state) => state.requests.data);
     const { bookingID } = useSelector((state) => state.requests.state);
-    const { userType, profile } = useSelector((state) => state.auth.user);
+    const { userType } = useSelector((state) => state.auth.user);
     const isProvider = userType === "Provider" ? true : false;
 
-    const { loading, serviceCompleted, serviceConfirmed } = useSelector(
+    const { loading, serviceCompleted, serviceConfirmed, serviceStarted, serviceCancelled } = useSelector(
         (state) => state.requests?.data
     );
 
-    // useEffect(() => {
-    //     dispatch(getRequestsData());
-    //     socket.emit("addNewUser", profile?.id);
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []);
 
     window.OneSignal = window.OneSignal || [];
     const OneSignal = window.OneSignal;
@@ -57,7 +60,7 @@ const Requests = () => {
     });
 
     useEffect(() => {
-        if (serviceCompleted || serviceConfirmed) {
+        if (serviceCompleted || serviceConfirmed || serviceStarted || serviceCancelled) {
             dispatch(getRequestsData());
         }
 
@@ -65,8 +68,27 @@ const Requests = () => {
             dispatch(setServiceCompleted(false));
         } else if (serviceConfirmed) {
             dispatch(setServiceConfirmed(false));
+        } else if (serviceStarted) {
+            dispatch(setServiceStarted(false))
+        } else if (serviceCancelled) {
+            dispatch(setServiceCancelled(false))
         }
-    }, [dispatch, serviceCompleted, serviceConfirmed]);
+    }, [dispatch, serviceCancelled, serviceCompleted, serviceConfirmed, serviceStarted]);
+
+    const onReport = (booking) => {
+        dispatch(toggleOpenDisputeDialog(true));
+        dispatch(setBookingID(booking?.id));
+    }
+
+    const onStart = (booking) => {
+        dispatch(toggleStartServiceDialog(true));
+        dispatch(setBookingID(booking?.id));
+    }
+
+    const onCancel = (booking) => {
+        dispatch(toggleCancelServiceDialog(true));
+        dispatch(setBookingID(booking?.id));
+    }
 
     const onComplete = (booking) => {
         dispatch(toggleCompleteServiceDialog(true));
@@ -97,6 +119,9 @@ const Requests = () => {
                             isProvider={isProvider}
                             onComplete={onComplete}
                             onConfirm={onConfirm}
+                            onStart={onStart}
+                            onCancel={onCancel}
+                            onReport={onReport}
                         />
                     </div>
 
@@ -116,6 +141,9 @@ const Requests = () => {
 
             <CompleteServiceDialog socket={socket.current} />
             <ConfirmServiceDialog socket={socket.current} />
+            <StartService />
+            <CancelService />
+            <DisputeDialog />
         </div>
     );
 };

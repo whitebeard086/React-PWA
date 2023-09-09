@@ -21,6 +21,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Admin\HomeAdminController;
 use App\Http\Controllers\Admin\UsersAdminController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
+use App\Http\Controllers\Admin\HandymanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -111,8 +112,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // Booking Routes
     Route::post('/book-service', [BookingController::class, 'book_service']);
+    Route::post('/service/start', [BookingController::class, 'start_service']);
+    Route::post('/service/cancel', [BookingController::class, 'cancel_service']);
     Route::post('/service/complete', [BookingController::class, 'complete_service']);
     Route::post('/service/confirm', [BookingController::class, 'confirm_service']);
+    Route::post('/service/dispute/new', [BookingController::class, 'open_dispute']);
 
     // Bills Routes
     Route::get('/bills/operators', [BillsController::class, 'get_operators']);
@@ -155,5 +159,8 @@ Route::group(['prefix' => 'admin'], function(){
 
         // Users Routes
         Route::get('/users', [UsersAdminController::class, 'index']);
+
+        // Handyman Routes
+        Route::get('/enquiries', [HandymanController::class, 'enquiries']);
     });
 });

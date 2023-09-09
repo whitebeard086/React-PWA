@@ -17,6 +17,7 @@ class Booking extends Model
         'service_status',
         'user_status',
         'status',
+        'cancel_reason',
         'rating',
         'comment',
     ]; 
@@ -47,5 +48,10 @@ class Booking extends Model
     public function Escrow()
     {
         return $this->hasOne(Escrow::class);
+    }
+
+    public function Dispute()
+    {
+        return $this->hasOne(Dispute::class);
     }
 }

@@ -39,6 +39,44 @@ const NotificationTypeAvatar = (data) => {
             } else {
                 return <GeneratedAvatar target={sender} />
             }
+        case 'invoice paid':
+            if (sender.image) {
+                return <Avatar shape="circle" src={`${imagePath}/${sender.image}`} />
+            } else {
+                return <GeneratedAvatar target={sender} />
+            }
+        case 'booking start':
+            if (sender.service?.banner) {
+                return <Avatar shape="circle" src={`${imagePath}/${sender.service.banner}`} />
+            } else if (sender.image) {
+                return <Avatar shape="circle" src={`${imagePath}/${sender.image}`} />
+            } else {
+                return <GeneratedAvatar target={sender} />
+            }
+        case 'booking cancelled':
+            if (sender.service?.banner) {
+                return <Avatar shape="circle" src={`${imagePath}/${sender.service.banner}`} />
+            } else if (sender.image) {
+                return <Avatar shape="circle" src={`${imagePath}/${sender.image}`} />
+            } else {
+                return <GeneratedAvatar target={sender} />
+            }
+        case 'booking disputed':
+            if (sender.service?.banner) {
+                return <Avatar shape="circle" src={`${imagePath}/${sender.service.banner}`} />
+            } else if (sender.image) {
+                return <Avatar shape="circle" src={`${imagePath}/${sender.image}`} />
+            } else {
+                return <GeneratedAvatar target={sender} />
+            }
+        case 'booking complete':
+            if (sender.service?.banner) {
+                return <Avatar shape="circle" src={`${imagePath}/${sender.service.banner}`} />
+            } else if (sender.image) {
+                return <Avatar shape="circle" src={`${imagePath}/${sender.image}`} />
+            } else {
+                return <GeneratedAvatar target={sender} />
+            }
         case 1:
             return (
                 <Avatar
