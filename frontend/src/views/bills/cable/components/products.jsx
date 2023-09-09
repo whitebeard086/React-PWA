@@ -26,7 +26,7 @@ const Products = () => {
 				className="grid grid-cols-pow gap-3"
 				onChange={(val) => {
 					const selected = products?.data?.find((b) => b.id === val[0]);
-					if (selected?.meta?.fee > profile?.balance) {
+					if (selected?.meta?.fee > profile?.account_balance) {
 						popNotification(
 							'Error',
 							'You do not have enough balance to complete this transaction, please top-up and try again.',
@@ -41,7 +41,7 @@ const Products = () => {
 							productID: val[0],
 							bill: 'television',
 							operatorID: store?.operatorID,
-							amount: selected?.meta?.fee,
+							amount: Number(selected?.meta?.fee),
 							package: selected?.name,
 						})
 					);

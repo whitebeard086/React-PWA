@@ -11,6 +11,7 @@ export const verifyCustomer = createApiThunk(
 const initialState = stateAdapter.getInitialState({
 	customer: { ...meta },
 	store: {},
+	product: null,
 });
 
 const dataSlice = createSlice({
@@ -19,6 +20,9 @@ const dataSlice = createSlice({
 	reducers: {
 		setStore: (state, action) => {
 			state.store = action.payload === 0 ? {} : action.payload;
+		},
+		setProduct: (state, action) => {
+			state.product = action.payload === 0 ? null : action.payload;
 		},
 		resetState: (state, action) => {
 			const resetActions = {
@@ -38,6 +42,6 @@ const dataSlice = createSlice({
 	},
 });
 
-export const { setStore, resetState } = dataSlice.actions;
+export const { setStore, resetState, setProduct } = dataSlice.actions;
 
 export default dataSlice.reducer;

@@ -51,23 +51,16 @@ trait CustomersTrait
             'dob' => $user->dob,
             'gender' => $user->gender,
             'country' => $user->address->country,
-            'image' => $user->image,
+            'image' => "https://s3.eu-central-1.wasabisys.com/taskitly/$user->image",
          ];
 
          $response = Http::withHeaders([
             'accept' => 'application/json',
             'authorization' => $accessToken,
             'content-type' => 'application/json',
-         ])->put("https://api.blochq.io/v1/customers/upgrade/t1/{$customerId}", $data);
+         ])->put("https://api.blochq.io/v1/customers/upgrade/t1/$customerId", $data);
 
-         if ($response->successful()) {
-            return $response->json();
-         } else {
-            return [
-               'status' => 'error',
-               'response' => $response->json(),
-            ];
-         }
+         return $response->json();
       }
    }
 
@@ -204,12 +197,13 @@ trait CustomersTrait
    {
       // Check if the user has the necessary data for KYC T1
       return (
+         $user->kyc_tier === "0" &&
          $user->address &&
-         $user->address->street &&
-         $user->address->city &&
-         $user->address->state &&
-         $user->address->country &&
-         $user->address->postal_code &&
+         ($user->address->street ?? false) &&
+         ($user->address->city ?? false) &&
+         ($user->address->state ?? false) &&
+         ($user->address->country ?? false) &&
+         ($user->address->postal_code ?? false) &&
          $user->place_of_birth &&
          $user->dob &&
          $user->gender &&

@@ -1,4 +1,4 @@
-import { Card } from '@/components/ui';
+import { Badge, Card } from '@/components/ui';
 import { BiCameraMovie, BiUserVoice } from 'react-icons/bi';
 import {
 	MdMobiledataOff,
@@ -55,25 +55,41 @@ const BillsComponent = () => {
 							<p className="text-base font-bold text-gray-200">Television</p>
 						</Link>
 						<div className="flex cursor-pointer flex-col justify-center items-center">
-							<Card className="flex justify-center items-center w-full">
+							<Card className="flex justify-center items-center w-full relative">
+								<Badge
+									content={'Coming soon'}
+									innerClass="bg-emerald-500 absolute top-0 rounded-md w-max left-0"
+								/>
 								<MdOutlineGames className="text-3xl" />
 							</Card>
 							<p className="text-base font-bold text-gray-200">Betting</p>
 						</div>
 						<div className="flex cursor-pointer flex-col justify-center items-center">
-							<Card className="flex justify-center items-center w-full">
+							<Card className="flex justify-center items-center w-full relative">
+								<Badge
+									content={'Coming soon'}
+									innerClass="bg-emerald-500 absolute top-0 rounded-md w-max left-0"
+								/>
 								<MdOutlineSignalCellularConnectedNoInternet0Bar className="text-3xl" />
 							</Card>
 							<p className="text-base font-bold text-gray-200">Internet</p>
 						</div>
 						<div className="flex cursor-pointer flex-col justify-center items-center">
-							<Card className="flex justify-center items-center w-full">
+							<Card className="flex justify-center items-center w-full relative">
+								<Badge
+									content={'Coming soon'}
+									innerClass="bg-emerald-500 absolute top-0 rounded-md w-max left-0"
+								/>
 								<MdOutlineHotel className="text-3xl" />
 							</Card>
 							<p className="text-base font-bold text-gray-200">Hotels</p>
 						</div>
 						<div className="flex cursor-pointer flex-col justify-center items-center">
-							<Card className="flex justify-center items-center w-full">
+							<Card className="flex justify-center items-center w-full relative">
+								<Badge
+									content={'Coming soon'}
+									innerClass="bg-emerald-500 absolute top-0 rounded-md w-max left-0"
+								/>
 								<MdOutlineFlightTakeoff className="text-3xl" />
 							</Card>
 							<p className="text-base font-bold text-gray-200">Flights</p>

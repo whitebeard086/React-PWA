@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Otp;
+use App\Models\Address;
 use App\Models\User;
 use App\Models\Country;
 use App\Models\Service;
@@ -80,6 +81,13 @@ class UserController extends Controller
                     $user->wallet_balance = $prepped;
                     $user->save();
                 }
+            }
+
+            $upgradeResponse = $this->upgradeCustomerToKYCT1($user);
+            if ($upgradeResponse && $upgradeResponse['success'] == true) {
+                // KYC Tier 1 upgrade successful
+                $user->kyc_tier = $upgradeResponse['data']['kyc_tier'];
+                $user->save();
             }
 
             // if (!$user->customer_id && $user->bvn) {
@@ -636,7 +644,7 @@ class UserController extends Controller
                 }
                 
                 $upgradeResponse = $this->upgradeCustomerToKYCT1($user);
-                if ($upgradeResponse) {
+                if ($upgradeResponse && $upgradeResponse['success'] == true) {
                     // KYC Tier 1 upgrade successful
                     $user->kyc_tier = $upgradeResponse['data']['kyc_tier'];
                 }
@@ -651,7 +659,7 @@ class UserController extends Controller
         ], $statusCode);
     }
 
-    public function simulate_credit(Request $request,)
+    public function simulate_credit(Request $request)
     {
         $user = User::where('id', auth()->user()->id)->firstOrFail();
         $formFields = $request->validate([
@@ -698,4 +706,42 @@ class UserController extends Controller
         ], $statusCode);
     }
     
+    public function address(Request $request)
+    {
+        $user = User::where('id', auth()->user()->id)->firstOrFail();
+        $formFields = $request->validate([
+            'street' => 'required|string',
+            'city' => 'required|string',
+            'state' => 'required|string',
+            'country' => 'required|string',
+            'postal_code' => 'required|string',
+        ]);
+
+        $formFields['user_id'] = $user->id;
+        $address = Address::create($formFields);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Address updated successfully',
+            'address' => $address,
+        ], 200);
+    }
+    
+    public function update_kyb(Request $request)
+    {
+        $user = User::where('id', auth()->user()->id)->firstOrFail();
+        $formFields = $request->validate([
+            'place_of_birth' => 'required|string',
+            'gender' => 'required|string',
+            'dob' => 'required|string',
+        ]);
+
+        $user->update($formFields);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'User details updated successfully',
+            'user' => $user,
+        ], 200);
+    }
 }

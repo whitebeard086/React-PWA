@@ -12,6 +12,7 @@ export {
 	useConfig,
 } from './ConfigProvider';
 export { default as CropImage } from './CropImage';
+export { Calendar, default as DatePicker, RangeCalendar } from './DatePicker';
 export { default as Dialog } from './Dialog';
 export { default as Dropdown } from './Dropdown';
 export { default as FormContainer } from './Form/FormContainer';
@@ -30,6 +31,7 @@ export { default as Skeleton } from './Skeleton';
 export { default as Spinner } from './Spinner';
 export { default as Switcher } from './Switcher';
 export { default as Table } from './Table';
+export { default as TimeInput } from './TimeInput';
 export { default as Tooltip } from './Tooltip';
 export { default as Upload } from './Upload';
 export { default as hooks } from './hooks';

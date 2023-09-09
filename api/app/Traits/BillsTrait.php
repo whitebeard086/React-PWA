@@ -61,13 +61,21 @@ trait BillsTrait
 
         // If meter_type is not null, include it in the endpoint URL
         $meter_type_parameter = $meter_type !== null ? "meter_type=$meter_type&" : "";
-        
-        $response = Http::withHeaders([
-            'accept' => 'application/json',
-            'authorization' => $accessToken,
-        ])->get("https://api.blochq.io/v1/bills/customer/validate/$operatorID?$meter_type_parameter" . "bill=$bill&device_number=$device_number");
 
-        return $response->json();
+        try {
+            $response = Http::withHeaders([
+                'accept' => 'application/json',
+                'authorization' => $accessToken,
+            ])->get("https://api.blochq.io/v1/bills/customer/validate/$operatorID?$meter_type_parameter" . "bill=$bill&device_number=$device_number");
+    
+            return $response->json();
+        } catch (\Exception $e) {
+            // Handle the exception and return a custom error message
+            return [
+                'success' => false,
+                'message' => 'Unable to process the request at this time. Please try again later.',
+            ];
+        }
     }
 
     public function getOperatorProducts($operatorID, $bill)
@@ -94,7 +102,7 @@ trait BillsTrait
         }
     }
 
-    public function buyAirtime($data)
+    public function buyAirtime($data, $account_id)
     {
         $curl = curl_init();
         $url = "https://api.blochq.io/v1/bills/payment?bill=telco";
@@ -104,7 +112,8 @@ trait BillsTrait
             'device_details' => ['beneficiary_msisdn' => $data->phone],
             'amount' => $data->amount * 100,
             'operator_id' => $data->operator,
-            'product_id' => $data->product
+            'product_id' => $data->product,
+            'account_id' => $account_id
         ];
 
         $post_data = json_encode($fields);
@@ -146,5 +155,54 @@ trait BillsTrait
         }
 
         return json_decode($response, true);
+    }
+
+    public function billSubsriptions($data, $bill)
+    {
+        $blocSecret = env('BLOC_SECRET_KEY');
+        $accessToken = "Bearer $blocSecret";
+
+        try {
+            $response = Http::withHeaders([
+                'accept' => 'application/json',
+                'authorization' => $accessToken,
+                'content-type' => 'application/json',
+            ])->post("https://api.blochq.io/v1/bills/payment?bill=$bill", $data);
+    
+            return $response->json();
+        } catch (\Exception $e) {
+            // Handle the exception and return a custom error message
+            return [
+                'success' => false,
+                'message' => 'Unable to process the request at this time. Please try again later.',
+            ];
+        }
+    }
+
+    public function getOrgAccount()
+    {
+        $blocSecret = env('BLOC_SECRET_KEY');
+        $accessToken = "Bearer $blocSecret";
+
+        $response = Http::withHeaders([
+            'accept' => 'application/json',
+            'authorization' => $accessToken,
+        ])->get("https://api.blochq.io/v1/accounts/organization/default");
+
+        $responseData = $response->json();
+
+        // Check if the response is successful
+        if ($responseData['success']) {
+            $data = $responseData['data'];
+
+            // Return the accounts separately
+            return [
+                'settlementAccount' => collect($data)->firstWhere('type', 'Settlement'),
+                'mainAccount' => collect($data)->firstWhere('type', 'Main'),
+            ];
+        }
+
+        // Return null or an empty array if there was an error
+        return null;
     }
 }

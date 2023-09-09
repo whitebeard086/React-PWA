@@ -1,14 +1,17 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { BiSolidLockOpen } from 'react-icons/bi';
 import PinInput from 'react-pin-input';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Button, Dialog } from '@/components/ui';
+import { getUser } from '@/store/auth/userSlice';
 import { popNotification } from '@/utils/toast';
+import { usePayBill } from '../../store/hooks';
 import {
 	SLICE_NAME,
-	buyData,
-	resetState,
+	setState,
+	setStore,
 	togglePinDialog,
 	useAppDispatch,
 	useAppSelector,
@@ -31,66 +34,91 @@ const FOCUS_INPUT_PIN_STYLE_RESET = {
 
 const RequirePin = () => {
 	const dispatch = useAppDispatch();
-	const [pin, setPin] = useState('');
+	const navigate = useNavigate();
+	const location = useLocation();
 
+	const [pin, setPin] = useState('');
 	let pinRef;
 
-	const { store, bundle } = useAppSelector((state) => state[SLICE_NAME].data);
+	const { product } = useAppSelector((state) => state[SLICE_NAME].data);
 	const { pinDialog } = useAppSelector((state) => state[SLICE_NAME].state);
 
 	const onDialogClose = () => {
 		dispatch(togglePinDialog(false));
 	};
 
-	useEffect(() => {
-		const clearInput = () => {
-			pinRef?.clear();
-			setPin('');
-		};
+	const onError = () => {
+		dispatch(togglePinDialog(false));
+		dispatch(setState(0));
+	};
 
-		if (bundle.status === 'failed') {
-			popNotification(
-				'Error',
-				'Oops! Something went wrong, please try again.',
-				'danger',
-				5000
-			);
-
-			clearInput();
-			dispatch(resetState('bundle'));
-			onDialogClose();
+	const doKYB = () => {
+		if (location.pathname !== '/profile/kyb') {
+			navigate('/profile/kyb');
 		}
+	};
 
-		if (bundle.status === 'pin error') {
-			popNotification(
-				'Error',
-				'The PIN entered does not match your transaction PIN, please try again.',
-				'danger',
-				5000
-			);
-
-			clearInput();
-			dispatch(resetState('bundle'));
-		}
-
-		if (bundle.status === 'success') {
-			clearInput();
-			dispatch(togglePinDialog(false));
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [bundle.status]);
+	const clearInput = () => {
+		pinRef?.clear();
+		setPin('');
+	};
 
 	const handleSubmit = () => {
-		dispatch(
-			buyData({
-				pin,
-				phone: store?.phone,
-				amount: store?.amount,
-				product: store?.product,
-				operator: store?.oid,
-			})
-		);
+		const p_data = {
+			pin,
+			...product,
+		};
+		mutate(p_data);
 	};
+
+	const { mutate, isLoading, error } = usePayBill(
+		(error) => {
+			console.log('error block', error);
+			if (error.response.data.status === 'pin error') {
+				popNotification(
+					error.response.data.message,
+					'The PIN entered does not match your transaction PIN, please try again.',
+					'danger',
+					5000
+				);
+			} else if (error.response.status === 422) {
+				popNotification(
+					error.response.data.status,
+					error.response.data.message,
+					'danger',
+					5000
+				);
+				onError();
+				doKYB();
+			} else {
+				popNotification(
+					'Error',
+					error.response.data.message ??
+						'Oops! Something went wrong, please try again.',
+					'danger',
+					5000
+				);
+				onError();
+			}
+			clearInput();
+			onDialogClose();
+		},
+		(data) => {
+			console.log('Success block', data);
+			popNotification(
+				'Success',
+				data.message ?? 'Transaction completed successfully.',
+				'success',
+				5000
+			);
+			clearInput();
+			dispatch(togglePinDialog(false));
+			dispatch(getUser());
+			dispatch(setState(0));
+			dispatch(setStore(0));
+		}
+	);
+
 	return (
 		<Dialog
 			isOpen={pinDialog}
@@ -107,12 +135,6 @@ const RequirePin = () => {
 					Please enter your transaction pin to authorize this transaction
 				</p>
 
-				{/* <form
-          onSubmit={async (e) => {
-              e.preventDefault();
-              handleSubmit();
-          }}
-      > */}
 				<div>
 					<PinInput
 						length={6}
@@ -127,9 +149,6 @@ const RequirePin = () => {
 						inputStyle={INPUT_PIN_STYLE_RESET}
 						inputFocusStyle={FOCUS_INPUT_PIN_STYLE_RESET}
 						autoSelect={true}
-						// onComplete={(value) => {
-						//     dispatch(setPinData(value));
-						// }}
 						regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
 					/>
 				</div>
@@ -139,13 +158,12 @@ const RequirePin = () => {
 					variant="solid"
 					className="!bg-gray-900 hover:!bg-black mt-6"
 					icon={<BiSolidLockOpen />}
-					loading={bundle.status === 'pending'}
-					disabled={!pin || pin?.length < 6}
+					loading={isLoading}
+					disabled={!pin || pin?.length < 6 || isLoading}
 					onClick={handleSubmit}
 				>
 					Authorize
 				</Button>
-				{/* </form> */}
 			</div>
 		</Dialog>
 	);

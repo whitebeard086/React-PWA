@@ -70,3 +70,11 @@ export async function apiSimulateCredit(data) {
 		data,
 	});
 }
+
+export async function apiPayBill(data) {
+	return ApiQueryService.fetchData({
+		url: `/bills/pay`,
+		method: 'post',
+		data,
+	});
+}

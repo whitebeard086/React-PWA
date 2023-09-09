@@ -3,7 +3,7 @@ import { BsBagCheckFill } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@/components/ui';
-// import { RequirePin } from '.';
+import { RequirePin } from '.';
 import {
 	SLICE_NAME,
 	setState,
@@ -16,35 +16,8 @@ const Order = () => {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 
-	const { store, product } = useAppSelector((state) => state[SLICE_NAME].data);
+	const { product } = useAppSelector((state) => state[SLICE_NAME].data);
 	const { hasPin } = useAppSelector((state) => state.auth.user);
-
-	// useEffect(() => {
-	// 	if (bundle.status === 'failed') {
-	// 		popNotification(
-	// 			'Error',
-	// 			'Oops! Something went wrong, please try again.',
-	// 			'danger',
-	// 			5000
-	// 		);
-
-	// 		dispatch(resetState('bundle'));
-	// 		// dispatch(setState(0));
-	// 	}
-
-	// 	if (bundle.status === 'success') {
-	// 		popNotification(
-	// 			'Success',
-	// 			'Transaction completed successfully.',
-	// 			'success',
-	// 			5000
-	// 		);
-
-	// 		dispatch(resetState('bundle'));
-	// 		dispatch(getUser());
-	// 		dispatch(setState(0));
-	// 	}
-	// }, [dispatch, bundle.status]);
 
 	const onConfirm = () => {
 		if (!hasPin) {
@@ -82,7 +55,6 @@ const Order = () => {
 						color="red-500"
 						icon={<AiOutlineRollback />}
 						className=""
-						// disabled={bundle.status === 'pending'}
 						onClick={() => dispatch(setState(1))}
 					>
 						Back
@@ -92,14 +64,13 @@ const Order = () => {
 						variant="solid"
 						icon={<BsBagCheckFill />}
 						className="!bg-gray-900 hover:!bg-black"
-						// loading={bundle.status === 'pending'}
 						onClick={onConfirm}
 					>
 						Confirm
 					</Button>
 				</div>
 			</div>
-			{/* <RequirePin /> */}
+			<RequirePin />
 		</div>
 	);
 };

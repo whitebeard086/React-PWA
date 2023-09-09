@@ -97,6 +97,7 @@ const Layout = () => {
 
 	useGetOperators('electricity');
 	useGetOperators('television');
+	useGetOperators('telco');
 
 	return (
 		<Container className="max-w-2xl w-full">
