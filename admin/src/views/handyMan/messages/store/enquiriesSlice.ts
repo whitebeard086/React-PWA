@@ -1,6 +1,6 @@
-import { Chat, Invoice, InvoiceItem, Message } from '@/@types/common'
+import { Category, Chat, Invoice, InvoiceItem, Message, Service, TableQueries, User } from '@/@types/common'
 import { apiGetEnquiries } from '@/services/HandymanService'
-import { UserWithService } from '@/views/users/store'
+// import { UserWithService } from '@/views/users/store'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { AxiosError } from 'axios' 
 
@@ -19,7 +19,17 @@ export interface InvoiceWithItems extends Invoice {
     items: InvoiceItem[]
 }
 
+interface ServiceWithCategoryAndUser extends Service {
+    category: Category
+    user: User
+}
+
+interface UserWithService extends User {
+    service: ServiceWithCategoryAndUser | null
+}
+
 export interface ChatWithMessages extends Chat {
+    messages_count: number
     messages: Message[]
     user: UserWithService
     receiver: UserWithService
@@ -31,10 +41,16 @@ interface GetEnquiriesResponse {
     enquiries: ChatWithMessages[]
 }
 
+type Filter = {
+    status: string
+}
+
 export interface enquiriesState {
     loading: boolean
     enquiries: ChatWithMessages[]
     status: string
+    tableData: TableQueries
+    filterData: Filter
 }
 
 export const SLICE_NAME = 'enquiries'
@@ -55,10 +71,27 @@ export const getEnquiries = createAsyncThunk<GetEnquiriesResponse, void, { rejec
     }
 );
 
+export const initialTableData: TableQueries = {
+    total: 0,
+    pageIndex: 1,
+    pageSize: 10,
+    query: '',
+    sort: {
+        order: '',
+        key: '',
+    },
+}
+
+export const initialFilterData = {
+    status: '',
+}
+
 const initialState: enquiriesState = {
     loading: false,
     enquiries: [],
     status: 'idle',
+    tableData: initialTableData,
+    filterData: initialFilterData,
 }
 
 const enquiriesSlice = createSlice({
@@ -67,6 +100,12 @@ const enquiriesSlice = createSlice({
     reducers: {
         setStatus: (state, action) => {
             state.status = action.payload
+        },
+        setTableData: (state, action) => {
+            state.tableData = action.payload
+        },
+        setFilterData: (state, action) => {
+            state.filterData = action.payload
         },
     }, 
     extraReducers: (builder) => {
@@ -88,7 +127,9 @@ const enquiriesSlice = createSlice({
 })
 
 export const {
-    setStatus
+    setStatus,
+    setTableData,
+    setFilterData,
 } = enquiriesSlice.actions;
 
 export default enquiriesSlice.reducer

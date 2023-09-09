@@ -16,6 +16,7 @@ use App\Traits\GatewayTrait;
 use Illuminate\Http\Request;
 use App\Models\KYCSubmission;
 use App\Traits\CustomersTrait;
+use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -326,6 +327,7 @@ class UserController extends Controller
 
         $service = new Service;
         $service->user_id = auth()->user()->id;
+        $service->uid = Hashids::encode($service->id);
         $service->category_id = $request->category;
         $service->sub_category_id = $request->subcategory;
         $service->workdays_id = $workdays->id;

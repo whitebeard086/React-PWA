@@ -10,6 +10,7 @@ use App\Traits\SmsTrait;
 use App\Models\InvoiceItem;
 use Illuminate\Http\Request;
 use App\Traits\UploadImageTrait;
+use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Support\Facades\Storage;
 use App\Notifications\NewInvoiceNotification;
 use App\Notifications\NewMessageNotification;
@@ -84,6 +85,7 @@ class ChatController extends Controller
 
                 if (!$chat) {
                     $n_chat = new Chat;
+                    $n_chat->uid = Hashids::encode($n_chat->id);
                     $n_chat->user_id = $userId;
                     $n_chat->receiver_id = $provider->id;
                     $n_chat->save();

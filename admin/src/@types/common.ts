@@ -80,6 +80,7 @@ export interface InvoiceItem {
 
 export interface Service {
     id: number
+    uid: string | null
     user_id: number
     category_id: number
     sub_category_id: number
@@ -106,6 +107,7 @@ export interface Category {
 
 export interface Chat {
     id: number
+    uid: string | null
     user_id: number
     receiver_id: number
     created_at: Date

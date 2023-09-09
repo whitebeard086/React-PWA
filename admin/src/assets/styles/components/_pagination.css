@@ -1,9 +1,9 @@
 .pagination {
-  @apply relative z-0 inline-flex items-center rounded-md;
+  @apply relative z-0 inline-flex items-center rounded-lg;
 }
 
 .pagination-pager {
-  @apply cursor-pointer relative mx-1 rounded inline-flex items-center h-8 w-8 justify-center text-sm font-semibold select-none;
+  @apply cursor-pointer relative mx-1 rounded inline-flex items-center h-8 w-8 justify-center text-sm font-semibold select-none border border-gray-300 hover:border-gray-400 transition duration-300;
 }
 
 .pagination-pager-inactive {
@@ -11,7 +11,7 @@
 }
 
 .pagination-pager-disabled {
-  @apply cursor-not-allowed text-gray-300 dark:text-gray-600;
+  @apply cursor-not-allowed text-gray-300 dark:text-gray-600 border-gray-200 hover:bg-white;
 }
 
 .pagination-total {
