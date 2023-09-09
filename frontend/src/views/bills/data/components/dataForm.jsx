@@ -13,10 +13,11 @@ import {
 	Spinner,
 } from '@/components/ui';
 import { popNotification } from '@/utils/toast';
+import { useGetProducts } from '../../store/hooks';
 import {
 	SLICE_NAME,
+	setProduct,
 	setState,
-	setStore,
 	useAppDispatch,
 	useAppSelector,
 } from '../store';
@@ -31,88 +32,24 @@ const validationSchema = Yup.object().shape({
 	bundle: Yup.string().required('Please select bundle'),
 });
 
-// const parseExpirationDate = (expirationString) => {
-// 	const regex = /^["']?\s*(\d+)\s*(\w+)/;
-// 	const match = expirationString.match(regex);
-
-// 	if (match) {
-// 		const expirationValue = parseInt(match[1], 10);
-// 		const expirationUnit = match[2];
-
-// 		let expirationDate = new Date();
-
-// 		if (expirationUnit === 'day' || expirationUnit === 'days') {
-// 			expirationDate.setDate(expirationDate.getDate() + expirationValue);
-// 		} else if (expirationUnit === 'week' || expirationUnit === 'weeks') {
-// 			expirationDate.setDate(expirationDate.getDate() + expirationValue * 7);
-// 		} else if (expirationUnit === 'month' || expirationUnit === 'months') {
-// 			expirationDate.setMonth(expirationDate.getMonth() + expirationValue);
-// 		} else if (expirationUnit === 'year' || expirationUnit === 'years') {
-// 			expirationDate.setFullYear(
-// 				expirationDate.getFullYear() + expirationValue
-// 			);
-// 		}
-
-// 		return expirationDate;
-// 	}
-
-// 	return null; // Handle invalid expiration strings
-// };
 const DataForm = () => {
 	const dispatch = useAppDispatch();
 
-	const { operator, products, store } = useAppSelector(
-		(state) => state[SLICE_NAME].data
-	);
+	const { product, store } = useAppSelector((state) => state[SLICE_NAME].data);
 	const { profile } = useAppSelector((state) => state.auth.user);
 
-	const { data, status } = products;
+	const { isFetching, data } = useGetProducts(store);
+	const { products } = data || {};
 
-	// const sortedData = data?.sort((a, b) => {
-	// 	const expiryA = parseInt(a.meta.data_expiry); // Assuming data_expiry is a number (e.g., "30 days")
-	// 	const expiryB = parseInt(b.meta.data_expiry);
-	// 	return expiryA - expiryB;
-	// });
-
-	// Convert data_expiry to Date objects
-	// const sortedDataBundles = data?.map((bundle) => {
-	// 	let trimmedExpiry = bundle.meta.data_expiry;
-	// 	if (!trimmedExpiry && bundle.meta.hasOwnProperty(' data_expiry')) {
-	// 		trimmedExpiry = bundle.meta[' data_expiry'].replace(/["']/g, '').trim();
-	// 	}
-
-	// 	return {
-	// 		...bundle,
-	// 		meta: {
-	// 			...bundle.meta,
-	// 			data_expiry: parseExpirationDate(trimmedExpiry),
-	// 		},
-	// 	};
-	// });
-
-	// Sort the list based on data_expiry in ascending order
-	// sortedDataBundles?.sort(
-	// 	(a, b) => a?.meta?.data_expiry - b?.meta?.data_expiry
-	// );
-
-	// Step 3: Map over the sorted list and display the data bundles
-	// sortedDataBundles.map(bundle => (
-	//   <div key={bundle.id}>
-	//     <p>Name: {bundle.name}</p>
-	//     <p>Expiry Date: {bundle.meta.data_expiry.toDateString()}</p>
-	//     {/* ... other properties */}
-	//   </div>
-	// ));
-	// console.log('sorted: ', sortedDataBundles);
-	const isFetching = status === 'pending';
+	console.log(products);
 
 	const initialValues = {
-		phone: store?.phone || '',
+		phone: product?.phone || '',
 	};
 
 	const onSubmit = ({ phone, bundle }) => {
-		const selected = data?.find((b) => b.id === bundle);
-		if (selected?.meta?.fee > profile?.balance) {
+		const selected = products?.data?.find((b) => b.id === bundle);
+		if (selected?.meta?.fee > profile?.account_balance) {
 			popNotification(
 				'Error',
 				'You do not have enough balance to complete this transaction, please top-up and try again.',
@@ -124,16 +61,16 @@ const DataForm = () => {
 		}
 
 		dispatch(
-			setStore({
-				oid: operator?.id,
-				operator: selected?.name,
-				product: bundle,
-				phone,
-				amount: selected?.meta?.fee,
+			setProduct({
+				productID: bundle,
+				bill: store?.bill,
+				operatorID: store?.operatorID,
+				device_number: phone,
+				amount: Number(selected?.meta?.fee),
+				package: selected?.name,
 			})
 		);
 		dispatch(setState(1));
-		// onNext();
 	};
 
 	return (
@@ -144,33 +81,32 @@ const DataForm = () => {
 				transition={{ duration: 0.3, type: 'tween' }}
 				exit={{ opacity: 0, visibility: 'hidden' }}
 			>
-				{isFetching ? (
-					<Spinner size={40} className="mx-auto" />
-				) : (
-					<Formik
-						initialValues={initialValues}
-						validationSchema={validationSchema}
-						onSubmit={(values) => onSubmit(values)}
-					>
-						{({ touched, errors, values }) => {
-							return (
-								<Form>
-									<FormContainer>
-										<FormItem
-											label="Enter Your Phone Number"
-											invalid={errors.phone && touched.phone}
-											errorMessage={errors.phone}
-										>
-											<Field
-												type="text"
-												autoComplete="off"
-												name="phone"
-												placeholder="Phone number"
-												component={Input}
-												prefix={<BsPhone className="text-xl" />}
-											/>
-										</FormItem>
-
+				<Formik
+					initialValues={initialValues}
+					validationSchema={validationSchema}
+					onSubmit={(values) => onSubmit(values)}
+				>
+					{({ touched, errors, values }) => {
+						return (
+							<Form>
+								<FormContainer>
+									<FormItem
+										label="Enter Your Phone Number"
+										invalid={errors.phone && touched.phone}
+										errorMessage={errors.phone}
+									>
+										<Field
+											type="text"
+											autoComplete="off"
+											name="phone"
+											placeholder="Phone number"
+											component={Input}
+											prefix={<BsPhone className="text-xl" />}
+										/>
+									</FormItem>
+									{isFetching ? (
+										<Spinner size={40} className="mx-auto mb-4" />
+									) : (
 										<FormItem
 											label="Select a data bundle"
 											invalid={errors.bundle && touched.bundle}
@@ -186,60 +122,68 @@ const DataForm = () => {
 														}
 													>
 														<>
-															{data?.map((item, index) => (
-																<Segment.Item value={item.id} key={item.id}>
-																	{({
-																		ref,
-																		active,
-																		value,
-																		onSegmentItemClick,
-																		disabled,
-																	}) => {
-																		return (
-																			<SegmentItemOption
-																				ref={ref}
-																				active={active}
-																				disabled={disabled}
-																				className="bg-slate-50"
-																				onSegmentItemClick={onSegmentItemClick}
-																				variant="plain"
-																			>
-																				<div className="space-y-1 text-center">
-																					<h6>{item?.meta?.data_value}</h6>
-																					<p>{item?.meta?.data_expiry}</p>
-																					<p>
-																						₦
-																						{Number(
-																							item?.meta?.fee
-																						)?.toLocaleString()}
-																					</p>
-																				</div>
-																			</SegmentItemOption>
-																		);
-																	}}
-																</Segment.Item>
-															))}
+															{products?.data
+																?.filter(
+																	(item) =>
+																		item.category !==
+																		'pctg_z6dJLqhj85UeBhd7kCCZZX'
+																)
+																.map((item) => (
+																	<Segment.Item value={item.id} key={item.id}>
+																		{({
+																			ref,
+																			active,
+																			value,
+																			onSegmentItemClick,
+																			disabled,
+																		}) => {
+																			return (
+																				<SegmentItemOption
+																					ref={ref}
+																					active={active}
+																					disabled={disabled}
+																					className="bg-slate-50"
+																					onSegmentItemClick={
+																						onSegmentItemClick
+																					}
+																					variant="plain"
+																				>
+																					<div className="space-y-1 text-center">
+																						<h6>{item?.meta?.data_value}</h6>
+																						<p>{item?.meta?.data_expiry}</p>
+																						<p>
+																							₦
+																							{Number(
+																								item?.meta?.fee
+																							)?.toLocaleString()}
+																						</p>
+																					</div>
+																				</SegmentItemOption>
+																			);
+																		}}
+																	</Segment.Item>
+																))}
 														</>
 													</Segment>
 												)}
 											</Field>
 										</FormItem>
+									)}
 
-										<Button
-											variant="solid"
-											type="submit"
-											block
-											className="!bg-gray-900 hover:!bg-black"
-											disabled={!values.bundle || !values.phone}
-										>
-											Continue
-										</Button>
-									</FormContainer>
-								</Form>
-							);
-						}}
-					</Formik>
-				)}
+									<Button
+										variant="solid"
+										type="submit"
+										block
+										className="!bg-gray-900 hover:!bg-black"
+										disabled={!values.bundle || !values.phone || isFetching}
+									>
+										Continue
+									</Button>
+								</FormContainer>
+							</Form>
+						);
+					}}
+				</Formik>
 			</motion.div>
 		</div>
 	);

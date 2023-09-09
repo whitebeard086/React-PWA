@@ -24,9 +24,10 @@ const initialState = stateAdapter.getInitialState({
 	operators: { ...meta },
 	products: { ...meta },
 	bundle: { ...meta },
-	store: {},
+	store: null,
 	pin: '',
 	operator: null,
+	product: null,
 });
 
 const dataSlice = createSlice({
@@ -34,10 +35,13 @@ const dataSlice = createSlice({
 	initialState,
 	reducers: {
 		setStore: (state, action) => {
-			state.store = action.payload === 0 ? {} : action.payload;
+			state.store = action.payload === 0 ? null : action.payload;
 		},
 		setPin: (state, { payload }) => {
 			state.pin = payload;
+		},
+		setProduct: (state, action) => {
+			state.product = action.payload === 0 ? null : action.payload;
 		},
 		setOperator: (state, action) => {
 			state.operator = action.payload === 0 ? null : action.payload;
@@ -62,6 +66,7 @@ const dataSlice = createSlice({
 	},
 });
 
-export const { setStore, resetState, setOperator, setPin } = dataSlice.actions;
+export const { setStore, resetState, setOperator, setPin, setProduct } =
+	dataSlice.actions;
 
 export default dataSlice.reducer;

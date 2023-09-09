@@ -231,3 +231,19 @@ export async function apiUpdateBvn(data, userID) {
 		data,
 	});
 }
+
+export async function apiAddress(data) {
+	return ApiQueryService.fetchData({
+		url: `/profile/kyb`,
+		method: 'post',
+		data,
+	});
+}
+
+export async function apiKybUpdate(data) {
+	return ApiQueryService.fetchData({
+		url: `/profile/kyb/update`,
+		method: 'post',
+		data,
+	});
+}

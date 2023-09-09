@@ -4,6 +4,7 @@ import notifications from '../../src/views/notifications/store';
 import payments from '../../src/views/payments/store';
 import kyc from '../../src/views/profile/kyc/store';
 import requests from '../../src/views/requests/store';
+import settings from '../../src/views/settings/store';
 import withdraw from '../../src/views/withdraw/store';
 import auth from './auth';
 
@@ -16,6 +17,7 @@ const rootReducer = (asyncReducers) => (state, action) => {
 		notifications,
 		chat,
 		kyc,
+		settings,
 		...asyncReducers,
 	});
 

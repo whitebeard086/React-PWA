@@ -98,7 +98,7 @@ const BvnForm = () => {
 									type="text"
 									autoComplete="off"
 									name="last_name"
-									placeholder="URL"
+									placeholder="Last Name"
 									component={Input}
 								/>
 							</FormItem>

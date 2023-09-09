@@ -1,103 +1,66 @@
+import { SegmentItemOption } from '@/components/shared';
+import { Avatar, Segment } from '@/components/ui';
 import classNames from 'classnames';
-import { useEffect } from 'react';
 import { HiOutlineUser } from 'react-icons/hi';
-// import { useNavigate } from 'react-router-dom';
 
-import { Avatar } from '@/components/ui';
-import { popNotification } from '@/utils/toast';
-import {
-	SLICE_NAME,
-	getProducts,
-	resetState,
-	setOperator,
-	useAppDispatch,
-	useAppSelector,
-} from '../store';
+import { setStore, useAppDispatch } from '../store';
 
-const Operators = () => {
+const Operators = ({ operators }) => {
 	const dispatch = useAppDispatch();
-	// const navigate = useNavigate();
 
-	const { operators, operator, products } = useAppSelector(
-		(state) => state[SLICE_NAME].data
-	);
-	const { status } = products;
-
-	const onSelectOperator = (operator) => {
-		dispatch(setOperator(operator));
-		dispatch(
-			getProducts({
-				category: operator.id,
-			})
-		);
+	const operatorImages = {
+		Airtel: '/img/airtel.jpg',
+		'9Mobile': '/img/9mobile.png',
+		Glo: '/img/Glo.png',
+		MTN: '/img/MTN.png',
 	};
 
-	console.log('Operators: ', operators);
-
-	useEffect(() => {
-		if (status === 'error') {
-			popNotification(
-				'Error',
-				'Oops! Something went wrong, please try again.',
-				'danger',
-				5000
-			);
-
-			dispatch(resetState('products'));
-		}
-	}, [dispatch, status]);
+	console.log(operators);
 
 	return (
-		<>
-			<p className="text-sm font-semibold mb-4">Choose a Network Operator</p>
-			<div className="flex items-center gap-4 justify-around flex-wrap">
-				{operators?.data?.map((item) => (
-					<div
-						key={item.id}
-						className={classNames(
-							'flex flex-col gap-1 items-center cursor-pointer',
-							status === 'success' &&
-								operator.name === item.name &&
-								'shadow-md px-4 py-2 bg-white rounded-lg border-b-2 border-primary-500'
-						)}
-						onClick={() => onSelectOperator(item)}
-					>
-						{item.name === 'Airtel' && (
-							<Avatar
-								size="lg"
-								src="/img/airtel.jpg"
-								icon={<HiOutlineUser />}
-							/>
-						)}
-						{item.name === '9Mobile' && (
-							<Avatar
-								className="bg-white"
-								size="lg"
-								src="/img/9mobile.png"
-								icon={<HiOutlineUser />}
-							/>
-						)}
-						{item.name === 'Glo' && (
-							<Avatar
-								className="bg-white"
-								size="lg"
-								src="/img/Glo.png"
-								icon={<HiOutlineUser />}
-							/>
-						)}
-						{item.name === 'MTN' && (
-							<Avatar
-								className="bg-white"
-								size="lg"
-								src="/img/MTN.png"
-								icon={<HiOutlineUser />}
-							/>
-						)}
-						<p className="text-sm">{item.name}</p>
-					</div>
+		<Segment
+			className="flex flex-col xx:grid xx:grid-cols-4 gap-3"
+			onChange={(val) => {
+				dispatch(
+					setStore({
+						operatorID: val[0],
+						bill: 'telco',
+					})
+				);
+			}}
+		>
+			{operators?.data
+				?.filter(
+					(item) =>
+						item.id !== 'op_zQG65u4Ax7HyXDHyJaHCLK' &&
+						item.id !== 'op_4NJKCdevbLiZPCxdrRmmCX'
+				)
+				.map((item) => (
+					<Segment.Item value={item.id} key={item.id}>
+						{({ ref, active, value, onSegmentItemClick, disabled }) => {
+							return (
+								<SegmentItemOption
+									ref={ref}
+									active={active}
+									disabled={disabled}
+									className={classNames('bg-slate-50', active && 'bg-sky-100')}
+									onSegmentItemClick={onSegmentItemClick}
+									variant="plain"
+								>
+									<div className="space-y-1 text-center">
+										<Avatar
+											size="lg"
+											src={operatorImages[item.name]}
+											icon={<HiOutlineUser />}
+										/>
+										<h6>{item?.name}</h6>
+									</div>
+								</SegmentItemOption>
+							);
+						}}
+					</Segment.Item>
 				))}
-			</div>
-		</>
+		</Segment>
 	);
 };
 export default Operators;

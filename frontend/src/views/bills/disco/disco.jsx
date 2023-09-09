@@ -1,7 +1,7 @@
 import { Loading } from '@/components/shared';
 import { injectReducer } from '@/store';
 import { useGetOperators } from '../store/hooks';
-import { DataForm, Operators } from './components';
+import { DataForm, Operators, Order } from './components';
 import reducer, { SLICE_NAME, useAppDispatch, useAppSelector } from './store';
 
 injectReducer(`${SLICE_NAME}`, reducer);
@@ -23,7 +23,10 @@ const Disco = () => {
 		<div className="p-4 mt-2">
 			<Loading loading={isFetching}>
 				{state.state ? (
-					<>{state.steps === 1 && <DataForm data={store} />}</>
+					<>
+						{state.steps === 1 && <DataForm data={store} />}
+						{state.steps === 2 && <Order />}
+					</>
 				) : (
 					<>
 						<Operators operators={operators} />

@@ -1,9 +1,18 @@
 import { SegmentItemOption } from '@/components/shared';
-import { Segment } from '@/components/ui';
+import { Avatar, Segment } from '@/components/ui';
+import classNames from 'classnames';
+import { HiOutlineUser } from 'react-icons/hi';
+
 import { setStore, useAppDispatch } from '../store';
 
 const Operators = ({ operators }) => {
 	const dispatch = useAppDispatch();
+
+	const operatorImages = {
+		DSTV: '/img/dstv.png',
+		GOTV: '/img/gotv.png',
+		STARTIMES: '/img/startimes.png',
+	};
 	return (
 		<Segment
 			className="flex flex-col xx:grid xx:grid-cols-3 gap-3"
@@ -24,12 +33,17 @@ const Operators = ({ operators }) => {
 								ref={ref}
 								active={active}
 								disabled={disabled}
-								className="bg-slate-50"
+								className={classNames('bg-slate-50', active && 'bg-sky-100')}
 								onSegmentItemClick={onSegmentItemClick}
 								variant="plain"
 							>
 								<div className="space-y-1 text-center">
-									{/* <p className="text-xs">{item?.desc}</p> */}
+									<Avatar
+										//  className="bg-white"
+										size="lg"
+										src={operatorImages[item.name]}
+										icon={<HiOutlineUser />}
+									/>
 									<h6>{item?.name}</h6>
 								</div>
 							</SegmentItemOption>

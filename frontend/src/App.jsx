@@ -42,6 +42,7 @@ const ProviderProfile = lazy(() =>
 const Settings = lazy(() => import('./views/settings'));
 const Referral = lazy(() => import('./views/referral'));
 const Kyc = lazy(() => import('./views/profile/kyc'));
+const Kyb = lazy(() => import('./views/profile/kyb'));
 const Payments = lazy(() => import('./views/payments'));
 const Browse = lazy(() => import('./views/browse'));
 const Chat = lazy(() => import('./views/chat'));
@@ -181,6 +182,7 @@ function App() {
 									<Route path="/settings" element={<Settings />} />
 									<Route path="/refer-and-earn" element={<Referral />} />
 									<Route path="/profile/kyc" element={<Kyc />} />
+									<Route path="/profile/kyb" element={<Kyb />} />
 									<Route path="/transactions" element={<Payments />} />
 									<Route path="/requests" element={<Requests />} />
 									<Route path="/requests/history" element={<History />} />

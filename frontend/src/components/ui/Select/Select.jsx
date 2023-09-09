@@ -1,102 +1,133 @@
-import React from 'react'
-import classNames from 'classnames'
-import PropTypes from 'prop-types'
-import ReactSelect from 'react-select'
-import tw, { theme } from 'twin.macro'
-import isEmpty from 'lodash/isEmpty'
-import get from 'lodash/get'
-import { useConfig } from '../ConfigProvider'
-import { useForm } from '../Form/context'
-import { useInputGroup } from '../InputGroup/context'
-import { HiCheck, HiChevronDown, HiX } from 'react-icons/hi'
-import Spinner from '../Spinner'
-import { CONTROL_SIZES, SIZES } from '../utils/constant'
+import classNames from 'classnames';
+import get from 'lodash/get';
+import isEmpty from 'lodash/isEmpty';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { HiCheck, HiChevronDown, HiX } from 'react-icons/hi';
+import ReactSelect from 'react-select';
+import tw, { theme } from 'twin.macro';
+import { useConfig } from '../ConfigProvider';
+import { useForm } from '../Form/context';
+import { useInputGroup } from '../InputGroup/context';
+import Spinner from '../Spinner';
+import { CONTROL_SIZES, SIZES } from '../utils/constant';
 
-const DefaultOption = ({innerProps, label, selectProps, isSelected, isDisabled}) => {
-	const { themeColor } = selectProps
+// const DefaultOption = ({innerProps, label, selectProps, isSelected, isDisabled}) => {
+// 	const { themeColor } = selectProps
+// 	return (
+// 		<div
+// 			className={`select-option ${isSelected && 'selected'} ${isDisabled && 'disabled'}`}
+// 			{...innerProps}
+// 		>
+// 			<span className="ml-2">{label}</span>
+// 			{isSelected && <HiCheck className={`text-${themeColor} dark:text-white text-xl`} />}
+// 		</div>
+// 	)
+// }
+
+const DefaultOption = ({
+	innerProps,
+	label,
+	selectProps,
+	isSelected,
+	isDisabled,
+}) => {
+	const { themeColor } = selectProps;
 	return (
-		<div 
-			className={`select-option ${isSelected && 'selected'} ${isDisabled && 'disabled'}`} 
+		<div
+			className={`select-option ${
+				isSelected ? 'bg-blue-500 text-white' : 'bg-white text-black'
+			} ${isDisabled && 'bg-gray-200'} ${isSelected && 'selected'} ${
+				isDisabled && 'disabled'
+			}`}
 			{...innerProps}
 		>
 			<span className="ml-2">{label}</span>
-			{isSelected && <HiCheck className={`text-${themeColor} dark:text-white text-xl`} />}
+			{isSelected && (
+				<HiCheck className={`text-${themeColor} dark:text-white text-xl`} />
+			)}
 		</div>
-	)
-}
+	);
+};
 
+// const DefaultDropdownIndicator = () => {
+// 	return (
+// 		<div className="select-dropdown-indicator">
+// 			<HiChevronDown />
+// 		</div>
+// 	)
+// }
 const DefaultDropdownIndicator = () => {
 	return (
-		<div className="select-dropdown-indicator">
+		<div className="select-dropdown-indicator text-blue-500">
 			<HiChevronDown />
 		</div>
-	)
-}
+	);
+};
 
-const DefaultClearIndicator = props => {
-	const { innerProps: { ref, ...restInnerProps } } = props
+const DefaultClearIndicator = (props) => {
+	const {
+		innerProps: { ref, ...restInnerProps },
+	} = props;
 	return (
-		<div {...restInnerProps} ref={ref} >
+		<div {...restInnerProps} ref={ref}>
 			<div className="select-clear-indicator">
 				<HiX />
 			</div>
 		</div>
-	)
-  }
+	);
+};
 
-const DefaultLoadingIndicator = ({selectProps}) => {
-	const { themeColor } = selectProps
-	return (
-		<Spinner className={`select-loading-indicatior text-${themeColor}`} />
-	)
-}
+const DefaultLoadingIndicator = ({ selectProps }) => {
+	const { themeColor } = selectProps;
+	return <Spinner className={`select-loading-indicatior text-${themeColor}`} />;
+};
 
-const Select = React.forwardRef(( props, ref) => {
+const Select = React.forwardRef((props, ref) => {
+	const {
+		size,
+		style,
+		className,
+		form,
+		field,
+		components,
+		componentAs: Component,
+		...rest
+	} = props;
 
-	const { 
-		size, 
-		style, 
-		className, 
-		form, 
-		field, 
-		components, 
-		componentAs: Component, 
-		...rest 
-	} = props
+	const { themeColor, controlSize, primaryColorLevel, mode } = useConfig();
+	const formControlSize = useForm()?.size;
+	const inputGroupSize = useInputGroup()?.size;
 
-	const { themeColor, controlSize, primaryColorLevel, mode } = useConfig()
-	const formControlSize = useForm()?.size
-	const inputGroupSize = useInputGroup()?.size
+	const selectSize = size || inputGroupSize || formControlSize || controlSize;
 
-	const selectSize = size || inputGroupSize || formControlSize || controlSize
+	const twColor = theme`colors`;
+	const twHeight = theme`height`;
 
-	const twColor = theme`colors`
-	const twHeight= theme`height`
+	let isInvalid = false;
 
-	let isInvalid = false
+	if (!isEmpty(form)) {
+		const { touched, errors } = form;
 
-	if(!isEmpty(form)) {
-		const { touched, errors } = form
+		const touchedField = get(touched, field.name);
+		const errorField = get(errors, field.name);
 
-		const touchedField = get(touched, field.name)
-		const errorField = get(errors, field.name)
-
-		isInvalid = touchedField && errorField
+		isInvalid = touchedField && errorField;
 	}
 
 	const getBoxShadow = (state) => {
-		const shadaowBase = '0 0 0 1px '
+		const shadaowBase = '0 0 0 1px ';
 
-		if(isInvalid) {
-			return shadaowBase + twColor.red['500']
+		if (isInvalid) {
+			return shadaowBase + twColor.red['500'];
 		}
 
-		if(state.isFocused) {
-			return shadaowBase + "primary-500"
+		if (state.isFocused) {
+			return shadaowBase + 'primary-500';
 		}
 
-		return 'none'
-	}
+		return 'none';
+	};
 
 	const styles = {
 		control: (provided, state) => {
@@ -104,14 +135,14 @@ const Select = React.forwardRef(( props, ref) => {
 				...provided,
 				height: twHeight[CONTROL_SIZES[selectSize]],
 				minHeight: twHeight[CONTROL_SIZES[selectSize]],
-				'&:hover': { 
+				'&:hover': {
 					boxShadow: getBoxShadow(state),
-					cursor: 'pointer'
+					cursor: 'pointer',
 				},
 				boxShadow: getBoxShadow(state),
 				borderRadius: tw`rounded-md`.borderRadius,
-				...isInvalid ? {borderColor: twColor.red['500']} : {}
-			}
+				...(isInvalid ? { borderColor: twColor.red['500'] } : {}),
+			};
 		},
 		input: (css) => {
 			return {
@@ -119,19 +150,15 @@ const Select = React.forwardRef(( props, ref) => {
 				input: {
 					outline: 'none',
 					outlineOffset: 0,
-					boxShadow: 'none !important'
-				}
-			}
+					boxShadow: 'none !important',
+				},
+			};
 		},
-		menu: provided => ({ ...provided, zIndex: 50 }),
-		...style
-	}
+		menu: (provided) => ({ ...provided, zIndex: 50 }),
+		...style,
+	};
 
-	const selectClass = classNames(
-		'select',
-		`select-${selectSize}`,
-		className
-	)
+	const selectClass = classNames('select', `select-${selectSize}`, className);
 
 	return (
 		<Component
@@ -139,7 +166,7 @@ const Select = React.forwardRef(( props, ref) => {
 			classNamePrefix={'select'}
 			ref={ref}
 			styles={styles}
-			theme={theme => ({
+			theme={(theme) => ({
 				...theme,
 				// colors: {
 				// 	...theme.colors,
@@ -158,22 +185,21 @@ const Select = React.forwardRef(( props, ref) => {
 				LoadingIndicator: DefaultLoadingIndicator,
 				DropdownIndicator: DefaultDropdownIndicator,
 				ClearIndicator: DefaultClearIndicator,
-				...components
+				...components,
 			}}
 			{...field}
 			{...rest}
 		/>
-	)
-})
-
+	);
+});
 
 Select.propTypes = {
 	size: PropTypes.oneOf([SIZES.LG, SIZES.MD, SIZES.SM]),
-	componentAs: PropTypes.elementType
-}
+	componentAs: PropTypes.elementType,
+};
 
 Select.defaultProps = {
-	componentAs: ReactSelect
-}
+	componentAs: ReactSelect,
+};
 
-export default Select
+export default Select;
