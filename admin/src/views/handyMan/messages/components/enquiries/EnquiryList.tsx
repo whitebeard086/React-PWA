@@ -15,7 +15,7 @@ import {
 import { rankItem } from '@tanstack/match-sorter-utils'
 import type { ColumnDef, FilterFn, ColumnFiltersState } from '@tanstack/react-table'
 import type { InputHTMLAttributes } from 'react'
-import { ChatWithMessages, useAppSelector } from '../../store'
+import { ChatWithMessages, setEnquiry, useAppDispatch, useAppSelector } from '../../store'
 import { Avatar, Button, Card, Pagination, Select } from '@/components/ui'
 import TableRowSkeleton from '@/components/shared/loaders/TableRowSkeleton'
 import { Loading } from '@/components/shared'
@@ -94,12 +94,17 @@ const GeneratedAvatar = ({ target }: { target: string }) => {
 
 const ActionColumn = ({ row }: { row: ChatWithMessages }) => {
     const { textTheme } = useThemeClass()
+    const dispatch = useAppDispatch()
+
+    const onView = (enquiry: ChatWithMessages) => {
+        dispatch(setEnquiry(enquiry))
+    }
 
     return (
         <Link
             className={`${textTheme} cursor-pointer select-none font-semibold`}
-            // onClick={onView}
             to={`/handy-man/messages/${row.uid}`}
+            onClick={() => onView(row)}
         >
             <Button
                 variant='solid'

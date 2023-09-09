@@ -11,6 +11,12 @@ const handyManRoute: Routes = [
         authority: [ADMIN],
     },
     {
+        key: 'handyMan.messages',
+        path: `${HANDY_MAN_PREFIX_PATH}/messages/:uid`,
+        component: lazy(() => import('@/views/handyMan/messages/message')),
+        authority: [ADMIN],
+    },
+    {
         key: 'handyMan.activeBookings',
         path: `${HANDY_MAN_PREFIX_PATH}/active-bookings`,
         component: lazy(() => import('@/views/handyMan/activeBookings')),

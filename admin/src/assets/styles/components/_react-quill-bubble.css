@@ -1,0 +1,7 @@
+.rich-text-editor .ql-editor {
+    @apply !min-h-fit !p-0
+}
+.ql-bubble .ql-editor {
+    @apply p-0 text-base
+}
+

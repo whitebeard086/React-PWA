@@ -1,14 +1,12 @@
 import { useEffect } from 'react'
 import { injectReducer } from "@/store"
-import reducer, { getEnquiries, useAppDispatch, useAppSelector } from "./store"
+import reducer, { getEnquiries, useAppDispatch } from "./store"
 import Enquiries from './components/enquiries'
 
 injectReducer('enquiries', reducer)
 
 const Messages = () => {
     const dispatch = useAppDispatch();
-
-    const { loading } = useAppSelector((state) => state.enquiries.data)
 
     useEffect(() => {
         dispatch(getEnquiries())

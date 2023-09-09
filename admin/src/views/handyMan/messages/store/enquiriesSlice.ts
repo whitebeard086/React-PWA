@@ -1,5 +1,5 @@
 import { Category, Chat, Invoice, InvoiceItem, Message, Service, TableQueries, User } from '@/@types/common'
-import { apiGetEnquiries } from '@/services/HandymanService'
+import { apiGetEnquiries, apiGetEnquiry } from '@/services/HandymanService'
 // import { UserWithService } from '@/views/users/store'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { AxiosError } from 'axios' 
@@ -41,6 +41,15 @@ interface GetEnquiriesResponse {
     enquiries: ChatWithMessages[]
 }
 
+type GetEnquiryRequest = {
+    uid: string
+} 
+
+interface GetEnquiryResponse {
+    status: string
+    enquiry: ChatWithMessages
+}
+
 type Filter = {
     status: string
 }
@@ -48,6 +57,7 @@ type Filter = {
 export interface enquiriesState {
     loading: boolean
     enquiries: ChatWithMessages[]
+    enquiry: Partial<ChatWithMessages>
     status: string
     tableData: TableQueries
     filterData: Filter
@@ -62,6 +72,24 @@ export const getEnquiries = createAsyncThunk<GetEnquiriesResponse, void, { rejec
             const response = await apiGetEnquiries<GetEnquiriesResponse>();
             return response.data;
         } catch (err: unknown) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const error: AxiosError<RejectedWithValueAction> = err as any;
+            if (!error.response) {
+                throw err;
+            }
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const getEnquiry = createAsyncThunk<GetEnquiryResponse, GetEnquiryRequest, { rejectValue: RejectedWithValueAction }>(
+    `${SLICE_NAME}/getEnquiry`,
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await apiGetEnquiry<GetEnquiryResponse, GetEnquiryRequest>(data);
+            return response.data;
+        } catch (err: unknown) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const error: AxiosError<RejectedWithValueAction> = err as any;
             if (!error.response) {
                 throw err;
@@ -89,6 +117,7 @@ export const initialFilterData = {
 const initialState: enquiriesState = {
     loading: false,
     enquiries: [],
+    enquiry: {},
     status: 'idle',
     tableData: initialTableData,
     filterData: initialFilterData,
@@ -100,6 +129,9 @@ const enquiriesSlice = createSlice({
     reducers: {
         setStatus: (state, action) => {
             state.status = action.payload
+        },
+        setEnquiry: (state, action) => {
+            state.enquiry = action.payload
         },
         setTableData: (state, action) => {
             state.tableData = action.payload
@@ -123,11 +155,26 @@ const enquiriesSlice = createSlice({
                 state.loading = false
                 state.status = 'error'
             })
+
+            .addCase(getEnquiry.pending, (state) => {
+                state.loading = true
+            })
+            .addCase(getEnquiry.fulfilled, (state, action) => {
+                state.loading = false
+                const { enquiry, status } = action.payload
+                state.status = status
+                state.enquiry = enquiry
+            })
+            .addCase(getEnquiry.rejected, (state) => {
+                state.loading = false
+                state.status = 'error'
+            })
     }
 })
 
 export const {
     setStatus,
+    setEnquiry,
     setTableData,
     setFilterData,
 } = enquiriesSlice.actions;

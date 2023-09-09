@@ -37,4 +37,22 @@ class HandymanController extends Controller
             ], 500);
         }
     }
+
+    public function enquiry(Request $request)
+    {
+        try {
+            $enquiry = Chat::with('Messages', 'User.Service.Category', 'Receiver.Service.Category', 'User.Service.User', 'Receiver.Service.User', 'Invoices.Items')->where('uid', $request->uid)->withCount('Messages')->firstOrFail();
+
+            return response()->json([
+                'status' => 'success',
+                'enquiry' => $enquiry,
+            ], 200);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }
