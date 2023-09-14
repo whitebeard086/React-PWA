@@ -193,6 +193,31 @@ trait CustomersTrait
       return $response->json();
    }
 
+   public function createColectionAccount($user)
+   {
+      $blocSecret = env('BLOC_SECRET_KEY');
+      $accessToken = "Bearer $blocSecret";
+
+      $data = [
+         'alias' => $user->first_name.' '.$user->last_name,
+      ];
+
+      try {
+         $response = Http::withHeaders([
+            'accept' => 'application/json',
+            'authorization' => $accessToken,
+            'content-type' => 'application/json',
+            ])->post("https://api.blochq.io/v1/accounts/collections", $data);
+    
+            return $response->json();
+        } catch (\Exception $e) {
+            return [
+               'success' => false,
+               'message' => 'Unable to process the request at this time. Please try again later.',
+            ];
+        }
+   }
+
    protected function checkKYCT1Requirements($user)
    {
       // Check if the user has the necessary data for KYC T1

@@ -65,7 +65,19 @@ class UserController extends Controller
             
             $user->save();
 
-            if ($user->account_id) {
+            if (!$user->collection_number && ($user->first_name && $user->last_name)) {
+                $collectionResponse = $this->createColectionAccount($user);
+                if ($collectionResponse && $collectionResponse['success'] == true) {
+                    $user->collection_number = $collectionResponse['data']['account_number'];
+                    $user->collection_id = $collectionResponse['data']['id'];
+                    $user->collection_name = $collectionResponse['data']['name'];
+                    $user->collection_bank = $collectionResponse['data']['bank_name'];
+                    $user->collection_preferred = $collectionResponse['data']['preferred_bank'];
+                    $user->save();
+                }
+            }
+
+            /* if ($user->account_id) {
                 $virtualResponse = $this->getAccount($user->account_id);
                 if ($virtualResponse['success'] == true) {
                     $prepped = $virtualResponse['data']['balance'] / 100;
@@ -88,7 +100,7 @@ class UserController extends Controller
                 // KYC Tier 1 upgrade successful
                 $user->kyc_tier = $upgradeResponse['data']['kyc_tier'];
                 $user->save();
-            }
+            } */
 
             // if (!$user->customer_id && $user->bvn) {
             //     $customerResponse = $this->createCustomerIfConditionsMet($user);

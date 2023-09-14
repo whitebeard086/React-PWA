@@ -11,18 +11,19 @@ use App\Http\Controllers\BrowseController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\GatewayController;
 use App\Http\Controllers\WebhookController;
+use App\Http\Controllers\DisputesController;
 use App\Http\Controllers\PaymentsController;
+use App\Http\Controllers\ReferralController;
 use App\Http\Controllers\RequestsController;
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\ReferralController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WithdrawalController;
+use App\Http\Controllers\BlocWebhookController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\Admin\HandymanController;
 use App\Http\Controllers\Admin\HomeAdminController;
 use App\Http\Controllers\Admin\UsersAdminController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
-use App\Http\Controllers\Admin\HandymanController;
-use App\Http\Controllers\DisputesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +43,7 @@ Route::post('/register/check-email', [AuthController::class, 'check_email']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [UserController::class, 'register']);
 Route::webhooks('paystack/webhook');
+Route::post('/webhooks', [BlocWebhookController::class, 'handle']);
 
 // Home Routes
 Route::get('/home/guest', [HomeController::class, 'guest']);

@@ -31,7 +31,8 @@ class User extends Authenticatable
         'transaction_pin',
         'account_level_id',
         'pending_account_level',
-        'customer_id', 'bvn', 'preferred_bank', 'alias', 'wallet_id', 'account_id', 'account_number', 'account_balance', 'wallet_number', 'wallet_balance', 'place_of_birth', 'dob', 'gender', 'address_id', 'kyc_tier'
+        'customer_id', 'bvn', 'preferred_bank', 'alias', 'wallet_id', 'account_id', 'account_number', 'account_balance', 'wallet_number', 'wallet_balance', 'place_of_birth', 'dob', 'gender', 'address_id', 'kyc_tier', 'collection_id', 'collection_number', 'collection_balance', 'collection_name', 'collection_bank',
+        'collection_preferred'
     ];
 
     /**

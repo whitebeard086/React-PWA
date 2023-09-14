@@ -129,7 +129,7 @@ trait BillsTrait
             CURLOPT_POSTFIELDS => $post_data,
             CURLOPT_HTTPHEADER => [
                 "accept: application/json",
-                "authorization: Bearer sk_test_64d91c85651453c535f710f264d91c85651453c535f710f3",
+                "authorization: Bearer $blocSecret",
                 "content-type: application/json"
             ],
         ]);

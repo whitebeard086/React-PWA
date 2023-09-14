@@ -58,7 +58,7 @@ const AirtimeForm = ({ onNext }) => {
 	};
 
 	const onSubmit = ({ phone, amount }) => {
-		if (amount > profile?.account_balance) {
+		if (amount > profile?.balance) {
 			popNotification(
 				'You do not have enough balance to complete this transaction, please top-up and try again.',
 				'danger',

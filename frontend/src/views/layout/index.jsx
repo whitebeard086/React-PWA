@@ -114,7 +114,7 @@ const Layout = () => {
 									size="25px"
 								/>
 							) : (
-								`₦${profile?.account_balance?.toLocaleString()}`
+								`₦${profile?.balance?.toLocaleString()}`
 							)}
 						</h2>
 					) : (
