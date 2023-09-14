@@ -19,6 +19,7 @@ import Unauthorized from './views/notfound/Unauthorized';
 import { setNotifications } from './views/notifications/store/dataSlice';
 import { setServiceCancelledDash, setServiceCompletedDash, setServiceStartedDash } from './views/providerDash/store/dataSlice';
 import {
+	setDisMessages,
 	setServiceCancelled,
 	setServiceCompleted,
 	setServiceConfirmed,
@@ -88,6 +89,13 @@ function App() {
 			handler(data) {
 				dispatch(setMessages(data));
 				console.log('Received Socket Message: ', true);
+			},
+		},
+		{
+			name: 'receiveDisputeMessage',
+			handler(data) {
+				dispatch(setDisMessages(data));
+				console.log('Received Socket Dispute Message: ', true);
 			},
 		},
 		{

@@ -1,57 +1,61 @@
-import { Button, Dropdown, Notification, toast } from "@/components/ui";
-import { useDropdownMenuContext } from "@/components/ui/Dropdown/context/dropdownMenuContext";
+/* eslint-disable react/prop-types */
+import { EllipsisButton } from "@/components/shared";
+import { Dropdown, Notification, toast } from "@/components/ui";
 import appConfig from "@/configs/app.config";
-import useCompressFile from "@/utils/hooks/useCompressFile";
 import { sendPushNotification } from "@/utils/sendPushNotification";
 import { socket } from "@/utils/socket";
 import useFocus from "@/views/chat/components/useFocus";
 import { createNotification, setCreateStatus } from "@/views/notifications/store/dataSlice";
 import { sendMessage, setMessageStatus } from "@/views/requests/store/dataSlice";
-import { setFile } from "@/views/requests/store/stateSlice";
-import EmojiPicker, { Emoji } from "emoji-picker-react";
-import { useEffect, useRef, useState } from "react";
+import { resetFiles, toggleUploadImageDialog } from "@/views/requests/store/stateSlice";
+import EmojiPicker from "emoji-picker-react";
+import { useEffect, useState } from "react";
+import { BiImages } from "react-icons/bi";
 import { BsEmojiSmile } from "react-icons/bs";
+import { IoIosAddCircleOutline, IoIosSend } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import TextareaAutosize from "react-textarea-autosize";
 
-const MessageBox = () => {
+const MessageBox = ({ receiver }) => {
     const dispatch = useDispatch();
-    const { compressFile, compressedFile, resetCompressedFile } = useCompressFile();
+    // const { compressFile, compressedFile, resetCompressedFile } = useCompressFile();
     // eslint-disable-next-line no-unused-vars
-    const [avatarImg, setAvatarImg] = useState(null);
+    // const [avatarImg, setAvatarImg] = useState(null);
     const [message, setMessage] = useState("");
     const [inputRef, setInputFocus] = useFocus();
-    console.log(message);
 
-    const { file } = useSelector((state) => state.requests.state);
     const { dispute, messageStatus, sentMessage } = useSelector((state) => state.requests.data);
-    const { userType, profile, onlineUsers } = useSelector((state) => state.auth.user)
+    const { profile } = useSelector((state) => state.auth.user)
     const { createStatus, notification } = useSelector((state) => state.notifications.data)
-    const receiver = dispute?.booking?.service?.user?.id === profile?.id ? dispute?.booking?.user : dispute?.booking?.service?.user
+    // const receiver = dispute?.booking?.service?.user?.id === profile?.id ? dispute?.booking?.user : dispute?.booking?.service?.user
 
     const notificationData = {
 		receiver_id: receiver?.id,
 		type: 'dispute message',
 		data: JSON.stringify({
-			message: 'New Dispute Message',
+			message: sentMessage?.message,
 			dispute_id: dispute?.id,
 		}),
 		url: `/requests/disputes/${dispute?.uid}`,
 	};
 
-    const onFileUpload = (file) => {
-        setAvatarImg(URL.createObjectURL(file[0]));
-        compressFile(file[0], 0.15);
-    };
+    // const onFileUpload = (file) => {
+    //     setAvatarImg(URL.createObjectURL(file[0]));
+    //     compressFile(file[0], 0.15);
+    // };
 
     const handleChange = (e) => {
         setMessage(e.target?.value);
     };
 
-    const onAddEmoji = (emojiData, e) => {
-        console.log(emojiData);
-        // setMessage(<Emoji unified={emojiData.unified} />)
+    const onAddEmoji = (emojiData) => {
+        // console.log(emojiData);
         setMessage((prev) => prev + emojiData.emoji)
+    }
+
+    const onAddImage = () => {
+        dispatch(resetFiles())
+        dispatch(toggleUploadImageDialog(true))
     }
 
     const onSendMessage = () => {
@@ -80,18 +84,17 @@ const MessageBox = () => {
             sendMessage({
                 dispute_id: dispute?.id,
                 sender_id: profile?.id,
-                media: compressedFile,
+                // media: compressedFile,
                 message: message,
             })
         );
 
-        dispatch(setFile({}));
         setMessage("");
-        resetCompressedFile();
     };
 
     useEffect(() => {
         if (messageStatus === "success") {
+            socket.emit('sendDisputeMessage', [sentMessage, receiver?.id])
             dispatch(createNotification(notificationData));
             sendPushNotification({
                 app_id: import.meta.env.VITE_ONESIGNAL_APP_ID,
@@ -145,6 +148,37 @@ const MessageBox = () => {
                         />
                     </Dropdown.Item>
                 </Dropdown>
+            </div>
+            <div className="hover:bg-emerald-50 hover:shadow-md cursor-pointer transition duration-300 w-8 h-8 flex items-center justify-center rounded-full">
+                <Dropdown
+                    customToggleClass="flex"
+                    placement="top-end"
+                    renderTitle={
+                        <EllipsisButton
+                            icon={
+                                <IoIosAddCircleOutline className="text-3xl text-gray-600" />
+                            }
+                            variant="twoTone"
+                            shape="round"
+                        />
+                    }
+                >
+                    <Dropdown.Item 
+                        style={{ justifyContent: "flex-start" }} 
+                        onClick={onAddImage}
+                    >
+                        <BiImages className="text-lg" />
+                        Image
+                    </Dropdown.Item>
+                </Dropdown>
+            </div>
+            <div className="w-fit">
+                <div
+                    onClick={onSendMessage}
+                    className="bg-blue-500 hover:bg-blue-600 text-white hover:shadow-md cursor-pointer transition duration-300 w-12 h-12 flex items-center justify-center rounded-full"
+                >
+                    <IoIosSend className="text-3xl" />
+                </div>
             </div>
         </div>
     )

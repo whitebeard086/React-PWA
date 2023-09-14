@@ -1,4 +1,4 @@
-import ApiService from "./ApiService";
+import ApiService, { ApiQueryService } from "./ApiService";
 
 export async function apiGetRequestsData (data) {
     return ApiService.fetchData({
@@ -22,4 +22,20 @@ export async function apiSendMessage (data) {
         method: 'post',
         data
     })
+}
+
+export async function apiDispute(data) {
+	return ApiQueryService.fetchData({
+		url: '/requests/disputes/dispute',
+		method: 'post',
+		data,
+	});
+}
+
+export async function apiSendMessageQuery(data) {
+	return ApiQueryService.fetchData({
+		url: '/requests/disputes/dispute/send-message',
+		method: 'post',
+		data,
+	});
 }

@@ -88,6 +88,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/requests', [RequestsController::class, 'index']);
     Route::post('/requests/disputes/dispute', [DisputesController::class, 'get_dispute']);
     Route::post('/requests/disputes/dispute/send-message', [DisputesController::class, 'send_message']);
+    Route::post('/service/dispute/close', [DisputesController::class, 'close_dispute']);
 
     // Payment Routes
     Route::get('/payments', [PaymentsController::class, 'index']);

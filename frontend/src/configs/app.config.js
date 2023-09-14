@@ -1,6 +1,6 @@
 const appConfig = {
-    appURL: 'https://app0101.taskitly.com/',
-    apiPrefix: 'https://api.taskitly.com/api',
+    // appURL: 'https://app0101.taskitly.com/',
+    // apiPrefix: 'https://api.taskitly.com/api',
     appURL: 'http://localhost:3000',
     apiPrefix: 'http://localhost:8000/api',
     oneSignalApiPrefix:'https://onesignal.com/api/v1',

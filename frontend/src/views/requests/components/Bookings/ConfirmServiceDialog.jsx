@@ -23,8 +23,6 @@ const ConfirmServiceDialog = () => {
 	const [ratingError, setRatingError] = useState(false);
 	const [comment, setComment] = useState('');
 
-	console.log(comment);
-
 	const { confirmingService, confirmStatus, booking } = useSelector(
 		(state) => state.requests.data
 	);
