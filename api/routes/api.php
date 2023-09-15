@@ -167,5 +167,6 @@ Route::group(['prefix' => 'admin'], function(){
         // Handyman Routes
         Route::get('/enquiries', [HandymanController::class, 'enquiries']);
         Route::post('/enquiries/enquiry', [HandymanController::class, 'enquiry']);
+        Route::get('/disputes', [HandymanController::class, 'disputes']);
     });
 });

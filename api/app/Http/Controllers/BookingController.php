@@ -399,7 +399,6 @@ class BookingController extends Controller
             $booking->save();
 
             $dispute = new Dispute;
-            $dispute->uid = Hashids::encode($dispute->id);
             $dispute->booking_id = $booking->id;
             $dispute->disputer_id = auth()->user()->id;
             $dispute->client_id = $client->id;
@@ -407,6 +406,9 @@ class BookingController extends Controller
             $dispute->invoice_id = $invoice->id;
             $dispute->description = $request->reason;
             $dispute->respond_before = Carbon::now()->addHours(24);
+            $dispute->save();
+            
+            $dispute->uid = Hashids::encode($dispute->id);
             $dispute->save();
 
             if($request->hasFile('file')) {

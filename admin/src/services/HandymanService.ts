@@ -1,4 +1,4 @@
-import ApiService from './ApiService'
+import ApiService, { ApiQueryService } from './ApiService'
 
 export async function apiGetEnquiries<T>() {
     return ApiService.fetchData<T>({
@@ -12,5 +12,12 @@ export async function apiGetEnquiry<T, U extends Record<string, unknown>>(data: 
         url: '/enquiries/enquiry',
         method: 'post',
         data,
+    })
+}
+
+export async function apiGetDisputes<T>() {
+    return ApiQueryService.fetchData<T>({
+        url: '/disputes',
+        method: 'get',
     })
 }

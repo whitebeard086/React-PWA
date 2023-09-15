@@ -124,3 +124,36 @@ export interface Message {
     created_at: Date
     updated_at: Date
 }
+
+export interface Dispute {
+    id: number
+    uid: string
+    booking_id: number
+    disputer_id: number
+    client_id: number
+    provider_id: number
+    invoice_id: number
+    description: string
+    status: 'open' | 'resolved'
+    respond_before: Date
+    created_at: Date
+    updated_at: Date
+}
+
+export interface DisputeMessage {
+    id: number
+    dispute_id: number
+    sender_id: number
+    message: string
+    created_at: Date
+    updated_at: Date
+}
+
+export interface Media {
+    id: number
+    file: string
+    mediaable_type: string
+    mediaable_id: number
+    created_at: Date
+    updated_at: Date
+}

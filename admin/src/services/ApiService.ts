@@ -17,4 +17,20 @@ const ApiService = {
     },
 }
 
+export const ApiQueryService = {
+	fetchData<Response = unknown, Request = Record<string, unknown>>(
+        param: AxiosRequestConfig<Request>
+    ) {
+		return new Promise<AxiosResponse<Response>>((resolve, reject) => {
+			BaseService(param)
+				.then((response: AxiosResponse<Response>) => {
+					resolve(response)
+				})
+				.catch((error: AxiosError) => {
+					reject(error);
+				});
+		});
+	},
+};
+
 export default ApiService
