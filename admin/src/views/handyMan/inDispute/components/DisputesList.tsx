@@ -13,7 +13,7 @@ import appConfig from '@/configs/app.config'
 import { Loading } from '@/components/shared'
 import TableRowSkeleton from '@/components/shared/loaders/TableRowSkeleton'
 import dayjs from 'dayjs'
-import { openDisputeDialog, toggleInvoiceDialog, useAppDispatch } from '../store'
+import { setClient, setInvoice, setProvider, toggleInvoiceDialog, useAppDispatch } from '../store'
 
 type Props = {
     data: DisputeWithDetails[]
@@ -160,6 +160,9 @@ const InvoiceColumn = ({ row }: { row: DisputeWithDetails }) => {
     const dispatch = useAppDispatch()
 
     const onViewInvoice = () => {
+        dispatch(setInvoice(row.invoice))
+        dispatch(setClient(row.client))
+        dispatch(setProvider(row.provider))
         dispatch(toggleInvoiceDialog(true))
     }
 
@@ -232,6 +235,14 @@ const DisputesList = ({ data, loading }: Props) => {
                     const row = props.row.original
                     return <InvoiceColumn row={row} />
                 }
+            },
+            { 
+                header: 'Service Cost', 
+                accessorFn: (row) => row.invoice.price,
+                cell: (props) => {
+                    const row = props.row.original
+                    return `₦${row.invoice.price?.toLocaleString()}`
+                },
             },
             { 
                 header: 'Time Started', 

@@ -60,7 +60,7 @@ class HandymanController extends Controller
     public function disputes()
     {
         try {
-            $disputes = Dispute::with('Invoice', 'Client', 'Provider.Service.Category', 'Disputer.Service', 'Booking.User', 'Messages.Medias')->where('status', 'open')->get();
+            $disputes = Dispute::with('Invoice.Items', 'Client', 'Provider.Service.Category', 'Disputer.Service', 'Booking.User', 'Messages.Medias')->where('status', 'open')->get();
             
             return response()->json([
                 'status' => 'success',

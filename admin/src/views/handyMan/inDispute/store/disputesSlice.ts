@@ -1,26 +1,41 @@
+import { InvoiceWithItems, User } from '@/@types/common'
 import { createSlice } from '@reduxjs/toolkit'
+import { UserWithService } from '../../types'
 
 export interface disputesState {
-    disputeDialogOpen: boolean
     invoiceDialog: boolean
+    invoice: Partial<InvoiceWithItems>
+    client: Partial<UserWithService>
+    provider: Partial<User>
 }
 
 export const SLICE_NAME = 'disputes'
 
 const initialState: disputesState = {
-    disputeDialogOpen: false,
-    invoiceDialog: false
+    invoiceDialog: false,
+    invoice: {},
+    client: {},
+    provider: {},
 }
 
 const disputesSlice = createSlice({
     name: `${SLICE_NAME}/state`,
     initialState,
     reducers: {
-        openDisputeDialog: (state) => {
-            state.disputeDialogOpen = true;
+        cleanInvoiceDialog: (state) => {
+            state.invoiceDialog = false
+            state.client = {}
+            state.invoice = {}
+            state.provider = {}
         },
-        closeDisputeDialog: (state) => {
-            state.disputeDialogOpen = false;
+        setClient: (state, action) => {
+            state.client = action.payload
+        },
+        setInvoice: (state, action) => {
+            state.invoice = action.payload;
+        },
+        setProvider: (state, action) => {
+            state.provider = action.payload
         },
         toggleInvoiceDialog: (state, action) => {
             state.invoiceDialog = action.payload
@@ -29,8 +44,10 @@ const disputesSlice = createSlice({
 })
 
 export const {
-    openDisputeDialog,
-    closeDisputeDialog,
+    setClient,
+    setInvoice,
+    setProvider,
+    cleanInvoiceDialog,
     toggleInvoiceDialog
 } = disputesSlice.actions
 

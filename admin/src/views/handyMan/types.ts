@@ -1,4 +1,5 @@
-import { Booking, Category, Dispute, DisputeMessage, Invoice, Media, Service, User } from '@/@types/common'
+import { InvoiceWithItems } from './messages/store/enquiriesSlice';
+import { Booking, Category, Dispute, DisputeMessage, Media, Service, User } from '@/@types/common'
 
 export interface ServiceWithCategory extends Service {
     category: Category
@@ -17,7 +18,7 @@ export interface DisputeMessageWithMedia extends DisputeMessage {
 }
 
 export interface DisputeWithDetails extends Dispute {
-    invoice: Invoice
+    invoice: InvoiceWithItems
     client: User
     provider: UserWithService
     disputer: UserWithService
