@@ -22,7 +22,7 @@ class DisputesController extends Controller
     public function get_dispute(Request $request)
     {
         try {
-            $dispute = Dispute::with('Client', 'Provider.Service', 'Disputer.Service', 'Booking.User', 'Booking.Service.User.Service', 'Booking.Invoice', 'Messages.Medias')->where('uid', $request->DUID)->firstOrFail();
+            $dispute = Dispute::with('Client', 'Provider.Service', 'Disputer.Service', 'Booking.User', 'Booking.Service.User.Service', 'Booking.Invoice', 'Messages.Media')->where('uid', $request->DUID)->firstOrFail();
 
             return response()->json([
                 'status' => 'success',
@@ -43,7 +43,7 @@ class DisputesController extends Controller
             $userId = auth()->user()->id;
             $user = User::findOrFail($userId);
 
-            $disputeQuery = Dispute::with('Booking.Service.User', 'Booking.User', 'Booking.Invoice', 'Messages.Medias')->orderBy('id', 'desc');
+            $disputeQuery = Dispute::with('Booking.Service.User', 'Booking.User', 'Booking.Invoice', 'Messages.Media')->orderBy('id', 'desc');
             
             if ($user->profile_type_id == 1) {
                 $disputes = $disputeQuery->where('client_id', $userId)->get();
@@ -63,15 +63,15 @@ class DisputesController extends Controller
                     
                     $disMedia = new Media;
                     $disMedia->file = $image;
-                    $disMessage->medias()->save($disMedia);
+                    $disMessage->media()->save($disMedia);
                 }
             }
 
 
             return response()->json([
                 'status' => 'success',
-                'dispute' => Dispute::with('Client', 'Provider.Service', 'Booking.Service.User', 'Booking.User', 'Booking.Invoice', 'Messages.Medias')->where('id', $request->dispute_id)->first(),
-                'message' => DisputeMessage::with('Medias')->where('id', $disMessage->id)->first(),
+                'dispute' => Dispute::with('Client', 'Provider.Service', 'Booking.Service.User', 'Booking.User', 'Booking.Invoice', 'Messages.Media')->where('id', $request->dispute_id)->first(),
+                'message' => DisputeMessage::with('Media')->where('id', $disMessage->id)->first(),
                 // 'disputes' => $disputes,
             ], 201);
             
@@ -86,7 +86,7 @@ class DisputesController extends Controller
     public function close_dispute(Request $request)
     {
         try {
-            $dispute = Dispute::with('Client', 'Provider.Service', 'Disputer.Service', 'Booking.User', 'Booking.Service.User.Service', 'Booking.Invoice', 'Messages.Medias')->where('uid', $request->DUID)->firstOrFail();
+            $dispute = Dispute::with('Client', 'Provider.Service', 'Disputer.Service', 'Booking.User', 'Booking.Service.User.Service', 'Booking.Invoice', 'Messages.Media')->where('uid', $request->DUID)->firstOrFail();
             $booking = $dispute->booking;
 
             DB::beginTransaction();

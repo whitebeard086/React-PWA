@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { DisputeWithDetails } from '../../types'
+import { DisputeWithDetails, GetDisputeRequest, GetDisputeResponse } from '../../types'
 import { flexRender, getCoreRowModel, getFacetedMinMaxValues, getFacetedRowModel, getFacetedUniqueValues, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import type { ColumnDef, FilterFn, ColumnFiltersState } from '@tanstack/react-table'
@@ -8,12 +8,14 @@ import { Avatar, Button, Card, Input, Pagination, Select, Table } from '@/compon
 import useTwColorByName from '@/utils/hooks/useTwColorByName'
 import acronym from '@/utils/acronym'
 import useThemeClass from '@/utils/hooks/useThemeClass'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import appConfig from '@/configs/app.config'
 import { Loading } from '@/components/shared'
 import TableRowSkeleton from '@/components/shared/loaders/TableRowSkeleton'
 import dayjs from 'dayjs'
-import { setClient, setInvoice, setProvider, toggleInvoiceDialog, useAppDispatch } from '../store'
+import { setClient, setDispute, setInvoice, setProvider, toggleInvoiceDialog, useAppDispatch } from '../store'
+import { useQueryClient } from '@tanstack/react-query'
+import { apiGetDispute } from '@/services/HandymanService'
 
 type Props = {
     data: DisputeWithDetails[]
@@ -87,18 +89,34 @@ const GeneratedAvatar = ({ target }: { target: string }) => {
 
 const ActionColumn = ({ row }: { row: DisputeWithDetails }) => {
     const { textTheme } = useThemeClass()
-    // const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch()
+    const queryClient = useQueryClient()
+    const navigate = useNavigate()
 
-    // const onView = (enquiry: ChatWithMessages) => {
-    //     dispatch(setEnquiry(enquiry))
-    // }
+    const onView = (dispute: DisputeWithDetails) => {
+        dispatch(setDispute(dispute))
+        navigate(`/handy-man/bookings-in-dispute/${dispute.uid}`)
+    }
+
+    const onMouseEnter = (data: GetDisputeRequest) => {
+        queryClient.prefetchQuery({
+            queryKey: ['disputes', data],
+            queryFn: async () => {
+                const response = await apiGetDispute<GetDisputeResponse, GetDisputeRequest>(data);
+                return response.data;
+            },
+            staleTime: 60 * 1000,
+            
+        })
+    }
 
     return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2" onMouseEnter={() => onMouseEnter({ uid: row.uid })}>
             <Button
                 variant='solid'
                 size='xs'
                 color="slate-900"
+                onClick={() => onView(row)}
             >
                 View
             </Button>
@@ -203,6 +221,7 @@ const DisputesList = ({ data, loading }: Props) => {
     const onSelectChange = (value = 0) => {
         table.setPageSize(Number(value))
     }
+    
 
     const totalData = data?.length
 

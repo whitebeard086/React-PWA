@@ -421,7 +421,7 @@ class BookingController extends Controller
                 
                 $media = new Media;
                 $media->file = $formFields['file'];
-                $dm->medias()->save($media);
+                $dm->media()->save($media);
             }
 
             DB::commit();
@@ -430,7 +430,7 @@ class BookingController extends Controller
                 'status' => 'success',
                 'message' => 'Dispute Opened',
                 'booking' => Booking::with('Service.User', 'User', 'Invoice')->where('id', $booking->id)->firstOrFail(),
-                'dispute' => Dispute::with('Booking', 'Messages.Medias')->where('id', $dispute->id)->get(),
+                'dispute' => Dispute::with('Booking', 'Messages.Media')->where('id', $dispute->id)->get(),
             ], 201);
 
             

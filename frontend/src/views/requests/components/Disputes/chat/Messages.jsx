@@ -90,9 +90,9 @@ const Messages = ({ isOwner, receiver }) => {
                                     )}
                                 >
                                     <div className="flex gap-2">
-                                        {message.medias?.length > 0 ? 
+                                        {message.media?.length > 0 ? 
                                             <div>
-                                                {message.medias.map((item) => (
+                                                {message.media.map((item) => (
                                                     <div key={item.id} className="w-full">
                                                         <Image 
                                                             src={`${appConfig.imagePath}/${item.file}`}

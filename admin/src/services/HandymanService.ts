@@ -21,3 +21,11 @@ export async function apiGetDisputes<T>() {
         method: 'get',
     })
 }
+
+export async function apiGetDispute<T, U extends Record<string, unknown>>(data: U) {
+    return ApiService.fetchData<T>({
+        url: '/disputes/dispute',
+        method: 'post',
+        data
+    })
+}

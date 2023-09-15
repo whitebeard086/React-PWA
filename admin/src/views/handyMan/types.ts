@@ -30,3 +30,12 @@ export interface GetDisputesResponse {
     status: string
     disputes: DisputeWithDetails[]
 }
+
+export type GetDisputeRequest = {
+    uid: string
+}
+
+export interface GetDisputeResponse {
+    status: string
+    dispute: DisputeWithDetails
+}

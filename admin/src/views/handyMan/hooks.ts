@@ -1,12 +1,8 @@
 import { Category, InvoiceItem, Service, User } from '@/@types/common';
-import { apiGetDisputes } from '@/services/HandymanService';
-import { useQuery } from '@tanstack/react-query';
-import { GetDisputesResponse } from './types';
+import { apiGetDispute, apiGetDisputes } from '@/services/HandymanService';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { GetDisputeRequest, GetDisputeResponse, GetDisputesResponse } from './types';
 import { useEffect, useState } from 'react';
-
-
-
-
 
 export const useGetDisputes = () => {
 	return useQuery({
@@ -17,7 +13,19 @@ export const useGetDisputes = () => {
 		},
 		staleTime: 5000,
 		// cacheTime: 10000,
-		refetchInterval: 50000,
+		refetchInterval: 5 * 1000,
+	});
+};
+
+export const useGetDispute = (data: GetDisputeRequest) => {
+	return useQuery({
+		queryKey: ['disputes', data],
+        queryFn: async () => {
+			const response = await apiGetDispute<GetDisputeResponse, GetDisputeRequest>(data);
+			return response.data;
+		},
+		staleTime: 60 * 1000,
+		refetchInterval: 60 * 1000,
 	});
 };
 

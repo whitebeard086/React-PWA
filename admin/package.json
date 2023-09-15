@@ -46,6 +46,7 @@
     "react-highlight-words": "^0.20.0",
     "react-i18next": "^12.2.0",
     "react-icons": "^4.10.1",
+    "react-lazy-load-image-component": "^1.6.0",
     "react-markdown": "^8.0.7",
     "react-modal": "^3.16.1",
     "react-number-format": "^5.1.4",

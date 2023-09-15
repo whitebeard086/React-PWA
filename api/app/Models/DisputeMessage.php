@@ -21,7 +21,7 @@ class DisputeMessage extends Model
         'sender_id' => 'float',
     ];
 
-    public function Medias(): MorphMany
+    public function Media(): MorphMany
     {
         return $this->morphMany(Media::class, 'mediaable');
     }
