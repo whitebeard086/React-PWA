@@ -169,5 +169,7 @@ Route::group(['prefix' => 'admin'], function(){
         Route::post('/enquiries/enquiry', [HandymanController::class, 'enquiry']);
         Route::get('/disputes', [HandymanController::class, 'disputes']);
         Route::post('/disputes/dispute', [HandymanController::class, 'dispute']);
+        Route::post('/disputes/dispute/refund-client', [HandymanController::class, 'refund_client']);
+        Route::post('/disputes/dispute/pay-provider', [HandymanController::class, 'pay_provider']);
     });
 });

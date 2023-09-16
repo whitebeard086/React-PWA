@@ -18,6 +18,7 @@ interface ConfirmDialogProps extends DialogProps {
     confirmButtonColor?: string
     type?: StatusType
     title?: ReactNode | string
+    loading?: boolean
     onCancel?: () => void
     onConfirm?: () => void
 }
@@ -81,6 +82,7 @@ const ConfirmDialog = (props: ConfirmDialogProps) => {
         children,
         onCancel,
         onConfirm,
+        loading = false,
         cancelText = 'Cancel',
         confirmText = 'Confirm',
         confirmButtonColor,
@@ -118,6 +120,7 @@ const ConfirmDialog = (props: ConfirmDialogProps) => {
                     size="sm"
                     variant="solid"
                     color={confirmButtonColor}
+                    loading={loading}
                     onClick={handleConfirm}
                 >
                     {confirmText}

@@ -39,3 +39,7 @@ export interface GetDisputeResponse {
     status: string
     dispute: DisputeWithDetails
 }
+
+export interface RefundClientResponse {
+    status: string
+}

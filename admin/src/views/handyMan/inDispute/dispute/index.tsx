@@ -19,6 +19,7 @@ const Dispute = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 <Details 
                     dispute={dispute || {}}  
+                    uid={UID}
                     className="lg:hidden"
                 />
                 <Chat 
@@ -27,6 +28,7 @@ const Dispute = () => {
                 />
                 <Details 
                     dispute={dispute || {}}  
+                    uid={UID}
                     className="hidden lg:block"
                 />
             </div>

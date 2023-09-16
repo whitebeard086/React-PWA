@@ -8,6 +8,7 @@ import dayjs from 'dayjs'
 import relativeTime from "dayjs/plugin/relativeTime"
 import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
+
 dayjs.extend(relativeTime)
 
 type Props = {
@@ -152,7 +153,7 @@ const Chat = ({ className, dispute }: Props) => {
                     )
                 })}
             </AnimatePresence>
-
+            {/* // TODO: Admin response in the chat */}
         </div>
     )
 }

@@ -29,3 +29,19 @@ export async function apiGetDispute<T, U extends Record<string, unknown>>(data: 
         data
     })
 }
+
+export async function apiRefundClient<T, U extends Record<string, unknown>>(data: U) {
+    return ApiService.fetchData<T>({
+        url: '/disputes/dispute/refund-client',
+        method: 'post',
+        data
+    })
+}
+
+export async function apiPayProvider<T, U extends Record<string, unknown>>(data: U) {
+    return ApiService.fetchData<T>({
+        url: '/disputes/dispute/refund-client',
+        method: 'post',
+        data
+    })
+}

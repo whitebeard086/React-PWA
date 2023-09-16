@@ -74,7 +74,7 @@ const InvoiceDialog = () => {
 
                         <div
                             className={classNames(
-                                "mt-4 flex items-center gap-4",
+                                "mt-4 flex items-center justify-end gap-4",
                             )}
                         >
                             {/* <h4 className="text-base px-4 py-2 bg-primary-500 rounded-md text-white">Fully Paid</h4> */}

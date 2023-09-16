@@ -161,3 +161,7 @@ export interface Media {
 export interface InvoiceWithItems extends Invoice {
     items: InvoiceItem[]
 }
+
+export interface UserWithService extends User {
+    service: Service | null
+}
