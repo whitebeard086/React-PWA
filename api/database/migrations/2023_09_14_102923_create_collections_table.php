@@ -16,10 +16,11 @@ return new class extends Migration
             $table->string('webhook_id');
             $table->string('name');
             $table->string('bank_name');
-            $table->timestamp('created_at');
             $table->string('environment')->nullable();
             $table->string('account_number');
             $table->string('preferred_bank');
+            $table->timestamp('created_at');
+            $table->timestamp('updated_at')->nullable();
         });
     }
 

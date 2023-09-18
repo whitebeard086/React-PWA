@@ -123,11 +123,7 @@ const DataForm = () => {
 													>
 														<>
 															{products?.data
-																?.filter(
-																	(item) =>
-																		item.category !==
-																		'pctg_z6dJLqhj85UeBhd7kCCZZX'
-																)
+																?.filter((item) => item.fee_type !== 'RANGE')
 																.map((item) => (
 																	<Segment.Item value={item.id} key={item.id}>
 																		{({

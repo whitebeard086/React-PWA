@@ -80,13 +80,13 @@ class BlocWebhookController extends Controller
 
                     // Create a new record in the webhook_data table.
                     $collectionData = new Collection;
-                    $collectionData->webhook_id = $data['id'];
-                    $collectionData->name = $data['name'];
-                    $collectionData->bank_name = $data['bank_name'];
-                    $collectionData->created_at = $data['created_at'];
-                    $collectionData->environment = $data['environment'];
-                    $collectionData->account_number = $data['account_number'];
-                    $collectionData->preferred_bank = $data['preferred_bank'];
+                    $collectionData->webhook_id = $data->id;
+                    $collectionData->name = $data->name;
+                    $collectionData->bank_name = $data->bank_name;
+                    $collectionData->created_at = date('Y-m-d H:i:s', strtotime($data->created_at));
+                    $collectionData->environment = $data->environment;
+                    $collectionData->account_number = $data->account_number;
+                    $collectionData->preferred_bank = $data->preferred_bank;
                     $collectionData->save();
                     
                     break;

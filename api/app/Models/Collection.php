@@ -17,7 +17,7 @@ class Collection extends Model
 
     protected $fillable = [
         'name', 'webhook_id', 'bank_name', 'preferred_bank',
-        'created_at', 'environment', 'account_number',
+        'created_at', 'environment', 'account_number', 'updated_at',
     ];
 
 }
