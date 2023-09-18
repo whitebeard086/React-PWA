@@ -165,3 +165,8 @@ export interface InvoiceWithItems extends Invoice {
 export interface UserWithService extends User {
     service: Service | null
 }
+
+export interface ServiceWithUser extends Service {
+    user: User
+    category: Category
+}

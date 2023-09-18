@@ -3,9 +3,14 @@ import { BiSolidBookAdd } from "react-icons/bi"
 import { FaUsers, FaUsersCog } from "react-icons/fa"
 import { RiMoneyDollarCircleFill } from "react-icons/ri"
 import { useAppSelector } from "../../store"
+import { useHomeData } from '../../utils/hooks'
 
 const StatCards = () => {
-    const { allBookings, allClients, allProviders } = useAppSelector((state) => state.home.data) 
+    const { data } = useHomeData()
+    const allBookings = data?.allBookings
+    const allClients = data?.allClients
+    const allProviders = data?.allProviders
+    // const { allBookings, allClients, allProviders } = useAppSelector((state) => state.home.data) 
 
     return (
         <div className="grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">

@@ -6,11 +6,17 @@ import { Rating } from "@smastrom/react-rating";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../../store";
 import appConfig from "@/configs/app.config";
+import { GetHomeResponse } from '../../utils/types';
 
-const RecentProviders = () => {
+type Props = {
+    data: Partial<GetHomeResponse>
+}
+
+const RecentProviders = ({ data }: Props) => {
     const { imagePath } = appConfig
     const color = useTwColorByName()
-    const { recentProviders } = useAppSelector((state) => state.home.data)
+    const { recentProviders } = data
+    // const { recentProviders } = useAppSelector((state) => state.home.data)
 
     return (
         <Card>

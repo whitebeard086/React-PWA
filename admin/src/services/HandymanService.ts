@@ -22,6 +22,27 @@ export async function apiGetDisputes<T>() {
     })
 }
 
+export async function apiGetClosedDisputes<T>() {
+    return ApiService.fetchData<T>({
+        url: '/disputes/closed',
+        method: 'get',
+    })
+}
+
+export async function apiGetActiveBookings<T>() {
+    return ApiService.fetchData<T>({
+        url: '/bookings/active',
+        method: 'get',
+    })
+}
+
+export async function apiGetCompleteBookings<T>() {
+    return ApiService.fetchData<T>({
+        url: '/bookings/complete',
+        method: 'get',
+    })
+}
+
 export async function apiGetDispute<T, U extends Record<string, unknown>>(data: U) {
     return ApiService.fetchData<T>({
         url: '/disputes/dispute',

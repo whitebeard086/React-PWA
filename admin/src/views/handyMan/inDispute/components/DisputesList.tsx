@@ -2,8 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { DisputeWithDetails, GetDisputeRequest, GetDisputeResponse } from '../../types'
 import { flexRender, getCoreRowModel, getFacetedMinMaxValues, getFacetedRowModel, getFacetedUniqueValues, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
 import { rankItem } from '@tanstack/match-sorter-utils'
-import type { ColumnDef, FilterFn, ColumnFiltersState } from '@tanstack/react-table'
-import type { InputHTMLAttributes } from 'react'
 import { Avatar, Button, Card, Input, Pagination, Select, Table } from '@/components/ui'
 import useTwColorByName from '@/utils/hooks/useTwColorByName'
 import acronym from '@/utils/acronym'
@@ -16,6 +14,8 @@ import dayjs from 'dayjs'
 import { setClient, setDispute, setInvoice, setProvider, toggleInvoiceDialog, useAppDispatch } from '../store'
 import { useQueryClient } from '@tanstack/react-query'
 import { apiGetDispute } from '@/services/HandymanService'
+import type { ColumnDef, FilterFn, ColumnFiltersState } from '@tanstack/react-table'
+import type { InputHTMLAttributes } from 'react'
 
 type Props = {
     data: DisputeWithDetails[]
@@ -120,7 +120,7 @@ const ActionColumn = ({ row }: { row: DisputeWithDetails }) => {
             >
                 View
             </Button>
-            <Button
+            {/* <Button
                 variant="solid"
                 size="xs"
                 color="red-600"
@@ -132,7 +132,7 @@ const ActionColumn = ({ row }: { row: DisputeWithDetails }) => {
                 size="xs"
             >
                 Pay Provider
-            </Button>
+            </Button> */}
         </div>
     )
 }
@@ -190,7 +190,7 @@ const InvoiceColumn = ({ row }: { row: DisputeWithDetails }) => {
                 className={`hover:${textTheme} ml-2 font-semibold cursor-pointer`}
                 onClick={onViewInvoice}
             >
-                {row.invoice.invoice_number}
+                #{row.invoice.invoice_number}
             </div>
         </>
     )
@@ -309,7 +309,7 @@ const DisputesList = ({ data, loading }: Props) => {
         <Loading loading={loading && data.length !== 0} type="cover">
             <Card>
                 <div className="mb-4 flex items-center gap-4 justify-between">
-                    <h4 className="text-base">Disputes</h4>
+                    <h4 className="text-base">Open Disputes</h4>
                     <DebouncedInput
                         value={globalFilter ?? ''}
                         className="p-2 font-lg shadow border border-block"

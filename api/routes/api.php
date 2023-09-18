@@ -166,8 +166,11 @@ Route::group(['prefix' => 'admin'], function(){
 
         // Handyman Routes
         Route::get('/enquiries', [HandymanController::class, 'enquiries']);
+        Route::get('/bookings/active', [HandymanController::class, 'active_bookings']);
+        Route::get('/bookings/complete', [HandymanController::class, 'completed_bookings']);
         Route::post('/enquiries/enquiry', [HandymanController::class, 'enquiry']);
         Route::get('/disputes', [HandymanController::class, 'disputes']);
+        Route::get('/disputes/closed', [HandymanController::class, 'closed_disputes']);
         Route::post('/disputes/dispute', [HandymanController::class, 'dispute']);
         Route::post('/disputes/dispute/refund-client', [HandymanController::class, 'refund_client']);
         Route::post('/disputes/dispute/pay-provider', [HandymanController::class, 'pay_provider']);

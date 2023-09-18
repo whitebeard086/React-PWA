@@ -5,11 +5,17 @@ import appConfig from "@/configs/app.config"
 import useTwColorByName from "@/utils/hooks/useTwColorByName"
 import acronym from "@/utils/acronym"
 import dayjs from "dayjs"
+import { GetHomeResponse } from '../../utils/types'
 
-const RecentCustomers = () => {
+type Props = {
+    data: Partial<GetHomeResponse>
+}
+
+const RecentCustomers = ({ data }:Props) => {
     const { imagePath } = appConfig
     const color = useTwColorByName()
-    const { recentCustomers } = useAppSelector((state) => state.home.data)
+    const { recentCustomers } = data
+    // const { recentCustomers } = useAppSelector((state) => state.home.data)
     return (
         <Card>
             <div className="flex items-center gap-4 justify-between">
