@@ -15,7 +15,6 @@ import { setClient, setDispute, setInvoice, setProvider, toggleInvoiceDialog } f
 import { apiGetDispute } from '@/services/HandymanService'
 import appConfig from '@/configs/app.config'
 import type { ColumnDef, FilterFn, ColumnFiltersState } from '@tanstack/react-table'
-import type { InputHTMLAttributes } from 'react'
 import { Loading } from '@/components/shared'
 import TableRowSkeleton from '@/components/shared/loaders/TableRowSkeleton'
 
@@ -29,14 +28,13 @@ const { Tr, Th, Td, THead, TBody, Sorter } = Table
 const GeneratedAvatar = ({ target }: { target: string }) => {
     const color = useTwColorByName()
     return (
-        <Avatar shape="circle" className={`${color(target)}`}>
+        <Avatar size={28} shape="circle" className={`${color(target)}`}>
             {acronym(target)}
         </Avatar>
     )
 }
 
 const ActionColumn = ({ row }: { row: DisputeWithDetails }) => {
-    const { textTheme } = useThemeClass()
     const dispatch = useAppDispatch()
     const queryClient = useQueryClient()
     const navigate = useNavigate()

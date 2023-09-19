@@ -1,9 +1,10 @@
-import { Booking, Invoice, Service, User } from '@/@types/common'
+import { Booking, Invoice, InvoiceWithItems, Service, ServiceWithUser, User } from '@/@types/common'
 import { DisputeWithDetails } from '@/views/handyMan/types'
 
 interface RecentBookingWithInvoice extends Booking {
-    invoice: Invoice
+    invoice: InvoiceWithItems
     user: User
+    service: ServiceWithUser
 }
 
 interface ServiceWithBookings extends Service {

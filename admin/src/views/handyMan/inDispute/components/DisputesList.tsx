@@ -81,7 +81,7 @@ const DebouncedInput = ({
 const GeneratedAvatar = ({ target }: { target: string }) => {
     const color = useTwColorByName()
     return (
-        <Avatar shape="circle" className={`${color(target)}`}>
+        <Avatar size={28} shape="circle" className={`${color(target)}`}>
             {acronym(target)}
         </Avatar>
     )

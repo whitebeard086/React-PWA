@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { injectReducer } from "@/store"
-import reducer, { homeIndex, useAppSelector, useAppDispatch } from "./store"
+import reducer, { homeIndex, useAppDispatch } from "./store"
 import GettingData from './components/GettingData'
 import HomeFeed from './components/feed'
 import { useHomeData } from './utils/hooks'

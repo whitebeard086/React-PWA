@@ -9,7 +9,7 @@ export const useHomeData = () => {
             const response = await apiGetHomeData<GetHomeResponse>()
             return response.data;
         },
-        staleTime: 60 * 1000,
-		refetchInterval: 50 * 1000,
+        staleTime: 20 * 1000,
+		refetchInterval: 20 * 1000,
     })
 }

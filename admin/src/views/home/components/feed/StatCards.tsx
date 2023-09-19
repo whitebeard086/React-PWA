@@ -2,7 +2,6 @@ import { Card } from "@/components/ui"
 import { BiSolidBookAdd } from "react-icons/bi"
 import { FaUsers, FaUsersCog } from "react-icons/fa"
 import { RiMoneyDollarCircleFill } from "react-icons/ri"
-import { useAppSelector } from "../../store"
 import { useHomeData } from '../../utils/hooks'
 
 const StatCards = () => {
