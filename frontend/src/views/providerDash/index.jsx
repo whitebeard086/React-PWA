@@ -1,56 +1,74 @@
-import { injectReducer } from "@/store";
-import reducer from "./store";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import GettingDashboardData from "./components/GettingDashboardData";
-import DashboardFeed from "./components/DashboardFeed";
-import CompleteServiceDialog from "./components/CompleteServiceDialog";
+import { injectReducer } from '@/store';
+import { socket } from '@/utils/socket';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import BillsComponent from '../payments/components/Bills/BillsComponent';
+import CancelService from './components/CancelService';
+import CompleteServiceDialog from './components/CompleteServiceDialog';
+import DashboardFeed from './components/DashboardFeed';
+import DisputeDialog from './components/DisputeDialog';
+import GettingDashboardData from './components/GettingDashboardData';
+import StartService from './components/StartService';
+import reducer from './store';
 import {
-    getDashboardData,
-    setServiceCompletedDash,
-    setServiceConfirmedDash,
-} from "./store/dataSlice";
-import { socket } from "@/utils/socket";
-import StartService from "./components/StartService";
-import CancelService from "./components/CancelService";
-import DisputeDialog from "./components/DisputeDialog";
+	getDashboardData,
+	setServiceCompletedDash,
+	setServiceConfirmedDash,
+} from './store/dataSlice';
 
-injectReducer("dashboard", reducer);
+injectReducer('dashboard', reducer);
 
 const ProviderDashboard = () => {
-    const dispatch = useDispatch();
+	const dispatch = useDispatch();
 
-    const { serviceCompleted, serviceConfirmed, serviceStarted, serviceCancelled } = useSelector(
-        (state) => state.dashboard.data
-    );
-    const { serviceBooked } = useSelector((state) => state.chat.data);
-    const { loading } = useSelector((state) => state.dashboard.data);
+	const {
+		serviceCompleted,
+		serviceConfirmed,
+		serviceStarted,
+		serviceCancelled,
+	} = useSelector((state) => state.dashboard.data);
+	const { serviceBooked } = useSelector((state) => state.chat.data);
+	const { loading } = useSelector((state) => state.dashboard.data);
 
-    useEffect(() => {
-        dispatch(getDashboardData());
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch]);
+	useEffect(() => {
+		dispatch(getDashboardData());
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [dispatch]);
 
-    useEffect(() => {
-        if (serviceCompleted || serviceConfirmed || serviceBooked || serviceStarted || serviceCancelled) {
-            dispatch(getDashboardData());
-        }
+	useEffect(() => {
+		if (
+			serviceCompleted ||
+			serviceConfirmed ||
+			serviceBooked ||
+			serviceStarted ||
+			serviceCancelled
+		) {
+			dispatch(getDashboardData());
+		}
 
-        if (serviceCompleted) {
-            dispatch(setServiceCompletedDash(false));
-        } else if (serviceConfirmed) {
-            dispatch(setServiceConfirmedDash(false));
-        }
-    }, [dispatch, serviceCompleted, serviceConfirmed, serviceBooked, serviceStarted, serviceCancelled]);
+		if (serviceCompleted) {
+			dispatch(setServiceCompletedDash(false));
+		} else if (serviceConfirmed) {
+			dispatch(setServiceConfirmedDash(false));
+		}
+	}, [
+		dispatch,
+		serviceCompleted,
+		serviceConfirmed,
+		serviceBooked,
+		serviceStarted,
+		serviceCancelled,
+	]);
 
-    return (
-        <div className="mt-10 mb-8 px-4">
-            {loading ? <GettingDashboardData /> : <DashboardFeed />}
-            <CompleteServiceDialog socket={socket.current} />
-            <StartService />
-            <CancelService />
-            <DisputeDialog />
-        </div>
-    );
+	return (
+		<div className="mt-10 mb-8 px-4">
+			{loading ? <GettingDashboardData /> : <DashboardFeed />}
+			<BillsComponent />
+			<CompleteServiceDialog socket={socket.current} />
+			<StartService />
+			<CancelService />
+			<DisputeDialog />
+		</div>
+	);
 };
 export default ProviderDashboard;

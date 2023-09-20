@@ -15,7 +15,7 @@ const DepositDialog = () => {
 	const { depositDialog } = useSelector((state) => state.payments.state);
 	const { profile } = useSelector((state) => state.auth.user);
 
-	console.log('profile: ', profile);
+	// console.log('profile: ', profile);
 	const onDialogClose = () => {
 		dispatch(toggleDepositDialog(false));
 	};

@@ -17,7 +17,11 @@ import Layout from './views/layout';
 import NotFound from './views/notfound';
 import Unauthorized from './views/notfound/Unauthorized';
 import { setNotifications } from './views/notifications/store/dataSlice';
-import { setServiceCancelledDash, setServiceCompletedDash, setServiceStartedDash } from './views/providerDash/store/dataSlice';
+import {
+	setServiceCancelledDash,
+	setServiceCompletedDash,
+	setServiceStartedDash,
+} from './views/providerDash/store/dataSlice';
 import {
 	setServiceCancelled,
 	setServiceCompleted,
@@ -59,7 +63,9 @@ const Data = lazy(() => import('./views/bills/data'));
 const Disco = lazy(() => import('./views/bills/disco'));
 const Cable = lazy(() => import('./views/bills/cable'));
 const Notifications = lazy(() => import('./views/notifications'));
-const DisputeChat = lazy(() => import('./views/requests/components/Disputes/DisputeChat'));
+const DisputeChat = lazy(() =>
+	import('./views/requests/components/Disputes/DisputeChat')
+);
 
 function App() {
 	const dispatch = useDispatch();
@@ -136,18 +142,6 @@ function App() {
 				console.log('Received Service Booked: ', true);
 			},
 		},
-		// {
-		//     name: 'chargeSuccess',
-		//     handler({ data }) {
-		//         dispatch(updateTransaction({
-		//             email: data?.customer?.email,
-		//             reference: data?.reference,
-		//             amount: data?.amount,
-		//         }))
-		//         dispatch(setReceivedDeposit(true))
-		//         console.log('Deposit Updated: ', true);
-		//     }
-		// },
 	];
 
 	useEffect(() => {
@@ -205,7 +199,10 @@ function App() {
 									<Route path="/transactions" element={<Payments />} />
 									<Route path="/requests" element={<Requests />} />
 									<Route path="/requests/history" element={<History />} />
-									<Route path="/requests/disputes/:uid" element={<DisputeChat />} />
+									<Route
+										path="/requests/disputes/:uid"
+										element={<DisputeChat />}
+									/>
 									<Route path="/transaction-pin" element={<Pin />} />
 									<Route path="/bills/airtime" element={<Airtime />} />
 									<Route path="/bills/data" element={<Data />} />
