@@ -21,6 +21,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Admin\HomeAdminController;
 use App\Http\Controllers\Admin\UsersAdminController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
+use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\HandymanController;
 use App\Http\Controllers\DisputesController;
 
@@ -174,5 +175,8 @@ Route::group(['prefix' => 'admin'], function(){
         Route::post('/disputes/dispute', [HandymanController::class, 'dispute']);
         Route::post('/disputes/dispute/refund-client', [HandymanController::class, 'refund_client']);
         Route::post('/disputes/dispute/pay-provider', [HandymanController::class, 'pay_provider']);
+
+        // System Routes
+        Route::get('/categories', [CategoriesController::class, 'categories']);
     });
 });

@@ -230,7 +230,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
     }
 
     return (
-        <button ref={ref} className={classes} {...rest} onClick={handleClick}>
+        <button ref={ref} className={classNames('transition duration-150',classes)} {...rest} onClick={handleClick}>
             {renderChildren()}
         </button>
     )

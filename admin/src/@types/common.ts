@@ -118,6 +118,17 @@ export interface Category {
     updated_at: Date
 }
 
+export interface SubCategory {
+    id: number
+    uid: string 
+    name: string
+    category_id: number
+    slug: string
+    description: string | null
+    created_at: Date
+    updated_at: Date
+}
+
 export interface Chat {
     id: number
     uid: string | null
@@ -191,4 +202,9 @@ export interface UserWithService extends User {
 export interface ServiceWithUser extends Service {
     user: User
     category: Category
+}
+
+export interface CategoryWithSubCategories extends Category {
+    sub_categories: SubCategory[]
+    services: Service[]
 }
