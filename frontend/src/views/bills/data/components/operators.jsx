@@ -32,8 +32,9 @@ const Operators = ({ operators }) => {
 			{operators?.data
 				?.filter(
 					(item) =>
-						item.id !== 'op_zQG65u4Ax7HyXDHyJaHCLK' &&
-						item.id !== 'op_4NJKCdevbLiZPCxdrRmmCX'
+						// item.id !== 'op_zQG65u4Ax7HyXDHyJaHCLK' &&
+						// item.id !== 'op_4NJKCdevbLiZPCxdrRmmCX'
+						item.name !== 'Visafone'
 				)
 				.map((item) => (
 					<Segment.Item value={item.id} key={item.id}>

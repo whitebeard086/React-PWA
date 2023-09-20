@@ -5,7 +5,7 @@ import Notification from './components/notification';
 const Header = () => {
 	const { profile } = useSelector((state) => state.auth.user);
 	const { signedIn } = useSelector((state) => state.auth.session);
-
+	// console.log('Profile from header: ', profile);
 	return (
 		<div className="p-5 flex w-full justify-between items-center sticky top-0 bg-white z-10">
 			{signedIn ? (

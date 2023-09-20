@@ -34,7 +34,7 @@ const Transfer = ({ profile }) => {
 				You can fund your account via your personal Taskitly virtual account
 			</p>
 
-			{!profile?.preferred_bank ? (
+			{!profile?.collection_number ? (
 				<Card className="bg-primary-500 text-white mt-4">
 					<p className="text-base font-semibold text-center p-4">
 						We could not retrieve your dedicated account at the moment, please
@@ -45,13 +45,15 @@ const Transfer = ({ profile }) => {
 				<>
 					<Card className="bg-primary-500 text-white mt-4">
 						<div className="flex flex-col gap-2">
-							<p className="text-base text-center">{profile?.preferred_bank}</p>
+							<p className="text-base text-center">
+								{profile?.collection_bank}
+							</p>
 							<div
 								className="text-base flex flex-col justify-center items-center cursor-pointer"
-								onClick={() => handleCopyClick(profile?.account_number)}
+								onClick={() => handleCopyClick(profile?.collection_number)}
 							>
 								<p className="font-bold text-center">
-									{profile?.account_number}
+									{profile?.collection_number}
 								</p>
 								<div className="flex items-center gap-">
 									<p className="text sm">copy</p>
@@ -59,7 +61,7 @@ const Transfer = ({ profile }) => {
 								</div>
 							</div>
 							<p className="text-base text-center font-semibold">
-								{`${profile?.first_name} ${profile?.last_name}`}
+								{profile?.collection_name}
 							</p>
 
 							<Button

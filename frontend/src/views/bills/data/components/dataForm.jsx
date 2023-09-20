@@ -49,7 +49,7 @@ const DataForm = () => {
 
 	const onSubmit = ({ phone, bundle }) => {
 		const selected = products?.data?.find((b) => b.id === bundle);
-		if (selected?.meta?.fee > profile?.account_balance) {
+		if (selected?.meta?.fee > profile?.balance) {
 			popNotification(
 				'Error',
 				'You do not have enough balance to complete this transaction, please top-up and try again.',
@@ -123,11 +123,7 @@ const DataForm = () => {
 													>
 														<>
 															{products?.data
-																?.filter(
-																	(item) =>
-																		item.category !==
-																		'pctg_z6dJLqhj85UeBhd7kCCZZX'
-																)
+																?.filter((item) => item.fee_type !== 'RANGE')
 																.map((item) => (
 																	<Segment.Item value={item.id} key={item.id}>
 																		{({

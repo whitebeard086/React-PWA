@@ -122,9 +122,7 @@ const WithdrawForm = () => {
 												thousandSeparator={true}
 												form={form}
 												field={field}
-												isAllowed={(field) =>
-													field.value <= profile?.account_balance
-												}
+												isAllowed={(field) => field.value <= profile?.balance}
 												placeholder="Enter Amount"
 												decimalScale={0}
 												value={field.value}

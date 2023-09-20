@@ -195,10 +195,10 @@ class BillsController extends Controller
 
         $user = User::where('id', auth()->user()->id)->first();
 
-        $kycResponse = $this->checkKycTier($user, $request->amount);
-        if ($kycResponse !== null) {
-            return $kycResponse;
-        }
+        // $kycResponse = $this->checkKycTier($user, $request->amount);
+        // if ($kycResponse !== null) {
+        //     return $kycResponse;
+        // }
         
         if (!Hash::check($request->pin, $user->transaction_pin)) {
             return response()->json([
@@ -252,8 +252,8 @@ class BillsController extends Controller
             $electricityResponse = $this->billSubsriptions($electricity, $bill);
             if ($electricityResponse && $electricityResponse['success'] == true) {
                 $prepped = $electricityResponse['data']['amount'] / 100;
-                $newBalance = $user->account_balance - $prepped;
-                $user->account_balance = $newBalance;
+                $newBalance = $user->balance - $prepped;
+                $user->balance = $newBalance;
                 $message = 'Payment completed successfully';
                 $statusCode = 200;
                 $billResponse = $electricityResponse;
@@ -266,8 +266,8 @@ class BillsController extends Controller
             $televisionResponse = $this->billSubsriptions($television, $bill);
             if ($televisionResponse && $televisionResponse['success'] == true) {
                 $prepped = $televisionResponse['data']['amount'] / 100;
-                $newBalance = $user->account_balance - $prepped;
-                $user->account_balance = $newBalance;
+                $newBalance = $user->balance - $prepped;
+                $user->balance = $newBalance;
                 $message = 'Payment completed successfully';
                 $statusCode = 200;
                 $billResponse = $televisionResponse;
@@ -280,8 +280,8 @@ class BillsController extends Controller
             $telcoResponse = $this->billSubsriptions($telco, $bill);
             if ($telcoResponse && $telcoResponse['success'] == true) {
                 $prepped = $telcoResponse['data']['amount'] / 100;
-                $newBalance = $user->account_balance - $prepped;
-                $user->account_balance = $newBalance;
+                $newBalance = $user->balance - $prepped;
+                $user->balance = $newBalance;
                 $message = 'Payment completed successfully';
                 $statusCode = 200;
                 $billResponse = $telcoResponse;
@@ -335,7 +335,7 @@ class BillsController extends Controller
                 $data = $response['data'];
                 $prepped = $data['amount'] / 100;
 
-                $user->decrement('account_balance', $prepped);
+                $user->decrement('balance', $prepped);
                 
                 $txn = new Transaction;
                 $txn->user_id = $user->id;

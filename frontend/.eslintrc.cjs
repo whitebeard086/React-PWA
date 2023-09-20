@@ -23,4 +23,3 @@ module.exports = {
     	'@tanstack/query/prefer-query-object-syntax': 'error'
 	},
 };
- 

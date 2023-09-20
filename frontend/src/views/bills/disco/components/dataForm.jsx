@@ -71,7 +71,7 @@ const DataForm = () => {
 		debounceFn(d_values);
 	};
 	const onPay = (values) => {
-		if (values?.amount > profile?.account_balance) {
+		if (values?.amount > profile?.balance) {
 			popNotification(
 				'Error',
 				'You do not have sufficient fund to complete this transaction, please top-up and try again.',
