@@ -22,6 +22,7 @@ use App\Http\Controllers\BlocWebhookController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Admin\HandymanController;
 use App\Http\Controllers\Admin\HomeAdminController;
+use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\UsersAdminController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 
