@@ -399,7 +399,6 @@ class BookingController extends Controller
             $booking->save();
 
             $dispute = new Dispute;
-            $dispute->uid = Hashids::encode($dispute->id);
             $dispute->booking_id = $booking->id;
             $dispute->disputer_id = auth()->user()->id;
             $dispute->client_id = $client->id;
@@ -407,6 +406,9 @@ class BookingController extends Controller
             $dispute->invoice_id = $invoice->id;
             $dispute->description = $request->reason;
             $dispute->respond_before = Carbon::now()->addHours(24);
+            $dispute->save();
+            
+            $dispute->uid = Hashids::encode($dispute->id);
             $dispute->save();
 
             if($request->hasFile('file')) {
@@ -419,7 +421,7 @@ class BookingController extends Controller
                 
                 $media = new Media;
                 $media->file = $formFields['file'];
-                $dm->medias()->save($media);
+                $dm->media()->save($media);
             }
 
             DB::commit();
@@ -428,7 +430,7 @@ class BookingController extends Controller
                 'status' => 'success',
                 'message' => 'Dispute Opened',
                 'booking' => Booking::with('Service.User', 'User', 'Invoice')->where('id', $booking->id)->firstOrFail(),
-                'dispute' => Dispute::with('Booking', 'Messages.Medias')->where('id', $dispute->id)->get(),
+                'dispute' => Dispute::with('Booking', 'Messages.Media')->where('id', $dispute->id)->get(),
             ], 201);
 
             

@@ -1,10 +1,10 @@
+/* eslint-disable react/display-name */
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
 import { forwardRef } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
-const Image = forwardRef((props, ref) => {
+const Image = forwardRef((props) => {
 
     const {
         placeholderSrc,

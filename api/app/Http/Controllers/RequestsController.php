@@ -18,7 +18,7 @@ class RequestsController extends Controller
             $user = User::findOrFail($userId);
 
             $bookingQuery = Booking::with('Service.User', 'User')->where('status', 'ongoing');
-            $disputeQuery = Dispute::with('Booking.Service.User', 'Booking.User', 'Messages.Medias')->orderBy('id', 'desc');
+            $disputeQuery = Dispute::with('Booking.Service.User', 'Booking.User', 'Messages.Media')->orderBy('id', 'desc')->where('status', 'open');
             $historyQuery = Booking::with('Service.User', 'User', 'Invoice')->orderBy('id', 'desc');
             
             if ($user->profile_type_id == 1) {

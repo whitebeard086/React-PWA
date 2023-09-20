@@ -9,6 +9,7 @@ import type { MouseEvent } from 'react'
 
 export interface DialogProps extends ReactModal.Props {
     closable?: boolean
+    scrollable?: boolean
     contentClassName?: string
     height?: string | number
     onClose?: (e: MouseEvent<HTMLSpanElement>) => void
@@ -23,6 +24,7 @@ const Dialog = (props: DialogProps) => {
         children,
         className,
         closable = true,
+        scrollable = false,
         closeTimeoutMS = 150,
         contentClassName,
         height,
@@ -82,7 +84,7 @@ const Dialog = (props: DialogProps) => {
             }}
             overlayClassName={{
                 base: classNames('dialog-overlay', overlayClassName as string),
-                afterOpen: 'dialog-overlay-after-open',
+                afterOpen: classNames('dialog-overlay-after-open', scrollable && 'overflow-y-auto'),
                 beforeClose: 'dialog-overlay-before-close',
             }}
             portalClassName={classNames('dialog-portal', portalClassName)}

@@ -85,9 +85,10 @@ class ChatController extends Controller
 
                 if (!$chat) {
                     $n_chat = new Chat;
-                    $n_chat->uid = Hashids::encode($n_chat->id);
                     $n_chat->user_id = $userId;
                     $n_chat->receiver_id = $provider->id;
+                    $n_chat->save();
+                    $n_chat->uid = Hashids::encode($n_chat->id);
                     $n_chat->save();
 
                     return response()->json([

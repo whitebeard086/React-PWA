@@ -6,10 +6,11 @@ module.exports = {
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:@tanstack/eslint-plugin-query/recommended",
     "prettier",
     "eslint-config-prettier",
   ],
-  plugins: ["react-refresh"],
+  plugins: ["react-refresh", "@tanstack/query"],
   settings: {
     react: {
       version: "detect",
@@ -30,6 +31,8 @@ module.exports = {
       { "allowConstantExport": true }
     ],
     "react/react-in-jsx-scope": "off",
+    "@tanstack/query/exhaustive-deps": "error",
+    "@tanstack/query/prefer-query-object-syntax": "error",
     "import/first": "warn",
     "import/default": "off",
     "import/newline-after-import": "warn",

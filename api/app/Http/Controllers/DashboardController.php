@@ -19,7 +19,7 @@ class DashboardController extends Controller
             $allBookings = Booking::where('provider_id', $userId);
             $bookings = Booking::orderBy('id', 'desc')->with('Service.User', 'User', 'Service.Category')->where('status', 'ongoing')->where('provider_id', $userId)->get();
             $enquiries = Chat::with('Messages', 'User.Service', 'Receiver.Service')->where('receiver_id', $userId)->orderBy('id', 'desc')->get();
-            $disputes = Dispute::with('Booking.Service.User', 'Booking.User', 'Messages.Medias')->orderBy('id', 'desc')->where('provider_id', $userId)->get();
+            $disputes = Dispute::with('Booking.Service.User', 'Booking.User', 'Messages.Media')->orderBy('id', 'desc')->where('provider_id', $userId)->get();
 
             return response()->json([
                 'status' => 'success',

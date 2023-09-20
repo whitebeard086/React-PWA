@@ -1,4 +1,4 @@
-import ApiService from './ApiService'
+import ApiService, { ApiQueryService } from './ApiService'
 
 export async function apiGetEnquiries<T>() {
     return ApiService.fetchData<T>({
@@ -12,5 +12,36 @@ export async function apiGetEnquiry<T, U extends Record<string, unknown>>(data: 
         url: '/enquiries/enquiry',
         method: 'post',
         data,
+    })
+}
+
+export async function apiGetDisputes<T>() {
+    return ApiQueryService.fetchData<T>({
+        url: '/disputes',
+        method: 'get',
+    })
+}
+
+export async function apiGetDispute<T, U extends Record<string, unknown>>(data: U) {
+    return ApiService.fetchData<T>({
+        url: '/disputes/dispute',
+        method: 'post',
+        data
+    })
+}
+
+export async function apiRefundClient<T, U extends Record<string, unknown>>(data: U) {
+    return ApiService.fetchData<T>({
+        url: '/disputes/dispute/refund-client',
+        method: 'post',
+        data
+    })
+}
+
+export async function apiPayProvider<T, U extends Record<string, unknown>>(data: U) {
+    return ApiService.fetchData<T>({
+        url: '/disputes/dispute/refund-client',
+        method: 'post',
+        data
     })
 }

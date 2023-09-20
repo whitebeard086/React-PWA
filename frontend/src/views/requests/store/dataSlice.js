@@ -1,15 +1,20 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
     apiCancelService,
+    apiCloseDispute,
     apiCompleteService,
     apiConfirmService,
     apiOpenDispute,
     apiStartService,
-} from "@/services/BookingService";
-import { apiGetDispute, apiGetRequestsData, apiSendMessage } from "@/services/RequestsService";
+} from '@/services/BookingService';
+import {
+    apiGetDispute,
+    apiGetRequestsData,
+    apiSendMessage,
+} from '@/services/RequestsService';
 
 export const getRequestsData = createAsyncThunk(
-    "requests/data/getRequestsData",
+    'requests/data/getRequestsData',
     async (data, { rejectWithValue }) => {
         try {
             const response = await apiGetRequestsData(data);
@@ -29,7 +34,7 @@ export const getRequestsData = createAsyncThunk(
 );
 
 export const completeService = createAsyncThunk(
-    "payments/data/completeService",
+    'payments/data/completeService',
     async (data, { rejectWithValue }) => {
         try {
             const response = await apiCompleteService(data);
@@ -41,7 +46,7 @@ export const completeService = createAsyncThunk(
 );
 
 export const confirmService = createAsyncThunk(
-    "payments/data/confirmService",
+    'payments/data/confirmService',
     async (data, { rejectWithValue }) => {
         try {
             const response = await apiConfirmService(data);
@@ -53,7 +58,7 @@ export const confirmService = createAsyncThunk(
 );
 
 export const startService = createAsyncThunk(
-    "payments/data/startService",
+    'payments/data/startService',
     async (data, { rejectWithValue }) => {
         try {
             const response = await apiStartService(data);
@@ -65,7 +70,7 @@ export const startService = createAsyncThunk(
 );
 
 export const cancelService = createAsyncThunk(
-    "payments/data/cancelService",
+    'payments/data/cancelService',
     async (data, { rejectWithValue }) => {
         try {
             const response = await apiCancelService(data);
@@ -77,7 +82,7 @@ export const cancelService = createAsyncThunk(
 );
 
 export const openDispute = createAsyncThunk(
-    "requests/data/openDispute",
+    'requests/data/openDispute',
     async (data, { rejectWithValue }) => {
         try {
             const response = await apiOpenDispute(data);
@@ -89,7 +94,7 @@ export const openDispute = createAsyncThunk(
 );
 
 export const getDispute = createAsyncThunk(
-    "requests/data/getDispute",
+    'requests/data/getDispute',
     async (data, { rejectWithValue }) => {
         try {
             const response = await apiGetDispute(data);
@@ -101,7 +106,7 @@ export const getDispute = createAsyncThunk(
 );
 
 export const sendMessage = createAsyncThunk(
-    "requests/data/sendMessage",
+    'requests/data/sendMessage',
     async (data, { rejectWithValue }) => {
         try {
             const response = await apiSendMessage(data);
@@ -112,8 +117,20 @@ export const sendMessage = createAsyncThunk(
     }
 );
 
+export const closeDispute = createAsyncThunk(
+    'requests/data/closeDispute',
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await apiCloseDispute(data);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 const dataSlice = createSlice({
-    name: "requests/data",
+    name: 'requests/data',
     initialState: {
         bookings: [],
         enquiries: [],
@@ -124,19 +141,21 @@ const dataSlice = createSlice({
         sentMessage: {},
         booking: {},
         dispute: {},
-        serviceStatus: "idle",
-        confirmStatus: "idle",
-        startStatus: "idle",
-        cancelStatus: "idle",
-        disputeStatus: "idle",
-        messageStatus: "idle",
-        status: "idle",
+        serviceStatus: 'idle',
+        confirmStatus: 'idle',
+        startStatus: 'idle',
+        cancelStatus: 'idle',
+        disputeStatus: 'idle',
+        closeDisputeStatus: 'idle',
+        messageStatus: 'idle',
+        status: 'idle',
         sendingMessage: false,
         completingService: false,
         confirmingStatus: false,
         startingService: false,
         cancellingService: false,
         openingDispute: false,
+        closingDispute: false,
         gettingDispute: false,
         serviceStarted: false,
         serviceCancelled: false,
@@ -162,8 +181,8 @@ const dataSlice = createSlice({
             state.startStatus = action.payload;
         },
         setDisMessages: (state, action) => {
-			state.disMessages = [...state.disMessages, action.payload];
-		},
+            state.disMessages = [...state.disMessages, action.payload];
+        },
         setCancelStatus: (state, action) => {
             state.cancelStatus = action.payload;
         },
@@ -177,8 +196,11 @@ const dataSlice = createSlice({
             state.serviceStarted = action.payload;
         },
         setMessageStatus: (state, action) => {
-			state.messageStatus = action.payload;
-		},
+            state.messageStatus = action.payload;
+        },
+        setCloseDisputeStatus: (state, action) => {
+            state.closeDisputeStatus = action.payload;
+        },
         setServiceCancelled: (state, action) => {
             state.serviceCancelled = action.payload;
         },
@@ -196,7 +218,8 @@ const dataSlice = createSlice({
             })
             .addCase(getRequestsData.fulfilled, (state, action) => {
                 state.loading = false;
-                const { status, enquiries, bookings, history, disputes } = action.payload;
+                const { status, enquiries, bookings, history, disputes } =
+                    action.payload;
                 state.status = status;
                 state.enquiries = enquiries;
                 state.bookings = bookings;
@@ -205,7 +228,7 @@ const dataSlice = createSlice({
             })
             .addCase(getRequestsData.rejected, (state) => {
                 state.loading = false;
-                state.status = "error";
+                state.status = 'error';
             })
 
             .addCase(completeService.pending, (state) => {
@@ -286,7 +309,7 @@ const dataSlice = createSlice({
                 state.gettingDispute = false;
                 const { status, dispute } = action.payload;
                 state.disputeStatus = status;
-                state.disMessages = dispute.messages
+                state.disMessages = dispute.messages;
                 state.dispute = dispute;
             })
             .addCase(getDispute.rejected, (state, action) => {
@@ -299,15 +322,29 @@ const dataSlice = createSlice({
             })
             .addCase(sendMessage.fulfilled, (state, action) => {
                 state.sendingMessage = false;
-                const { status, dispute, message } = action.payload;
+                const { status, message } = action.payload;
                 state.messageStatus = status;
                 state.sentMessage = message;
-                state.dispute = dispute;
+                state.disMessages = [...state.disMessages, message];
             })
             .addCase(sendMessage.rejected, (state, action) => {
                 state.sendingMessage = false;
                 state.messageStatus = action.payload.status || 'error';
             })
+
+            .addCase(closeDispute.pending, (state) => {
+                state.closingDispute = true;
+            })
+            .addCase(closeDispute.fulfilled, (state, action) => {
+                state.closingDispute = false;
+                const { status, dispute } = action.payload;
+                state.closeDisputeStatus = status;
+                state.dispute = dispute;
+            })
+            .addCase(closeDispute.rejected, (state, action) => {
+                state.closingDispute = false;
+                state.closeDisputeStatus = action.payload.status || 'error';
+            });
     },
 });
 
@@ -326,5 +363,6 @@ export const {
     setServiceCancelled,
     setServiceCompleted,
     setServiceConfirmed,
+    setCloseDisputeStatus,
 } = dataSlice.actions;
 export default dataSlice.reducer;

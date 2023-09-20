@@ -47,3 +47,11 @@ export async function apiOpenDispute (data) {
         data
     })
 }
+
+export async function apiCloseDispute (data) {
+    return ApiService.fetchData({
+        url: '/service/dispute/close',
+        method: 'post',
+        data
+    })
+}

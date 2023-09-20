@@ -347,7 +347,6 @@ class UserController extends Controller
 
         $service = new Service;
         $service->user_id = auth()->user()->id;
-        $service->uid = Hashids::encode($service->id);
         $service->category_id = $request->category;
         $service->sub_category_id = $request->subcategory;
         $service->workdays_id = $workdays->id;
@@ -355,6 +354,8 @@ class UserController extends Controller
         $service->slug = Str::slug($request->title);
         $service->description = $request->description;
         $service->starting_price = $request->starting_price;
+        $service->save();
+        $service->uid = Hashids::encode($service->id);
         $service->save();
 
         return response()->json([

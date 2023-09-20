@@ -1,3 +1,4 @@
+/* eslint-disable @tanstack/query/exhaustive-deps */
 import {
 	apiGetBillOperators,
 	apiGetOperatorProducts,

@@ -109,6 +109,18 @@ const NotificationTypeContent = ({ item }) => {
                     <Link to={url} state={{ chat: messageData?.chat_id }} className="absolute w-full h-full top-0 left-0"/>
                 </div>
             )
+        case 'booking complete':
+            return (
+                <div className="leading-tight">
+                    <span className="font-bold">
+                        {`${sender.service?.title}`}{' '}
+                    </span>
+                    <span>
+                        {messageData?.message}
+                    </span>
+                    <Link to={url} state={{ chat: messageData?.chat_id }} className="absolute w-full h-full top-0 left-0"/>
+                </div>
+            )
         case 'booking disputed':
             if (sender.service) {
                 return (
@@ -135,6 +147,32 @@ const NotificationTypeContent = ({ item }) => {
                         </span>
                         <span>
                             you have 24hrs to respond.
+                        </span>
+                        <Link to={url} className="absolute w-full h-full top-0 left-0"/>
+                    </div>
+                )
+            }
+        case 'dispute message':
+            if (sender.service) {
+                return (
+                    <div className="leading-tight">
+                        <span className="font-bold">
+                            Dispute update from {sender.service.title}{' '}
+                        </span>{' '}
+                        <span className="font-bold text-xs heading-text block">
+                            <TextEllipsis text={messageData?.message} maxTextCount={60} />
+                        </span>
+                        <Link to={url} className="absolute w-full h-full top-0 left-0"/>
+                    </div>
+                )
+            } else {
+                return (
+                    <div className="leading-tight">
+                        <span className="font-bold">
+                            Dispute update from {`${sender.first_name} ${sender.last_name}`}{' '}
+                        </span>{' '}
+                        <span className="font-bold text-xs heading-text block">
+                            <TextEllipsis text={messageData?.message} maxTextCount={60} />
                         </span>
                         <Link to={url} className="absolute w-full h-full top-0 left-0"/>
                     </div>

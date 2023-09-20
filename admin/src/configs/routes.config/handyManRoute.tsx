@@ -34,6 +34,12 @@ const handyManRoute: Routes = [
         component: lazy(() => import('@/views/handyMan/inDispute')),
         authority: [ADMIN],
     },
+    {
+        key: 'handyMan.inDispute',
+        path: `${HANDY_MAN_PREFIX_PATH}/bookings-in-dispute/:dispute`,
+        component: lazy(() => import('@/views/handyMan/inDispute/dispute')),
+        authority: [ADMIN],
+    },
 ]
 
 export default handyManRoute

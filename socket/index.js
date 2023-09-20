@@ -92,6 +92,18 @@ io.on('connection', (socket) => {
 		}
 	});
 
+	// Send dispute message
+	socket.on('sendDisputeMessage', (data) => {
+		const receiverId = data[1];
+		const user = activeUsers.find((user) => user.userId === receiverId);
+		console.log('Sending from socket to: ', receiverId);
+		console.log('Data: ', data);
+
+		if (user) {
+			io.to(user.socketId).emit('receiveDisputeMessage', data[0]);
+		}
+	});
+
 	// Send Invoice
 	socket.on('sendInvoice', (data) => {
 		const receiverId = data;
