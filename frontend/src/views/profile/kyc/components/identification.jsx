@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { initiateKyc, resetState } from '../store';
+// import { useCreateKycMutation } from '@/services/features/kycApi';
 
 const isSubmitButtonDisabled = (documentType, values) => {
 	if (documentType === 'nin') {
@@ -170,6 +171,8 @@ const Identification = ({ userId }) => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
+	// const [createKyc, { isLoading, isError }] = useCreateKycMutation();
+
 	const { kycState } = useSelector((state) => state.kyc.data);
 
 	const onSubmit = (values) => {
@@ -214,6 +217,7 @@ const Identification = ({ userId }) => {
 		};
 		console.log('Values: ', payload);
 		dispatch(initiateKyc(payload));
+		// createKyc(payload);
 	};
 
 	useEffect(() => {

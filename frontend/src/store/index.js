@@ -1,9 +1,9 @@
+import { apiSlice } from '@/services/api/apiSlice';
 import { configureStore } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { PERSIST_STORE_NAME } from '../constants/app.constant';
 import rootReducer from './rootReducer';
-
 const middlewares = [];
 
 const persistConfig = {
@@ -28,7 +28,9 @@ const store = configureStore({
 		getDefaultMiddleware({
 			immutableCheck: false,
 			serializableCheck: false,
-		}).concat(middlewares),
+		})
+			.concat(middlewares)
+			.concat(apiSlice.middleware),
 	devTools: process.env.NODE_ENV === 'development',
 });
 

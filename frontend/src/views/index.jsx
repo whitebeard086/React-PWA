@@ -1,11 +1,13 @@
 import Home from '@/views/home';
 import ProviderDashboard from '@/views/providerDash';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
+import { useUser } from '@/services/features/userApi';
 
 const Views = () => {
-	const { userType } = useSelector((state) => state.auth.user);
-	console.log('usertype: ', userType);
-	console.log('evaluating usertype: ', userType === 'Provider');
+	const { userType } = useUser();
+	// const { userType } = useSelector((state) => state.auth.user);
+	// return userType === 'Provider' ? <ProviderDashboard /> : <Home />;
+
 	return userType === 'Provider' ? <ProviderDashboard /> : <Home />;
 };
 export default Views;

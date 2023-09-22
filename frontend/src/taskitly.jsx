@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { RouterProvider } from 'react-router-dom';
 
 import { appRouter } from '@/routes/appRouter';
+import { useUser } from '@/services/features/userApi';
 import { getUser, setOnlineUsers } from '@/store/auth/userSlice';
 import { useSocket } from '@/utils/hooks/useSocket';
 import { socket } from '@/utils/socket';
@@ -26,6 +27,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 function App() {
 	const dispatch = useDispatch();
+	useUser();
 
 	const { onlineUsers, profile } = useSelector((state) => state.auth.user);
 

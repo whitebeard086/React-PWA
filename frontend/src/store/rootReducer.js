@@ -1,3 +1,4 @@
+import { apiSlice } from '@/services/api/apiSlice';
 import { combineReducers } from 'redux';
 import chat from '../../src/views/chat/store';
 import notifications from '../../src/views/notifications/store';
@@ -18,6 +19,7 @@ const rootReducer = (asyncReducers) => (state, action) => {
 		chat,
 		kyc,
 		settings,
+		[apiSlice.reducerPath]: apiSlice.reducer,
 		...asyncReducers,
 	});
 

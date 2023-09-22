@@ -34,7 +34,7 @@ const Data = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	// console.log('Operators: ', operators);
+	console.log('Operators: ', operators);
 	// console.log('Products: ', products);
 	// console.log('Store: ', store);
 	// console.log('State: ', state);

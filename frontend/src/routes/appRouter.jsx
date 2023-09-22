@@ -37,7 +37,9 @@ import Settings from '@/views/settings';
 import Verify from '@/views/verify';
 import Withdraw from '@/views/withdraw';
 
-export const appRouter = createBrowserRouter(
+// import {Airtime, } from '@/views/bills/bills';
+
+export let appRouter = createBrowserRouter(
 	createRoutesFromElements(
 		<Route path="/" element={<Layout />} errorElement={<ErrorPage />}>
 			<Route path="/" element={<Landing />} />
@@ -72,7 +74,11 @@ export const appRouter = createBrowserRouter(
 					<Route path="bills/airtime" element={<Airtime />} />
 					<Route path="bills/data" element={<Data />} />
 					<Route path="bills/disco" element={<Disco />} />
-					<Route path="bills/cable" element={<Cable />} />
+					<Route
+						path="bills/cable"
+						element={<Cable />}
+						lazy={() => import('@/views/bills/cable')}
+					/>
 					<Route path="unauthorized" element={<Unauthorized />} />
 					<Route path="/profile/notifications" element={<Notifications />} />
 				</Route>
