@@ -58,7 +58,7 @@ const CropImage = ({ photoURL, openCrop, setOpenCrop, aspect, setPhotoURL, setFi
             onRequestClose={onCancel}
             shouldCloseOnOverlayClick={false}
             shouldCloseOnEsc={false}
-            width={600}
+            // width={600}
             className="p-0"
         >
             <div className="flex flex-col gap-4 mt-8 w-full max-h-[80vh]">

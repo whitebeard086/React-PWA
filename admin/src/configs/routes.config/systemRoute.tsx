@@ -11,6 +11,12 @@ const systemRoute: Routes = [
         authority: [ADMIN],
     },
     {
+        key: 'system.serviceCategories.category',
+        path: `${SYSTEM_PREFIX_PATH}/service-categories/:category`,
+        component: lazy(() => import('@/views/system/serviceCategories/category')),
+        authority: [ADMIN],
+    },
+    {
         key: 'system.referralSettings',
         path: `${SYSTEM_PREFIX_PATH}/referral-settings`,
         component: lazy(() => import('@/views/system/referralSettings')),

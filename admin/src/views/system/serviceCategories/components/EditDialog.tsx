@@ -1,5 +1,6 @@
-import { Dialog } from '@/components/ui'
+import { Dialog, Image } from '@/components/ui'
 import { closeCategoryDialog, useAppDispatch, useAppSelector } from '../store'
+import appConfig from '@/configs/app.config'
 
 const EditDialog = () => {
     const dispatch = useAppDispatch()
@@ -19,6 +20,14 @@ const EditDialog = () => {
         >
             <div>
                 <h4 className="text-base">{category.name}</h4>
+
+                <div className="mt-4">
+                    <Image 
+                        src={`${appConfig.imagePath}/${category.banner}`} 
+                        alt={`${category.name} image`}
+                        className='max-w-lg max-h-60'
+                    />
+                </div>
             </div>
         </Dialog>
     )

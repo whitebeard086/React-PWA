@@ -5,6 +5,10 @@ import { RiEdit2Fill } from 'react-icons/ri'
 import { AnimatePresence, motion } from 'framer-motion'
 import { MdDelete } from 'react-icons/md'
 import { setCategory, toggleCategoryDialog, useAppDispatch } from '../store'
+import { useNavigate } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
+import { apiGetCategory } from '@/services/SystemService'
+import { GetCategoryRequest, GetCategoryResponse } from '../../utils/types'
 
 type Props = {
     categories: CategoryWithSubCategories[]
@@ -40,10 +44,24 @@ const CardHeader = ({ data }: DataProps) => (
 
 const CategoryCard = ({ categories }: Props) => {
     const dispatch = useAppDispatch()
+    const navigate = useNavigate()
+    const queryClient = useQueryClient()
+
+    const prefetchCategory = (category: GetCategoryRequest) => {
+        queryClient.prefetchQuery({
+            queryKey: ['categories', category],
+            queryFn: async () => {
+                const response = await apiGetCategory<GetCategoryResponse, GetCategoryRequest>(category)
+                return response.data
+            },
+            staleTime: 60 * 1000,
+        })
+    }
 
     const onEdit = (category: CategoryWithSubCategories) => {
         dispatch(setCategory(category))
-        dispatch(toggleCategoryDialog(true))
+        // dispatch(toggleCategoryDialog(true))
+        navigate(`/configurations/service-categories/${category.slug}`)
     }
 
     return (
@@ -61,7 +79,7 @@ const CategoryCard = ({ categories }: Props) => {
                         header={<CardHeader data={category}  />}
                         headerClass="p-0"
                     >
-                        <div>
+                        <div onMouseEnter={() => prefetchCategory({ slug: category.slug })}>
                             <div className="flex items-center gap-4 justify-between">
                                 <p className='font-semibold'>
                                     Sub Categories:
@@ -78,27 +96,28 @@ const CategoryCard = ({ categories }: Props) => {
                                     {category.services.length.toLocaleString()}
                                 </p>
                             </div>
+                            
+                            <div className='mt-4 flex items-center gap-4 justify-between'>
+                                <Button
+                                    size='xs'
+                                    variant='solid'
+                                    icon={<RiEdit2Fill />}
+                                    onClick={() => onEdit(category)}
+                                >
+                                    Edit
+                                </Button>
+
+                                <Button
+                                    size='xs'
+                                    variant='twoTone'
+                                    color='red-500'
+                                    icon={<MdDelete />}
+                                >
+                                    Delete
+                                </Button>
+                            </div>
                         </div>
 
-                        <div className='mt-4 flex items-center gap-4 justify-between'>
-                            <Button
-                                size='xs'
-                                variant='solid'
-                                icon={<RiEdit2Fill />}
-                                onClick={() => onEdit(category)}
-                            >
-                                Edit
-                            </Button>
-
-                            <Button
-                                size='xs'
-                                variant='twoTone'
-                                color='red-500'
-                                icon={<MdDelete />}
-                            >
-                                Delete
-                            </Button>
-                        </div>
                     </Card>
                 </motion.div>
             ))}

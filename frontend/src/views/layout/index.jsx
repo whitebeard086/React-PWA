@@ -95,6 +95,9 @@ const Layout = () => {
 		dispatch(toggleWithdrawDialog(true));
 	};
 
+	// if (signedIn) {
+
+	// }
 	useGetOperators('electricity');
 	useGetOperators('television');
 	useGetOperators('telco');

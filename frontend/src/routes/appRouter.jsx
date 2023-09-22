@@ -3,6 +3,7 @@ import {
 	createBrowserRouter,
 	createRoutesFromElements,
 } from 'react-router-dom';
+// import { persistor } from './store';
 
 import ErrorPage from '@/routes/error';
 import Views from '@/views';
@@ -36,6 +37,7 @@ import EditService from '@/views/service/components/EditService';
 import Settings from '@/views/settings';
 import Verify from '@/views/verify';
 import Withdraw from '@/views/withdraw';
+import History from '@/views/requests/components/History';
 
 export const appRouter = createBrowserRouter(
 	createRoutesFromElements(

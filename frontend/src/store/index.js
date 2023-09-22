@@ -18,6 +18,7 @@ const persistConfig = {
 		'requests',
 		'notifications',
 	],
+	// debug: true,
 	// serialize: false,
 	// deserialize: false,
 };

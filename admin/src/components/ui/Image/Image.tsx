@@ -6,6 +6,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import { CommonProps } from '../@types/common';
 import { ComponentPropsWithoutRef } from 'react-markdown/lib/ast-to-react';
+import classNames from 'classnames';
 
 export interface ImageProps
     extends CommonProps,
@@ -40,7 +41,7 @@ const Image = forwardRef<HTMLDivElement, ImageProps>((props, ref) => {
             height={height}
             width={width}
             effect={effect}
-            className={className}
+            className={classNames('object-cover', className)}
             wrapperClassName={wrapperClassName}
         />
     )
