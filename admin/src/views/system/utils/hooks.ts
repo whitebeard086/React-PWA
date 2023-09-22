@@ -2,6 +2,8 @@ import { apiGetCategories, apiGetCategory, apiUpdateCategory } from '@/services/
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { GetCategoriesResponse, GetCategoryRequest, GetCategoryResponse, UpdateCategoryRequest } from './types'
 import { popNotification } from '@/components/ui/Notification/toast'
+import { useNavigate } from 'react-router-dom'
+import { setEditCategory, useAppDispatch } from '../serviceCategories/store'
 
 export const useGetCategories = () => {
     return useQuery({
@@ -27,14 +29,20 @@ export const useGetCategory = (category: GetCategoryRequest) => {
 
 export const useUpdateCategory = () => {
     const queryClient = useQueryClient()
+    const navigate = useNavigate()
+    const dispatch = useAppDispatch()
     return useMutation({
         mutationKey: ['categories'],
         mutationFn: async (category: UpdateCategoryRequest) => {
             const response = await apiUpdateCategory<GetCategoryResponse, UpdateCategoryRequest>(category)
             return response.data;
         },
-        onSuccess: () => {
+        onSuccess: (data, variables) => {
             queryClient.invalidateQueries(['categories'])
+            if (variables.name) {
+                navigate(`/configurations/service-categories/${data.category.slug}`)
+                dispatch(setEditCategory(false))
+            }
             popNotification(
                 'Success',
                 'Category updated!',

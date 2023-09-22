@@ -4,14 +4,17 @@ import { Avatar, Button, Card, Image, Tooltip, Upload } from '@/components/ui';
 import appConfig from '@/configs/app.config';
 import { RiImageEditFill } from 'react-icons/ri';
 import UploadBanner from './UploadBanner';
-import reducer, { SLICE_NAME } from '../store';
+import reducer, { SLICE_NAME, setEditCategory, useAppDispatch } from '../store';
 import { injectReducer } from '@/store';
 import useCompressFile from '@/utils/hooks/useCompressFile';
 import UploadIcon from './UploadIcon';
+import { BiEditAlt } from 'react-icons/bi';
+import CategoryName from './CategoryName';
 
 injectReducer(SLICE_NAME, reducer)
 
 const Category = () => {
+    const dispatch = useAppDispatch()
     const { pathname } = useLocation()
     const slug = pathname.split('/')[3];
     const { data, isLoading } = useGetCategory({ slug })
@@ -19,7 +22,7 @@ const Category = () => {
 
     return (
         <div>
-            <h4 className="font-base">{category?.name}</h4>
+            <h4 className="mb-4">{category?.name} Category</h4>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 <div className="lg:col-span-2">
                     <Card>
@@ -59,6 +62,12 @@ const Category = () => {
                                 </div>
                             </div>
                         </Card>
+                        <div className="mt-6">
+                            <CategoryName 
+                                category={category ?? {}}
+                                slug={category?.slug ?? ''}
+                            />
+                        </div>
                     </Card>
                 </div>
             </div>

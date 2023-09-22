@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 export interface CategoryState {
     deleteDialog: boolean
+    editCategory: boolean
     categoryDialog: boolean
     image: Partial<Blob>
     category: Partial<CategoryWithSubCategories>
@@ -13,6 +14,7 @@ export const SLICE_NAME = 'categories'
 
 const initialState: CategoryState = {
     deleteDialog: false,
+    editCategory: false,
     categoryDialog: false,
     image: {},
     category: {},
@@ -32,6 +34,9 @@ const categorySlice = createSlice({
         setSubCategory: (state, action) => {
             state.subCategory = action.payload
         },
+        setEditCategory: (state, action) => {
+            state.editCategory = action.payload
+        },
         toggleDeleteDialog: (state, action) => {
             state.deleteDialog = action.payload
         },
@@ -49,6 +54,7 @@ export const {
     setImage,
     setCategory,
     setSubCategory,
+    setEditCategory,
     toggleDeleteDialog,
     closeCategoryDialog,
     toggleCategoryDialog,

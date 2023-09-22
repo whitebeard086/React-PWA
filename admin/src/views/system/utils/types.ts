@@ -13,6 +13,7 @@ export type UpdateCategoryRequest = {
     slug: string
     banner?: File | null
     icon?: File | null
+    name?: string
 }
 
 export interface GetCategoryResponse {
