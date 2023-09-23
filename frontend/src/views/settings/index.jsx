@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui';
+import { useUser } from '@/services/features/userApi';
 import { injectReducer } from '@/store';
 import { setEnabledNotifications } from '@/store/auth/userSlice';
 import useAuth from '@/utils/hooks/useAuth';
@@ -24,6 +25,7 @@ injectReducer('settings', reducer);
 const Settings = () => {
 	const { handleSignOut } = useAuth();
 	const dispatch = useDispatch();
+	const { hasPin, user: profile, userType } = useUser();
 
 	window.OneSignal = window.OneSignal || [];
 	const OneSignal = window.OneSignal;
@@ -33,9 +35,7 @@ const Settings = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const { userType, enabledNotifications, profile } = useSelector(
-		(state) => state.auth.user
-	);
+	const { enabledNotifications } = useSelector((state) => state.auth.user);
 
 	OneSignal.push(() => {
 		OneSignal.init({
@@ -159,9 +159,11 @@ const Settings = () => {
 					>
 						<div className="w-full flex flex-col">
 							<span className="text-base font-semibold text-gray-600">
-								Change PIN
+								{hasPin ? 'Change PIN' : 'Create PIN'}
 							</span>
-							<p className="text xs">Change your transaction pin</p>
+							<p className="text xs">
+								{hasPin ? 'Change your' : 'Create'} transaction pin
+							</p>
 						</div>
 					</Link>
 

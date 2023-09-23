@@ -137,7 +137,7 @@ const RequirePin = () => {
 
 				<div>
 					<PinInput
-						length={6}
+						length={4}
 						initialValue=""
 						secretDelay={200}
 						ref={(n) => (pinRef = n)}
@@ -159,7 +159,7 @@ const RequirePin = () => {
 					className="!bg-gray-900 hover:!bg-black mt-6"
 					icon={<BiSolidLockOpen />}
 					loading={isLoading}
-					disabled={!pin || pin?.length < 6 || isLoading}
+					disabled={!pin || pin?.length < 4 || isLoading || pin[0] === '0'}
 					onClick={handleSubmit}
 				>
 					Authorize

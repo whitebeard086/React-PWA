@@ -2,16 +2,15 @@ import { Card, Image } from '@/components/ui';
 import appConfig from '@/configs/app.config';
 import { calculateAverageRating } from '@/utils';
 import { Rating, Star } from '@smastrom/react-rating';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import 'swiper/css';
 import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-const ServicesCard = () => {
+const ServicesCard = ({ services }) => {
 	const { imagePath } = appConfig;
 
-	const { services } = useSelector((state) => state.home.data);
+	// const { services } = useSelector((state) => state.home.data);
 
 	const ratingStyles = {
 		itemShapes: Star,

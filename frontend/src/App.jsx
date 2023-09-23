@@ -1,3 +1,4 @@
+import { useUser } from '@/services/features/userApi';
 import { Suspense, lazy, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -51,6 +52,7 @@ const Referral = lazy(() => import('./views/referral'));
 const Kyc = lazy(() => import('./views/profile/kyc'));
 const Kyb = lazy(() => import('./views/profile/kyb'));
 const Payments = lazy(() => import('./views/payments'));
+const Topup = lazy(() => import('./views/payments/topup'));
 const Browse = lazy(() => import('./views/browse'));
 const Chat = lazy(() => import('./views/chat'));
 const Requests = lazy(() => import('./views/requests'));
@@ -70,6 +72,7 @@ const DisputeChat = lazy(() =>
 
 function App() {
 	const dispatch = useDispatch();
+	useUser();
 
 	const { userType, onlineUsers, profile } = useSelector(
 		(state) => state.auth.user
@@ -193,6 +196,7 @@ function App() {
 								<Route path="/service-setup" element={<Service />} />
 							</Route>
 							<Route path="/" element={<Layout />}>
+								<Route path="payment/topup" element={<Topup />} />
 								<Route element={<RequireServiceProvider />}>
 									<Route path="/profile" element={<Profile />} />
 									<Route path="/service/edit" element={<EditService />} />

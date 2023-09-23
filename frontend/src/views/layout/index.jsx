@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { useEffect } from 'react';
 import { FaSpinner } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useGetOperators } from '../bills/store/hooks';
 import { setMessages } from '../chat/store/dataSlice';
 import {
@@ -16,19 +16,40 @@ import {
 } from '../notifications/store/dataSlice';
 import DepositDialog from '../payments/components/Deposit/DepositDialog';
 import BvnDialog from '../payments/components/bvn/bvnDialog';
-import {
-	toggleBvnDialog,
-	toggleDepositDialog,
-} from '../payments/store/stateSlice';
+// import {
+// 	toggleBvnDialog,
+// 	toggleDepositDialog,
+// } from '../payments/store/stateSlice';
 import KycDialog from '../profile/kyc/components/kycDialog';
 import WithdrawDialog from '../withdraw/components/withdraw';
 import { toggleWithdrawDialog } from '../withdraw/store/stateSlice';
 import Footer from './Footer';
 import Header from './Header';
+// import BreadCrumbs from './components/breadCrumbs';
+import { useUser } from '@/services/features/userApi';
 
 const Layout = () => {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const location = useLocation();
+
+	const {
+		user,
+		isLoading,
+		isError,
+		hasPin,
+		hasService,
+		userType: typenkeuser,
+		verifiedPhone,
+	} = useUser();
+
+	console.log('User from useUser: ', user);
+	console.log('IsLoading from useUser: ', isLoading);
+	console.log('IsError from useUser: ', isError);
+	console.log('HasPin from useUser: ', hasPin);
+	console.log('HasService from useUser: ', hasService);
+	console.log('VerifiedPhone from useUser: ', verifiedPhone);
+	console.log('User type from useUser: ', typenkeuser);
 
 	const { profile, userType } = useSelector((state) => state.auth.user);
 	const { signedIn } = useSelector((state) => state.auth.session);
@@ -87,8 +108,9 @@ const Layout = () => {
 	}, [createStatus]);
 
 	const onTopUp = () => {
-		if (profile?.bvn) dispatch(toggleDepositDialog(true));
-		if (!profile?.bvn) dispatch(toggleBvnDialog(true));
+		navigate('/payment/topup', { state: { from: location } });
+		// if (profile?.bvn) dispatch(toggleDepositDialog(true));
+		// if (!profile?.bvn) dispatch(toggleBvnDialog(true));
 	};
 
 	const onWithdraw = () => {
@@ -172,6 +194,7 @@ const Layout = () => {
 					)}
 				</div>
 			</div>
+			{/* <BreadCrumbs /> */}
 			<div className={classNames('bg-gray-100 min-h-[72vh]')}>
 				<Outlet />
 			</div>
