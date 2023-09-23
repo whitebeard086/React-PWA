@@ -27,6 +27,6 @@ class SubCategory extends Model
 
     public function Services()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(Service::class);
     }
 }

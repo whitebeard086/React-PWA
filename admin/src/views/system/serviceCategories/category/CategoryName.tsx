@@ -26,7 +26,7 @@ const CategoryName = ({ slug, category }: Props) => {
                     layoutId='editing'
                     initial={{ opacity: 0, visibility: 'hidden' }}
                     animate={{ opacity: 1, visibility: 'visible' }}
-                    transition={{ duration: 0.3, type: 'tween' }}
+                    transition={{ duration: 0.2, type: 'tween' }}
                     exit={{ opacity: 0, visibility: 'hidden' }}
                 >
                     <div className="flex items center gap-2 flex-wrap">
@@ -44,7 +44,7 @@ const CategoryName = ({ slug, category }: Props) => {
                     layoutId='initial'
                     initial={{ opacity: 0, visibility: 'hidden' }}
                     animate={{ opacity: 1, visibility: 'visible' }}
-                    transition={{ duration: 0.3, type: 'tween' }}
+                    transition={{ duration: 0.2, type: 'tween' }}
                     exit={{ opacity: 0, visibility: 'hidden' }}
                     className='flex items-center gap-2'
                 >

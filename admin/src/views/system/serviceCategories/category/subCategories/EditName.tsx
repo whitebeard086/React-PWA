@@ -1,41 +1,41 @@
-import { useCallback } from 'react'
-import { CategoryWithSubCategories } from '@/@types/common'
+import { SubCategory } from '@/@types/common'
 import { Field, Formik, Form } from 'formik'
 import * as Yup from 'yup'
-import { useUpdateCategory } from '../../utils/hooks'
+import { useCallback } from 'react'
 import { TbArrowBackUp } from 'react-icons/tb'
-import { Button, FormContainer, FormItem, Input } from '@/components/ui'
+import { Button, Card, FormContainer, FormItem, Input } from '@/components/ui'
+import { setEditSubCategory, useAppDispatch } from '../../store'
+import { useUpdateSubCategory } from '@/views/system/utils/hooks'
 import { MdOutlineUploadFile } from 'react-icons/md'
-import { setEditCategory, useAppDispatch } from '../store'
+
+type Props = {
+    slug: string
+    subCategory: Partial<SubCategory>
+}
 
 type FormFields = {
     name: string
 }
 
-type Props = {
-    category: Partial<CategoryWithSubCategories>
-    slug: string
-}
-
-const EditName = ({ category, slug }: Props) => {
+const EditName = ({ slug, subCategory }: Props) => {
     const dispatch = useAppDispatch()
-    const { mutate: updateName, isLoading } = useUpdateCategory()
+    const { mutate: update, isLoading } = useUpdateSubCategory()
 
     const validationSchema = Yup.object().shape({
-        name: Yup.string().required('Enter Category Name'),
+        name: Yup.string().required('Enter Sub-Category Name'),
     })
 
     const initialData: FormFields = {
-        name: category?.name ?? ''
+        name: subCategory.name ?? '',
     }
 
     const onGoBack = useCallback(() => {
-        dispatch(setEditCategory(false))
+        dispatch(setEditSubCategory(0))
     }, [dispatch])
 
     const handleSubmit = (values: FormFields) => {
         const { name } = values
-        updateName({ slug, name })
+        update({ slug, name })
     }
 
     return (
@@ -44,12 +44,16 @@ const EditName = ({ category, slug }: Props) => {
             validationSchema={validationSchema}
             onSubmit={(values) => handleSubmit(values)}
         >
-            {({ touched, errors }) => (
+            {({ touched, errors  }) => (
                 <Form>
                     <FormContainer>
-                        <div className="flex items-center gap-2 flex-wrap">
+                        <Card 
+                            bordered 
+                            className=""
+                            bodyClass=''
+                        >
                             <FormItem
-                                label=""
+                                label="Sub Category Name"
                                 invalid={(errors.name && touched.name) as boolean}
                                 errorMessage={errors.name}
                                 className='mb-0'
@@ -64,8 +68,9 @@ const EditName = ({ category, slug }: Props) => {
                                 />
                             </FormItem>
 
-                            <div className="flex items-center gap-2 flex-wrap">
+                            <div className="flex items-center gap-2 mt-4">
                                 <Button
+                                    block
                                     variant='solid'
                                     color='slate-900'
                                     type='submit'
@@ -76,6 +81,7 @@ const EditName = ({ category, slug }: Props) => {
                                     Save
                                 </Button>
                                 <Button
+                                    block
                                     variant='twoTone'
                                     color='red-500'
                                     type='button'
@@ -87,7 +93,7 @@ const EditName = ({ category, slug }: Props) => {
                                     cancel
                                 </Button>
                             </div>
-                        </div>
+                        </Card>
                     </FormContainer>
                 </Form>
             )}

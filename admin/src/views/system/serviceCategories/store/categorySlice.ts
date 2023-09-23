@@ -5,6 +5,7 @@ export interface CategoryState {
     deleteDialog: boolean
     editCategory: boolean
     categoryDialog: boolean
+    editSubCategory: number
     image: Partial<Blob>
     category: Partial<CategoryWithSubCategories>
     subCategory: Partial<SubCategory>
@@ -15,6 +16,7 @@ export const SLICE_NAME = 'categories'
 const initialState: CategoryState = {
     deleteDialog: false,
     editCategory: false,
+    editSubCategory: 0,
     categoryDialog: false,
     image: {},
     category: {},
@@ -37,6 +39,9 @@ const categorySlice = createSlice({
         setEditCategory: (state, action) => {
             state.editCategory = action.payload
         },
+        setEditSubCategory: (state, action) => {
+            state.editSubCategory = action.payload
+        },
         toggleDeleteDialog: (state, action) => {
             state.deleteDialog = action.payload
         },
@@ -51,6 +56,7 @@ const categorySlice = createSlice({
 })
 
 export const {
+    setEditSubCategory,
     setImage,
     setCategory,
     setSubCategory,

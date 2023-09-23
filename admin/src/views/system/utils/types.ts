@@ -16,6 +16,15 @@ export type UpdateCategoryRequest = {
     name?: string
 }
 
+export type UpdateSubCategoryRequest = {
+    slug: string
+    name: string
+}
+
+export type UpdateSubCategoryResponse = {
+    status: string
+}
+
 export interface GetCategoryResponse {
     status: string
     category: CategoryWithSubCategories

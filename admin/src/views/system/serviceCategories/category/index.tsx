@@ -10,6 +10,7 @@ import useCompressFile from '@/utils/hooks/useCompressFile';
 import UploadIcon from './UploadIcon';
 import { BiEditAlt } from 'react-icons/bi';
 import CategoryName from './CategoryName';
+import SubCategories from './subCategories';
 
 injectReducer(SLICE_NAME, reducer)
 
@@ -68,6 +69,12 @@ const Category = () => {
                                 slug={category?.slug ?? ''}
                             />
                         </div>
+                    </Card>
+
+                    <Card className='mt-4'>
+                        <SubCategories 
+                            category={category ?? {}}
+                        />
                     </Card>
                 </div>
             </div>

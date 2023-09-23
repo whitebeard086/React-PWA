@@ -22,3 +22,11 @@ export async function apiUpdateCategory<T, U extends Record<string, unknown>>(da
         data,
     })
 }
+
+export async function apiUpdateSubCategory<T, U extends Record<string, unknown>>(data: U) {
+    return ApiService.fetchData<T>({
+        url: '/categories/sub_category/update',
+        method: 'post',
+        data,
+    })
+}

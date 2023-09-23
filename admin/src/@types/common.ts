@@ -127,6 +127,7 @@ export interface SubCategory {
     description: string | null
     created_at: Date
     updated_at: Date
+    services: Service[]
 }
 
 export interface Chat {

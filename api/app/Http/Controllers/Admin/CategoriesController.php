@@ -6,14 +6,16 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Traits\UploadImageTrait;
 use App\Http\Controllers\Controller;
+use App\Models\SubCategory;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class CategoriesController extends Controller
 {
     public function categories()
     {
         try {
-            $categories = Category::with('SubCategories', 'Services')->withCount('SubCategories')->get();
+            $categories = Category::with('SubCategories.Services', 'Services')->withCount('SubCategories')->get();
 
             return response()->json([
                 'status' => 'success',
@@ -31,7 +33,7 @@ class CategoriesController extends Controller
     public function category(Request $request)
     {
         try {
-            $category = Category::with('SubCategories', 'Services')->where('slug', $request->slug)->first();
+            $category = Category::with('SubCategories.Services', 'Services')->where('slug', $request->slug)->first();
 
             return response()->json([
                 'status' => 'success',
@@ -49,7 +51,7 @@ class CategoriesController extends Controller
     public function update_category(Request $request)
     {
         try {
-            $category = Category::with('SubCategories', 'Services')->where('slug', $request->slug)->first();
+            $category = Category::with('SubCategories.Services', 'Services')->where('slug', $request->slug)->first();
 
             if ($request->hasFile('banner')) {
                 if ($category->banner) {
@@ -74,11 +76,41 @@ class CategoriesController extends Controller
                 );
             }
 
+            if($request->name && $request->name !== '') {
+                $category->name = $request->name;
+                $category->slug = Str::slug($category->name);
+            } 
+
             $category->save();
 
             return response()->json([
                 'status' => 'success',
                 'category' => $category,
+            ], 200);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function update_sub_category(Request $request)
+    {
+        $request->validate([
+            'slug' => 'required|string',
+            'name' => 'required|string',
+        ]);
+        
+        try {
+            $sub_cat = SubCategory::where('slug', $request->slug)->first();
+            $sub_cat->name = $request->name;
+            $sub_cat->slug = Str::slug($sub_cat->name);
+            $sub_cat->save();
+            
+            return response()->json([
+                'status' => 'success',
             ], 200);
             
         } catch (\Exception $e) {
