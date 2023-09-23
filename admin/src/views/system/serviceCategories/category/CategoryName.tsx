@@ -29,7 +29,7 @@ const CategoryName = ({ slug, category }: Props) => {
                     transition={{ duration: 0.2, type: 'tween' }}
                     exit={{ opacity: 0, visibility: 'hidden' }}
                 >
-                    <div className="flex items center gap-2 flex-wrap">
+                    <div className="flex items-center gap-2 flex-wrap">
                         <h4 className="text-base">
                             Category Name: 
                         </h4>

@@ -205,7 +205,11 @@ export interface ServiceWithUser extends Service {
     category: Category
 }
 
+export interface ServiceWithSubCategory extends Service {
+    sub_category: SubCategory
+}
+
 export interface CategoryWithSubCategories extends Category {
     sub_categories: SubCategory[]
-    services: Service[]
+    services: ServiceWithSubCategory[]
 }

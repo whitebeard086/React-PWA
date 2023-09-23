@@ -33,7 +33,7 @@ class CategoriesController extends Controller
     public function category(Request $request)
     {
         try {
-            $category = Category::with('SubCategories.Services', 'Services')->where('slug', $request->slug)->first();
+            $category = Category::with('SubCategories.Services', 'Services.SubCategory')->where('slug', $request->slug)->first();
 
             return response()->json([
                 'status' => 'success',

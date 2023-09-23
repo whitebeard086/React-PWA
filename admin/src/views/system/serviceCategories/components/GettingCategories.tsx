@@ -1,6 +1,6 @@
 import { Button, Card, Skeleton } from '@/components/ui'
+import { FaEye } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
-import { RiEdit2Fill } from 'react-icons/ri'
 
 const CardHeader = () => (
     <div className="rounded-tl-lg rounded-tr-lg h-44 overflow-hidden relative">
@@ -34,9 +34,9 @@ const GettingCategories = () => {
                     <Button
                         size='xs'
                         variant='solid'
-                        icon={<RiEdit2Fill />}
+                        icon={<FaEye />}
                     >
-                        Edit
+                        View
                     </Button>
 
                     <Button
@@ -72,9 +72,9 @@ const GettingCategories = () => {
                     <Button
                         size='xs'
                         variant='solid'
-                        icon={<RiEdit2Fill />}
+                        icon={<FaEye />}
                     >
-                        Edit
+                        View
                     </Button>
 
                     <Button
@@ -110,9 +110,9 @@ const GettingCategories = () => {
                     <Button
                         size='xs'
                         variant='solid'
-                        icon={<RiEdit2Fill />}
+                        icon={<FaEye />}
                     >
-                        Edit
+                        View
                     </Button>
 
                     <Button
@@ -148,9 +148,9 @@ const GettingCategories = () => {
                     <Button
                         size='xs'
                         variant='solid'
-                        icon={<RiEdit2Fill />}
+                        icon={<FaEye />}
                     >
-                        Edit
+                        View
                     </Button>
 
                     <Button
@@ -186,9 +186,9 @@ const GettingCategories = () => {
                     <Button
                         size='xs'
                         variant='solid'
-                        icon={<RiEdit2Fill />}
+                        icon={<FaEye />}
                     >
-                        Edit
+                        View
                     </Button>
 
                     <Button
@@ -224,9 +224,9 @@ const GettingCategories = () => {
                     <Button
                         size='xs'
                         variant='solid'
-                        icon={<RiEdit2Fill />}
+                        icon={<FaEye />}
                     >
-                        Edit
+                        View
                     </Button>
 
                     <Button
@@ -262,9 +262,9 @@ const GettingCategories = () => {
                     <Button
                         size='xs'
                         variant='solid'
-                        icon={<RiEdit2Fill />}
+                        icon={<FaEye />}
                     >
-                        Edit
+                        View
                     </Button>
 
                     <Button
@@ -300,9 +300,9 @@ const GettingCategories = () => {
                     <Button
                         size='xs'
                         variant='solid'
-                        icon={<RiEdit2Fill />}
+                        icon={<FaEye />}
                     >
-                        Edit
+                        View
                     </Button>
 
                     <Button

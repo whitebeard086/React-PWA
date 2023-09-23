@@ -1,14 +1,14 @@
 import { CategoryWithSubCategories } from '@/@types/common'
 import { Avatar, Button, Card, Image } from '@/components/ui'
 import appConfig from '@/configs/app.config'
-import { RiEdit2Fill } from 'react-icons/ri'
 import { AnimatePresence, motion } from 'framer-motion'
 import { MdDelete } from 'react-icons/md'
-import { setCategory, toggleCategoryDialog, useAppDispatch } from '../store'
+import { setCategory, useAppDispatch } from '../store'
 import { useNavigate } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 import { apiGetCategory } from '@/services/SystemService'
 import { GetCategoryRequest, GetCategoryResponse } from '../../utils/types'
+import { FaEye } from 'react-icons/fa'
 
 type Props = {
     categories: CategoryWithSubCategories[]
@@ -58,7 +58,7 @@ const CategoryCard = ({ categories }: Props) => {
         })
     }
 
-    const onEdit = (category: CategoryWithSubCategories) => {
+    const onView = (category: CategoryWithSubCategories) => {
         dispatch(setCategory(category))
         // dispatch(toggleCategoryDialog(true))
         navigate(`/configurations/service-categories/${category.slug}`)
@@ -101,10 +101,10 @@ const CategoryCard = ({ categories }: Props) => {
                                 <Button
                                     size='xs'
                                     variant='solid'
-                                    icon={<RiEdit2Fill />}
-                                    onClick={() => onEdit(category)}
+                                    icon={<FaEye />}
+                                    onClick={() => onView(category)}
                                 >
-                                    Edit
+                                    View
                                 </Button>
 
                                 <Button

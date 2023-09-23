@@ -36,7 +36,7 @@ const SubCategories = ({ category }: Props) => {
                         transition={{ duration: 0.3, type: 'tween' }}
                         exit={{ opacity: 0, visibility: 'hidden' }}
                     >
-                        <p className="text-xl text-center mb-4">
+                        <p className="text-xl font-bold text-center mb-4">
                             No Sub Categories <br />
                             Click The Button Below to Add Some
                         </p>
