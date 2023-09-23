@@ -508,47 +508,47 @@ class UserController extends Controller
         }
     }
 
-    public function update_pin(Request $request)
-    {
-        $request->validate([
-            'old_pin' => 'required|integer',
-            'pin' => 'required|integer',
-            'pin_confirmation' => 'same:pin',
-        ]);
-        
-        try {
-            $user = User::where('id', auth()->user()->id)->firstOrFail();
+        public function update_pin(Request $request)
+        {
+            $request->validate([
+                'old_pin' => 'required|integer',
+                'pin' => 'required|integer',
+                'pin_confirmation' => 'same:pin',
+            ]);
             
-            if (isset($user)) {
-                if (!Hash::check($request->old_pin, $user->transaction_pin)) {
-                    return response()->json([
-                        'status' => 'pin error',
-                        'message' => 'Incorrect pin'
-                    ], 400);
-                }
+            try {
+                $user = User::where('id', auth()->user()->id)->firstOrFail();
                 
-                if (Hash::check($request->pin, $user->transaction_pin)) {
-                    return response()->json([
-                        'status' => 'duplicate error',
-                        'message' => 'Incorrect pin'
-                    ], 400);
+                if (isset($user)) {
+                    if (!Hash::check($request->old_pin, $user->transaction_pin)) {
+                        return response()->json([
+                            'status' => 'Pin Error!',
+                            'message' => 'The PIN entered does not match your transaction PIN, please try again.'
+                        ], 400);
+                    }
+                    
+                    if (Hash::check($request->pin, $user->transaction_pin)) {
+                        return response()->json([
+                            'status' => 'Duplicate Error!',
+                            'message' => 'The PIN entered is the same as your transaction PIN, please enter a new PIN.'
+                        ], 400);
+                    }
+                    
+                    $user->transaction_pin = bcrypt($request->pin);
+                    $user->save();
                 }
-                
-                $user->transaction_pin = bcrypt($request->pin);
-                $user->save();
-            }
 
-            return response()->json([
-                'status' => 'success',
-            ], 200);
-            
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ], 500);
+                return response()->json([
+                    'status' => 'success',
+                ], 200);
+                
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                ], 500);
+            }
         }
-    }
 
     public function initiate_kyc(Request $request)
     {

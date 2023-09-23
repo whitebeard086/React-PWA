@@ -34,6 +34,7 @@ const Airtime = () => {
 	};
 	return (
 		<div className="p-4 mt-2">
+			<h1 className="text-base font-bold pb-4">Airtime</h1>
 			<Loading loading={isFetching}>
 				{step === 1 && (
 					<>

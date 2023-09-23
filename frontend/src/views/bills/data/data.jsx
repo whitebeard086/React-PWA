@@ -42,6 +42,7 @@ const Data = () => {
 
 	return (
 		<div className="p-4 mt-2">
+			<h1 className="text-base font-bold pb-4">Mobile Data</h1>
 			<Loading loading={isFetching}>
 				{state.state ? (
 					<>{state.steps === 1 && <Order />}</>

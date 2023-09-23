@@ -1,5 +1,6 @@
 import { Avatar, Card } from '@/components/ui';
 import appConfig from '@/configs/app.config';
+import { useGuest, useHome } from '@/services/features/homeApi';
 import BillsComponent from '@/views/payments/components/Bills/BillsComponent';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -8,8 +9,15 @@ import ServicesCard from './servicesCard';
 
 const HomeFeed = () => {
 	const { imagePath } = appConfig;
+	const { categories: guestCat, services: guestS } = useGuest();
+	const { categories: homeCat, bookings: homeB, services: homeS } = useHome();
 
-	const { categories, bookings } = useSelector((state) => state.home.data);
+	// const { categories, bookings } = useSelector((state) => state.home.data);
+	const { signedIn } = useSelector((state) => state.auth.session);
+
+	let categories = signedIn ? homeCat : guestCat;
+	let bookings = signedIn ? homeB : [];
+	let services = signedIn ? homeS : guestS;
 
 	return (
 		<div className="grid grid-cols-4 gap-4">
@@ -45,7 +53,7 @@ const HomeFeed = () => {
 				</div>
 			) : (
 				<div className="col-span-4 w-full mt-4">
-					<ServicesCard />
+					<ServicesCard services={services} />
 				</div>
 			)}
 

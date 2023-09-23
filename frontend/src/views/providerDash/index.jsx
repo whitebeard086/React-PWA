@@ -3,7 +3,7 @@ import { injectReducer } from '@/store';
 import { socket } from '@/utils/socket';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import BillsComponent from '../payments/components/Bills/BillsComponent';
+// import BillsComponent from '../payments/components/Bills/BillsComponent';
 import CancelService from './components/CancelService';
 import CompleteServiceDialog from './components/CompleteServiceDialog';
 import DashboardFeed from './components/DashboardFeed';
@@ -83,8 +83,8 @@ const ProviderDashboard = () => {
 
 	return (
 		<div className="mt-10 mb-8 px-4">
-			{loading ? <GettingDashboardData /> : <DashboardFeed />}
-			<BillsComponent />
+			{isLoading ? <GettingDashboardData /> : <DashboardFeed />}
+			{/* <BillsComponent /> */}
 			<CompleteServiceDialog socket={socket.current} />
 			<StartService />
 			<CancelService />

@@ -1,4 +1,7 @@
 import appConfig from '@/configs/app.config';
+import { useDashboard } from '@/services/features/dashboardApi';
+import { useUser } from '@/services/features/userApi';
+import BillsComponent from '@/views/payments/components/Bills/BillsComponent';
 import Bookings from '@/views/requests/components/Bookings';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -10,21 +13,17 @@ import {
 } from '../store/stateSlice';
 import Stats from './Stats';
 import UnansweredChats from './UnansweredChats';
-// import BillsComponent from "@/views/payments/components/Bills/BillsComponent";
 
 const DashboardFeed = () => {
 	const dispatch = useDispatch();
+	const { bookings, bookingsCount, enquiries } = useDashboard();
+	const { userType, user: profile } = useUser();
 	const { imagePath } = appConfig;
-	const {
-		enquiries,
-		bookings,
-		bookingsCount,
-		booking,
-		completingService,
-		confirmingService,
-	} = useSelector((state) => state.dashboard.data);
+	const { booking, completingService, confirmingService } = useSelector(
+		(state) => state.dashboard.data
+	);
 	const { bookingID } = useSelector((state) => state.dashboard.state);
-	const { profile, userType } = useSelector((state) => state.auth.user);
+	// const { profile, userType } = useSelector((state) => state.auth.user);
 	const isProvider = userType === 'Provider' ? true : false;
 
 	const chatsData = enquiries?.filter((chat) => {
@@ -81,7 +80,7 @@ const DashboardFeed = () => {
 				<Stats bookingsCount={bookingsCount} profile={profile} />
 			</div>
 
-			{/* <BillsComponent /> */}
+			<BillsComponent />
 		</div>
 	);
 };

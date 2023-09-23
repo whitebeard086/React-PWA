@@ -1,3 +1,4 @@
+import { useUser } from '@/services/features/userApi';
 import { setHasVisited } from '@/store/auth/userSlice';
 import { Suspense, lazy, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -5,23 +6,26 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Container } from '../../components/shared';
 
 const Landing = () => {
+	const navigate = useNavigate();
+	const { userType } = useUser();
+
 	// const Step1 = lazy(() => import("./components/Step1"))
 	const Step2 = lazy(() => import('./components/Step2'));
 	const Step3 = lazy(() => import('./components/Step3'));
 	const Step4 = lazy(() => import('./components/Step4'));
 	const Step5 = lazy(() => import('./components/Step5'));
 
-	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const location = useLocation();
 	console.log(location.pathname);
 
-	const { userType, hasVisited } = useSelector((state) => state.auth.user);
+	const { hasVisited } = useSelector((state) => state.auth.user);
 
 	const [step, setStep] = useState(1);
 
 	useEffect(() => {
-		if (userType !== '' && location.pathname === '/' && hasVisited) {
+		if (userType ?? '' != '') navigate('/home');
+		if (location.pathname === '/' && hasVisited) {
 			navigate('/home');
 		}
 	}, [dispatch, hasVisited, location.pathname, navigate, userType]);

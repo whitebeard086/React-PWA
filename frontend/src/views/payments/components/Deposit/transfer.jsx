@@ -31,7 +31,7 @@ const Transfer = ({ profile }) => {
 	return (
 		<div>
 			<p className="text-base text-center">
-				You can fund your account via your personal Taskitly virtual account
+				You can fund your account via your personal Taskitly account
 			</p>
 
 			{!profile?.collection_number ? (

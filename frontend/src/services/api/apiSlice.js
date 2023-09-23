@@ -23,7 +23,7 @@ export const apiSlice = createApi({
 			return headers;
 		},
 	}),
-	tagTypes: ['User', 'KYC', 'Dashboard'],
+	tagTypes: ['User', 'KYC', 'Dashboard', 'Home', 'Guest'],
 	endpoints: (builder) => ({}),
 	onError: (error, { dispatch }) => {
 		if (error.status === 401) {

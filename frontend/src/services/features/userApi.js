@@ -6,10 +6,27 @@ export const userApi = apiSlice.injectEndpoints({
 			query: () => '/profile/user',
 			providesTags: ['User'],
 		}),
+		createPin: builder.mutation({
+			query: (data) => ({
+				url: '/profile/pin',
+				method: 'POST',
+				body: data,
+			}),
+			invalidatesTags: ['User'],
+		}),
+		UpdatePin: builder.mutation({
+			query: (data) => ({
+				url: '/profile/pin/update',
+				method: 'POST',
+				body: data,
+			}),
+			invalidatesTags: ['User'],
+		}),
 	}),
 });
 
-export const { useGetUserQuery } = userApi;
+export const { useGetUserQuery, useCreatePinMutation, useUpdatePinMutation } =
+	userApi;
 
 export function useUser() {
 	const { data, isLoading, isError } = useGetUserQuery();
