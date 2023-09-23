@@ -182,6 +182,7 @@ Route::group(['prefix' => 'admin'], function(){
         Route::get('/categories', [CategoriesController::class, 'categories']);
         Route::post('/categories/category', [CategoriesController::class, 'category']);
         Route::post('/categories/category/update', [CategoriesController::class, 'update_category']);
+        Route::post('/categories/sub_category/new', [CategoriesController::class, 'new_sub_category']);
         Route::post('/categories/sub_category/update', [CategoriesController::class, 'update_sub_category']);
     });
 });

@@ -3,8 +3,9 @@ import { Button, Card } from '@/components/ui'
 import { AnimatePresence, motion } from 'framer-motion'
 import { BiEditAlt } from 'react-icons/bi'
 import { MdDeleteOutline, MdPostAdd } from 'react-icons/md'
-import { setEditSubCategory, useAppDispatch, useAppSelector } from '../../store'
+import { setEditSubCategory, setNewSubCategory, useAppDispatch, useAppSelector } from '../../store'
 import EditName from './EditName'
+import NewSubCategory from './NewSubCategory'
 
 type Props = {
     category: Partial<CategoryWithSubCategories>
@@ -12,10 +13,14 @@ type Props = {
 
 const SubCategories = ({ category }: Props) => {
     const dispatch = useAppDispatch()
-    const { editSubCategory } = useAppSelector((state) => state.categories.data)
+    const { editSubCategory, newSubCategory } = useAppSelector((state) => state.categories.data)
 
     const onEdit = (subCat: number) => {
         dispatch(setEditSubCategory(subCat))
+    }
+
+    const onAddNew = () => {
+        dispatch(setNewSubCategory(true))
     }
 
     return (
@@ -92,14 +97,26 @@ const SubCategories = ({ category }: Props) => {
                             </motion.div>
                         )
                     )}
-                    <Button
-                        block
-                        size="sm"
-                        variant="twoTone"
-                        icon={<MdPostAdd />}
-                    >
-                        New SubCategory
-                    </Button>
+
+                    {newSubCategory && (
+                        <div className="">
+                            <NewSubCategory 
+                                slug={category.slug ?? ''}
+                            />
+                        </div>
+                    )}
+
+                    {!newSubCategory && (
+                        <Button
+                            block
+                            size="sm"
+                            variant="twoTone"
+                            icon={<MdPostAdd />}
+                            onClick={onAddNew}
+                        >
+                            New SubCategory
+                        </Button>
+                    )}
                 </AnimatePresence>
             </div>
         </div>

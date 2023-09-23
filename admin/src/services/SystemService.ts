@@ -30,3 +30,11 @@ export async function apiUpdateSubCategory<T, U extends Record<string, unknown>>
         data,
     })
 }
+
+export async function apiNewSubCategory<T, U extends Record<string, unknown>>(data: U) {
+    return ApiService.fetchData<T>({
+        url: '/categories/sub_category/new',
+        method: 'post',
+        data,
+    })
+}

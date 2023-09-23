@@ -4,6 +4,7 @@ import { createSlice } from '@reduxjs/toolkit'
 export interface CategoryState {
     deleteDialog: boolean
     editCategory: boolean
+    newSubCategory: boolean
     categoryDialog: boolean
     editSubCategory: number
     image: Partial<Blob>
@@ -17,6 +18,7 @@ const initialState: CategoryState = {
     deleteDialog: false,
     editCategory: false,
     editSubCategory: 0,
+    newSubCategory: false,
     categoryDialog: false,
     image: {},
     category: {},
@@ -39,6 +41,9 @@ const categorySlice = createSlice({
         setEditCategory: (state, action) => {
             state.editCategory = action.payload
         },
+        setNewSubCategory: (state, action) => {
+            state.newSubCategory = action.payload
+        },
         setEditSubCategory: (state, action) => {
             state.editSubCategory = action.payload
         },
@@ -57,6 +62,7 @@ const categorySlice = createSlice({
 
 export const {
     setEditSubCategory,
+    setNewSubCategory,
     setImage,
     setCategory,
     setSubCategory,

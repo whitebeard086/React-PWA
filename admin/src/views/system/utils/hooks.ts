@@ -1,9 +1,9 @@
-import { apiGetCategories, apiGetCategory, apiUpdateCategory, apiUpdateSubCategory } from '@/services/SystemService'
+import { apiGetCategories, apiGetCategory, apiNewSubCategory, apiUpdateCategory, apiUpdateSubCategory } from '@/services/SystemService'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { GetCategoriesResponse, GetCategoryRequest, GetCategoryResponse, UpdateCategoryRequest, UpdateSubCategoryRequest, UpdateSubCategoryResponse } from './types'
 import { popNotification } from '@/components/ui/Notification/toast'
 import { useNavigate } from 'react-router-dom'
-import { setEditCategory, setEditSubCategory, useAppDispatch } from '../serviceCategories/store'
+import { setEditCategory, setEditSubCategory, setNewSubCategory, useAppDispatch } from '../serviceCategories/store'
 
 export const useGetCategories = () => {
     return useQuery({
@@ -71,6 +71,34 @@ export const useUpdateSubCategory = () => {
         onSuccess: () => {
             queryClient.invalidateQueries(['categories'])
             dispatch(setEditSubCategory(0))
+            popNotification(
+                'Success',
+                'Category updated!',
+                'success',
+            )
+        },
+        onError: () => {
+			popNotification(
+                'Error',
+                'Something went wrong, please try again.',
+                'danger'
+            )
+		},
+    })
+}
+
+export const useNewSubCategory = () => {
+    const queryClient = useQueryClient()
+    const dispatch = useAppDispatch()
+    return useMutation({
+        mutationKey: ['categories'],
+        mutationFn: async (subCategory: UpdateSubCategoryRequest) => {
+            const response = await apiNewSubCategory<UpdateSubCategoryResponse, UpdateSubCategoryRequest>(subCategory)
+            return response.data
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['categories'])
+            dispatch(setNewSubCategory(false))
             popNotification(
                 'Success',
                 'Category updated!',

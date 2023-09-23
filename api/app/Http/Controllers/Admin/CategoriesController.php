@@ -120,4 +120,31 @@ class CategoriesController extends Controller
             ], 500);
         }
     }
+
+    public function new_sub_category(Request $request)
+    {
+        $request->validate([
+            'slug' => 'required|string',
+            'name' => 'required|string',
+        ]);
+        
+        try {
+            $category = Category::where('slug', $request->slug)->first();
+            $sub_cat = new SubCategory;
+            $sub_cat->name = $request->name;
+            $sub_cat->category_id = $category->id;
+            $sub_cat->slug = Str::slug($request->name);
+            $sub_cat->save();
+
+            return response()->json([
+                'status' => 'success',
+            ], 201);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }
