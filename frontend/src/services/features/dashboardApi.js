@@ -5,6 +5,7 @@ export const dashboardApi = apiSlice.injectEndpoints({
 		getDashboard: builder.query({
 			query: () => '/dashboard',
 			providesTags: ['Dashboard'],
+			staleTime: 15 * 60 * 1000, // data remains fresh for 15 minutes
 		}),
 		completeService: builder.mutation({
 			query: (data) => ({
@@ -55,6 +56,7 @@ export const dashboardApi = apiSlice.injectEndpoints({
 			// invalidatesTags: ['Dashboard'],
 		}),
 	}),
+	keepUnusedDataFor: 15 * 60, // keep unused data for 15 minutes
 });
 
 export const { useGetDashboardQuery } = dashboardApi;

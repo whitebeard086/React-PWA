@@ -1,22 +1,15 @@
-import { useEffect } from 'react'
 import { injectReducer } from "@/store"
 import StatCards from "@/views/home/components/feed/StatCards"
-import reducer, { useAppSelector, useAppDispatch, usersIndex } from "../store"
+import reducer, {  } from "../store"
 import AllClients from "./components/AllClients"
 import GettingData from "./components/GettingData"
+import { useUsersData } from '../utils/hooks'
 
 injectReducer('users', reducer)
 
 const Clients = () => {
-    const dispatch = useAppDispatch()
-    const { loading, status,  } = useAppSelector((state) => state.users.data)
-
-    useEffect(() => {
-        if (status !== 'success') {
-            dispatch(usersIndex())
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    const { data, isLoading:loading } = useUsersData()
+    // const { loading, status,  } = useAppSelector((state) => state.users.data)
 
     return (
         <div>
@@ -26,7 +19,10 @@ const Clients = () => {
                 <>
                     <StatCards />
                     <div className="mt-4">
-                        <AllClients />
+                        <AllClients 
+                            usersData={data ?? {}}
+                            loading={loading}
+                        />
                     </div>
                 </>
             )}

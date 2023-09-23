@@ -5,6 +5,7 @@ export const userApi = apiSlice.injectEndpoints({
 		getUser: builder.query({
 			query: () => '/profile/user',
 			providesTags: ['User'],
+			staleTime: 15 * 60 * 1000, // data remains fresh for 15 minutes
 		}),
 		createPin: builder.mutation({
 			query: (data) => ({
@@ -23,6 +24,7 @@ export const userApi = apiSlice.injectEndpoints({
 			invalidatesTags: ['User'],
 		}),
 	}),
+	keepUnusedDataFor: 15 * 60, // keep unused data for 15 minutes
 });
 
 export const { useGetUserQuery, useCreatePinMutation, useUpdatePinMutation } =

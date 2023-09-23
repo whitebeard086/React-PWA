@@ -6,3 +6,10 @@ export async function apiHomeIndex<T>() {
         method: 'get',
     })
 }
+
+export async function apiGetHomeData<T>() {
+    return ApiService.fetchData<T>({
+        url: '/home',
+        method: 'get',
+    })
+}

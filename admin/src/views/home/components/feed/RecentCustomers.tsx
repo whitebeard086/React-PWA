@@ -1,15 +1,22 @@
 import { Avatar, Card } from "@/components/ui"
-import { useAppSelector } from "../../store"
 import { Link } from "react-router-dom"
 import appConfig from "@/configs/app.config"
 import useTwColorByName from "@/utils/hooks/useTwColorByName"
 import acronym from "@/utils/acronym"
 import dayjs from "dayjs"
+import { GetHomeResponse } from '../../utils/types'
+import useThemeClass from '@/utils/hooks/useThemeClass'
 
-const RecentCustomers = () => {
+type Props = {
+    data: Partial<GetHomeResponse>
+}
+
+const RecentCustomers = ({ data }:Props) => {
     const { imagePath } = appConfig
+    const { textTheme } = useThemeClass()
     const color = useTwColorByName()
-    const { recentCustomers } = useAppSelector((state) => state.home.data)
+    const { recentCustomers } = data
+    // const { recentCustomers } = useAppSelector((state) => state.home.data)
     return (
         <Card>
             <div className="flex items-center gap-4 justify-between">
@@ -40,9 +47,14 @@ const RecentCustomers = () => {
                             </div>
 
                             <div className="w-full flex flex-col">
-                                <p className="text-base">
-                                    {`${item.first_name} ${item.last_name}`}
-                                </p>
+                                <Link
+                                    to={`/users/clients/${item.slug}`}
+                                    className='w-fit'
+                                >
+                                    <p className={`hover:${textTheme} font-semibold w-fit`}>
+                                        {`${item.first_name} ${item.last_name}`}
+                                    </p>
+                                </Link>
                                 <p className="text-xs font-semibold">
                                     {dayjs(item.created_at).format('DD/MM/YYYY HH:mm') }
                                 </p>

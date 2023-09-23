@@ -19,6 +19,8 @@ export type TableQueries = {
 
 export interface User {
     id: number
+    address_id: number | null
+    customer_id: number | null
     role_id: number
     profile_type_id: number
     username: string
@@ -28,11 +30,22 @@ export interface User {
     slug: string
     balance: number
     bank: string | null
+    bvn: number | null
+    kyc_tier: number
+    preferred_bank: string | null
+    alias: string | null
+    wallet_id: string | null
+    wallet_number: number | null
+    account_id: string | null
+    account_number: number | null
     virtual_acc: number | null
     email: string 
     email_verified_at: Date | null
     phone: number | null
     phone_verified_at: Date | null
+    place_of_birth: string | null
+    dob: string | null
+    gender: string | null
     created_at: Date
     updated_at: Date
     profile_views: number
@@ -49,7 +62,7 @@ export interface Booking {
     invoice_id: number
     service_status: 'ongoing' | 'completed' | 'disputed' | 'refunded'
     user_status: 'ongoing' | 'completed' | 'disputed' | 'refunded'
-    status: 'ongoing' | 'completed' | 'disputed' | 'refunded'
+    status: 'ongoing' | 'completed' | 'disputed' | 'refunded' | 'cancelled'
     created_at: Date
     updated_at: Date
     provider_id: number
@@ -99,6 +112,17 @@ export interface Category {
     name: string
     banner: string | null
     icon: string
+    slug: string
+    description: string | null
+    created_at: Date
+    updated_at: Date
+}
+
+export interface SubCategory {
+    id: number
+    uid: string 
+    name: string
+    category_id: number
     slug: string
     description: string | null
     created_at: Date
@@ -158,10 +182,29 @@ export interface Media {
     updated_at: Date
 }
 
+export interface AccountLevel {
+    id: number
+    name: string
+    description: string
+    max_balance: number 
+    created_at: Date
+    updated_at: Date
+}
+
 export interface InvoiceWithItems extends Invoice {
     items: InvoiceItem[]
 }
 
 export interface UserWithService extends User {
     service: Service | null
+}
+
+export interface ServiceWithUser extends Service {
+    user: User
+    category: Category
+}
+
+export interface CategoryWithSubCategories extends Category {
+    sub_categories: SubCategory[]
+    services: Service[]
 }

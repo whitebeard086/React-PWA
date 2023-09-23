@@ -1,4 +1,4 @@
-import { Booking, Invoice, Service, User } from '@/@types/common';
+import { Booking, Invoice, InvoiceWithItems, Service, ServiceWithUser, User } from '@/@types/common';
 import { apiHomeIndex } from '@/services/HomeService';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { AxiosError } from 'axios';
@@ -27,9 +27,10 @@ interface RecentProviderWithBookings extends User {
     bookings: Booking[] | []
 }
 
-interface RecentBookingWithInvoice extends Booking {
-    invoice: Invoice
+export interface RecentBookingWithInvoice extends Booking {
+    invoice: InvoiceWithItems
     user: User
+    service: ServiceWithUser
 }
 
 export type KnownError = {

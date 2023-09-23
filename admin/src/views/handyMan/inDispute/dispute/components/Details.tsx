@@ -73,22 +73,26 @@ const Details = ({ className, dispute, uid }: Props) => {
                 </Link>
             </div>
 
-            <p className="text-base mb-4 font-bold">Actions</p>
+            {dispute.status === 'open' && (
+                <>
+                    <p className="text-base mb-4 font-bold">Actions</p>
 
-            <div className="mb-4">
-                <div className="flex flex-col gap-2">
-                    <Button
-                        variant="solid"
-                        color="red-600"
-                        onClick={onRefundClientOpen}
-                    >
-                        Refund Client
-                    </Button>
-                    <Button variant="solid" onClick={onPayProviderOpen}>
-                        Pay Provider
-                    </Button>
-                </div>
-            </div>
+                    <div className="mb-4">
+                        <div className="flex flex-col gap-2">
+                            <Button
+                                variant="solid"
+                                color="red-600"
+                                onClick={onRefundClientOpen}
+                            >
+                                Refund Client
+                            </Button>
+                            <Button variant="solid" onClick={onPayProviderOpen}>
+                                Pay Provider
+                            </Button>
+                        </div>
+                    </div>
+                </>
+            )}
 
             <RefundClient
                 client={client}

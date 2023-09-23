@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Chat;
 use App\Models\User;
+use App\Models\Booking;
 use App\Models\Dispute;
 use App\Models\Service;
 use App\Models\Transaction;
@@ -65,6 +66,24 @@ class HandymanController extends Controller
     {
         try {
             $disputes = Dispute::with('Invoice.Items', 'Client', 'Provider.Service.Category', 'Disputer.Service', 'Booking.User', 'Messages.Media')->where('status', 'open')->get();
+            
+            return response()->json([
+                'status' => 'success',
+                'disputes' => $disputes,
+            ], 200);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function closed_disputes()
+    {
+        try {
+            $disputes = Dispute::with('Invoice.Items', 'Client', 'Provider.Service.Category', 'Disputer.Service', 'Booking.User', 'Messages.Media')->where('status', 'resolved')->get();
             
             return response()->json([
                 'status' => 'success',
@@ -234,6 +253,42 @@ class HandymanController extends Controller
             
         } catch (\Exception $e) {
             DB::rollBack();
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function active_bookings()
+    {
+        try {
+            $activeBookings = Booking::with('Invoice.Items', 'Service.User', 'Service.Category', 'User')->where('status', 'ongoing')->get();
+            
+            return response()->json([
+                'status' => 'success',
+                'activeBookings' => $activeBookings,
+            ], 200);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function completed_bookings()
+    {
+        try {
+            $completedBookings = Booking::with('Invoice.Items', 'Service.User', 'Service.Category', 'User')->where('status', 'completed')->get();
+            
+            return response()->json([
+                'status' => 'success',
+                'completedBookings' => $completedBookings,
+            ], 200);
+            
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage(),

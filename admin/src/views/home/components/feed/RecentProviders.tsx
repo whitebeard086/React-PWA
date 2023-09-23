@@ -4,13 +4,20 @@ import { calculateAverageRating } from "@/utils/getTaskitlyData";
 import useTwColorByName from "@/utils/hooks/useTwColorByName";
 import { Rating } from "@smastrom/react-rating";
 import { Link } from "react-router-dom";
-import { useAppSelector } from "../../store";
 import appConfig from "@/configs/app.config";
+import { GetHomeResponse } from '../../utils/types';
+import useThemeClass from '@/utils/hooks/useThemeClass';
 
-const RecentProviders = () => {
+type Props = {
+    data: Partial<GetHomeResponse>
+}
+
+const RecentProviders = ({ data }: Props) => {
     const { imagePath } = appConfig
+    const { textTheme } = useThemeClass()
     const color = useTwColorByName()
-    const { recentProviders } = useAppSelector((state) => state.home.data)
+    const { recentProviders } = data
+    // const { recentProviders } = useAppSelector((state) => state.home.data)
 
     return (
         <Card>
@@ -42,10 +49,15 @@ const RecentProviders = () => {
                             </div>
 
                             <div className="w-full flex flex-col gap-0">
-                                <p className="text-base">
-                                    {item.service.title && item.service.title}
-                                    {!item.service.title && `${item.last_name} ${item.first_name}`}
-                                </p>
+                                <Link
+                                    to={`/services/${item.service.uid}`}
+                                    className='w-fit'
+                                >
+                                    <p className={`hover:${textTheme} font-semibold w-fit`}>
+                                        {item.service.title && item.service.title}
+                                        {!item.service.title && `${item.last_name} ${item.first_name}`}
+                                    </p>
+                                </Link>
                                 <p className="text-xs font-semibold flex items-center gap-2">
                                     {averageRating}
                                     <Rating readOnly style={{ maxWidth: 60 }} value={averageRating} />

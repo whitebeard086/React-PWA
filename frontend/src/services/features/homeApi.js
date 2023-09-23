@@ -5,12 +5,15 @@ export const homeApi = apiSlice.injectEndpoints({
 		getGuest: builder.query({
 			query: () => '/home/guest',
 			providesTags: ['Guest'],
+			staleTime: 15 * 60 * 1000, // data remains fresh for 15 minutes
 		}),
 		getHome: builder.query({
 			query: () => '/home',
 			providesTags: ['Home'],
+			staleTime: 15 * 60 * 1000, // data remains fresh for 15 minutes
 		}),
 	}),
+	keepUnusedDataFor: 15 * 60, // keep unused data for 15 minutes
 });
 
 export const { useGetHomeQuery, useGetGuestQuery } = homeApi;

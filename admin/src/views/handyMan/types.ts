@@ -1,5 +1,5 @@
 import { InvoiceWithItems } from './messages/store/enquiriesSlice';
-import { Booking, Category, Dispute, DisputeMessage, Media, Service, User } from '@/@types/common'
+import { Booking, Category, Dispute, DisputeMessage, Media, Service, ServiceWithUser, User } from '@/@types/common'
 
 export interface ServiceWithCategory extends Service {
     category: Category
@@ -10,6 +10,12 @@ export interface UserWithService extends User {
 }
 
 export interface BookingWithUser extends Booking {
+    user: User
+}
+
+export interface BookingWithUserAndService extends Booking {
+    invoice: InvoiceWithItems
+    service: ServiceWithUser
     user: User
 }
 
@@ -29,6 +35,12 @@ export interface DisputeWithDetails extends Dispute {
 export interface GetDisputesResponse {
     status: string
     disputes: DisputeWithDetails[]
+}
+
+export interface GetBookingsResponse {
+    status: string
+    activeBookings?: BookingWithUserAndService[]
+    completedBookings?: BookingWithUserAndService[]
 }
 
 export type GetDisputeRequest = {

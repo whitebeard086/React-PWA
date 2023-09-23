@@ -11,8 +11,8 @@ class UsersAdminController extends Controller
     public function index()
     {
         try {
-            $all_clients = User::with('Bookings')->where('profile_type_id', 1)->where('username', '!=', 'escrow')->get();
-            $all_providers = User::with('Service.Category', 'Service.Bookings')->where('profile_type_id', 2)->get();
+            $all_clients = User::with('Bookings', 'accountLevel')->where('profile_type_id', 1)->where('username', '!=', 'escrow')->get();
+            $all_providers = User::with('Service.Category', 'Service.Bookings', 'accountLevel')->where('profile_type_id', 2)->get();
 
             return response()->json([
                 'status' => 'success',

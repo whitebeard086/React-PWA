@@ -1,10 +1,34 @@
-import { Category, InvoiceItem, Service, User } from '@/@types/common';
-import { apiGetDispute, apiGetDisputes, apiPayProvider, apiRefundClient } from '@/services/HandymanService';
+import { InvoiceItem } from '@/@types/common';
+import { apiGetActiveBookings, apiGetClosedDisputes, apiGetCompleteBookings, apiGetDispute, apiGetDisputes, apiPayProvider, apiRefundClient } from '@/services/HandymanService';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { GetDisputeRequest, GetDisputeResponse, GetDisputesResponse, RefundClientResponse } from './types';
+import {  GetBookingsResponse, GetDisputeRequest, GetDisputeResponse, GetDisputesResponse, RefundClientResponse } from './types';
 import { useEffect, useState } from 'react';
 import { popNotification } from '@/components/ui/Notification/toast';
 import { useNavigate } from 'react-router-dom';
+
+export const useGetActiveBookings = () => {
+	return useQuery({
+		queryKey: ['activeBookings'],
+        queryFn: async () => {
+			const response = await apiGetActiveBookings<GetBookingsResponse>();
+			return response.data;
+		},
+		staleTime: 5 * 1000,
+		refetchInterval: 5 * 1000,
+	});
+};
+
+export const useGetCompleteBookings = () => {
+	return useQuery({
+		queryKey: ['completeBookings'],
+        queryFn: async () => {
+			const response = await apiGetCompleteBookings<GetBookingsResponse>();
+			return response.data;
+		},
+		staleTime: 5 * 1000,
+		refetchInterval: 5 * 1000,
+	});
+};
 
 export const useGetDisputes = () => {
 	return useQuery({
@@ -19,6 +43,18 @@ export const useGetDisputes = () => {
 	});
 };
 
+export const useGetClosedDisputes = () => {
+	return useQuery({
+		queryKey: ['closedDisputes'],
+        queryFn: async () => {
+			const response = await apiGetClosedDisputes<GetDisputesResponse>();
+			return response.data;
+		},
+		staleTime: 5 * 1000,
+		refetchInterval: 5 * 1000,
+	});
+};
+
 export const useGetDispute = (data: GetDisputeRequest) => {
 	return useQuery({
 		queryKey: ['disputes', data],
@@ -26,8 +62,8 @@ export const useGetDispute = (data: GetDisputeRequest) => {
 			const response = await apiGetDispute<GetDisputeResponse, GetDisputeRequest>(data);
 			return response.data;
 		},
-		staleTime: 60 * 1000,
-		refetchInterval: 60 * 1000,
+		staleTime: 5 * 1000,
+		refetchInterval: 5 * 1000,
 	});
 };
 
