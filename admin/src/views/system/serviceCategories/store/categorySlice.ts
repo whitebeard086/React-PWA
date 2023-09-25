@@ -55,7 +55,6 @@ const categorySlice = createSlice({
         },
         closeCategoryDialog: (state) => {
             state.categoryDialog = false
-            state.category = {}
         },
     },
 })

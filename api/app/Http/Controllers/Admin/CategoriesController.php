@@ -48,6 +48,39 @@ class CategoriesController extends Controller
         }
     }
 
+    public function new(Request $request)
+    {
+        // $request->validate([
+        //     'name' => 'required|string|unique:categories',
+        // ]);
+
+        try {
+            $duplicate = Category::where('slug', Str::slug($request->name))->first();
+            
+            if ($duplicate) {
+                return response()->json([
+                    'status' => 'duplicate error',
+                ], 400);
+            }
+            
+            $category = new Category;
+            $category->name = $request->name;
+            $category->slug = Str::slug($request->name);
+            $category->save();
+
+            return response()->json([
+                'status' => 'success',
+                'category' => $category
+            ], 201);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
     public function update_category(Request $request)
     {
         try {

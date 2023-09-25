@@ -1,0 +1,1 @@
+import{r as o,ba as m}from"./index-d4dc8e82.js";const F=()=>{const[t,s]=o.useState(null),[i,r]=o.useState(null);return{compressFile:async(l,a)=>{const c={maxSizeMB:a||.1,maxWidthOrHeight:800,useWebWorker:!0};try{const e=await m(l,c);s(e)}catch(e){r(e)}},compressedFile:t,compressedFileError:i,resetCompressedFile:()=>{s(null),r(null)}}};export{F as u};

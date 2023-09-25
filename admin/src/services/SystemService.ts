@@ -15,6 +15,14 @@ export async function apiGetCategory<T, U extends Record<string, unknown>>(data:
     })
 }
 
+export async function apiNewCategory<T, U extends Record<string, unknown>>(data: U) {
+    return ApiService.fetchData<T>({
+        url: '/categories/new',
+        method: 'post',
+        data,
+    })
+}
+
 export async function apiUpdateCategory<T, U extends Record<string, unknown>>(data: U) {
     return ApiService.fetchData<T>({
         url: '/categories/category/update',

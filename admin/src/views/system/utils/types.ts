@@ -9,6 +9,10 @@ export type GetCategoryRequest = {
     slug: string
 }
 
+export type NewCategoryRequest = {
+    name: string
+}
+
 export type UpdateCategoryRequest = {
     slug: string
     banner?: File | null
@@ -22,6 +26,10 @@ export type UpdateSubCategoryRequest = {
 }
 
 export type UpdateSubCategoryResponse = {
+    status: string
+}
+
+export interface CategoryResponse {
     status: string
 }
 

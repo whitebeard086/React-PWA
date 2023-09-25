@@ -1,9 +1,10 @@
-import { apiGetCategories, apiGetCategory, apiNewSubCategory, apiUpdateCategory, apiUpdateSubCategory } from '@/services/SystemService'
+import { apiGetCategories, apiGetCategory, apiNewCategory, apiNewSubCategory, apiUpdateCategory, apiUpdateSubCategory } from '@/services/SystemService'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { GetCategoriesResponse, GetCategoryRequest, GetCategoryResponse, UpdateCategoryRequest, UpdateSubCategoryRequest, UpdateSubCategoryResponse } from './types'
+import { CategoryResponse, GetCategoriesResponse, GetCategoryRequest, GetCategoryResponse, NewCategoryRequest, UpdateCategoryRequest, UpdateSubCategoryRequest, UpdateSubCategoryResponse } from './types'
 import { popNotification } from '@/components/ui/Notification/toast'
 import { useNavigate } from 'react-router-dom'
-import { setEditCategory, setEditSubCategory, setNewSubCategory, useAppDispatch } from '../serviceCategories/store'
+import { closeCategoryDialog, setEditCategory, setEditSubCategory, setNewSubCategory, useAppDispatch } from '../serviceCategories/store'
+import axios, { AxiosError } from 'axios'
 
 export const useGetCategories = () => {
     return useQuery({
@@ -84,6 +85,52 @@ export const useUpdateSubCategory = () => {
                 'danger'
             )
 		},
+    })
+}
+
+export const useNewCategory = () => {
+    const queryClient = useQueryClient()
+    const dispatch = useAppDispatch()
+    return useMutation({
+        mutationKey: ['categories'],
+        mutationFn: async (data: NewCategoryRequest) => {
+            const response = await apiNewCategory<CategoryResponse, NewCategoryRequest>(data)
+            return response.data
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['categories'])
+            dispatch(closeCategoryDialog())
+            popNotification(
+                'Success',
+                'Category added!',
+                'success',
+            )
+        },
+        onError: (error) => {
+            if (axios.isAxiosError(error)) {
+                const { response } = error
+                if (response?.data.status === 'duplicate error') {
+                    popNotification(
+                        'Category Already Exists',
+                        'This category already exists, choose a different name.',
+                        'warning'
+                    )
+                }
+                if (response?.data.status === 'error') {
+                    popNotification(
+                        'Error',
+                        'Something went wrong, please try again.',
+                        'danger'
+                    )
+                }
+            } else {
+                popNotification(
+                    'Category Already Exists',
+                    'This category already exists, choose a different name.',
+                    'warning'
+                )
+            }
+        }
     })
 }
 

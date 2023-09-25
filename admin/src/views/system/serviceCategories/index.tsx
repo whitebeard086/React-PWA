@@ -2,9 +2,10 @@ import StatCards from '@/views/home/components/feed/StatCards'
 import { useGetCategories } from '../utils/hooks'
 import CategoryCard from './components/CategoryCard'
 import GettingCategories from './components/GettingCategories'
-import EditDialog from './components/EditDialog'
 import reducer, { SLICE_NAME } from './store'
 import { injectReducer } from '@/store'
+import Header from './components/Header'
+import NewDialog from './components/NewDialog'
 
 injectReducer(SLICE_NAME, reducer)
 
@@ -15,7 +16,7 @@ const ServiceCategories = () => {
     return (
         <div>
             <StatCards />
-            <h4 className="text-base mb-4 mt-4">Service Categories</h4>
+            <Header />
             <div className='grid gap-4 grid-cols-1 xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2'>
                 {isLoading ? (
                     <GettingCategories />
@@ -25,7 +26,7 @@ const ServiceCategories = () => {
                     />
                 )}
             </div>
-            <EditDialog />
+            <NewDialog />
         </div>
     )
 }
