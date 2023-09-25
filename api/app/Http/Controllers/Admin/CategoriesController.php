@@ -48,12 +48,36 @@ class CategoriesController extends Controller
         }
     }
 
+    public function delete(Request $request)
+    {
+        try {
+            $category = Category::where('slug', $request->slug)->first();
+
+            if ($request->id) {
+                $services = $category->services;
+                foreach ($services as $service) {
+                    $service->category_id = $request->id;
+                    $service->sub_category_id = $request->sid; 
+                    $service->save();  
+                }
+            }
+            
+            $category->delete();
+
+            return response()->json([
+                'status' => 'success',
+            ], 200);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
     public function new(Request $request)
     {
-        // $request->validate([
-        //     'name' => 'required|string|unique:categories',
-        // ]);
-
         try {
             $duplicate = Category::where('slug', Str::slug($request->name))->first();
             

@@ -13,6 +13,12 @@ export type NewCategoryRequest = {
     name: string
 }
 
+export type CategoryRequest = {
+    slug: string
+    id?: number | null
+    sid?: number | null
+}
+
 export type UpdateCategoryRequest = {
     slug: string
     banner?: File | null

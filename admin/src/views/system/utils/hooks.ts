@@ -1,9 +1,9 @@
-import { apiGetCategories, apiGetCategory, apiNewCategory, apiNewSubCategory, apiUpdateCategory, apiUpdateSubCategory } from '@/services/SystemService'
+import { apiDeleteCategory, apiGetCategories, apiGetCategory, apiNewCategory, apiNewSubCategory, apiUpdateCategory, apiUpdateSubCategory } from '@/services/SystemService'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { CategoryResponse, GetCategoriesResponse, GetCategoryRequest, GetCategoryResponse, NewCategoryRequest, UpdateCategoryRequest, UpdateSubCategoryRequest, UpdateSubCategoryResponse } from './types'
+import { CategoryResponse, GetCategoriesResponse, GetCategoryRequest, GetCategoryResponse, CategoryRequest, UpdateCategoryRequest, UpdateSubCategoryRequest, UpdateSubCategoryResponse, NewCategoryRequest } from './types'
 import { popNotification } from '@/components/ui/Notification/toast'
 import { useNavigate } from 'react-router-dom'
-import { closeCategoryDialog, setEditCategory, setEditSubCategory, setNewSubCategory, useAppDispatch } from '../serviceCategories/store'
+import { closeCategoryDialog, setCategory, setEditCategory, setEditSubCategory, setNewSubCategory, toggleCategoryWithServicesDialog, toggleDeleteDialog, useAppDispatch, useAppSelector } from '../serviceCategories/store'
 import axios, { AxiosError } from 'axios'
 
 export const useGetCategories = () => {
@@ -151,6 +151,41 @@ export const useNewSubCategory = () => {
                 'Category updated!',
                 'success',
             )
+        },
+        onError: () => {
+			popNotification(
+                'Error',
+                'Something went wrong, please try again.',
+                'danger'
+            )
+		},
+    })
+}
+
+export const useDeleteCategory = () => {
+    const queryClient = useQueryClient()
+    const dispatch = useAppDispatch()
+    const { deleteDialog, categoryWithServicesDialog } = useAppSelector((state) => state.categories.data)
+    return useMutation({
+        mutationKey: ['categories'],
+        mutationFn: async (data: CategoryRequest) => {
+            const response = await apiDeleteCategory<CategoryResponse, CategoryRequest>(data)
+            return response.data
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['categories'])
+            if (deleteDialog) {
+                dispatch(toggleDeleteDialog(false))
+            } 
+            if (categoryWithServicesDialog) {
+                dispatch(toggleCategoryWithServicesDialog(false))
+            }
+            popNotification(
+                'Success',
+                'Category deleted!',
+                'success',
+            )
+            dispatch(setCategory({}))
         },
         onError: () => {
 			popNotification(

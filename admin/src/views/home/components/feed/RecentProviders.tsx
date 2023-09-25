@@ -50,12 +50,12 @@ const RecentProviders = ({ data }: Props) => {
 
                             <div className="w-full flex flex-col gap-0">
                                 <Link
-                                    to={`/services/${item.service.uid}`}
+                                    to={`/services/${item.service?.uid}`}
                                     className='w-fit'
                                 >
                                     <p className={`hover:${textTheme} font-semibold w-fit`}>
-                                        {item.service.title && item.service.title}
-                                        {!item.service.title && `${item.last_name} ${item.first_name}`}
+                                        {item.service?.title && item.service?.title}
+                                        {!item.service?.title && `${item.last_name} ${item.first_name}`}
                                     </p>
                                 </Link>
                                 <p className="text-xs font-semibold flex items-center gap-2">

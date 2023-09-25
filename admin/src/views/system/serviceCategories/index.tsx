@@ -6,6 +6,8 @@ import reducer, { SLICE_NAME } from './store'
 import { injectReducer } from '@/store'
 import Header from './components/Header'
 import NewDialog from './components/NewDialog'
+import DeleteCategory from './components/DeleteCategory'
+import DeleteCategoryWithServices from './components/DeleteCategoryWithServices'
 
 injectReducer(SLICE_NAME, reducer)
 
@@ -27,6 +29,8 @@ const ServiceCategories = () => {
                 )}
             </div>
             <NewDialog />
+            <DeleteCategory />
+            <DeleteCategoryWithServices categories={categories ?? []} />
         </div>
     )
 }

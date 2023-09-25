@@ -181,6 +181,7 @@ Route::group(['prefix' => 'admin'], function(){
         // System Routes
         Route::get('/categories', [CategoriesController::class, 'categories']);
         Route::post('/categories/new', [CategoriesController::class, 'new']);
+        Route::post('/categories/delete', [CategoriesController::class, 'delete']);
         Route::post('/categories/category', [CategoriesController::class, 'category']);
         Route::post('/categories/category/update', [CategoriesController::class, 'update_category']);
         Route::post('/categories/sub_category/new', [CategoriesController::class, 'new_sub_category']);

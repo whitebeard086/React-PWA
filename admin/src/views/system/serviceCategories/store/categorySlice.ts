@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 export interface CategoryState {
     deleteDialog: boolean
+    categoryWithServicesDialog: boolean
     editCategory: boolean
     newSubCategory: boolean
     categoryDialog: boolean
@@ -10,6 +11,7 @@ export interface CategoryState {
     image: Partial<Blob>
     category: Partial<CategoryWithSubCategories>
     subCategory: Partial<SubCategory>
+    subCategories: SubCategory[]
 }
 
 export const SLICE_NAME = 'categories'
@@ -20,9 +22,11 @@ const initialState: CategoryState = {
     editSubCategory: 0,
     newSubCategory: false,
     categoryDialog: false,
+    categoryWithServicesDialog: false,
     image: {},
     category: {},
     subCategory: {},
+    subCategories: [],
 }
 
 const categorySlice = createSlice({
@@ -41,6 +45,9 @@ const categorySlice = createSlice({
         setEditCategory: (state, action) => {
             state.editCategory = action.payload
         },
+        setSubCategories: (state, action) => {
+            state.subCategories = action.payload
+        },
         setNewSubCategory: (state, action) => {
             state.newSubCategory = action.payload
         },
@@ -56,12 +63,16 @@ const categorySlice = createSlice({
         closeCategoryDialog: (state) => {
             state.categoryDialog = false
         },
+        toggleCategoryWithServicesDialog: (state, action) => {
+            state.categoryWithServicesDialog = action.payload
+        },
     },
 })
 
 export const {
     setEditSubCategory,
     setNewSubCategory,
+    setSubCategories,
     setImage,
     setCategory,
     setSubCategory,
@@ -69,6 +80,7 @@ export const {
     toggleDeleteDialog,
     closeCategoryDialog,
     toggleCategoryDialog,
+    toggleCategoryWithServicesDialog,
 } = categorySlice.actions
 
 export default categorySlice.reducer

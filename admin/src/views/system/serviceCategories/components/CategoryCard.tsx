@@ -3,7 +3,7 @@ import { Avatar, Button, Card, Image } from '@/components/ui'
 import appConfig from '@/configs/app.config'
 import { AnimatePresence, motion } from 'framer-motion'
 import { MdDelete } from 'react-icons/md'
-import { setCategory, useAppDispatch } from '../store'
+import { setCategory, toggleCategoryWithServicesDialog, toggleDeleteDialog, useAppDispatch } from '../store'
 import { useNavigate } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 import { apiGetCategory } from '@/services/SystemService'
@@ -60,8 +60,17 @@ const CategoryCard = ({ categories }: Props) => {
 
     const onView = (category: CategoryWithSubCategories) => {
         dispatch(setCategory(category))
-        // dispatch(toggleCategoryDialog(true))
         navigate(`/configurations/service-categories/${category.slug}`)
+    }
+
+    const onDelete = (category: CategoryWithSubCategories) => {
+        dispatch(setCategory(category))
+
+        if (category.services.length > 0) {
+            dispatch(toggleCategoryWithServicesDialog(true))
+        } else {
+            dispatch(toggleDeleteDialog(true))
+        }
     }
 
     return (
@@ -112,6 +121,7 @@ const CategoryCard = ({ categories }: Props) => {
                                     variant='twoTone'
                                     color='red-500'
                                     icon={<MdDelete />}
+                                    onClick={() => onDelete(category)}
                                 >
                                     Delete
                                 </Button>
