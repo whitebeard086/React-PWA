@@ -20,6 +20,7 @@ import BvnDialog from '../payments/components/bvn/bvnDialog';
 // 	toggleBvnDialog,
 // 	toggleDepositDialog,
 // } from '../payments/store/stateSlice';
+import ContinueWithPin from '../auth/validate/continueWithPin';
 import KycDialog from '../profile/kyc/components/kycDialog';
 import WithdrawDialog from '../withdraw/components/withdraw';
 import { toggleWithdrawDialog } from '../withdraw/store/stateSlice';
@@ -43,13 +44,13 @@ const Layout = () => {
 		verifiedPhone,
 	} = useUser();
 
-	console.log('User from useUser: ', user);
-	console.log('IsLoading from useUser: ', isLoading);
-	console.log('IsError from useUser: ', isError);
-	console.log('HasPin from useUser: ', hasPin);
-	console.log('HasService from useUser: ', hasService);
-	console.log('VerifiedPhone from useUser: ', verifiedPhone);
-	console.log('User type from useUser: ', typenkeuser);
+	// console.log('User from useUser: ', user);
+	// console.log('IsLoading from useUser: ', isLoading);
+	// console.log('IsError from useUser: ', isError);
+	// console.log('HasPin from useUser: ', hasPin);
+	// console.log('HasService from useUser: ', hasService);
+	// console.log('VerifiedPhone from useUser: ', verifiedPhone);
+	// console.log('User type from useUser: ', typenkeuser);
 
 	const { profile, userType } = useSelector((state) => state.auth.user);
 	const { signedIn } = useSelector((state) => state.auth.session);
@@ -201,6 +202,7 @@ const Layout = () => {
 			<DepositDialog />
 			<BvnDialog />
 			<WithdrawDialog />
+			<ContinueWithPin />
 		</Container>
 	);
 };

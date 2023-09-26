@@ -23,12 +23,23 @@ export const userApi = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: ['User'],
 		}),
+		validate: builder.mutation({
+			query: (data) => ({
+				url: '/profile/pin/validate',
+				method: 'POST',
+				body: data,
+			}),
+		}),
 	}),
 	keepUnusedDataFor: 15 * 60, // keep unused data for 15 minutes
 });
 
-export const { useGetUserQuery, useCreatePinMutation, useUpdatePinMutation } =
-	userApi;
+export const {
+	useGetUserQuery,
+	useCreatePinMutation,
+	useUpdatePinMutation,
+	useValidateMutation,
+} = userApi;
 
 export function useUser() {
 	const { data, isLoading, isError } = useGetUserQuery();

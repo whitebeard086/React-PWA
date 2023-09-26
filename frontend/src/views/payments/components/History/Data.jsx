@@ -1,15 +1,15 @@
 /* eslint-disable react/prop-types */
-import { Card } from '@/components/ui';
 import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const Data = ({ transactions }) => {
 	const { userType } = useSelector((state) => state.auth.user);
 
 	return (
-		<div className="flex flex-col">
+		<div className="flex flex-col gap-2">
 			{transactions?.map((txn) => (
-				<Card key={txn.id}>
+				<Link to={txn.uid} key={txn.id} className="card p-4 ">
 					<div className="flex items-center gap-4 justify-between">
 						<h4 className="text-lg font-bold text-gray-700">{txn.type}</h4>
 						{txn.type === 'Wallet Topup' && (
@@ -47,7 +47,7 @@ const Data = ({ transactions }) => {
 							{dayjs(txn.created_at).format('DD MMM YYYY hh:mm a')}
 						</p>
 					</div>
-				</Card>
+				</Link>
 			))}
 		</div>
 	);

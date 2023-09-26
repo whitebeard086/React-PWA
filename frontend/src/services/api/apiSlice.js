@@ -11,7 +11,7 @@ export const apiSlice = createApi({
 	reducerPath: 'api',
 	baseQuery: fetchBaseQuery({
 		baseUrl: appConfig.apiPrefix,
-		prepareHeaders: (headers, { getState }) => {
+		prepareHeaders: (headers) => {
 			const rawPersistData = localStorage.getItem(PERSIST_STORE_NAME);
 			const persistData = deepParseJson(rawPersistData);
 			const accessToken = persistData.auth.session.token;
@@ -23,7 +23,7 @@ export const apiSlice = createApi({
 			return headers;
 		},
 	}),
-	tagTypes: ['User', 'KYC', 'Dashboard', 'Home', 'Guest'],
+	tagTypes: ['User', 'KYC', 'Dashboard', 'Home', 'Guest', 'Payment'],
 	endpoints: (builder) => ({}),
 	onError: (error, { dispatch }) => {
 		if (error.status === 401) {

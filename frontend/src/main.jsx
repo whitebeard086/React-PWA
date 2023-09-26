@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import store from './store';
 // import App from './taskitly';
 import App from './App';
+import { IdleProvider } from './utils/idleContext';
 
 import './index.css';
 
@@ -16,7 +17,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 	<QueryClientProvider client={queryClient}>
 		<Provider store={store}>
 			{/* <PersistGate loading={null} persistor={persistor}> */}
-			<App />
+			<IdleProvider>
+				<App />
+			</IdleProvider>
 			{/* </PersistGate> */}
 		</Provider>
 		<ReactQueryDevtools initialIsOpen={false} />

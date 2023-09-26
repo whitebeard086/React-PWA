@@ -17,9 +17,9 @@ const Airtime = () => {
 	const { data, isFetching } = useGetOperators('telco');
 	const { operators } = data || {};
 
-	console.log('Product: ', product);
-	console.log('Store: ', store);
-	console.log('Step: ', step);
+	// console.log('Product: ', product);
+	// console.log('Store: ', store);
+	// console.log('Step: ', step);
 
 	const handleNext = useCallback(() => {
 		setStep(step + 1);

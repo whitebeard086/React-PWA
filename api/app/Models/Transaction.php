@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Transaction extends Model
 {
@@ -18,6 +19,7 @@ class Transaction extends Model
         'final_amount',
         'method',
         'status',
+        'uid',
     ];
 
     protected $casts = [
@@ -27,6 +29,15 @@ class Transaction extends Model
         'final_amount' => 'float',
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($transaction) {
+            $transaction->uid = (string) Str::uuid();
+        });
+    }
+    
     public function User()
     {
         return $this->belongsTo(User::class);

@@ -217,7 +217,7 @@ class BillsController extends Controller
         $device_number = $formFields['device_number'];
         $meter_type = $request->input('meter_type');
         $amount = $formFields['amount'] * 100;
-        $account_id = $user->account_id;
+        // $account_id = $user->account_id;
 
         $electricity =[
             'device_details' => [
@@ -227,7 +227,7 @@ class BillsController extends Controller
             'amount' => $amount,
             'product_id' => $product_id,
             'operator_id' => $operator_id,
-            'account_id' => $account_id,
+            // 'account_id' => $account_id,
         ];
 
         $television =[
@@ -237,7 +237,7 @@ class BillsController extends Controller
             'amount' => $amount,
             'product_id' => $product_id,
             'operator_id' => $operator_id,
-            'account_id' => $account_id,
+            // 'account_id' => $account_id,
         ];
 
         $telco = [
@@ -245,7 +245,7 @@ class BillsController extends Controller
             'amount' => $amount,
             'product_id' => $product_id,
             'operator_id' => $operator_id,
-            'account_id' => $account_id,
+            // 'account_id' => $account_id,
         ];
 
         if ($bill == 'electricity') {

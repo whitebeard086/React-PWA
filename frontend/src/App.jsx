@@ -1,4 +1,5 @@
 import { useUser } from '@/services/features/userApi';
+import { useGlobalIdle } from '@/utils/hooks/useGlobalIdle';
 import { Suspense, lazy, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -52,6 +53,9 @@ const Referral = lazy(() => import('./views/referral'));
 const Kyc = lazy(() => import('./views/profile/kyc'));
 const Kyb = lazy(() => import('./views/profile/kyb'));
 const Payments = lazy(() => import('./views/payments'));
+const SingleTransaction = lazy(() =>
+	import('./views/payments/components/History/singleTransaction')
+);
 const Topup = lazy(() => import('./views/payments/topup'));
 const Browse = lazy(() => import('./views/browse'));
 const Chat = lazy(() => import('./views/chat'));
@@ -73,6 +77,7 @@ const DisputeChat = lazy(() =>
 function App() {
 	const dispatch = useDispatch();
 	useUser();
+	useGlobalIdle();
 
 	const { userType, onlineUsers, profile } = useSelector(
 		(state) => state.auth.user
@@ -209,6 +214,10 @@ function App() {
 									<Route path="/profile/kyc" element={<Kyc />} />
 									<Route path="/profile/kyb" element={<Kyb />} />
 									<Route path="/transactions" element={<Payments />} />
+									<Route
+										path="/transactions/:slug"
+										element={<SingleTransaction />}
+									/>
 									<Route path="/requests" element={<Requests />} />
 									<Route path="/requests/history" element={<History />} />
 									<Route
