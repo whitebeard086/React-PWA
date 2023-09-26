@@ -120,7 +120,7 @@ const ActionColumn = ({ row }: { row: UserWithService }) => {
                 color="red-600"
                 onClick={() => onView(row)}
             >
-                Requests({row.service.bookings.length})
+                Requests({row.service?.bookings.length})
             </Button>
             <Button
                 variant="solid"
@@ -145,7 +145,7 @@ const ProviderColumn = ({ row }: { row: UserWithService }) => {
             )}
             <Link
                 className={`hover:${textTheme} ml-2 font-semibold`}
-                to={`/services/${row.service.uid}`}
+                to={`/services/${row.service?.uid}`}
             >
                 {`${row.first_name} ${row.last_name}`}
             </Link>

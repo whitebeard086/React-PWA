@@ -3,7 +3,7 @@ import { useGetCategory } from '../../utils/hooks'
 import { Avatar, Card, Image } from '@/components/ui';
 import appConfig from '@/configs/app.config';
 import UploadBanner from './UploadBanner';
-import reducer, { SLICE_NAME, useAppDispatch } from '../store';
+import reducer, { SLICE_NAME } from '../store';
 import { injectReducer } from '@/store';
 import UploadIcon from './UploadIcon';
 import CategoryName from './CategoryName';

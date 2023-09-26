@@ -1,8 +1,6 @@
-import appConfig from '@/configs/app.config'
-import { useCallback } from 'react'
 import { Field, Formik, Form } from 'formik'
 import * as Yup from 'yup'
-import { Button, Card, FormContainer, FormItem, Input, Image } from '@/components/ui'
+import { Button, FormContainer, FormItem, Input } from '@/components/ui'
 import { useNewCategory } from '../../utils/hooks'
 import { MdOutlineUploadFile } from 'react-icons/md'
 

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
-use App\Traits\UploadImageTrait;
 use App\Http\Controllers\Controller;
 use App\Models\SubCategory;
 use Illuminate\Support\Facades\Storage;
@@ -63,6 +62,34 @@ class CategoriesController extends Controller
             }
             
             $category->delete();
+
+            return response()->json([
+                'status' => 'success',
+            ], 200);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function delete_sub_category(Request $request)
+    {
+        try {
+            $sub = SubCategory::where('id', $request->id)->first();
+            
+            if ($request->sid) {
+                $services = $sub->services;   
+                 
+                foreach ($services as $service) {
+                    $service->sub_category_id = $request->sid; 
+                    $service->save();  
+                }
+            }
+
+            $sub->delete();
 
             return response()->json([
                 'status' => 'success',

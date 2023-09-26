@@ -1,55 +1,51 @@
-import { CategoryWithSubCategories } from '@/@types/common'
-import { setCategory, setSubCategories, toggleCategoryWithServicesDialog, useAppDispatch, useAppSelector } from '../store'
-import { Avatar, Button, Dialog, FormContainer, FormItem, Select } from '@/components/ui'
-import { HiOutlineExclamation } from 'react-icons/hi'
-import { useDeleteCategory } from '../../utils/hooks'
+import { SubCategory } from '@/@types/common'
 import { Field, Formik, Form, FieldProps } from 'formik'
 import * as Yup from 'yup'
+import { Avatar, Button, Dialog, FormContainer, FormItem, Select } from '@/components/ui'
+import { HiOutlineExclamation } from 'react-icons/hi'
+import { useDeleteSubCategory } from '@/views/system/utils/hooks'
+import { setSubCategory, toggleSubWithServicesDialog, useAppDispatch, useAppSelector } from '../../store'
 
 type Props = {
-    categories: CategoryWithSubCategories[]
+    subCategories: SubCategory[]
 }
 
 type FormFields = {
-    category: number | null
     subCategory: number | null
 }
 
-const DeleteCategoryWithServices = ({ categories }: Props) => {
-    const { mutate: deleteCategory, isLoading } = useDeleteCategory()
+const DeleteWithServices = ({ subCategories }: Props) => {
+    const { mutate: deleteSub, isLoading } = useDeleteSubCategory()
     const dispatch = useAppDispatch()
-    const { categoryWithServicesDialog, category, subCategories } = useAppSelector((state) => state.categories.data)
+    const { subCategory, subWithServicesDialog } = useAppSelector((state) => state.categories.data)
 
     const onDialogClose = () => {
-        dispatch(toggleCategoryWithServicesDialog(false))
-        dispatch(setCategory({}))
+        dispatch(toggleSubWithServicesDialog(false))
+        dispatch(setSubCategory({}))
     }
 
     const handleSubmit = (values: FormFields) => {
-        deleteCategory({ slug: category.slug ?? '', id: values.category, sid: values.subCategory })
+        deleteSub({ id: subCategory.id ?? null, sid: values.subCategory })
     }
 
     const validationSchema = Yup.object().shape({
-        category: Yup.string().required('Select a Category'),
         subCategory: Yup.string().required('Select a Sub Category'),
     })
 
-    const categoryOptions = categories?.filter(item => item.sub_categories.length > 0 && item.id !== category.id).map((item) => {
-        return { label: item.name, value: item.id, setSubCategories: item.sub_categories };
-    })
-
-    const subCategoryOptions = subCategories?.map(item => {
-        return { label: item.name, value: item.id }
-    })
+    // const subCategoryOptions = subCategories?.map(item => {
+    //     return { label: item.name, value: item.id }
+    // })
+    const subCategoryOptions = subCategories?.filter(item => item.id !== subCategory.id).map(item => (
+        { label: item.name, value: item.id }
+    ))
 
     const initialData: FormFields = {
-        category: null,
         subCategory: null,
     }
 
     return (
         <Dialog
-            isOpen={categoryWithServicesDialog}
+            isOpen={subWithServicesDialog}
             scrollable={true}
             contentClassName="pb-0 px-0"
             onRequestClose={onDialogClose}
@@ -76,58 +72,34 @@ const DeleteCategoryWithServices = ({ categories }: Props) => {
                                 </Avatar>
                                 <div className='ml-4'>
                                     <h5 className="mb-2">
-                                        Delete Category
+                                        Delete Sub Category
                                     </h5>
                                     <p className='mb-4'>
-                                        This category has service(s), chose a category below to move the service(s) to before you continue.
+                                        This sub category has service(s), chose a sub category below to move the service(s) to before you continue.
                                     </p>
                                     <div className="mt-2">
+
                                         <FormItem
-                                            label="Category"
+                                            label="Sub Category"
                                             invalid={
-                                                (errors.category && touched.category) as boolean
+                                                (errors.subCategory && touched.subCategory) as boolean
                                             }
-                                            errorMessage={errors.category}
+                                            errorMessage={errors.subCategory}
                                         >
-                                            <Field name="category">
+                                            <Field name="subCategory">
                                                 {({ field, form }: FieldProps) => (
                                                     <Select
                                                         field={field}
                                                         form={form}
-                                                        options={categoryOptions}
-                                                        value={categoryOptions.filter((category) => category.value === values.category)}
+                                                        options={subCategoryOptions}
+                                                        value={subCategoryOptions.filter((category) => category.value === values.subCategory)}
                                                         onChange={(option) => {
                                                             form.setFieldValue(field.name, option?.value)
-                                                            dispatch(setSubCategories(option?.setSubCategories))
                                                         }}
                                                     />
                                                 )}
                                             </Field>
                                         </FormItem>
-
-                                        {values.category !== null && (
-                                            <FormItem
-                                                label="Sub Category"
-                                                invalid={
-                                                    (errors.subCategory && touched.subCategory) as boolean
-                                                }
-                                                errorMessage={errors.subCategory}
-                                            >
-                                                <Field name="subCategory">
-                                                    {({ field, form }: FieldProps) => (
-                                                        <Select
-                                                            field={field}
-                                                            form={form}
-                                                            options={subCategoryOptions}
-                                                            value={subCategoryOptions.filter((category) => category.value === values.subCategory)}
-                                                            onChange={(option) => {
-                                                                form.setFieldValue(field.name, option?.value)
-                                                            }}
-                                                        />
-                                                    )}
-                                                </Field>
-                                            </FormItem>
-                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -159,4 +131,4 @@ const DeleteCategoryWithServices = ({ categories }: Props) => {
         </Dialog>
     )
 }
-export default DeleteCategoryWithServices
+export default DeleteWithServices

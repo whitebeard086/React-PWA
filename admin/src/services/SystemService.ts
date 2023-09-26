@@ -54,3 +54,11 @@ export async function apiNewSubCategory<T, U extends Record<string, unknown>>(da
         data,
     })
 }
+
+export async function apiDeleteSubCategory<T, U extends Record<string, unknown>>(data: U) {
+    return ApiService.fetchData<T>({
+        url: '/categories/sub_category/delete',
+        method: 'post',
+        data,
+    })
+}

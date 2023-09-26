@@ -13,6 +13,11 @@ export type NewCategoryRequest = {
     name: string
 }
 
+export type DeleteSubCategoryRequest = {
+    id: number | null
+    sid?: number | null
+}
+
 export type CategoryRequest = {
     slug: string
     id?: number | null

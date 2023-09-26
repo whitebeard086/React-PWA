@@ -186,5 +186,6 @@ Route::group(['prefix' => 'admin'], function(){
         Route::post('/categories/category/update', [CategoriesController::class, 'update_category']);
         Route::post('/categories/sub_category/new', [CategoriesController::class, 'new_sub_category']);
         Route::post('/categories/sub_category/update', [CategoriesController::class, 'update_sub_category']);
+        Route::post('/categories/sub_category/delete', [CategoriesController::class, 'delete_sub_category']);
     });
 });

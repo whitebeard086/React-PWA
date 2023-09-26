@@ -1,11 +1,13 @@
-import { CategoryWithSubCategories } from '@/@types/common'
+import { CategoryWithSubCategories, SubCategory } from '@/@types/common'
 import { Button, Card } from '@/components/ui'
 import { AnimatePresence, motion } from 'framer-motion'
 import { BiEditAlt } from 'react-icons/bi'
 import { MdDeleteOutline, MdPostAdd } from 'react-icons/md'
-import { setEditSubCategory, setNewSubCategory, useAppDispatch, useAppSelector } from '../../store'
+import { setEditSubCategory, setNewSubCategory, setSubCategory, toggleDeleteDialog, toggleSubWithServicesDialog, useAppDispatch, useAppSelector } from '../../store'
 import EditName from './EditName'
 import NewSubCategory from './NewSubCategory'
+import Delete from './Delete'
+import DeleteWithServices from './DeleteWithServices'
 
 type Props = {
     category: Partial<CategoryWithSubCategories>
@@ -22,6 +24,16 @@ const SubCategories = ({ category }: Props) => {
     const onAddNew = () => {
         dispatch(setNewSubCategory(true))
     }
+
+    const onDelete = (subCat: SubCategory) => {
+        dispatch(setSubCategory(subCat))
+
+        if (subCat.services.length > 0) {
+            dispatch(toggleSubWithServicesDialog(true))
+        } else {
+            dispatch(toggleDeleteDialog(true))
+        }
+    } 
 
     return (
         <div>
@@ -90,6 +102,7 @@ const SubCategories = ({ category }: Props) => {
                                                 size="sm"
                                                 color="red-500"
                                                 icon={<MdDeleteOutline />}
+                                                onClick={() => onDelete(item)}
                                             />
                                         </div>
                                     </div>
@@ -119,6 +132,8 @@ const SubCategories = ({ category }: Props) => {
                     )}
                 </AnimatePresence>
             </div>
+            <Delete />
+            <DeleteWithServices subCategories={category?.sub_categories ?? []} />
         </div>
     )
 }
