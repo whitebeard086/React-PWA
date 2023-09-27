@@ -1,6 +1,6 @@
 .rich-text-editor {
   .ql-toolbar.ql-snow {
-    @apply border border-gray-300 dark:border-gray-600 rounded-tl-lg rounded-tr-lg;
+    @apply border !border-gray-300 dark:border-gray-600 rounded-tl-lg rounded-tr-lg;
   }
 
   .ql-container.ql-snow {
@@ -8,7 +8,7 @@
   }
 
   .ql-editor {
-    @apply min-h-[120px] p-6;
+    @apply !min-h-[120px] !p-6;
   }
 
   .ql-snow.ql-toolbar button,

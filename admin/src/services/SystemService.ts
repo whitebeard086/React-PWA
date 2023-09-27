@@ -62,3 +62,18 @@ export async function apiDeleteSubCategory<T, U extends Record<string, unknown>>
         data,
     })
 }
+
+export async function apiGetSystemConfig<T>() {
+    return ApiService.fetchData<T>({
+        url: '/system/config',
+        method: 'get',
+    })
+}
+
+export async function apiUpdateSystemConfig<T, U extends Record<string, unknown>>(data: U) {
+    return ApiService.fetchData<T>({
+        url: '/system/update',
+        method: 'post',
+        data,
+    })
+}

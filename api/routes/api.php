@@ -19,6 +19,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WithdrawalController;
 use App\Http\Controllers\BlocWebhookController;
+use App\Http\Controllers\Admin\SystemController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Admin\HandymanController;
 use App\Http\Controllers\Admin\HomeAdminController;
@@ -179,6 +180,8 @@ Route::group(['prefix' => 'admin'], function(){
         Route::post('/disputes/dispute/pay-provider', [HandymanController::class, 'pay_provider']);
 
         // System Routes
+        Route::get('/system/config', [SystemController::class, 'system_config']);
+        Route::post('/system/update', [SystemController::class, 'update']);
         Route::get('/categories', [CategoriesController::class, 'categories']);
         Route::post('/categories/new', [CategoriesController::class, 'new']);
         Route::post('/categories/delete', [CategoriesController::class, 'delete']);

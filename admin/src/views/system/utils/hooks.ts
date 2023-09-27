@@ -1,10 +1,11 @@
-import { apiDeleteCategory, apiDeleteSubCategory, apiGetCategories, apiGetCategory, apiNewCategory, apiNewSubCategory, apiUpdateCategory, apiUpdateSubCategory } from '@/services/SystemService'
+import { apiDeleteCategory, apiDeleteSubCategory, apiGetCategories, apiGetCategory, apiGetSystemConfig, apiNewCategory, apiNewSubCategory, apiUpdateCategory, apiUpdateSubCategory, apiUpdateSystemConfig } from '@/services/SystemService'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { CategoryResponse, GetCategoriesResponse, GetCategoryRequest, GetCategoryResponse, CategoryRequest, UpdateCategoryRequest, UpdateSubCategoryRequest, UpdateSubCategoryResponse, NewCategoryRequest, DeleteSubCategoryRequest } from './types'
+import { CategoryResponse, GetCategoriesResponse, GetCategoryRequest, GetCategoryResponse, CategoryRequest, UpdateCategoryRequest, UpdateSubCategoryRequest, UpdateSubCategoryResponse, NewCategoryRequest, DeleteSubCategoryRequest, SystemConfigurationsResponse, SystemConfigurationsRequest } from './types'
 import { popNotification } from '@/components/ui/Notification/toast'
 import { useNavigate } from 'react-router-dom'
-import { closeCategoryDialog, setCategory, setEditCategory, setEditSubCategory, setNewSubCategory, setSubCategories, setSubCategory, toggleCategoryWithServicesDialog, toggleDeleteDialog, toggleSubWithServicesDialog, useAppDispatch, useAppSelector } from '../serviceCategories/store'
+import { closeCategoryDialog, setCategory, setEditCategory, setEditSubCategory, setNewSubCategory, setSubCategory, toggleCategoryWithServicesDialog, toggleDeleteDialog, toggleSubWithServicesDialog, useAppDispatch, useAppSelector } from '../serviceCategories/store'
 import axios from 'axios'
+import { setEditBonus, setEditPitch, useAppSelector as useReferralAppSelector} from '../referralSettings/store'
 
 export const useGetCategories = () => {
     return useQuery({
@@ -221,6 +222,51 @@ export const useDeleteSubCategory = () => {
                 'success',
             )
             dispatch(setSubCategory({}))
+        },
+        onError: () => {
+			popNotification(
+                'Error',
+                'Something went wrong, please try again.',
+                'danger'
+            )
+		},
+    })
+}
+
+export const useGetSystemConfigurations = () => {
+    return useQuery({
+        queryKey: ['systemConfig'],
+        queryFn: async () => {
+            const response = await apiGetSystemConfig<SystemConfigurationsResponse>()
+            return response.data
+        },
+        staleTime: 20 * 60 * 1000,
+    })
+}
+
+export const useUpdateSystemConfigurations = () => {
+    const queryClient = useQueryClient()
+    const dispatch = useAppDispatch()
+    const { editBonus, editPitch } = useReferralAppSelector((state) => state.referralSettings.data)
+    return useMutation({
+        mutationKey: ['systemConfig'],
+        mutationFn: async (data: SystemConfigurationsRequest) => {
+            const response = await apiUpdateSystemConfig<SystemConfigurationsResponse, SystemConfigurationsRequest>(data)
+            return response.data
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['systemConfig'])
+            if (editBonus) {
+                dispatch(setEditBonus(false))
+            }
+            if (editPitch) {
+                dispatch(setEditPitch(false))
+            }
+            popNotification(
+                'Success',
+                'System Configurations Updated!',
+                'success',
+            )
         },
         onError: () => {
 			popNotification(

@@ -1,4 +1,4 @@
-import { CategoryWithSubCategories } from '@/@types/common'
+import { CategoryWithSubCategories, Referral, SystemConfigurations } from '@/@types/common'
 
 export type GetCategoriesResponse = {
     status: string
@@ -42,6 +42,17 @@ export type UpdateSubCategoryResponse = {
 
 export interface CategoryResponse {
     status: string
+}
+
+export interface SystemConfigurationsResponse {
+    status: string
+    systemConfig: SystemConfigurations
+    referrals: Referral[]
+}
+
+export type SystemConfigurationsRequest = {
+    bonus?: number
+    pitch?: string
 }
 
 export interface GetCategoryResponse {

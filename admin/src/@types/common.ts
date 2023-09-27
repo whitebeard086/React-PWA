@@ -192,6 +192,25 @@ export interface AccountLevel {
     updated_at: Date
 }
 
+export interface Referral {
+    id: number
+    referrer_id: number 
+    referred_id: number 
+    earned_bonus: string 
+    created_at: Date
+    updated_at: Date
+    referrer: User
+    referred: User
+}
+
+export interface SystemConfigurations {
+    id: number
+    referral_bonus: number 
+    referral_pitch: string 
+    created_at: Date
+    updated_at: Date
+}
+
 export interface InvoiceWithItems extends Invoice {
     items: InvoiceItem[]
 }
