@@ -15,3 +15,10 @@ export async function apiGetReferrals(data) {
 		data,
 	});
 }
+
+export async function apiGetSystemConfig() {
+	return ApiService.fetchData({
+		url: '/system-config',
+		method: 'get',
+	});
+}

@@ -5,6 +5,7 @@ import { Actions, History, Intro } from './components';
 import reducer, {
 	SLICE_NAME,
 	getReferrals,
+	getSystemConfig,
 	useAppDispatch,
 	useAppSelector,
 } from './store';
@@ -18,6 +19,7 @@ const Referral = () => {
 	const { state } = useAppSelector((state) => state[SLICE_NAME].state);
 
 	useEffect(() => {
+		dispatch(getSystemConfig())
 		dispatch(getReferrals());
 	}, [dispatch]);
 

@@ -137,6 +137,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/bills/pay', [BillsController::class, 'pay_bill']);
 
     // Referral routes
+    Route::get('/system-config', [ReferralController::class, 'system_config']);
     Route::get('/referrals', [ReferralController::class, 'getReferrals']);
 
     // Kyc routes

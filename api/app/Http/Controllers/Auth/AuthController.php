@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use App\Services\SMSService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\SystemConfigurations;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -100,19 +101,21 @@ class AuthController extends Controller
         // check if the user was referred
         if ($request->has('referrer')) {
             $referrer = User::where('username', $request->input('referrer'))->first();
+            $system = SystemConfigurations::where('id', 1)->first();
             if ($referrer) {
                 // Record the referral relationship in the "referrals" table
                 Referral::create([
                     'referrer_id' => $referrer->id,
                     'referred_id' => $new_user->id,
+                    'earned_bonus' => $system->referral_bonus,
                 ]);
                 // Add reward to the referrer's balance
-                $referrer->balance += 200;
+                $referrer->balance += $system->referral_bonus;
                 $referrer->save();
                 
                 //Send sms to the referrer
                 // $message = "Congratulations $referrer->username, you've earned ₦200 referral bonus from the new account by $new_user->username";
-                $message = "Congratulations $referrer->username, you've earned NGN200 from referral.";
+                $message = "Congratulations $referrer->username, you've earned NGN$system->referral_bonus from referral.";
                 $this->smsService->sendSMS($referrer->phone, $referrer->username, $message);
             }
         }

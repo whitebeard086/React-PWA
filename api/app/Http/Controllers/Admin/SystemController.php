@@ -14,11 +14,13 @@ class SystemController extends Controller
         try {
             $system = SystemConfigurations::where('id', 1)->first();
             $referrals = Referral::with('referrer', 'referred')->orderBy('id', 'desc')->get();
+            $latestReferrals = Referral::with('referrer', 'referred')->orderBy('id', 'desc')->take(5)->get();
 
             return response()->json([
                 'status' => 'success',
                 'systemConfig' => $system,
-                'referrals' => $referrals
+                'referrals' => $referrals,
+                'latestReferrals' => $latestReferrals,
             ], 200);
             
         } catch (\Exception $e) {

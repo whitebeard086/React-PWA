@@ -48,6 +48,7 @@ export interface SystemConfigurationsResponse {
     status: string
     systemConfig: SystemConfigurations
     referrals: Referral[]
+    latestReferrals: Referral[]
 }
 
 export type SystemConfigurationsRequest = {

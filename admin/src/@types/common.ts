@@ -196,7 +196,7 @@ export interface Referral {
     id: number
     referrer_id: number 
     referred_id: number 
-    earned_bonus: string 
+    earned_bonus: number 
     created_at: Date
     updated_at: Date
     referrer: User

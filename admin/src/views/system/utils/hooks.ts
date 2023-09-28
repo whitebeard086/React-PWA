@@ -240,7 +240,8 @@ export const useGetSystemConfigurations = () => {
             const response = await apiGetSystemConfig<SystemConfigurationsResponse>()
             return response.data
         },
-        staleTime: 20 * 60 * 1000,
+        refetchInterval: 10 * 1000,
+        staleTime: 10 * 1000,
     })
 }
 

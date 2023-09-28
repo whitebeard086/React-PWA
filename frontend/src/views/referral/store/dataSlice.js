@@ -1,5 +1,5 @@
 import { apiGetUser } from '@/services/AuthService';
-import { apiGetReferrals } from '@/services/DashboardService';
+import { apiGetReferrals, apiGetSystemConfig } from '@/services/DashboardService';
 import { createApiThunk, createAsyncReducers, meta } from '@/store';
 import { createSlice } from '@reduxjs/toolkit';
 import { SLICE_NAME, stateAdapter } from './constants';
@@ -9,10 +9,12 @@ export const getReferrals = createApiThunk(
 	apiGetReferrals,
 	`${SLICE_NAME}/data/getReferrals`
 );
+export const getSystemConfig = createApiThunk(apiGetSystemConfig, `${SLICE_NAME}/data/getSystemConfig`)
 
 const initialState = stateAdapter.getInitialState({
 	user: { ...meta },
 	referrals: { ...meta },
+	systemConfig: { ...meta },
 	store: {},
 });
 
@@ -39,6 +41,7 @@ const dataSlice = createSlice({
 	extraReducers: (builder) => {
 		createAsyncReducers(builder, getUser, 'user', 'user');
 		createAsyncReducers(builder, getReferrals, 'referrals', 'referrals');
+		createAsyncReducers(builder, getSystemConfig, 'systemConfig', 'systemConfig');
 	},
 });
 

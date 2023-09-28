@@ -9,7 +9,15 @@ class Referral extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['referrer_id', 'referred_id'];
+    protected $fillable = [
+        'referrer_id', 
+        'referred_id',
+        'earned_bonus',
+    ];
+
+    protected $casts = [
+        'earned_bonus' => 'float',
+    ];
 
     public function referrer()
     {

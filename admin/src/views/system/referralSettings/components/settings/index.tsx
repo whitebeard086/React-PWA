@@ -11,7 +11,7 @@ type Props = {
 const Settings = ({ systemConfig }: Props) => {
     return (
         <AnimatedDiv layoutId='referral settings'>
-            <Card>
+            <Card className='h-full'>
                 <div className='flex flex-col gap-4'>
                     <ReferralBonus systemConfig={systemConfig} />
 
