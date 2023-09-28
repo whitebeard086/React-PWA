@@ -56,6 +56,7 @@ class SystemController extends Controller
 
             return response()->json([
                 'status' => 'success',
+                'test' => $request->airtimeDiscount < 1,
                 'systemConfig' => $system
             ], 200);
             

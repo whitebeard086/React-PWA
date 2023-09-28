@@ -1,6 +1,4 @@
 import { SystemConfigurations } from '@/@types/common'
-import { setCommission, useAppDispatch } from '../../store'
-import { useUpdateSystemConfigurations } from '@/views/system/utils/hooks'
 import { useCallback } from 'react'
 import { Field, Formik, Form, FieldProps } from 'formik'
 import * as Yup from 'yup'
@@ -9,34 +7,36 @@ import { Button, FormContainer, FormItem } from '@/components/ui'
 import { MdOutlineUploadFile } from 'react-icons/md'
 import { FormNumericInput } from '@/components/shared'
 import { NumberFormatValues } from 'react-number-format'
+import { setAirtimeDiscount, useAppDispatch } from '../../store'
+import { useUpdateSystemConfigurations } from '@/views/system/utils/hooks'
 
 type Props = {
     systemConfig: Partial<SystemConfigurations>
 }
 
 type FormFields = {
-    commission: number
+    airtimeDiscount: number
 }
 
-const EditCommission = ({ systemConfig }: Props) => {
+const EditAirtimeDiscount = ({ systemConfig }: Props) => {
     const dispatch = useAppDispatch()
-    const { mutate: updateCommission, isLoading } = useUpdateSystemConfigurations()
+    const { mutate: updateAirtimeDiscount, isLoading } = useUpdateSystemConfigurations()
 
     const validationSchema = Yup.object().shape({
-        commission: Yup.number().required('Enter Service Commission'),
+        airtimeDiscount: Yup.number().required('Enter Service AirtimeDiscount'),
     })
 
     const initialData: FormFields = {
-        commission: systemConfig?.service_commission ?? 0
+        airtimeDiscount: systemConfig?.airtime_discount ?? 0
     }
 
     const onGoBack = useCallback(() => {
-        dispatch(setCommission(false))
+        dispatch(setAirtimeDiscount(false))
     }, [dispatch])
 
     const handleSubmit = (values: FormFields) => {
-        const { commission } = values
-        updateCommission({ commission })
+        const { airtimeDiscount } = values
+        updateAirtimeDiscount({ airtimeDiscount })
     }
 
     const isAllowed = (field: NumberFormatValues) => {
@@ -58,11 +58,11 @@ const EditCommission = ({ systemConfig }: Props) => {
                         <div className="flex flex-col gap-6">
                             <FormItem
                                 label=""
-                                invalid={(errors.commission && touched.commission) as boolean}
-                                errorMessage={errors.commission}
+                                invalid={(errors.airtimeDiscount && touched.airtimeDiscount) as boolean}
+                                errorMessage={errors.airtimeDiscount}
                                 className='mb-0'
                             >
-                                <Field name="commission">
+                                <Field name="airtimeDiscount">
                                     {({ field, form }: FieldProps) => {
                                         return (
                                             <FormNumericInput
@@ -70,7 +70,7 @@ const EditCommission = ({ systemConfig }: Props) => {
                                                 form={form}
                                                 // size="sm"
                                                 field={field}
-                                                placeholder="Enter Service Commission"
+                                                placeholder="Enter Airtime Discount"
                                                 isAllowed={isAllowed}
                                                 decimalScale={2}
                                                 value={field.value}
@@ -118,4 +118,4 @@ const EditCommission = ({ systemConfig }: Props) => {
         </Formik>
     )
 }
-export default EditCommission
+export default EditAirtimeDiscount

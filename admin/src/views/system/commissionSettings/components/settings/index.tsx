@@ -1,6 +1,7 @@
 import { SystemConfigurations } from '@/@types/common'
 import { AnimatedDiv, Card } from '@/components/ui'
 import ServiceCommission from './ServiceCommission'
+import AirtimeDiscount from './AirtimeDiscount'
 
 type Props = {
     systemConfig: Partial<SystemConfigurations>
@@ -12,6 +13,7 @@ const Settings = ({ systemConfig }: Props) => {
             <Card className='h-full'>
                 <div className="flex flex-col gap-4">
                     <ServiceCommission systemConfig={systemConfig} />
+                    <AirtimeDiscount systemConfig={systemConfig} />
                 </div>
             </Card>
         </AnimatedDiv>

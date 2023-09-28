@@ -12,6 +12,9 @@ class SystemConfigurations extends Model
     protected $fillable = [
         'referral_bonus',
         'referral_pitch',
+        'service_commission',
+        'airtime_discount',
+        'data_discount',
     ];
 
     protected $casts = [
