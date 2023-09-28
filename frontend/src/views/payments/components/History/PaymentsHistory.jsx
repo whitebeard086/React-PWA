@@ -2,6 +2,7 @@ import Tabs from '@/components/ui/Tabs';
 import { useSelector } from 'react-redux';
 import Data from './Data';
 import GettingData from './GettingData';
+import PaymentData from './paymentData';
 
 const PaymentsHistory = () => {
 	const { verifying } = useSelector((state) => state.payments.data);
@@ -18,7 +19,6 @@ const PaymentsHistory = () => {
 	);
 	const { TabNav, TabList, TabContent } = Tabs;
 
-	console.log('Transactions: ', transactions);
 	return (
 		<div className="mt-2 mb-2">
 			<h4 className="text-lg font-bold text-gray-700 mb-4">Transactions</h4>
@@ -39,7 +39,8 @@ const PaymentsHistory = () => {
 						</TabList>
 						<div className="mt-4">
 							<TabContent value="all">
-								<Data transactions={transactions} />
+								{/* <Data transactions={transactions} /> */}
+								<PaymentData />
 							</TabContent>
 							<TabContent value="topups">
 								{userType === 'Client' && <Data transactions={clientTopups} />}

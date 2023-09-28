@@ -27,12 +27,14 @@ import { toggleWithdrawDialog } from '../withdraw/store/stateSlice';
 import Footer from './Footer';
 import Header from './Header';
 // import BreadCrumbs from './components/breadCrumbs';
+import { usePaymentsQuery } from '@/services/features/paymentApi';
 import { useUser } from '@/services/features/userApi';
 
 const Layout = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const location = useLocation();
+	usePaymentsQuery('payments');
 
 	const {
 		user,

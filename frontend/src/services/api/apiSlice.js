@@ -25,6 +25,7 @@ export const apiSlice = createApi({
 	}),
 	tagTypes: ['User', 'KYC', 'Dashboard', 'Home', 'Guest', 'Payment'],
 	endpoints: (builder) => ({}),
+	keepUnusedDataFor: 15 * 60, // keep data for 15 minutes
 	onError: (error, { dispatch }) => {
 		if (error.status === 401) {
 			dispatch(onSignOutSuccess());
