@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { closeCategoryDialog, setCategory, setEditCategory, setEditSubCategory, setNewSubCategory, setSubCategory, toggleCategoryWithServicesDialog, toggleDeleteDialog, toggleSubWithServicesDialog, useAppDispatch, useAppSelector } from '../serviceCategories/store'
 import axios from 'axios'
 import { setEditBonus, setEditPitch, useAppSelector as useReferralAppSelector} from '../referralSettings/store'
+import { setAirtimeDiscount, setCommission, setDataDiscount, useAppSelector as useCommissionAppSelector } from '../commissionSettings/store'
 
 export const useGetCategories = () => {
     return useQuery({
@@ -241,7 +242,7 @@ export const useGetSystemConfigurations = () => {
             return response.data
         },
         refetchInterval: 10 * 1000,
-        staleTime: 10 * 1000,
+        staleTime: 20 * 10 * 1000,
     })
 }
 
@@ -249,6 +250,7 @@ export const useUpdateSystemConfigurations = () => {
     const queryClient = useQueryClient()
     const dispatch = useAppDispatch()
     const { editBonus, editPitch } = useReferralAppSelector((state) => state.referralSettings.data)
+    const { commission, airtimeDiscount, dataDiscount } = useCommissionAppSelector((state) => state.commissionSettings.data)
     return useMutation({
         mutationKey: ['systemConfig'],
         mutationFn: async (data: SystemConfigurationsRequest) => {
@@ -262,6 +264,15 @@ export const useUpdateSystemConfigurations = () => {
             }
             if (editPitch) {
                 dispatch(setEditPitch(false))
+            }
+            if (commission) {
+                dispatch(setCommission(false))
+            }
+            if (dataDiscount) {
+                dispatch(setDataDiscount(false))
+            }
+            if (airtimeDiscount) {
+                dispatch(setAirtimeDiscount(false))
             }
             popNotification(
                 'Success',

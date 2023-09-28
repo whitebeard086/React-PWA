@@ -54,6 +54,9 @@ export interface SystemConfigurationsResponse {
 export type SystemConfigurationsRequest = {
     bonus?: number
     pitch?: string
+    commission?: number
+    airtimeDiscount?: number
+    dataDiscount?: number
 }
 
 export interface GetCategoryResponse {

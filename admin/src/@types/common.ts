@@ -205,6 +205,9 @@ export interface Referral {
 
 export interface SystemConfigurations {
     id: number
+    service_commission: number
+    airtime_discount: number
+    data_discount: number
     referral_bonus: number 
     referral_pitch: string 
     created_at: Date

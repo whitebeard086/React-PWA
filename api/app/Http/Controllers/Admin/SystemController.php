@@ -42,6 +42,15 @@ class SystemController extends Controller
             if ($request->pitch) {
                 $system->referral_pitch = $request->pitch;
             }
+            if ($request->commission) {
+                $system->service_commission = $request->commission;
+            }
+            if ($request->airtimeDiscount) {
+                $system->airtime_discount = $request->airtimeDiscount;
+            }
+            if ($request->dataDiscount) {
+                $system->data_discount = $request->dataDiscount;
+            }
             
             $system->save();
 

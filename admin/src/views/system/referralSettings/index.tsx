@@ -1,6 +1,4 @@
-import { AnimatedDiv, Button, Card } from '@/components/ui'
 import StatCards from '@/views/home/components/feed/StatCards'
-import { BiEditAlt } from 'react-icons/bi'
 import reducer, { SLICE_NAME } from './store'
 import { injectReducer } from '@/store'
 import { useGetSystemConfigurations } from '../utils/hooks'

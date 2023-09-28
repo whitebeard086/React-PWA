@@ -15,6 +15,9 @@ class SystemConfigurations extends Model
     ];
 
     protected $casts = [
+        'service_commission' => 'float',
+        'data_discount' => 'float',
+        'airtime_discount' => 'float',
         'referral_bonus' => 'float',
     ];
 }

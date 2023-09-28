@@ -5,6 +5,8 @@ import theme, { ThemeState } from './slices/theme/themeSlice'
 import RtkQueryService from '@/services/RtkQueryService'
 import home, { HomeIndexState } from '@/views/home/store'
 import disputes, { DisputesState } from '@/views/handyMan/inDispute/store'
+import commissionSettings, { CommissionSettingsState } from '@/views/system/commissionSettings/store'
+import referralSettings, { ReferralSettingsState } from '@/views/system/referralSettings/store'
 import locale, { LocaleState } from './slices/locale/localeSlice'
 
 export type RootState = CombinedState<{
@@ -14,6 +16,8 @@ export type RootState = CombinedState<{
     theme: ThemeState
     home: HomeIndexState
     disputes: DisputesState
+    commissionSettings: CommissionSettingsState
+    referralSettings: ReferralSettingsState
 
     /* eslint-disable @typescript-eslint/no-explicit-any */
     [RtkQueryService.reducerPath]: any
@@ -30,6 +34,8 @@ const staticReducers = {
     locale,
     home,
     disputes,
+    commissionSettings,
+    referralSettings,
     [RtkQueryService.reducerPath]: RtkQueryService.reducer,
 }
 
