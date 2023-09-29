@@ -23,7 +23,7 @@ const EditAirtimeDiscount = ({ systemConfig }: Props) => {
     const { mutate: updateAirtimeDiscount, isLoading } = useUpdateSystemConfigurations()
 
     const validationSchema = Yup.object().shape({
-        airtimeDiscount: Yup.number().required('Enter Service AirtimeDiscount'),
+        airtimeDiscount: Yup.number().required('Enter Airtime Discount'),
     })
 
     const initialData: FormFields = {
@@ -36,7 +36,11 @@ const EditAirtimeDiscount = ({ systemConfig }: Props) => {
 
     const handleSubmit = (values: FormFields) => {
         const { airtimeDiscount } = values
-        updateAirtimeDiscount({ airtimeDiscount })
+        if (values.airtimeDiscount === 0) {
+            updateAirtimeDiscount({ zeroAirtime: true })
+        } else {
+            updateAirtimeDiscount({ airtimeDiscount })
+        }
     }
 
     const isAllowed = (field: NumberFormatValues) => {

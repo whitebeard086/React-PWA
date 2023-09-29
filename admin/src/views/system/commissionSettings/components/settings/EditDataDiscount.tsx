@@ -1,6 +1,4 @@
 import { SystemConfigurations } from '@/@types/common'
-import { setCommission, useAppDispatch } from '../../store'
-import { useUpdateSystemConfigurations } from '@/views/system/utils/hooks'
 import { useCallback } from 'react'
 import { Field, Formik, Form, FieldProps } from 'formik'
 import * as Yup from 'yup'
@@ -9,37 +7,39 @@ import { Button, FormContainer, FormItem } from '@/components/ui'
 import { MdOutlineUploadFile } from 'react-icons/md'
 import { FormNumericInput } from '@/components/shared'
 import { NumberFormatValues } from 'react-number-format'
+import { useUpdateSystemConfigurations } from '@/views/system/utils/hooks'
+import { setDataDiscount, useAppDispatch } from '../../store'
 
 type Props = {
     systemConfig: Partial<SystemConfigurations>
 }
 
 type FormFields = {
-    commission: number
+    dataDiscount: number
 }
 
-const EditCommission = ({ systemConfig }: Props) => {
+const EditDataDiscount = ({ systemConfig }: Props) => {
     const dispatch = useAppDispatch()
-    const { mutate: updateCommission, isLoading } = useUpdateSystemConfigurations()
+    const { mutate: updateDataDiscount, isLoading } = useUpdateSystemConfigurations()
 
     const validationSchema = Yup.object().shape({
-        commission: Yup.number().required('Enter Service Commission'),
+        dataDiscount: Yup.number().required('Enter Data Discount'),
     })
 
     const initialData: FormFields = {
-        commission: systemConfig?.service_commission ?? 0
+        dataDiscount: systemConfig?.data_discount ?? 0
     }
 
     const onGoBack = useCallback(() => {
-        dispatch(setCommission(false))
+        dispatch(setDataDiscount(false))
     }, [dispatch])
 
     const handleSubmit = (values: FormFields) => {
-        const { commission } = values
-        if (commission === 0) {
-            updateCommission({ zeroCommission: true })
+        const { dataDiscount } = values
+        if (dataDiscount === 0) {
+            updateDataDiscount({ zeroData: true })
         } else {
-            updateCommission({ commission })
+            updateDataDiscount({ dataDiscount })
         }
     }
 
@@ -62,11 +62,11 @@ const EditCommission = ({ systemConfig }: Props) => {
                         <div className="flex flex-col gap-6">
                             <FormItem
                                 label=""
-                                invalid={(errors.commission && touched.commission) as boolean}
-                                errorMessage={errors.commission}
+                                invalid={(errors.dataDiscount && touched.dataDiscount) as boolean}
+                                errorMessage={errors.dataDiscount}
                                 className='mb-0'
                             >
-                                <Field name="commission">
+                                <Field name="dataDiscount">
                                     {({ field, form }: FieldProps) => {
                                         return (
                                             <FormNumericInput
@@ -74,7 +74,7 @@ const EditCommission = ({ systemConfig }: Props) => {
                                                 form={form}
                                                 // size="sm"
                                                 field={field}
-                                                placeholder="Enter Service Commission"
+                                                placeholder="Enter Airtime Discount"
                                                 isAllowed={isAllowed}
                                                 decimalScale={2}
                                                 value={field.value}
@@ -122,4 +122,4 @@ const EditCommission = ({ systemConfig }: Props) => {
         </Formik>
     )
 }
-export default EditCommission
+export default EditDataDiscount

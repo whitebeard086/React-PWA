@@ -57,6 +57,9 @@ export type SystemConfigurationsRequest = {
     commission?: number
     airtimeDiscount?: number
     dataDiscount?: number
+    zeroData?: boolean
+    zeroAirtime?: boolean
+    zeroCommission?: boolean
 }
 
 export interface GetCategoryResponse {

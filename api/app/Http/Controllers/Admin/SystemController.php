@@ -51,12 +51,20 @@ class SystemController extends Controller
             if ($request->dataDiscount) {
                 $system->data_discount = $request->dataDiscount;
             }
+            if ($request->zeroAirtime) {
+                $system->airtime_discount = 0.00;
+            }
+            if ($request->zeroData) {
+                $system->data_discount = 0.00;
+            }
+            if ($request->zeroCommission) {
+                $system->service_commission = 0.00;
+            }
             
             $system->save();
 
             return response()->json([
                 'status' => 'success',
-                'test' => $request->airtimeDiscount < 1,
                 'systemConfig' => $system
             ], 200);
             
