@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Booking;
+use App\Models\Referral;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -16,6 +17,24 @@ class FinanceController extends Controller
             return response()->json([
                 'status' => 'success',
                 'serviceCommissions' => $service_commissions,
+            ], 200);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function referral_rewards()
+    {
+        try {
+            $referrals = Referral::with('referrer', 'referred')->orderBy('id', 'desc')->get();
+
+            return response()->json([
+                'status' => 'success',
+                'referrals' => $referrals,
             ], 200);
             
         } catch (\Exception $e) {

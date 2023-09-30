@@ -172,6 +172,7 @@ Route::group(['prefix' => 'admin'], function(){
 
         // Finance Routes
         Route::get('/finance/system-commissions', [FinanceController::class, 'system_commissions']);
+        Route::get('/finance/referral-rewards', [FinanceController::class, 'referral_rewards']);
 
         // Handyman Routes
         Route::get('/enquiries', [HandymanController::class, 'enquiries']);

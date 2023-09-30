@@ -15,7 +15,7 @@ import type { ColumnDef, FilterFn, ColumnFiltersState } from '@tanstack/react-ta
 import type { InputHTMLAttributes } from 'react'
 
 type Props = {
-    referrals: Referral[]
+    data: Referral[]
     loading: boolean
 }
 
@@ -150,7 +150,7 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
     return itemRank.passed
 }
 
-const Referrals = ({ referrals:data, loading }: Props) => {
+const Referrals = ({ data, loading }: Props) => {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [globalFilter, setGlobalFilter] = useState('')
 
@@ -231,7 +231,7 @@ const Referrals = ({ referrals:data, loading }: Props) => {
         <Loading loading={loading && data.length !== 0} type="cover">
             <Card>
                 <div className="mb-4 flex items-center gap-4 justify-between">
-                    <h4 className="text-base">All Referrals</h4>
+                    <h4 className="text-base">Referrals</h4>
                     <DebouncedInput
                         value={globalFilter ?? ''}
                         className="p-2 font-lg shadow border border-block"

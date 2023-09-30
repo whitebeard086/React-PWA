@@ -6,3 +6,10 @@ export async function apiGetSystemCommissions<T>() {
         method: 'get',
     })
 }
+
+export async function apiGetReferralRewards<T>() {
+    return ApiService.fetchData<T>({
+        url: '/finance/referral-rewards',
+        method: 'get',
+    })
+}

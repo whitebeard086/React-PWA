@@ -14,14 +14,14 @@ class SystemController extends Controller
     {
         try {
             $system = SystemConfigurations::where('id', 1)->first();
-            $referrals = Referral::with('referrer', 'referred')->orderBy('id', 'desc')->get();
+            // $referrals = Referral::with('referrer', 'referred')->orderBy('id', 'desc')->get();
             $latestReferrals = Referral::with('referrer', 'referred')->orderBy('id', 'desc')->take(5)->get();
             $recentCommissions = Booking::with(['Service.User', 'User'])->where('status', 'completed')->orderBy('id', 'desc')->take(5)->get();
 
             return response()->json([
                 'status' => 'success',
                 'systemConfig' => $system,
-                'referrals' => $referrals,
+                // 'referrals' => $referrals,
                 'latestReferrals' => $latestReferrals,
                 'recentCommissions' => $recentCommissions,
             ], 200);

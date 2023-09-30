@@ -6,13 +6,15 @@ import Settings from './components/settings'
 import LatestReferrals from './components/referrals/LatestReferrals'
 import Referrals from './components/referrals/Referrals'
 import GettingData from './components/GettingData'
+import { useGetReferralRewards } from '@/views/finance/utils/hooks'
 
 injectReducer(SLICE_NAME, reducer)
 
 const ReferralSettings = () => {
     const { data, isLoading } = useGetSystemConfigurations()
+    const { data: referralsData, isLoading: loadingReferrals } = useGetReferralRewards()
     const systemConfig = data?.systemConfig
-    const referrals = data?.referrals
+    const referrals = referralsData?.referrals
 
     return (
         <div>
@@ -33,7 +35,7 @@ const ReferralSettings = () => {
                 <div>
                     <Referrals 
                         referrals={referrals ?? []}
-                        loading={isLoading}
+                        loading={loadingReferrals}
                     />
                 </div>
             </div>
