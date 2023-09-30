@@ -1,4 +1,5 @@
 import { CategoryWithSubCategories, Referral, SystemConfigurations } from '@/@types/common'
+import { BookingWithUserAndService } from '@/views/handyMan/types'
 
 export type GetCategoriesResponse = {
     status: string
@@ -49,6 +50,9 @@ export interface SystemConfigurationsResponse {
     systemConfig: SystemConfigurations
     referrals: Referral[]
     latestReferrals: Referral[]
+    commissions: BookingWithUserAndService[]
+    recentCommissions: BookingWithUserAndService[]
+
 }
 
 export type SystemConfigurationsRequest = {

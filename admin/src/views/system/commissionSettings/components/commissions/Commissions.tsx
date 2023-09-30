@@ -1,25 +1,22 @@
 import { useEffect, useMemo, useState } from 'react'
 import { flexRender, getCoreRowModel, getFacetedMinMaxValues, getFacetedRowModel, getFacetedUniqueValues, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
 import { rankItem } from '@tanstack/match-sorter-utils'
-import { Avatar, Button, Card, Input, Pagination, Select, Table } from '@/components/ui'
+import { Avatar, Card, Input, Pagination, Select, Table } from '@/components/ui'
 import useTwColorByName from '@/utils/hooks/useTwColorByName'
 import acronym from '@/utils/acronym'
 import useThemeClass from '@/utils/hooks/useThemeClass'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import appConfig from '@/configs/app.config'
 import { Loading } from '@/components/shared'
 import TableRowSkeleton from '@/components/shared/loaders/TableRowSkeleton'
-import { BookingWithUserAndService } from '../../types'
+import dayjs from 'dayjs'
 import type { ColumnDef, FilterFn, ColumnFiltersState } from '@tanstack/react-table'
 import type { InputHTMLAttributes } from 'react'
-import { setClient, setInvoice, setProvider, toggleInvoiceDialog, useAppDispatch } from '../store'
-import dayjs from 'dayjs'
+import { BookingWithUserAndService } from '@/views/handyMan/types'
 
 type Props = {
-    data: BookingWithUserAndService[]
+    commissions: BookingWithUserAndService[]
     loading: boolean
-    forCompleted?: boolean
-    tableTitle: string
 }
 
 type Option = {
@@ -33,17 +30,13 @@ interface DebouncedInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>
     debounce?: number
 }
 
-interface DebouncedInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'size' | 'prefix'> {
-    value: string | number
-    onChange: (value: string | number) => void
-    debounce?: number
-}
-
 const pageSizeOption = [
     { value: 5, label: '5 / page' },
     { value: 10, label: '10 / page' },
     { value: 15, label: '15 / page' },
     { value: 20, label: '20 / page' },
+    { value: 25, label: '25 / page' },
+    { value: 30, label: '30 / page' },
 ]
 
 const { Tr, Th, Td, THead, TBody, Sorter } = Table
@@ -93,14 +86,6 @@ const GeneratedAvatar = ({ target }: { target: string }) => {
     )
 }
 
-// const ActionColumn = ({ row }: { row: BookingWithUserAndService }) => {
-//     return (
-//         <div>
-
-//         </div>
-//     )
-// }
-
 const ClientColumn = ({ row }: { row: BookingWithUserAndService }) => {
     const { textTheme } = useThemeClass()
 
@@ -127,35 +112,12 @@ const ServiceColumn = ({ row }: { row: BookingWithUserAndService }) => {
     return (
         <>
             <Link 
-                className={`hover:${textTheme} ml-2 font-semibold`}
+                className={`hover:${textTheme} font-semibold`}
                 to={`/services/${row.service?.uid}`}
 
             >
                 {row.service?.title}
             </Link>
-        </>
-    )
-}
-
-const InvoiceColumn = ({ row }: { row: BookingWithUserAndService }) => {
-    const { textTheme } = useThemeClass()
-    const dispatch = useAppDispatch()
-
-    const onViewInvoice = () => {
-        dispatch(setInvoice(row.invoice))
-        dispatch(setClient(row.user))
-        dispatch(setProvider(row.service.user))
-        dispatch(toggleInvoiceDialog(true))
-    }
-
-    return (
-        <>
-            <div 
-                className={`hover:${textTheme} ml-2 font-semibold cursor-pointer`}
-                onClick={onViewInvoice}
-            >
-                #{row.invoice.invoice_number}
-            </div>
         </>
     )
 }
@@ -174,7 +136,8 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
     return itemRank.passed
 }
 
-const Bookings = ({ data, loading, tableTitle, forCompleted }: Props) => {
+const Commissions = ({ commissions: data, loading }: Props) => {
+    const { textTheme } = useThemeClass()
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [globalFilter, setGlobalFilter] = useState('')
 
@@ -186,14 +149,13 @@ const Bookings = ({ data, loading, tableTitle, forCompleted }: Props) => {
         table.setPageSize(Number(value))
     }
     
-
     const totalData = data?.length
 
     const columns = useMemo<ColumnDef<BookingWithUserAndService>[]>(
         () => [
             { 
                 header: 'Client', 
-                accessorFn: row => `${row.user.first_name} ${row.user.last_name}`,
+                accessorFn: row => `${row.service.user.first_name} ${row.service.user.last_name}`,
                 cell: (props) => {
                     const row = props.row.original
                     return <ClientColumn row={row} />
@@ -201,22 +163,10 @@ const Bookings = ({ data, loading, tableTitle, forCompleted }: Props) => {
             },
             { 
                 header: 'Service', 
-                accessorFn: (row) => row.service?.title,
+                accessorFn: row => row.service?.title,
                 cell: (props) => {
                     const row = props.row.original
                     return <ServiceColumn row={row} />
-                }
-            },
-            { 
-                header: 'Category', 
-                accessorFn: (row) => row.service?.category.name,
-            },
-            { 
-                header: 'Invoice', 
-                accessorFn: (row) => row.invoice.invoice_number,
-                cell: (props) => {
-                    const row = props.row.original
-                    return <InvoiceColumn row={row} />
                 }
             },
             { 
@@ -227,36 +177,40 @@ const Bookings = ({ data, loading, tableTitle, forCompleted }: Props) => {
                     return `₦${row.invoice.price?.toLocaleString()}`
                 },
             },
-            forCompleted ? 
             { 
-                header:  'Time Completed', 
+                header: 'Commission Earned', 
+                accessorFn: (row) => row.invoice.price,
+                cell: (props) => {
+                    const row = props.row.original
+                    return (
+                        <span className={`${textTheme} font-semibold`}>
+                            ₦{row.service_commission?.toLocaleString()}
+                        </span>
+                    )
+                },
+            },
+            { 
+                header: 'Commission Rate', 
+                accessorFn: (row) => row.invoice.price,
+                cell: (props) => {
+                    const row = props.row.original
+                    return `${row.commission_rate?.toLocaleString()}%`
+                },
+            },
+            {
+                header:  'Date', 
                 accessorKey: 'updated_at',
                 cell: (props) => {
                     const row = props.row.original
-                    return dayjs(row.created_at).format('DD/MM/YYYY HH:mm')
-                },
-            }
-            :
-            {
-                header:  'Time Started', 
-                accessorKey: 'created_at',
-                cell: (props) => {
-                    const row = props.row.original
-                    return dayjs(row.created_at).format('DD/MM/YYYY HH:mm')
+                    return dayjs(row.updated_at).format('DD/MM/YYYY HH:mm')
                 },
             },
-            // { 
-            //     header: 'Actions', 
-            //     enableSorting: false,
-            //     id: 'action',
-            //     cell: (props) => <ActionColumn row={props.row.original} />,
-            // },
         ],
-        [forCompleted]
+        [textTheme]
     )
 
     const table = useReactTable({
-        data,
+        data: data ?? [],
         columns,
         filterFns: {
             fuzzy: fuzzyFilter,
@@ -280,10 +234,10 @@ const Bookings = ({ data, loading, tableTitle, forCompleted }: Props) => {
     })
 
     return (
-        <Loading loading={loading && data.length !== 0} type="cover">
+        <Loading loading={loading && data?.length !== 0} type="cover">
             <Card>
                 <div className="mb-4 flex items-center gap-4 justify-between">
-                    <h4 className="text-base">{tableTitle}</h4>
+                    <h4 className="text-base">All Commissions</h4>
                     <DebouncedInput
                         value={globalFilter ?? ''}
                         className="p-2 font-lg shadow border border-block"
@@ -395,4 +349,4 @@ const Bookings = ({ data, loading, tableTitle, forCompleted }: Props) => {
         </Loading>
     )
 }
-export default Bookings
+export default Commissions

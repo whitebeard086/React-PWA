@@ -31,15 +31,22 @@ class RequestsController extends Controller
                 $history = $historyQuery->where('provider_id', $userId)->get();
             }
 
-            // if($disputes) {
-            //     foreach ($disputes as $dispute) {
-            //         $dispute->uid = Hashids::encode($dispute->id);
-            //         $dispute->save();
-            //     }
-            // }
-
-            $enquiries = Chat::with('Messages', 'User.Service', 'Receiver.Service')->where('user_id', $userId)
-                ->orWhere('receiver_id', $userId)->orderBy('id', 'desc')->get();
+            $enquiries = Chat::with([
+                'Messages',
+                'User.Service',
+                'Receiver.Service',
+                'Booking'
+            ])
+            ->where(function ($query) use ($userId) {
+                $query->where('user_id', $userId)
+                      ->where('status', 'open');
+            })
+            ->orWhere(function ($query) use ($userId) {
+                $query->where('receiver_id', $userId)
+                      ->where('status', 'open');
+            })
+            ->orderBy('id', 'desc')
+            ->get();
 
             return response()->json([
                 'status' => 'success',

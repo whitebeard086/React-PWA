@@ -11,6 +11,7 @@ class Chat extends Model
 
     protected $fillable = [
         'user_id',
+        'status',
         'receiver_id',
     ];
 
@@ -32,6 +33,11 @@ class Chat extends Model
     public function Messages()
     {
         return $this->hasMany(Message::class);
+    }
+
+    public function Booking()
+    {
+        return $this->hasOne(Booking::class);
     }
 
     public function Invoices()

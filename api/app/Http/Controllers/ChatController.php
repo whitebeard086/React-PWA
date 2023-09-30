@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Notifications\NewInvoiceNotification;
 use App\Notifications\NewMessageNotification;
 use App\Notifications\ServiceEnquiryNotification;
+use Carbon\Carbon;
 
 class ChatController extends Controller
 {
@@ -67,12 +68,14 @@ class ChatController extends Controller
     public function chat(Request $request)
     {
         try {
+            // $unpublished = News::where('published_at', '>=', Carbon::now())->paginate(10);
             $provider = User::with('Service.Workdays', 'Service.Category')
                 ->where('slug', $request->slug)
                 ->firstOrFail();
 
             if (isset($request->id)) {
                 $chat = Chat::with('Messages', 'User.Service', 'Receiver.Service', 'Invoices.Items')
+                    ->where('status',  'open')
                     ->findOrFail($request->id);
                     
             } elseif (isset($request->provider_id)) {
@@ -81,6 +84,7 @@ class ChatController extends Controller
                 $chat = Chat::with('Messages', 'User.Service', 'Receiver.Service', 'Invoices.Items')
                     ->where('receiver_id', $request->provider_id)
                     ->where('user_id', $userId)
+                    ->where('status', 'open')
                     ->first();
 
                 if (!$chat) {
@@ -147,7 +151,11 @@ class ChatController extends Controller
 
         $message->save();
 
-        $chat = Chat::where('id', $request->chat_id)->firstOrFail();
+        // $chat = Chat::where('id', $request->chat_id)->firstOrFail();
+        $chat = $message->chat;
+
+        $chat->notify_at = Carbon::now()->addHour();
+        $chat->save();
         $sender = $chat->user;
         $receiver = $chat->receiver;
 

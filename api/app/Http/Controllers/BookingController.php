@@ -11,6 +11,7 @@ use App\Models\Dispute;
 use App\Models\Invoice;
 use App\Traits\SmsTrait;
 use App\Models\Transaction;
+use App\Traits\SystemTrait;
 use Illuminate\Http\Request;
 use App\Models\DisputeMessage;
 use Illuminate\Support\Facades\DB;
@@ -23,6 +24,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class BookingController extends Controller
 {
     use SmsTrait;
+    use SystemTrait;
     
     public function book_service(Request $request)
     {
@@ -32,6 +34,7 @@ class BookingController extends Controller
                 'provider_id' => 'required',
                 'user_id' => 'required',
                 'invoice_id' => 'required',
+                'chat_id' => 'required',
             ]);
 
             DB::beginTransaction();
@@ -212,15 +215,32 @@ class BookingController extends Controller
                 throw new ModelNotFoundException('Provider not found');
             }
 
-            $provider->increment('balance', $escrow->amount);
+            $taskitly = User::where('username', 'taskitly')->first();
+
+            $commission = $this->calculateServiceCommission($escrow->amount);
+            $service_commission = $commission['service_commission']; 
+            $provider_commission = $commission['provider_commission']; 
+            $commission_rate = $commission['commission_rate']; 
+
+            $booking->service_commission = $service_commission;
+            $booking->provider_commission = $provider_commission;
+            $booking->commission_rate = $commission_rate;
+            $booking->save();
+            $taskitly->increment('balance', $service_commission);
+            $taskitly->save();
+            $provider->increment('balance', $provider_commission);
             $provider->save();
+
+            $chat = $booking->chat;
+            $chat->status = 'closed';
+            $chat->save(); 
 
             $txn = new Transaction;
             $txn->user_id = $provider->id;
             $txn->reference = $booking->invoice->invoice_number;
-            $txn->amount = $booking->invoice->price;
+            $txn->amount = $provider_commission;
             $txn->type = 'Service Payment';
-            $txn->final_amount = $booking->invoice->price;
+            $txn->final_amount = $provider_commission;
             $txn->method = 'transfer';
             $txn->status = 'Success';
             $txn->save();

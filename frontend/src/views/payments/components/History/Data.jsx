@@ -17,7 +17,7 @@ const Data = ({ transactions }) => {
 								+₦{txn.amount?.toLocaleString()}
 							</p>
 						)}
-						{txn.type === 'Service Payment Refund' && (
+						{txn.type === 'Service Refund' && (
 							<p className="text-lg font-semibold text-green-500">
 								+₦{txn.amount?.toLocaleString()}
 							</p>

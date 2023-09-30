@@ -14,12 +14,16 @@ class Booking extends Model
         'provider_id',
         'user_id',
         'invoice_id',
+        'chat_id',
         'service_status',
         'user_status',
         'status',
         'cancel_reason',
         'rating',
         'comment',
+        'commission_rate',
+        'provider_commission',
+        'service_commission',
     ]; 
 
     protected $casts = [
@@ -28,6 +32,9 @@ class Booking extends Model
         'user_id' => 'float',
         'invoice_id' => 'float',
         'rating' => 'float',
+        'service_commission' => 'float',
+        'provider_commission' => 'float',
+        'commission_rate' => 'float',
     ];
 
     public function Service()
@@ -38,6 +45,11 @@ class Booking extends Model
     public function User()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function Chat()
+    {
+        return $this->belongsTo(Chat::class);
     }
     
     public function Invoice()

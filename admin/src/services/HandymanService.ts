@@ -61,7 +61,7 @@ export async function apiRefundClient<T, U extends Record<string, unknown>>(data
 
 export async function apiPayProvider<T, U extends Record<string, unknown>>(data: U) {
     return ApiService.fetchData<T>({
-        url: '/disputes/dispute/refund-client',
+        url: '/disputes/dispute/pay-provider',
         method: 'post',
         data
     })

@@ -138,6 +138,7 @@ const PaymentDialog = () => {
                 provider_id: provider?.id,
                 user_id: profile?.id,
                 invoice_id: invoice?.id,
+                chat_id: chat?.id,
                 amount: invoice?.price,
             })
         );

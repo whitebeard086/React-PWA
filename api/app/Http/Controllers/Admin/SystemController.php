@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\Referral;
 use App\Models\SystemConfigurations;
 use Illuminate\Http\Request;
@@ -15,12 +16,16 @@ class SystemController extends Controller
             $system = SystemConfigurations::where('id', 1)->first();
             $referrals = Referral::with('referrer', 'referred')->orderBy('id', 'desc')->get();
             $latestReferrals = Referral::with('referrer', 'referred')->orderBy('id', 'desc')->take(5)->get();
+            $commissions = Booking::with(['Service.User', 'User', 'Invoice'])->where('status', 'completed')->orderBy('id', 'desc')->take(5)->get();
+            $recentCommissions = Booking::with(['Service.User', 'User'])->where('status', 'completed')->orderBy('id', 'desc')->take(5)->get();
 
             return response()->json([
                 'status' => 'success',
                 'systemConfig' => $system,
                 'referrals' => $referrals,
                 'latestReferrals' => $latestReferrals,
+                'commissions' => $commissions,
+                'recentCommissions' => $recentCommissions,
             ], 200);
             
         } catch (\Exception $e) {

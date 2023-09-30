@@ -43,7 +43,7 @@ const History = () => {
             
                                     {userType === 'Provider' && (
                                         <p className="text-lg font-semibold text-green-500">
-                                            +₦{item.invoice?.price?.toLocaleString()}
+                                            +₦{item.provider_commission?.toLocaleString()}
                                         </p>
                                     )}
                                     {userType === 'Client' && (item.status === 'completed' || item.status === 'ongoing' || item.status === 'pending') && (

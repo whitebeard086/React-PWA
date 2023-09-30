@@ -5,6 +5,7 @@ import { useGetSystemConfigurations } from '../utils/hooks'
 import Settings from './components/settings'
 import LatestReferrals from './components/referrals/LatestReferrals'
 import Referrals from './components/referrals/Referrals'
+import GettingData from './components/GettingData'
 
 injectReducer(SLICE_NAME, reducer)
 
@@ -19,10 +20,14 @@ const ReferralSettings = () => {
             <div className="mt-6">
                 <h4 className='mb-4'>Referral Settings</h4>
 
-                <div className='grid gap-4 grid-cols-1 lg:grid-cols-2'>
-                    <Settings systemConfig={systemConfig ?? {}} />
-                    <LatestReferrals data={data ?? {}} />
-                </div>
+                {isLoading ? (
+                    <GettingData />
+                ):(
+                    <div className='grid gap-4 grid-cols-1 lg:grid-cols-2'>
+                        <Settings systemConfig={systemConfig ?? {}} />
+                        <LatestReferrals data={data ?? {}} />
+                    </div>
+                )}
 
                 <h4 className='mb-4 mt-4'>Referrals</h4>
                 <div>

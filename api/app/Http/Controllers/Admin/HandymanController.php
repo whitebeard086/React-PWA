@@ -12,24 +12,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Vinkla\Hashids\Facades\Hashids;
 use App\Http\Controllers\Controller;
+use App\Traits\SystemTrait;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class HandymanController extends Controller
 {
+    use SystemTrait;
+    
     public function enquiries()
     {
         try {
             $enquiries = Chat::with('Messages', 'User.Service.Category', 'Receiver.Service.Category', 'User.Service.User', 'Receiver.Service.User', 'Invoices.Items')->orderBy('id', 'desc')->withCount('Messages')->get();
-            // $services = Service::get();
-            // if ($services) {
-            //     foreach ($services as $service) {
-            //         if (!$service->uid) {
-            //             $service->uid = Hashids::encode($service->id);
-            //             $service->save();
-            //         }
-                    
-            //     }
-            // }
             
             return response()->json([
                 'status' => 'success',
@@ -223,15 +216,32 @@ class HandymanController extends Controller
             if (!$provider) {
                 throw new ModelNotFoundException('Provider not found');
             }
-            $provider->increment('balance', $escrow->amount);
+            $taskitly = User::where('username', 'taskitly')->first();
+
+            $commission = $this->calculateServiceCommission($escrow->amount);
+            $service_commission = $commission['service_commission']; 
+            $provider_commission = $commission['provider_commission']; 
+            $commission_rate = $commission['commission_rate']; 
+
+            $booking->service_commission = $service_commission;
+            $booking->provider_commission = $provider_commission;
+            $booking->commission_rate = $commission_rate;
+            $booking->save();
+            $taskitly->increment('balance', $service_commission);
+            $taskitly->save();
+            $provider->increment('balance', $provider_commission);
             $provider->save();
+
+            $chat = $booking->chat;
+            $chat->status = 'closed';
+            $chat->save(); 
 
             $txn = new Transaction;
             $txn->user_id = $provider->id;
             $txn->reference = $booking->invoice->invoice_number;
-            $txn->amount = $booking->invoice->price;
+            $txn->amount = $provider_commission;
             $txn->type = 'Service Refund';
-            $txn->final_amount = $booking->invoice->price;
+            $txn->final_amount = $provider_commission;
             $txn->method = 'transfer';
             $txn->status = 'Success';
             $txn->save();

@@ -60,9 +60,13 @@ export interface Booking {
     service_id: number
     user_id: number
     invoice_id: number
+    chat_id: number
     service_status: 'ongoing' | 'completed' | 'disputed' | 'refunded'
     user_status: 'ongoing' | 'completed' | 'disputed' | 'refunded'
     status: 'ongoing' | 'completed' | 'disputed' | 'refunded' | 'cancelled'
+    service_commission: number
+    provider_commission: number
+    commission_rate: number
     created_at: Date
     updated_at: Date
     provider_id: number
@@ -135,6 +139,8 @@ export interface Chat {
     uid: string | null
     user_id: number
     receiver_id: number
+    status: 'open' | 'closed'
+    notify_at: Date
     created_at: Date
     updated_at: Date
 }
