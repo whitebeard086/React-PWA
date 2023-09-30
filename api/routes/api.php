@@ -42,6 +42,8 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/register/check-user', [AuthController::class, 'check_user']);
 Route::post('/register/check-email', [AuthController::class, 'check_email']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/password/request', [AuthController::class, 'initiate']);
+Route::post('/password/reset', [AuthController::class, 'reset']);
 Route::get('/register', [UserController::class, 'register']);
 Route::webhooks('paystack/webhook');
 Route::post('/webhooks', [BlocWebhookController::class, 'handle']);
@@ -55,6 +57,7 @@ Route::post('/browse/category', [BrowseController::class, 'get_category']);
 Route::get('/browse/category/{slug}', [BrowseController::class, 'get_category_by_get']);
 Route::post('/profile/provider', [UserController::class, 'get_provider']);
 Route::get('/profile/provider/{slug}', [UserController::class, 'get_provider_by_get']);
+Route::get('/profile/client/{slug}', [UserController::class, 'get_client']);
 
 
 // Protected Routes

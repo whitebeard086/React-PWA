@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Otp;
-use App\Models\Address;
 use App\Models\User;
+use App\Models\Address;
 use App\Models\Country;
 use App\Models\Service;
 use App\Models\Category;
@@ -325,7 +325,7 @@ class UserController extends Controller
             'message' => 'Phone verified successfully',
         ], 200);
     }
-
+    
     public function new_service(Request $request)
     {
         $workdays = new Workdays;
@@ -468,6 +468,16 @@ class UserController extends Controller
         return response()->json([
             'status' => 'success',
             'provider' => $provider,
+        ], 200);
+    }
+
+    public function get_client($slug)
+    {
+        $client = User::where('slug', $slug)->first(); 
+
+        return response()->json([
+            'status' => 'success',
+            'client' => $client,
         ], 200);
     }
 

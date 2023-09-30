@@ -34,6 +34,7 @@ export const apiSlice = createApi({
 		'BrowseCat',
 		'Provider',
 		'Request',
+		'Client',
 	],
 	endpoints: (builder) => ({}),
 	keepUnusedDataFor: 15 * 60, // keep data for 15 minutes

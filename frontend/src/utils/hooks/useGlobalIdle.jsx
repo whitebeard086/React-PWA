@@ -9,9 +9,7 @@ export const useGlobalIdle = () => {
 
 	useEffect(() => {
 		if (isIdle) {
-			// trigger pin validation
-			// alert('You are idle');
-			dispatch(toggleValidate(true));
+			dispatch(toggleValidate(false));
 		}
 	}, [isIdle, dispatch]);
 };

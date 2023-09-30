@@ -1,33 +1,25 @@
 import { Avatar, Card } from '@/components/ui';
 import appConfig from '@/configs/app.config';
-import { useBrowse } from '@/services/features/browseApi';
 import { Link } from 'react-router-dom';
 
-const BrowseFeed = () => {
+const BrowseFeed = ({ categories }) => {
 	const { imagePath } = appConfig;
 
-	const { categories } = useBrowse();
-
-	// const { categories } = useSelector((state) => state.browse.data);
-	// console.log('Cats: ', categories);
-
 	return (
-		<div className="flex flex-col gap-4">
+		<div className="grid grid-cols-3 gap-2">
 			{categories?.map((item) => (
 				<Link key={item.id} to={`${item.slug}`}>
-					<Card bodyClass="w-full">
-						<div className="flex gap-4 justify-between">
-							<div className="flex flex-col gap-4">
-								<Avatar
-									size={65}
-									shape="circle"
-									src={`${imagePath}/${item.icon}`}
-									className="bg-amber-50"
-								/>
+					<Card clickable bordered bodyClass="" className="bg-amber-50">
+						<div className="flex flex-col gap-2 justify-center items-center">
+							<Avatar
+								size={65}
+								shape="circle"
+								src={`${imagePath}/${item.icon}`}
+								className="bg-white border-2"
+							/>
 
-								<h4 className="font-bold text-lg text-gray-600">{item.name}</h4>
-							</div>
-							<p className="text-lg font-bold text-primary-500">
+							<p className="font-bold text-sm sm:text-base">{item.name}</p>
+							<p className="text-xs font-bold text-primary-500">
 								{`${
 									item.services?.length === 1
 										? `${item.services?.length} Provider`

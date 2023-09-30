@@ -39,6 +39,7 @@ import RequireServiceProvider from './views/route/RequireServiceProvider';
 const Landing = lazy(() => import('./views/landing'));
 const Register = lazy(() => import('./views/auth/Register'));
 const Login = lazy(() => import('./views/auth/Login'));
+const Password = lazy(() => import('./views/auth/forgot/password'));
 const Home = lazy(() => import('./views/home'));
 const Verify = lazy(() => import('./views/verify'));
 const Service = lazy(() => import('./views/service'));
@@ -49,6 +50,7 @@ const Profile = lazy(() => import('./views/profile'));
 const ProviderProfile = lazy(() =>
 	import('./views/profile/components/ProviderProfile')
 );
+const Client = lazy(() => import('./views/profile/client/client'));
 const Settings = lazy(() => import('./views/settings'));
 const Referral = lazy(() => import('./views/referral'));
 const Kyc = lazy(() => import('./views/profile/kyc'));
@@ -184,6 +186,7 @@ function App() {
 						<Route path="/" element={<Landing />} />
 						<Route path="/register" element={<Register />} />
 						<Route path="/login" element={<Login />} />
+						<Route path="/forgot-password" element={<Password />} />
 
 						<Route path="/" element={<Layout />}>
 							<Route
@@ -198,6 +201,7 @@ function App() {
 								path="/browse/profile/:providerSlug"
 								element={<ProviderProfile />}
 							/>
+							<Route path="/browse/client/:clientSlug" element={<Client />} />
 						</Route>
 						<Route element={<RequireAuth />}>
 							<Route path="/verify" element={<Verify />} />

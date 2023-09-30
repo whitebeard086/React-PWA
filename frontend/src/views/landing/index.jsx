@@ -1,7 +1,7 @@
 import { useUser } from '@/services/features/userApi';
 import { setHasVisited } from '@/store/auth/userSlice';
-import { Suspense, lazy, useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { Suspense, lazy, useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Container } from '../../components/shared';
 
@@ -19,16 +19,21 @@ const Landing = () => {
 	const location = useLocation();
 	console.log(location.pathname);
 
-	const { hasVisited } = useSelector((state) => state.auth.user);
+	// const { hasVisited } = useSelector((state) => state.auth.user);
 
+	const hasVisited = localStorage.getItem('visitedTastikly');
+
+	if (hasVisited) {
+		navigate('/home');
+	}
 	const [step, setStep] = useState(1);
 
-	useEffect(() => {
-		if (userType ?? '' != '') navigate('/home');
-		if (location.pathname === '/' && hasVisited) {
-			navigate('/home');
-		}
-	}, [dispatch, hasVisited, location.pathname, navigate, userType]);
+	// useEffect(() => {
+	// 	if (userType ?? '' != '') navigate('/home');
+	// 	if (location.pathname === '/' && hasVisited) {
+	// 		navigate('/home');
+	// 	}
+	// }, [dispatch, hasVisited, location.pathname, navigate, userType]);
 
 	const handleNext = useCallback(() => {
 		setStep(step + 1);
@@ -36,6 +41,7 @@ const Landing = () => {
 
 	const handleSkip = () => {
 		if (userType !== '') {
+			localStorage.setItem('visitedTastikly', 'true');
 			dispatch(setHasVisited(true));
 			navigate('/home');
 		} else {

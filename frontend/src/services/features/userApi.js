@@ -29,6 +29,20 @@ export const userApi = apiSlice.injectEndpoints({
 				body: data,
 			}),
 		}),
+		initiate: builder.mutation({
+			query: (data) => ({
+				url: '/password/request',
+				method: 'POST',
+				body: data,
+			}),
+		}),
+		reset: builder.mutation({
+			query: (data) => ({
+				url: '/password/reset',
+				method: 'POST',
+				body: data,
+			}),
+		}),
 	}),
 });
 
@@ -37,6 +51,8 @@ export const {
 	useCreatePinMutation,
 	useUpdatePinMutation,
 	useValidateMutation,
+	useInitiateMutation,
+	useResetMutation,
 } = userApi;
 
 export function useUser() {

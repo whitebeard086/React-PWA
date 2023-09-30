@@ -11,9 +11,7 @@ import appConfig from '@/configs/app.config';
 import { pdfjs } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
-import {
-	setDeleteMessageStatus,
-} from '../store/dataSlice';
+import { setDeleteMessageStatus } from '../store/dataSlice';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 dayjs.extend(calendar);
 
@@ -89,12 +87,13 @@ const Messages = ({ isOwner, receiver }) => {
 								/>
 							</div>
 						)}
-						<div className="mb-4 max-w-[80%] w-fit">
+						<div className="mb-4 max-w-[60%] w-fit">
 							<Card
 								className={classNames(
 									'max-w-[100%] w-full',
 									owner ? 'bg-primary-500 text-white' : ''
 								)}
+								bodyClass="p-3"
 							>
 								<div className="flex gap-2">
 									{message.message && <p>{message.message}</p>}
@@ -104,7 +103,12 @@ const Messages = ({ isOwner, receiver }) => {
 								</div>
 							</Card>
 							<div>
-								<p className="text-left">
+								<p
+									className={classNames(
+										'text-xs',
+										owner ? 'text-right' : 'text-left'
+									)}
+								>
 									{dayjs(message.created_at).format('DD MMM, YYYY - h:mm A')}
 								</p>
 							</div>

@@ -26,7 +26,7 @@ const Topup = () => {
 				<img
 					className="w-1/3"
 					src="/svg/topup.svg"
-					alt="description of image"
+					alt="mobile payment image courtesy of undraw"
 				/>
 			</div>
 			{/* <h4 className="text-lg font-bold text-gray-700 text-center">

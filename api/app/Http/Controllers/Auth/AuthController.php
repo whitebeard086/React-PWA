@@ -4,20 +4,24 @@ namespace App\Http\Controllers\Auth;
 
 use Carbon\Carbon;
 use App\Models\User;
+use Ichtrojan\Otp\Otp;
 use App\Models\Referral;
 use Illuminate\Support\Str;
 use App\Services\SMSService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 
 class AuthController extends Controller
 {
     protected $smsService;
+    private $otp;
 
     public function __construct(SMSService $smsService)
     {
         $this->smsService = $smsService;
+        $this->otp = new Otp;
     }
     
     public function check_email(Request $request)
@@ -217,5 +221,53 @@ class AuthController extends Controller
                 'message' => $e->getMessage(),
             ], 500);
         }
+    }
+        
+    public function initiate(Request $request) {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+        
+        $user = User::where('email', $request->email)->first();
+    
+        if (!$user) {
+            return response()->json([
+                'message' => 'We can\'t find a user with that email address.',
+            ], 404);
+        }
+        $token = Password::createToken($user);
+        
+        $this->smsService->sendSMS($user->phone, $user->username, "Your password reset token is $token");
+
+        return response()->json([
+            'message' => 'We have sent a password reset token to your phone number.',
+        ]);
+    }
+
+    public function reset(Request $request) {
+        $credentials = request()->validate([
+            'token' => 'required|string',
+            'password' => 'required|string|confirmed',
+            // 'otp' => 'required|string',
+        ]);
+    
+        // Verify the OTP
+        // $n_otp = $this->otp->validate($request->phone, $request->otp);
+        // if ($n_otp->message == "OTP does not exist" || $n_otp->message == "OTP is not valid") {
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => $n_otp->message,
+        //     ], 400);
+        // }
+    
+        $reset_password_status = Password::reset($credentials, function ($user, $password) {
+            $user->password = Hash::make($password);
+            $user->save();
+        });
+    
+        if ($reset_password_status == Password::INVALID_TOKEN) {
+            return response()->json(["message" => "Invalid token provided"], 400);
+        }
+        return response()->json(["message" => "Password has been successfully changed"]);
     }
 }

@@ -47,8 +47,8 @@ const Provider = ({ provider, service, workdays }) => {
 			<div className="relative">
 				<Card bordered bodyClass="p-0 h-56">
 					<Image
-						src={`${imagePath}/${service.banner}`}
-						alt={service.title}
+						src={`${imagePath}/${service?.banner}`}
+						alt={service?.title}
 						className="h-full w-full object-fit rounded-lg"
 					></Image>
 				</Card>
