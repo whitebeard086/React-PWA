@@ -5,7 +5,6 @@ export const userApi = apiSlice.injectEndpoints({
 		getUser: builder.query({
 			query: () => '/profile/user',
 			providesTags: ['User'],
-			staleTime: 15 * 60 * 1000, // data remains fresh for 15 minutes
 		}),
 		createPin: builder.mutation({
 			query: (data) => ({
@@ -31,7 +30,6 @@ export const userApi = apiSlice.injectEndpoints({
 			}),
 		}),
 	}),
-	keepUnusedDataFor: 15 * 60, // keep unused data for 15 minutes
 });
 
 export const {
@@ -42,13 +40,26 @@ export const {
 } = userApi;
 
 export function useUser() {
-	const { data, isLoading, isError } = useGetUserQuery();
-
-	const user = data?.user;
-	const userType = data?.user?.profile_type?.name;
-	const hasPin = data?.hasPin;
-	const verifiedPhone = user?.phone_verified_at !== null;
-	const hasService = Boolean(user?.service);
+	const {
+		user,
+		userType,
+		hasPin,
+		verifiedPhone,
+		hasService,
+		isLoading,
+		isError,
+	} = useGetUserQuery(undefined, {
+		selectFromResult: ({ data, isLoading, isError }) => ({
+			data: data ?? {},
+			user: data?.user,
+			userType: data?.user?.profile_type?.name,
+			hasPin: data?.hasPin,
+			verifiedPhone: data?.user?.phone_verified_at !== null,
+			hasService: Boolean(data?.user?.service),
+			isLoading,
+			isError,
+		}),
+	});
 
 	return {
 		user,
@@ -60,3 +71,23 @@ export function useUser() {
 		isError,
 	};
 }
+
+// export function useUser() {
+// 	const { data, isLoading, isError } = useGetUserQuery();
+
+// 	const user = data?.user;
+// 	const userType = data?.user?.profile_type?.name;
+// 	const hasPin = data?.hasPin;
+// 	const verifiedPhone = user?.phone_verified_at !== null;
+// 	const hasService = Boolean(user?.service);
+
+// 	return {
+// 		user,
+// 		userType,
+// 		hasPin,
+// 		verifiedPhone,
+// 		hasService,
+// 		isLoading,
+// 		isError,
+// 	};
+// }

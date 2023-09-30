@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { updateProfileView } from '../store/dataSlice';
 
-const Provider = () => {
+const Provider = ({ provider, service, workdays }) => {
 	const { imagePath } = appConfig;
 	const dispatch = useDispatch();
 	const { ref } = useInView({
@@ -27,9 +27,9 @@ const Provider = () => {
 		inactiveFillColor: '#36454F',
 	};
 
-	const { provider, service, workdays } = useSelector(
-		(state) => state.profile.data
-	);
+	// const { provider, service, workdays } = useSelector(
+	// 	(state) => state.profile.data
+	// );
 	const { profile } = useSelector((state) => state.auth.user);
 	const { signedIn } = useSelector((state) => state.auth.session);
 

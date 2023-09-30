@@ -1,29 +1,36 @@
 import Tabs from '@/components/ui/Tabs';
+import { usePayment } from '@/services/features/paymentApi';
 import { useSelector } from 'react-redux';
 import Data from './Data';
 import GettingData from './GettingData';
-import PaymentData from './paymentData';
 
 const PaymentsHistory = () => {
-	const { verifying } = useSelector((state) => state.payments.data);
+	const {
+		transactions,
+		clientExpenses,
+		clientTopups,
+		providerTopups,
+		isLoading,
+	} = usePayment();
+	// const { verifying } = useSelector((state) => state.payments.data);
 	const { userType } = useSelector((state) => state.auth.user);
-	const { transactions } = useSelector((state) => state.payments.data);
-	const clientTopups = transactions?.filter(
-		(txn) => txn.type === 'Wallet Topup'
-	);
-	const providerTopups = transactions?.filter(
-		(txn) => txn.type === 'Wallet Topup' || txn.type === 'Service Payment'
-	);
-	const clientExpenses = transactions?.filter(
-		(txn) => txn.type === 'Service Payment'
-	);
+	// const { transactions } = useSelector((state) => state.payments.data);
+	// const clientTopups = transactions?.filter(
+	// 	(txn) => txn.type === 'Wallet Topup'
+	// );
+	// const providerTopups = transactions?.filter(
+	// 	(txn) => txn.type === 'Wallet Topup' || txn.type === 'Service Payment'
+	// );
+	// const clientExpenses = transactions?.filter(
+	// 	(txn) => txn.type === 'Service Payment'
+	// );
 	const { TabNav, TabList, TabContent } = Tabs;
 
 	return (
 		<div className="mt-2 mb-2">
 			<h4 className="text-lg font-bold text-gray-700 mb-4">Transactions</h4>
 
-			{verifying ? (
+			{isLoading ? (
 				<GettingData />
 			) : (
 				<>
@@ -39,8 +46,8 @@ const PaymentsHistory = () => {
 						</TabList>
 						<div className="mt-4">
 							<TabContent value="all">
-								{/* <Data transactions={transactions} /> */}
-								<PaymentData />
+								<Data transactions={transactions} />
+								{/* <PaymentData /> */}
 							</TabContent>
 							<TabContent value="topups">
 								{userType === 'Client' && <Data transactions={clientTopups} />}

@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\HandymanController;
 use App\Http\Controllers\Admin\HomeAdminController;
 use App\Http\Controllers\Admin\UsersAdminController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
+use Faker\Provider\ar_EG\Payment;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,7 +52,9 @@ Route::get('/home/guest', [HomeController::class, 'guest']);
 // Browse routes
 Route::get('/browse', [BrowseController::class, 'index']);
 Route::post('/browse/category', [BrowseController::class, 'get_category']);
+Route::get('/browse/category/{slug}', [BrowseController::class, 'get_category_by_get']);
 Route::post('/profile/provider', [UserController::class, 'get_provider']);
+Route::get('/profile/provider/{slug}', [UserController::class, 'get_provider_by_get']);
 
 
 // Protected Routes
@@ -94,6 +97,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/service/dispute/close', [DisputesController::class, 'close_dispute']);
 
     // Payment Routes
+    Route::get('/payments/{slug}', [PaymentsController::class, 'get_transaction']);
     Route::get('/payments', [PaymentsController::class, 'index']);
 
     // Deposit Routes

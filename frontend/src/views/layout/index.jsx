@@ -1,10 +1,9 @@
 import { Container } from '@/components/shared';
-import { Button, Spinner } from '@/components/ui';
+import { Button } from '@/components/ui';
 import { getUser } from '@/store/auth/userSlice';
 import { socket } from '@/utils/socket';
 import classNames from 'classnames';
 import { useEffect } from 'react';
-import { FaSpinner } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useGetOperators } from '../bills/store/hooks';
@@ -27,9 +26,8 @@ import { toggleWithdrawDialog } from '../withdraw/store/stateSlice';
 import Footer from './Footer';
 import Header from './Header';
 // import BreadCrumbs from './components/breadCrumbs';
-import { usePaymentsQuery } from '@/services/features/paymentApi';
+import { usePayment, usePaymentsQuery } from '@/services/features/paymentApi';
 import { useUser } from '@/services/features/userApi';
-
 const Layout = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -45,6 +43,7 @@ const Layout = () => {
 		userType: typenkeuser,
 		verifiedPhone,
 	} = useUser();
+	const { isLoading: isPaying } = usePayment();
 
 	// console.log('User from useUser: ', user);
 	// console.log('IsLoading from useUser: ', isLoading);
@@ -131,7 +130,7 @@ const Layout = () => {
 				<div className="bg-primary-500 w-[96%] mx-auto rounded-2xl py-3 px-4 flex items-center gap-4 justify-between">
 					{signedIn ? (
 						<h2 className="text-xl font-bold text-emerald-50">
-							{verifying ? (
+							{/* {verifying ? (
 								<Spinner
 									indicator={FaSpinner}
 									className="mr-4"
@@ -140,7 +139,8 @@ const Layout = () => {
 								/>
 							) : (
 								`₦${profile?.balance?.toLocaleString()}`
-							)}
+							)} */}
+							₦{user?.balance?.toLocaleString()}
 						</h2>
 					) : (
 						<h2 className="text-xl font-bold text-emerald-50">Welcome</h2>
@@ -153,7 +153,7 @@ const Layout = () => {
 								variant="solid"
 								className="!bg-gray-900 hover:!bg-black"
 								onClick={onTopUp}
-								disabled={verifying}
+								// disabled={verifying}
 							>
 								Topup
 							</Button>
@@ -161,7 +161,7 @@ const Layout = () => {
 								<Button
 									size="sm"
 									variant="solid"
-									disabled={verifying}
+									// disabled={verifying}
 									onClick={onWithdraw}
 									className="!bg-gray-900 hover:!bg-black"
 								>

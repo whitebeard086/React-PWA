@@ -1,13 +1,9 @@
 import { Button } from '@/components/ui';
 import Tabs from '@/components/ui/Tabs';
 import appConfig from '@/configs/app.config';
-import {
-	useCompleteServiceMutation,
-	useConfirmServiceMutation,
-	useRequest,
-} from '@/services/features/requestApi';
 import { injectReducer } from '@/store';
 import { socket } from '@/utils/socket';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Bookings from './components/Bookings';
@@ -21,6 +17,13 @@ import Enquiries from './components/Enquiries';
 import GettingData from './components/GettingData';
 import reducer from './store';
 import {
+	getRequestsData,
+	setServiceCancelled,
+	setServiceCompleted,
+	setServiceConfirmed,
+	setServiceStarted,
+} from './store/dataSlice';
+import {
 	setBookingID,
 	toggleCancelServiceDialog,
 	toggleCompleteServiceDialog,
@@ -28,26 +31,28 @@ import {
 	toggleOpenDisputeDialog,
 	toggleStartServiceDialog,
 } from './store/stateSlice';
+// import { useRequest } from "@/services/features/requestApi";
 
 injectReducer('requests', reducer);
 
 const Requests = () => {
-	const { isLoading, bookings, disputes, enquiries } = useRequest();
-	const [completeService, { isLoading: completingService }] =
-		useCompleteServiceMutation();
-	const [confirmService, { isLoading: confirmingService }] =
-		useConfirmServiceMutation();
+	// const {bookings, disputes } = useRequest()
 	const dispatch = useDispatch();
 	const { imagePath } = appConfig;
 
-	const { booking } = useSelector((state) => state.requests.data);
+	const { bookings, booking, disputes, completingService, confirmingService } =
+		useSelector((state) => state.requests.data);
 	const { bookingID } = useSelector((state) => state.requests.state);
 	const { userType } = useSelector((state) => state.auth.user);
 	const isProvider = userType === 'Provider' ? true : false;
 
-	console.log('Enquiries: ', enquiries);
-	console.log('Bookings: ', bookings);
-	console.log('Disputes: ', disputes);
+	const {
+		loading,
+		serviceCompleted,
+		serviceConfirmed,
+		serviceStarted,
+		serviceCancelled,
+	} = useSelector((state) => state.requests?.data);
 
 	const { TabNav, TabList, TabContent } = Tabs;
 
@@ -62,6 +67,33 @@ const Requests = () => {
 			autoResubscribe: true,
 		});
 	});
+
+	useEffect(() => {
+		if (
+			serviceCompleted ||
+			serviceConfirmed ||
+			serviceStarted ||
+			serviceCancelled
+		) {
+			dispatch(getRequestsData());
+		}
+
+		if (serviceCompleted) {
+			dispatch(setServiceCompleted(false));
+		} else if (serviceConfirmed) {
+			dispatch(setServiceConfirmed(false));
+		} else if (serviceStarted) {
+			dispatch(setServiceStarted(false));
+		} else if (serviceCancelled) {
+			dispatch(setServiceCancelled(false));
+		}
+	}, [
+		dispatch,
+		serviceCancelled,
+		serviceCompleted,
+		serviceConfirmed,
+		serviceStarted,
+	]);
 
 	const onReport = (booking) => {
 		dispatch(toggleOpenDisputeDialog(true));
@@ -90,7 +122,7 @@ const Requests = () => {
 
 	return (
 		<div className="mt-2 p-4">
-			{isLoading ? (
+			{loading ? (
 				<GettingData />
 			) : (
 				<div>

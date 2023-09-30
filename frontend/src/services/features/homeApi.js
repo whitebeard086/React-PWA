@@ -16,6 +16,54 @@ export const homeApi = apiSlice.injectEndpoints({
 export const { useGetHomeQuery, useGetGuestQuery } = homeApi;
 
 export function useHome() {
+	const { data, status, services, categories, bookings, isLoading, isError } =
+		useGetHomeQuery(undefined, {
+			selectFromResult: ({ data, isLoading, isError }) => ({
+				data: data ?? {},
+				status: data?.status,
+				services: data?.services,
+				categories: data?.categories,
+				bookings: data?.bookings?.data,
+				isLoading,
+				isError,
+			}),
+		});
+
+	return {
+		home: data,
+		status,
+		services,
+		categories,
+		bookings,
+		isLoading,
+		isError,
+	};
+}
+
+export function useGuest() {
+	const { data, status, services, categories, isLoading, isError } =
+		useGetGuestQuery(undefined, {
+			selectFromResult: ({ data, isLoading, isError }) => ({
+				data: data ?? {},
+				status: data?.status,
+				services: data?.services,
+				categories: data?.categories,
+				isLoading,
+				isError,
+			}),
+		});
+
+	return {
+		guest: data,
+		status,
+		services,
+		categories,
+		isLoading,
+		isError,
+	};
+}
+
+/* export function useHome() {
 	const { data, isLoading, isError } = useGetHomeQuery();
 
 	const status = data?.status;
@@ -49,4 +97,4 @@ export function useGuest() {
 		isLoading,
 		isError,
 	};
-}
+} */

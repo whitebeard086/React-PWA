@@ -23,7 +23,18 @@ export const apiSlice = createApi({
 			return headers;
 		},
 	}),
-	tagTypes: ['User', 'KYC', 'Dashboard', 'Home', 'Guest', 'Payment'],
+	tagTypes: [
+		'User',
+		'KYC',
+		'Dashboard',
+		'Home',
+		'Guest',
+		'Payment',
+		'Browse',
+		'BrowseCat',
+		'Provider',
+		'Request',
+	],
 	endpoints: (builder) => ({}),
 	keepUnusedDataFor: 15 * 60, // keep data for 15 minutes
 	onError: (error, { dispatch }) => {

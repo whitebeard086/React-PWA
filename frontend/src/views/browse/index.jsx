@@ -1,33 +1,32 @@
-import { useDispatch, useSelector } from "react-redux";
-import Search from "./components/search";
-import reducer from "./store";
-import { injectReducer } from "@/store";
-import { useEffect } from "react";
-import { getBrowseData } from "./store/dataSlice";
-import GettingFeed from "./components/GettingFeed";
-import BrowseFeed from "./components/BrowseFeed";
+import { useBrowse } from '@/services/features/browseApi';
+import { injectReducer } from '@/store';
+import { useDispatch } from 'react-redux';
+import BrowseFeed from './components/BrowseFeed';
+import GettingFeed from './components/GettingFeed';
+import Search from './components/search';
+import reducer from './store';
 
-injectReducer("browse", reducer);
+injectReducer('browse', reducer);
 
 const Browse = () => {
-    const dispatch = useDispatch();
+	const dispatch = useDispatch();
 
-    const { loading } = useSelector((state) => state.browse.data);
+	const { isLoading } = useBrowse();
 
-    useEffect(() => {
-        dispatch(getBrowseData());
-    }, [dispatch]);
+	// const { loading } = useSelector((state) => state.browse.data);
 
-    return (
-        <div className="mt-2 p-4">
-            <div>
-                <Search />
-            </div>
+	// useEffect(() => {
+	//     dispatch(getBrowseData());
+	// }, [dispatch]);
 
-            <div className="mt-4">
-                {loading ? <GettingFeed /> : <BrowseFeed />}
-            </div>
-        </div>
-    );
+	return (
+		<div className="mt-2 p-4">
+			<div>
+				<Search />
+			</div>
+
+			<div className="mt-4">{isLoading ? <GettingFeed /> : <BrowseFeed />}</div>
+		</div>
+	);
 };
 export default Browse;

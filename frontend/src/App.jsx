@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Loading } from './components/shared';
 import history from './history';
+import { useGuest, useHome } from './services/features/homeApi';
 import { persistor } from './store';
 import { getUser, setOnlineUsers } from './store/auth/userSlice';
 import { useSocket } from './utils/hooks/useSocket';
@@ -76,12 +77,15 @@ const DisputeChat = lazy(() =>
 
 function App() {
 	const dispatch = useDispatch();
-	useUser();
+	const { userType } = useUser();
+	useGuest();
+	useHome();
 	useGlobalIdle();
 
-	const { userType, onlineUsers, profile } = useSelector(
-		(state) => state.auth.user
-	);
+	const { onlineUsers, profile } = useSelector((state) => state.auth.user);
+	// const { userType, onlineUsers, profile } = useSelector(
+	// 	(state) => state.auth.user
+	// );
 
 	const events = [
 		{

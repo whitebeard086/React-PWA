@@ -3,10 +3,10 @@ import appConfig from '@/configs/app.config';
 import { calculateAverageRating } from '@/utils';
 import { Rating } from '@smastrom/react-rating';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-const Services = () => {
+const Services = ({ services, category }) => {
 	const { imagePath } = appConfig;
 	const [value, setValue] = useState('All');
 
@@ -23,7 +23,7 @@ const Services = () => {
 	// };
 
 	// const { profile } = useSelector((state) => state.auth.user)
-	const { category, services } = useSelector((state) => state.browse.data);
+	// const { category: services } = useSelector((state) => state.browse.data);
 
 	return (
 		<div className="flex flex-col gap-4">

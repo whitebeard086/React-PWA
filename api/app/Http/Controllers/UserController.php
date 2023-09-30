@@ -461,6 +461,16 @@ class UserController extends Controller
         ], 200);
     }
 
+    public function get_provider_by_get($slug)
+    {
+        $provider = User::with('Service.Workdays', 'Service.Category', 'Service.Bookings')->where('slug', $slug)->first(); 
+
+        return response()->json([
+            'status' => 'success',
+            'provider' => $provider,
+        ], 200);
+    }
+
     public function update_profile_view(Request $request)
     {
         try {
@@ -777,4 +787,14 @@ class UserController extends Controller
             'user' => $user,
         ], 200);
     }
+
+    // public function get_transaction($slug)
+    // {
+    //     $transaction = Transaction::where('uid', $slug)->first(); 
+
+    //     return response()->json([
+    //         'status' => 'success',
+    //         'transaction' => $transaction,
+    //     ], 200);
+    // }
 }

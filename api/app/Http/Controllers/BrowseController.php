@@ -26,4 +26,15 @@ class BrowseController extends Controller
             'category' => $category,
         ]);
     }
+
+    public function get_category_by_get($slug)
+    {
+        $category = Category::where('slug', $slug)->with('Services.User', 'Services.Bookings', 'SubCategories')->first();
+    
+        return response()->json([
+            'status' => 'success',
+            'category' => $category,
+        ]);
+    }
+    
 }

@@ -19,6 +19,10 @@ const HomeFeed = () => {
 	let bookings = signedIn ? homeB : [];
 	let services = signedIn ? homeS : guestS;
 
+	// console.log('categories: ', categories);
+	// console.log('bookings: ', bookings);
+	// console.log('services: ', services);
+
 	return (
 		<div className="grid grid-cols-4 gap-4">
 			<div className="col-span-4 w-full">

@@ -72,6 +72,7 @@ const ContinueWithPin = () => {
 					'danger',
 					2000
 				);
+				onDialogClose();
 				handleSignOut();
 			} else {
 				popNotification(

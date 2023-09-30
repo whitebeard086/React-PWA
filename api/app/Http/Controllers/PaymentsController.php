@@ -33,4 +33,14 @@ class PaymentsController extends Controller
             ], 500);
         }
     }
+
+    public function get_transaction($slug)
+    {
+        $transaction = Transaction::where('uid', $slug)->first(); 
+
+        return response()->json([
+            'status' => 'success',
+            'transaction' => $transaction,
+        ], 200);
+    }
 }
