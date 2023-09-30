@@ -6,13 +6,15 @@ import Settings from './components/settings'
 import RecentCommissions from './components/commissions/RecentCommissions'
 import Commissions from './components/commissions/Commissions'
 import GettingData from './components/GettingData'
+import { useGetSystemCommissions } from '@/views/finance/utils/hooks'
 
 injectReducer(SLICE_NAME, reducer)
 
 const CommissionSettings = () => {
     const { data, isLoading } = useGetSystemConfigurations()
+    const { data: commissionData, isLoading: loadingCommissions } = useGetSystemCommissions()
     const systemConfig = data?.systemConfig
-    const commissions = data?.commissions
+    const commissions = commissionData?.serviceCommissions
 
     return (
         <div>
@@ -33,7 +35,7 @@ const CommissionSettings = () => {
                 <div>
                     <Commissions 
                         commissions={commissions ?? []}
-                        loading={isLoading}
+                        loading={loadingCommissions}
                     />
                 </div>
             </div>

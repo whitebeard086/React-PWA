@@ -29,4 +29,5 @@ export type GetHomeResponse = {
     recentCustomers: User[]
     recentBookings: RecentBookingWithInvoice[]
     recentDisputes: DisputeWithDetails[]
+    totalRevenue: number
 }

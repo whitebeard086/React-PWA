@@ -21,6 +21,7 @@ use App\Http\Controllers\WithdrawalController;
 use App\Http\Controllers\BlocWebhookController;
 use App\Http\Controllers\Admin\SystemController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\Admin\FinanceController;
 use App\Http\Controllers\Admin\HandymanController;
 use App\Http\Controllers\Admin\HomeAdminController;
 use App\Http\Controllers\Admin\CategoriesController;
@@ -168,6 +169,9 @@ Route::group(['prefix' => 'admin'], function(){
 
         // Users Routes
         Route::get('/users', [UsersAdminController::class, 'index']);
+
+        // Finance Routes
+        Route::get('/finance/system-commissions', [FinanceController::class, 'system_commissions']);
 
         // Handyman Routes
         Route::get('/enquiries', [HandymanController::class, 'enquiries']);

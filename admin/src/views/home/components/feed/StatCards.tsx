@@ -9,6 +9,7 @@ const StatCards = () => {
     const allBookings = data?.allBookings
     const allClients = data?.allClients
     const allProviders = data?.allProviders
+    const totalRevenue = data?.totalRevenue
     // const { allBookings, allClients, allProviders } = useAppSelector((state) => state.home.data) 
 
     return (
@@ -55,7 +56,7 @@ const StatCards = () => {
             <Card className="bg-emerald-500">
                 <div className="w-full flex items-center gap-4 justify-between">
                     <div className="flex flex-col gap-2">
-                        <h4 className="text-lg text-white">₦{450000?.toLocaleString()}</h4>
+                        <h4 className="text-lg text-white">₦{totalRevenue?.toLocaleString()}</h4>
                         <h4 className="text-sm text-white font-semibold">Total Revenue</h4>
                     </div>
 

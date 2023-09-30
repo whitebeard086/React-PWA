@@ -21,11 +21,15 @@ class HomeAdminController extends Controller
             $recent_bookings = Booking::with('Invoice.Items', 'User', 'Service.User')->orderBy('id', 'desc')->take(5)->get();
             $recent_disputes = Dispute::with('Invoice.Items', 'Client', 'Provider.Service.Category', 'Disputer.Service', 'Booking.User', 'Messages.Media')->orderBy('id', 'desc')->take(5)->get();
 
+            $bookings = Booking::where('status', 'completed')->get();
+            $total_revenue = $bookings->sum('service_commission');
+
             return response()->json([
                 'status' => 'success',
                 'allBookings' => $all_bookings,
                 'allClients' => $all_clients,
                 'allProviders' => $all_providers,
+                'totalRevenue' => $total_revenue,
                 'recentProviders' => $recent_providers,
                 'recentCustomers' => $recent_customers,
                 'recentBookings' => $recent_bookings,
